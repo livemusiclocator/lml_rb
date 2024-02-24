@@ -1,24 +1,36 @@
-# README
+# LML
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+To get this running:
 
-Things you may want to cover:
+Run postgres on the default 5432 port.
 
-* Ruby version
+```
+docker run \
+    --rm \
+    --name postgres-default \
+    -d \
+    -p 5432:5432 \
+    -e POSTGRES_HOST_AUTH_METHOD=trust \
+    -e PGDATA=/var/lib/postgresql/data/pgdata \
+    -v postgres-default:/var/lib/postgresql/data \
+    postgres
+```
 
-* System dependencies
+Install ruby 3.3.0 (using asdf)
 
-* Configuration
+```
+```
 
-* Database creation
+Install dependencies
 
-* Database initialization
+```
+bundle
+```
 
-* How to run the test suite
+Create databases
 
-* Services (job queues, cache servers, search engines, etc.)
+```
+bin/rails db:create db:migrate db:seed
+```
 
-* Deployment instructions
-
-* ...
+Browse to https://localhost:3000/admin and log in as admin@example.com and password password
