@@ -8,4 +8,5 @@ class Event < ApplicationRecord
   end
 
   belongs_to :venue
+  belongs_to :headline_artist, class_name: "Artist"
 end
