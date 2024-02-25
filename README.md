@@ -33,4 +33,10 @@ Create databases
 bin/rails db:create db:migrate db:seed
 ```
 
+Start rails
+
+```
+bin/rails start
+```
+
 Browse to https://localhost:3000/admin and log in as admin@example.com and password password
