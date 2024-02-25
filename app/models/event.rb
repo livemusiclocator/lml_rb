@@ -1,4 +1,4 @@
-class Venue < ApplicationRecord
+class Event < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     %w[name]
   end
@@ -7,5 +7,5 @@ class Venue < ApplicationRecord
     []
   end
 
-  has_many :events
+  belongs_to :venue
 end
