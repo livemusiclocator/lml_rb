@@ -8,9 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-EventStatus.create!(name: "Confirmed") unless EventStatus.where(name: "Confirmed").exist?
-EventStatus.create!(name: "Cancelled") unless EventStatus.where(name: "Cancelled").exist?
+EventStatus.create!(name: "Confirmed") unless EventStatus.where(name: "Confirmed").exists?
+EventStatus.create!(name: "Cancelled") unless EventStatus.where(name: "Cancelled").exists?
 
 if Rails.env.development?
-  AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+  AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') unless AdminUser.where(email: "admin@example.com").exists?
 end
