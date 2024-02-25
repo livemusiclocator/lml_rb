@@ -28,6 +28,8 @@ asdf install
 Install dependencies
 
 ```
+brew install libpq postgresql
+# may need to add libpq to PATH
 bundle
 ```
 
