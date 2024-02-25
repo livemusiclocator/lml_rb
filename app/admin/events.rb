@@ -1,5 +1,13 @@
 ActiveAdmin.register Event do
-  permit_params :name, :venue_id, :headline_artist_id, :date, :start_time, :finish_time
+  permit_params(
+    :date,
+    :event_status_id,
+    :finish_time,
+    :headline_artist_id,
+    :name,
+    :start_time,
+    :venue_id,
+  )
 
   filter :none
 
@@ -9,6 +17,7 @@ ActiveAdmin.register Event do
       f.input :venue
       f.input :headline_artist
       f.input :date
+      f.input :event_status
       f.input :start_time
       f.input :finish_time
     end

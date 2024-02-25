@@ -1,4 +1,4 @@
-class Event < ApplicationRecord
+class EventStatus < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     %w[name]
   end
@@ -7,7 +7,5 @@ class Event < ApplicationRecord
     []
   end
 
-  belongs_to :venue
-  belongs_to :headline_artist, class_name: "Artist"
-  belongs_to :event_status
+  has_many :events
 end
