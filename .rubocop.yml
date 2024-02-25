@@ -1,6 +1,16 @@
 AllCops:
   TargetRubyVersion: 3.0
 
+Style/TrailingCommaInArguments:
+  Enabled: true
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInHashLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: consistent_comma
+
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
