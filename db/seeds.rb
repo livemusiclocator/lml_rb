@@ -45,10 +45,10 @@ mogwai_at_tiv_mogwai.update!(
   finish_time: "2024-02-21 22:30+10",
 )
 
-if Rails.env.development? && !AdminUser.where(email: "admin@example.com").exists?
-  AdminUser.create!(
-    email: "admin@example.com",
+if Rails.env.development?
+  user = AdminUser.find_or_create_by(email: "admin@example.com")
+  user.update!(
+    time_zone: ENV.fetch("TIMEZONE", "Melbourne"),
     password: "password",
-    password_confirmation: "password",
   )
 end
