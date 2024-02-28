@@ -7,5 +7,13 @@ module Lml
     def self.ransackable_associations(auth_object = nil)
       []
     end
+
+    def genre_list
+      genres.join(", ")
+    end
+
+    def genre_list=(value)
+      self.genres = value.split(",").map(&:strip)
+    end
   end
 end

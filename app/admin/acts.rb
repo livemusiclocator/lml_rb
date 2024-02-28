@@ -1,5 +1,10 @@
 ActiveAdmin.register Lml::Act, as: "Act" do
-  permit_params :name, :country, :location
+  permit_params(
+    :country,
+    :genre_list,
+    :location,
+    :name,
+  )
 
   filter :name_cont, label: "Name"
 
@@ -8,6 +13,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       f.input :name
       f.input :country, as: "string"
       f.input :location
+      f.input :genre_list
     end
     f.actions
   end
