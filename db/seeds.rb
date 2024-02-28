@@ -7,7 +7,7 @@ mogwai = Lml::Act.find_or_create_by(name: "Mogwai")
 mogwai.update!(
   location: "Glasgow",
   country: "Scotland",
-  genres: %w["Post-Rock Electronic Film-Score Television-Music Ambient],
+  genres: %w[Post-Rock Electronic Film-Score Television-Music Ambient],
 )
 jerm = Lml::Act.find_or_create_by(name: "Jerm")
 jerm.update!(

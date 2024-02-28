@@ -11,5 +11,6 @@ module Lml
     belongs_to :venue
     belongs_to :headline_act, class_name: "Lml::Act"
     belongs_to :status
+    has_many :sets
   end
 end
