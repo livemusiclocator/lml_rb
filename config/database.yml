@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: lml_production
-  username: lml
-  password: <%= ENV["LML_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
