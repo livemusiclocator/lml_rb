@@ -51,12 +51,14 @@ Browse to https://localhost:3000/admin and log in as admin@example.com and passw
 ## Heroku Stuff
 
 ```
-brew tap heroku/brew && brew install heroku
+# how I made the Heroku deployment
 
+brew tap heroku/brew && brew install heroku
 heroku login
 
-# to use Heroku CLI you need a verified account == enter your credit card in your personal account
+# to use Heroku CLI you need a verified account == enter your credit card in your personal account (I think)
 
 heroku create live-music-locator -t glassbeams
+heroku stack:set container
 
 ```
