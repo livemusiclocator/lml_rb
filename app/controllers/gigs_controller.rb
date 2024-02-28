@@ -2,7 +2,7 @@ class GigsController < ApplicationController
   def query
     content = []
 
-    Event.all.each do |event|
+    Lml::Gig.all.each do |event|
       content << {
         name: event.name,
         start_time: event.start_time,
