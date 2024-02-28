@@ -1,3 +1,8 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: LML_DB
+
 build:
   docker:
     web: Dockerfile
