@@ -1,9 +1,9 @@
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :date,
-    :event_status_id,
+    :status_id,
     :finish_time,
-    :headline_artist_id,
+    :headline_act_id,
     :name,
     :start_time,
     :venue_id,
@@ -15,9 +15,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     f.inputs do
       f.input :name
       f.input :venue
-      f.input :headline_artist
+      f.input :headline_act
       f.input :date
-      f.input :event_status
+      f.input :status
       f.input :start_time
       f.input :finish_time
     end

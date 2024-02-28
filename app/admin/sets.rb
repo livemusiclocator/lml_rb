@@ -5,8 +5,8 @@ ActiveAdmin.register Lml::Set, as: "Set" do
 
   form do |f|
     f.inputs do
-      f.input :event
-      f.input :artist
+      f.input :gig
+      f.input :act
       f.input :start_time
       f.input :finish_time
     end
