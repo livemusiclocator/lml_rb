@@ -23,4 +23,10 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     f.actions
   end
+
+  controller do
+    def new
+      @gig = Lml::Gig.new(start_time: Time.now)
+    end
+  end
 end

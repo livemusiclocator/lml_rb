@@ -12,4 +12,10 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     end
     f.actions
   end
+
+  controller do
+    def new
+      @set = Lml::Set.new(start_time: Time.now, finish_time: Time.now)
+    end
+  end
 end
