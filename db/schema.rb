@@ -12,9 +12,10 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "active_admin_comments", force: :cascade do |t|
+  create_table "active_admin_comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
@@ -28,7 +29,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
   end
 
-  create_table "admin_users", force: :cascade do |t|
+  create_table "acts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "country"
+    t.string "location"
+    t.jsonb "genres"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "admin_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -41,48 +51,39 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "artists", force: :cascade do |t|
-    t.string "name"
-    t.string "country"
-    t.string "location"
-    t.jsonb "genres"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "event_sets", force: :cascade do |t|
-    t.datetime "start_time", precision: nil
-    t.datetime "finish_time", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "event_id"
-    t.bigint "artist_id"
-    t.index ["artist_id"], name: "index_event_sets_on_artist_id"
-    t.index ["event_id"], name: "index_event_sets_on_event_id"
-  end
-
-  create_table "event_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "events", force: :cascade do |t|
+  create_table "gigs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.date "date"
     t.datetime "start_time", precision: nil
     t.datetime "finish_time", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "venue_id"
-    t.bigint "headline_artist_id"
-    t.bigint "event_status_id"
-    t.index ["event_status_id"], name: "index_events_on_event_status_id"
-    t.index ["headline_artist_id"], name: "index_events_on_headline_artist_id"
-    t.index ["venue_id"], name: "index_events_on_venue_id"
+    t.uuid "venue_id"
+    t.uuid "headline_act_id"
+    t.uuid "status_id"
+    t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
+    t.index ["status_id"], name: "index_gigs_on_status_id"
+    t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 
-  create_table "venues", force: :cascade do |t|
+  create_table "sets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "start_time", precision: nil
+    t.datetime "finish_time", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "gig_id"
+    t.uuid "act_id"
+    t.index ["act_id"], name: "index_sets_on_act_id"
+    t.index ["gig_id"], name: "index_sets_on_gig_id"
+  end
+
+  create_table "statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "venues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "address"
     t.string "location_url"
@@ -92,9 +93,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "event_sets", "artists"
-  add_foreign_key "event_sets", "events"
-  add_foreign_key "events", "artists", column: "headline_artist_id"
-  add_foreign_key "events", "event_statuses"
-  add_foreign_key "events", "venues"
+  add_foreign_key "gigs", "acts", column: "headline_act_id"
+  add_foreign_key "gigs", "statuses"
+  add_foreign_key "gigs", "venues"
+  add_foreign_key "sets", "acts"
+  add_foreign_key "sets", "gigs"
 end
