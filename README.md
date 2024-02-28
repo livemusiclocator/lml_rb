@@ -46,3 +46,17 @@ bin/rails start
 ```
 
 Browse to https://localhost:3000/admin and log in as admin@example.com and password password
+
+
+## Heroku Stuff
+
+```
+brew tap heroku/brew && brew install heroku
+
+heroku login
+
+# to use Heroku CLI you need a verified account == enter your credit card in your personal account
+
+heroku create live-music-locator -t glassbeams
+
+```
