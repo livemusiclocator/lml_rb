@@ -1,4 +1,4 @@
-ActiveAdmin.register EventStatus do
+ActiveAdmin.register Lml::Status, as: "Status" do
   permit_params :name
 
   filter :none

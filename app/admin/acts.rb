@@ -1,4 +1,4 @@
-ActiveAdmin.register Artist do
+ActiveAdmin.register Lml::Act, as: "Act" do
   permit_params :name, :country, :location
 
   filter :name_cont, label: "Name"

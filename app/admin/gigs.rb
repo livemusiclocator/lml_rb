@@ -1,4 +1,4 @@
-ActiveAdmin.register Event do
+ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :date,
     :event_status_id,

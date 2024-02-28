@@ -1,6 +1,6 @@
-class CreateArtists < ActiveRecord::Migration[7.1]
+class CreateActs < ActiveRecord::Migration[7.1]
   def change
-    create_table :artists do |t|
+    create_table :acts, id: :uuid do |t|
       t.string :name
       t.string :country
       t.string :location

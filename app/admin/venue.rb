@@ -1,4 +1,4 @@
-ActiveAdmin.register Venue do
+ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params :name, :address, :location_url, :latitude, :longitude
 
   filter :name_cont, label: "Name"

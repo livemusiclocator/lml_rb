@@ -1,4 +1,4 @@
-ActiveAdmin.register EventSet do
+ActiveAdmin.register Lml::Set, as: "Set" do
   permit_params :event_id, :artist_id, :start_time, :finish_time
 
   filter :none
