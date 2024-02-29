@@ -16,10 +16,10 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :name
       f.input :venue
       f.input :headline_act
-      f.input :date
+      f.input :date, as: :date_picker
       f.input :status
-      f.input :start_time
-      f.input :finish_time
+      f.input :start_time, as: :datetime_picker
+      f.input :finish_time, as: :datetime_picker
     end
     f.actions
   end

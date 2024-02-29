@@ -7,8 +7,8 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     f.inputs do
       f.input :gig
       f.input :act
-      f.input :start_time
-      f.input :finish_time
+      f.input :start_time, as: :datetime_picker
+      f.input :finish_time, as: :datetime_picker
     end
     f.actions
   end
