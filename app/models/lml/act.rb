@@ -1,15 +1,15 @@
 module Lml
   class Act < ApplicationRecord
-    def self.ransackable_attributes(auth_object = nil)
+    def self.ransackable_attributes(_auth_object = nil)
       %w[name country location]
     end
 
-    def self.ransackable_associations(auth_object = nil)
+    def self.ransackable_associations(_auth_object = nil)
       []
     end
 
     def genre_list
-      genres.join(", ")
+      (genres || []).join(", ")
     end
 
     def genre_list=(value)
