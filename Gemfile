@@ -9,6 +9,8 @@ gem "sass-rails"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3"
 
+gem 'arctic_admin'
+
 # allow CORS
 gem "rack-cors"
 
