@@ -2,6 +2,6 @@
 
 class GigsController < ApplicationController
   def query
-    @gigs = Lml::Gig.all
+    @gigs = Lml::Gig.confirmed.upcoming
   end
 end
