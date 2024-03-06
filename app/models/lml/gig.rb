@@ -8,9 +8,14 @@ module Lml
       []
     end
 
+    enum :status, { draft: "draft", confirmed:"confirmed", cancelled: "cancelled"}, prefix: true
+
     belongs_to :venue
     belongs_to :headline_act, class_name: "Lml::Act"
-    belongs_to :status
     has_many :sets
+    scope :filter_by_status, -> (status) { where(status: status) }
+    scope :upcoming  , ->(days:3 ) {  Lml::Gig.where(start_time: (1.hour.ago...days.days.from_now)) }
   end
+
+
 end

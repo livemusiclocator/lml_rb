@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-confirmed = Lml::Status.find_or_create_by!(name: "Confirmed")
-Lml::Status.find_or_create_by!(name: "Cancelled")
 
 mogwai = Lml::Act.find_or_create_by(name: "Mogwai")
 mogwai.update!(
@@ -28,7 +26,7 @@ mogwai_at_tiv = Lml::Gig.find_or_create_by(name: "Mogwai at The Tivoli 2024")
 mogwai_at_tiv.update!(
   venue: tivoli,
   headline_act: mogwai,
-  status: confirmed,
+  status: Lml::Gig.statuses[:confirmed],
   date: "2024-02-21",
   start_time: "2024-02-21 19:30+10",
   finish_time: "2024-02-21 22:30+10",

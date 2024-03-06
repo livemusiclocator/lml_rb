@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_06_023941) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "status", ["draft", "confirmed", "cancelled"]
 
   create_table "active_admin_comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "namespace"
@@ -60,9 +64,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
     t.datetime "updated_at", null: false
     t.uuid "venue_id"
     t.uuid "headline_act_id"
-    t.uuid "status_id"
+    t.enum "status", default: "draft", null: false, enum_type: "status"
     t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
-    t.index ["status_id"], name: "index_gigs_on_status_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 
@@ -77,12 +80,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
     t.index ["gig_id"], name: "index_sets_on_gig_id"
   end
 
-  create_table "statuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "venues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -94,7 +91,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_121159) do
   end
 
   add_foreign_key "gigs", "acts", column: "headline_act_id"
-  add_foreign_key "gigs", "statuses"
   add_foreign_key "gigs", "venues"
   add_foreign_key "sets", "acts"
   add_foreign_key "sets", "gigs"
