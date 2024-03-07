@@ -9,5 +9,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  get "/gigs/query", to: "gigs#query"
+  scope "gigs" do
+    root to: "gigs#index",defaults: { format: 'json' }
+    get "query", to: "gigs#query"
+  end
 end

@@ -3,6 +3,7 @@
 json.array! @gigs do |gig|
   json.id gig.id
   json.name gig.name
+  json.date gig.date
   json.start_time gig.start_time
   json.finish_time gig.finish_time
 
