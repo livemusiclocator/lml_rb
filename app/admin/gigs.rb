@@ -1,7 +1,7 @@
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :date,
-    :status_id,
+    :status,
     :finish_time,
     :headline_act_id,
     :name,
