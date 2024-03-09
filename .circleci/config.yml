@@ -60,8 +60,6 @@ workflows:
           requires:
             - test
           filters:
-            branches:
-              ignore: main
       - migrate:
           requires:
             - deploy
@@ -72,3 +70,4 @@ workflows:
       - deploy:
           requires:
             - test
+            - hold
