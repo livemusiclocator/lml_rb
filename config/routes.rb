@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     get "query", to: "gigs#query", defaults: { format: "json" }
   end
   scope "venues" do
-    get "query", to: "venues#query", defaults: { format: "json" }
+    get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
+  end
+  scope "acts" do
+    get "autocomplete", to: "acts#autocomplete", defaults: { format: "json" }
   end
 end

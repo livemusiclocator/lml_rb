@@ -16,14 +16,16 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :name
       f.input :venue_name
       f.input :venue_id, as: "hidden"
-      f.input :headline_act
+      f.input :headline_act_name
+      f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :start_time, as: :datetime_picker
       f.input :finish_time, as: :datetime_picker
     end
     script <<~SCRIPT.html_safe
-      attachAutocomplete("lml_gig_venue", "/venues/query");
+      attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
+      attachAutocomplete("lml_gig_headline_act", "/acts/autocomplete", "Select Headline Act");
     SCRIPT
     f.actions
   end

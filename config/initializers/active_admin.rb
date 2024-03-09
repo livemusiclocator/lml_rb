@@ -340,7 +340,7 @@ ActiveAdmin.setup do |config|
       .autoComplete_wrapper { display: block }
     </style>
     <script>
-      function attachAutocomplete(selector, endpoint) {
+      function attachAutocomplete(selector, endpoint, placeholder) {
         const name_field = `${selector}_name`;
         const id_field = `${selector}_id`;
         const autoCompleteJS = new autoComplete({
@@ -379,7 +379,7 @@ ActiveAdmin.setup do |config|
               return filteredResults;
             }
           },
-          placeHolder: "Search for Venue",
+          placeHolder: placeholder,
           resultsList: {
             element: (list, data) => {
               const info = document.createElement("p");

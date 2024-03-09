@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VenuesController < ApplicationController
-  def query
+  def autocomplete
     @venues = Lml::Venue.order(:name)
   end
 end
