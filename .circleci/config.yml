@@ -4,6 +4,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.0.1
   heroku: circleci/heroku@2.0.0
+  slack: circleci/slack@4.1
 jobs:
   test:
     # Install gems, run rails tests
@@ -26,6 +27,13 @@ jobs:
           name: Deploy Main to Heroku
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+      - slack/notify:
+          event: fail
+          mentions: '@Joe'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
   migrate:
     docker:
       - image: cimg/ruby:3.3.0
@@ -35,6 +43,12 @@ jobs:
       - run:
           name: Run migrations on Heroku
           command: heroku run rake db:migrate --app $HEROKU_APP_NAME
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
 
 workflows:
   version: 2
