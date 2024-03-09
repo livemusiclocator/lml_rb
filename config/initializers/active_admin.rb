@@ -333,7 +333,101 @@ ActiveAdmin.setup do |config|
   # You can add your own content to the site head like analytics. Make sure
   # you only pass content you trust.
   #
-  # config.head = ''.html_safe
+  config.head = <<~HEAD.html_safe
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
+    <style>
+      .autoComplete_wrapper { display: block }
+    </style>
+    <script>
+      function attachAutocomplete(selector, endpoint) {
+        const name_field = `${selector}_name`;
+        const id_field = `${selector}_id`;
+        const autoCompleteJS = new autoComplete({
+          selector: `#${name_field}`,
+          data: {
+            src: async () => {
+              try {
+                // Loading placeholder text
+                document
+                  .getElementById(name_field)
+                  .setAttribute("placeholder", "Loading...");
+                // Fetch External Data Source
+                const source = await fetch(endpoint);
+                const data = await source.json();
+                // Post Loading placeholder text
+                document
+                  .getElementById(name_field)
+                  .setAttribute("placeholder", autoCompleteJS.placeHolder);
+                // Returns Fetched data
+                return data;
+              } catch (error) {
+                return error;
+              }
+            },
+            keys: ["name"],
+            cache: true,
+            filter: (list) => {
+              // Filter duplicates
+              // incase of multiple data keys usage
+              const filteredResults = Array.from(
+                new Set(list.map((value) => value.match))
+              ).map((text) => {
+                return list.find((value) => value.match === text);
+              });
+
+              return filteredResults;
+            }
+          },
+          placeHolder: "Search for Venue",
+          resultsList: {
+            element: (list, data) => {
+              const info = document.createElement("p");
+              if (data.results.length > 0) {
+                info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
+              } else {
+                info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
+              }
+              list.prepend(info);
+            },
+            noResults: true,
+            maxResults: 15,
+            tabSelect: true
+          },
+          resultItem: {
+            element: (item, data) => {
+              // Modify Results Item Style
+              item.style = "display: flex; justify-content: space-between;";
+              // Modify Results Item Content
+              item.innerHTML = `
+              <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                ${data.match}
+              </span>
+              `;
+            },
+            highlight: true
+          },
+          events: {
+            input: {
+              focus: () => {
+                if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+              }
+            }
+          }
+        });
+
+        autoCompleteJS.input.addEventListener(
+          "selection",
+          function (event) {
+            const feedback = event.detail;
+            autoCompleteJS.input.blur();
+            autoCompleteJS.input.value = feedback.selection.value.name;
+            document.getElementById(id_field).value = feedback.selection.value.id;
+          }
+        );
+      }
+    </script>
+  HEAD
 
   # == Footer
   #

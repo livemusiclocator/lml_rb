@@ -13,4 +13,7 @@ Rails.application.routes.draw do
     root to: "gigs#index", defaults: { format: "json" }
     get "query", to: "gigs#query", defaults: { format: "json" }
   end
+  scope "venues" do
+    get "query", to: "venues#query", defaults: { format: "json" }
+  end
 end

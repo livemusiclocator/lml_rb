@@ -16,5 +16,12 @@ module Lml
     default_scope { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act) }
     scope :upcoming , ->(days:3) {  where(start_time: (1.hour.ago...days.days.from_now)) }
     scope :filter_by_date, ->(range_or_date)  {  where(date: range_or_date) }
+
+    def venue_name
+      venue&.name
+    end
+
+    def venue_name=(name)
+    end
   end
 end

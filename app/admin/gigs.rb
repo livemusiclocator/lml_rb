@@ -14,13 +14,17 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :venue
+      f.input :venue_name
+      f.input :venue_id, as: "hidden"
       f.input :headline_act
       f.input :date, as: :date_picker
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :start_time, as: :datetime_picker
       f.input :finish_time, as: :datetime_picker
     end
+    script <<~SCRIPT.html_safe
+      attachAutocomplete("lml_gig_venue", "/venues/query");
+    SCRIPT
     f.actions
   end
 
