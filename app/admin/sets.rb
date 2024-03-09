@@ -5,9 +5,9 @@ ActiveAdmin.register Lml::Set, as: "Set" do
 
   form do |f|
     f.inputs do
-      f.input :gig_label
+      f.input :gig_label, label: "Gig"
       f.input :gig_id, as: "hidden"
-      f.input :act_label
+      f.input :act_label, label: "Act"
       f.input :act_id, as: "hidden"
       f.input :start_time, as: :datetime_picker
       f.input :finish_time, as: :datetime_picker

@@ -14,9 +14,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :venue_label
+      f.input :venue_label, label: "Venue"
       f.input :venue_id, as: "hidden"
-      f.input :headline_act_label
+      f.input :headline_act_label, label: "Headline Act"
       f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
