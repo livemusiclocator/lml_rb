@@ -341,23 +341,23 @@ ActiveAdmin.setup do |config|
     </style>
     <script>
       function attachAutocomplete(selector, endpoint, placeholder) {
-        const name_field = `${selector}_name`;
+        const label_field = `${selector}_label`;
         const id_field = `${selector}_id`;
         const autoCompleteJS = new autoComplete({
-          selector: `#${name_field}`,
+          selector: `#${label_field}`,
           data: {
             src: async () => {
               try {
                 // Loading placeholder text
                 document
-                  .getElementById(name_field)
+                  .getElementById(label_field)
                   .setAttribute("placeholder", "Loading...");
                 // Fetch External Data Source
                 const source = await fetch(endpoint);
                 const data = await source.json();
                 // Post Loading placeholder text
                 document
-                  .getElementById(name_field)
+                  .getElementById(label_field)
                   .setAttribute("placeholder", autoCompleteJS.placeHolder);
                 // Returns Fetched data
                 return data;
@@ -365,7 +365,7 @@ ActiveAdmin.setup do |config|
                 return error;
               }
             },
-            keys: ["name"],
+            keys: ["label"],
             cache: true,
             filter: (list) => {
               // Filter duplicates
@@ -421,7 +421,7 @@ ActiveAdmin.setup do |config|
           function (event) {
             const feedback = event.detail;
             autoCompleteJS.input.blur();
-            autoCompleteJS.input.value = feedback.selection.value.name;
+            autoCompleteJS.input.value = feedback.selection.value.label;
             document.getElementById(id_field).value = feedback.selection.value.id;
           }
         );

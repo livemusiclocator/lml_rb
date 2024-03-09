@@ -15,5 +15,9 @@ module Lml
     def genre_list=(value)
       self.genres = value.split(",").map(&:strip)
     end
+
+    def label
+      "#{name} (#{country})"
+    end
   end
 end

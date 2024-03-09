@@ -17,12 +17,16 @@ module Lml
     scope :upcoming , ->(days: 3) {  where(start_time: (1.hour.ago...days.days.from_now)) }
     scope :filter_by_date, ->(range_or_date) { where(date: range_or_date) }
 
-    def venue_name
-      venue&.name
+    def label
+      "#{name} (#{date})"
     end
 
-    def headline_act_name
-      headline_act&.name
+    def venue_label
+      venue&.label
+    end
+
+    def headline_act_label
+      headline_act&.label
     end
   end
 end

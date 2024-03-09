@@ -2,5 +2,5 @@
 
 json.array! @acts do |act|
   json.id act.id
-  json.name act.name
+  json.label act.label
 end

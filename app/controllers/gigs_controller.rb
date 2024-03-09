@@ -2,7 +2,6 @@
 
 class GigsController < ApplicationController
   def index
-    @descr
     @links = [
       {
         id: "_self",
@@ -77,5 +76,9 @@ class GigsController < ApplicationController
               # TODO: move time based filtering to the client?
               Lml::Gig.status_confirmed.upcoming
             end
+  end
+
+  def autocomplete
+    @gigs = Lml::Gig.order(:name)
   end
 end

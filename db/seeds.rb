@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 mogwai = Lml::Act.find_or_create_by(name: "Mogwai")
 mogwai.update!(
   location: "Glasgow",
@@ -17,6 +16,7 @@ jerm.update!(
 tivoli = Lml::Venue.find_or_create_by(name: "The Tivoli")
 tivoli.update!(
   address: "52 Costin St, Fortitude Valley, Brisbane",
+  location: "Brisbane",
   latitude: "-27.452117",
   longitude: "153.028929",
   location_url: "https://maps.app.goo.gl/tWw3Waee4ic48EAd8",

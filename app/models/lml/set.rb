@@ -10,5 +10,13 @@ module Lml
 
     belongs_to :gig
     belongs_to :act
+
+    def gig_label
+      gig&.label
+    end
+
+    def act_label
+      act&.label
+    end
   end
 end

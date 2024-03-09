@@ -7,6 +7,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     f.inputs do
       f.input :name
       f.input :address
+      f.input :location
       f.input :location_url
       f.input :latitude
       f.input :longitude

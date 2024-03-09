@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   scope "gigs" do
     root to: "gigs#index", defaults: { format: "json" }
     get "query", to: "gigs#query", defaults: { format: "json" }
+    get "autocomplete", to: "gigs#autocomplete", defaults: { format: "json" }
   end
   scope "venues" do
     get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
