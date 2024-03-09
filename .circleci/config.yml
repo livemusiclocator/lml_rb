@@ -34,6 +34,7 @@ jobs:
       - slack/notify:
           event: pass
           template: success_tagged_deploy_1
+
   migrate:
     docker:
       - image: cimg/ruby:3.3.0
@@ -62,15 +63,15 @@ workflows:
           filters:
             branches:
               ignore: main
-      - migrate:
+      - deploy-main:
           requires:
-            - deploy
+            - test
           filters:
             branches:
               only: main
-      - deploy:
+      - migrate:
           requires:
-            - test
+            - deploy-main
           filters:
             branches:
               only: main
