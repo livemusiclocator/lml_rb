@@ -65,7 +65,7 @@ workflows:
               ignore: main
       - migrate:
           requires:
-            - deploy-main
+            - deploy
           filters:
             branches:
               only: main
