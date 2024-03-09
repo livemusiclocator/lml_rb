@@ -24,12 +24,11 @@ jobs:
       - checkout
       - heroku/install
       - run:
-          name: Deploy Main to Heroku
+          name: Deploy to Heroku
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
       - slack/notify:
           event: fail
-          mentions: '@Joe'
           template: basic_fail_1
       - slack/notify:
           event: pass
@@ -66,6 +65,7 @@ workflows:
       - migrate:
           requires:
             - deploy
+            - hold
           filters:
             branches:
               only: main
