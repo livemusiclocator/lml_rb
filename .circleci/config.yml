@@ -59,7 +59,6 @@ workflows:
           type: approval
           requires:
             - test
-          filters:
       - migrate:
           requires:
             - deploy
