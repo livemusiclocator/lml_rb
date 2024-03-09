@@ -10,6 +10,30 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
 
   filter :name_cont, label: "Name"
 
+  index do
+    selectable_column
+    id_column
+    column :name
+    column :location
+    column :created_at
+    column :updated_at
+    actions
+  end
+
+  show do
+    attributes_table do
+      row :id
+      row :name
+      row :address
+      row :location
+      row :location_url
+      row :latitude
+      row :longitude
+      row :created_at
+      row :updated_at
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :name

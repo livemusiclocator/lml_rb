@@ -11,6 +11,30 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
   filter :none
 
+  index do
+    selectable_column
+    id_column
+    column :name
+    column :date
+    column :venue
+    column :headline_act
+    column :created_at
+    column :updated_at
+    actions
+  end
+
+  show do
+    attributes_table do
+      row :id
+      row :name
+      row :date
+      row :venue
+      row :headline_act
+      row :created_at
+      row :updated_at
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :name

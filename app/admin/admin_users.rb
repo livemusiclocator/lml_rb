@@ -10,16 +10,26 @@ ActiveAdmin.register AdminUser do
     selectable_column
     id_column
     column :email
-    column :current_sign_in_at
-    column :sign_in_count
+    column :time_zone
     column :created_at
+    column :updated_at
     actions
   end
 
-  filter :email
-  filter :current_sign_in_at
-  filter :sign_in_count
+  show do
+    attributes_table do
+      row :id
+      row :email
+      row :time_zone
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  filter :email_cont, label: "Email"
+  filter :timezone_cont, label: "Timezone"
   filter :created_at
+  filter :updated_at
 
   form do |f|
     f.inputs do

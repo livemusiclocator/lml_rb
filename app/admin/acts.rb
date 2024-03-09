@@ -7,6 +7,30 @@ ActiveAdmin.register Lml::Act, as: "Act" do
   )
 
   filter :name_cont, label: "Name"
+  filter :country_cont, label: "Country"
+  filter :location_cont, label: "Location"
+
+  index do
+    selectable_column
+    id_column
+    column :name
+    column :country
+    column :location
+    column :created_at
+    column :updated_at
+    actions
+  end
+
+  show do
+    attributes_table do
+      row :id
+      row :name
+      row :country
+      row :location
+      row :created_at
+      row :updated_at
+    end
+  end
 
   form do |f|
     f.inputs do
