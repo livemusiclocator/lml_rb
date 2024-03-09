@@ -14,8 +14,8 @@ jobs:
       - checkout
       - ruby/install-deps
       - run:
-          name: rails test
-          command: bundle exec rails test
+          name: specs
+          command: bundle exec rails spec
 
   deploy:
     docker:
