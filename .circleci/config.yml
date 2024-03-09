@@ -72,7 +72,6 @@ workflows:
       - deploy:
           requires:
             - test
-            - hold
           filters:
             branches:
               ignore: main
