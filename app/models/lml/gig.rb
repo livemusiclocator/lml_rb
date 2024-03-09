@@ -8,7 +8,7 @@ module Lml
       []
     end
 
-    enum :status, { draft: "draft", confirmed:"confirmed", cancelled: "cancelled"}, prefix: true
+    enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
 
     belongs_to :venue
     belongs_to :headline_act, class_name: "Lml::Act"
@@ -17,6 +17,4 @@ module Lml
     scope :upcoming , ->(days:3) {  where(start_time: (1.hour.ago...days.days.from_now)) }
     scope :filter_by_date, ->(range_or_date)  {  where(date: range_or_date) }
   end
-
-
 end

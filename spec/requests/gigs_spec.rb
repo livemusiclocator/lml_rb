@@ -47,5 +47,52 @@ describe "gigs" do
         expect(JSON.parse(response.body)).to eq([])
       end
     end
+
+    context "when there are gigs" do
+      before do
+        @venue = Lml::Venue.create!(name: "The Gig Place")
+        @act = Lml::Act.create!(
+          name: "The Really Quite Good Music People",
+          genres: %w[good loud people]
+        )
+        @gig = Lml::Gig.create!(
+          name: "The One Gig You Should Not Miss Out On",
+          headline_act: @act,
+          venue: @venue,
+          date: "2001-06-08",
+          status: :confirmed,
+        )
+      end
+
+      it "returns matching gigs when dates are specified" do
+        get "/gigs/query?date_from=2001-06-08&date_to=2001-06-08"
+        expect(JSON.parse(response.body)).to(
+          eq(
+            [
+              {
+                "date" => "2001-06-08",
+                "finish_time" => nil,
+                "headline_act" => {
+                  "genres" => %w[good loud people],
+                  "id" => @act.id,
+                  "name" => "The Really Quite Good Music People",
+                },
+                "id" => @gig.id,
+                "name" => "The One Gig You Should Not Miss Out On",
+                "sets" => [],
+                "start_time" => nil,
+                "venue" => {
+                  "address" => nil,
+                  "id" => @venue.id,
+                  "latitude" => nil,
+                  "longitude" => nil,
+                  "name" => "The Gig Place",
+                },
+              },
+            ],
+          ),
+        )
+      end
+    end
   end
 end
