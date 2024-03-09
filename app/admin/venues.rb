@@ -9,6 +9,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   )
 
   filter :name_cont, label: "Name"
+  filter :location_cont, label: "Location"
 
   index do
     selectable_column

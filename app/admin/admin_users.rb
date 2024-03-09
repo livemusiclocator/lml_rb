@@ -27,7 +27,7 @@ ActiveAdmin.register AdminUser do
   end
 
   filter :email_cont, label: "Email"
-  filter :timezone_cont, label: "Timezone"
+  filter :time_zone_cont, label: "Timezone"
   filter :created_at
   filter :updated_at
 

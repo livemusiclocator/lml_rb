@@ -9,7 +9,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :venue_id,
   )
 
-  filter :none
+  filter :name_cont, label: "Name"
 
   index do
     selectable_column
