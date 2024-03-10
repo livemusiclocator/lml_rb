@@ -15,7 +15,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
   index do
     selectable_column
-    id_column
     column :name
     column :date
     column :venue

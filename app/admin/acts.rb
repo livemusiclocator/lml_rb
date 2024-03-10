@@ -12,7 +12,6 @@ ActiveAdmin.register Lml::Act, as: "Act" do
 
   index do
     selectable_column
-    id_column
     column :name
     column :country
     column :location

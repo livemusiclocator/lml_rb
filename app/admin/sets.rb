@@ -10,7 +10,6 @@ ActiveAdmin.register Lml::Set, as: "Set" do
 
   index do
     selectable_column
-    id_column
     column :gig
     column :act
     column :start_time

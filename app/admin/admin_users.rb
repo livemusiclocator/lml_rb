@@ -8,7 +8,6 @@ ActiveAdmin.register AdminUser do
 
   index do
     selectable_column
-    id_column
     column :email
     column :time_zone
     column :created_at

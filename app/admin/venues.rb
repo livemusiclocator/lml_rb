@@ -13,7 +13,6 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
 
   index do
     selectable_column
-    id_column
     column :name
     column :location
     column :created_at
