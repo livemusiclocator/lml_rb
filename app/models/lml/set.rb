@@ -1,7 +1,7 @@
 module Lml
   class Set < ApplicationRecord
     def self.ransackable_attributes(auth_object = nil)
-      []
+      %w[act_id]
     end
 
     def self.ransackable_associations(auth_object = nil)

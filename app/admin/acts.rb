@@ -32,6 +32,13 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     end
   end
 
+  sidebar "Links", only: :show do
+    ul do
+      li link_to "Gigs", admin_gigs_path("q[headline_act_id_eq]" => resource.id)
+      li link_to "Sets", admin_sets_path("q[act_id_eq]" => resource.id)
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :name
