@@ -4,6 +4,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :status,
     :finish_time,
     :headline_act_id,
+    :ticketing_url,
     :name,
     :start_time,
     :venue_id,
@@ -29,6 +30,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :name
       row :date
       row :venue
+      row :ticketing_url
       row :headline_act
       row :created_at
       row :updated_at
@@ -58,6 +60,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :headline_act_label, label: "Headline Act"
       f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
+      f.input :ticketing_url
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :start_time, as: :datetime_picker
       f.input :finish_time, as: :datetime_picker

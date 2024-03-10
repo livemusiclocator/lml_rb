@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_09_234247) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_10_063501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_234247) do
     t.uuid "venue_id"
     t.uuid "headline_act_id"
     t.enum "status", default: "draft", null: false, enum_type: "status"
+    t.string "ticketing_url"
     t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
