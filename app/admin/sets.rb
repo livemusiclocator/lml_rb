@@ -32,6 +32,10 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     end
   end
 
+  action_item :clone, only: %i[show] do
+    link_to "Clone", new_admin_set_path(gig_id: set.gig_id, start_time: set.start_time, end_time: set.finish_time), method: :get
+  end
+
   form do |f|
     f.inputs do
       f.input :gig_label, label: "Gig"
@@ -50,7 +54,15 @@ ActiveAdmin.register Lml::Set, as: "Set" do
 
   controller do
     def new
-      @set = Lml::Set.new(start_time: Time.now, finish_time: Time.now)
+      gig_id = params[:gig_id]
+      start_time = params[:start_time]
+      finish_time = params[:finish_time]
+
+      @set = Lml::Set.new(
+        gig_id: gig_id,
+        start_time: start_time,
+        finish_time: finish_time,
+      )
     end
   end
 end

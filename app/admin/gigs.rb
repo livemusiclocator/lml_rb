@@ -33,6 +33,21 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :created_at
       row :updated_at
     end
+
+    panel "Sets" do
+      table_for gig.sets do
+        column :id do |set|
+          link_to set.id, admin_set_path(set)
+        end
+        column :act
+        column :start_time
+        column :finish_time
+      end
+    end
+  end
+
+  action_item :add_set, only: %i[show] do
+    link_to "Add Set", new_admin_set_path(gig_id: gig.id, start_time: gig.start_time, end_time: gig.finish_time), method: :get
   end
 
   form do |f|
@@ -52,11 +67,5 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       attachAutocomplete("lml_gig_headline_act", "/acts/autocomplete", "Select Headline Act");
     SCRIPT
     f.actions
-  end
-
-  controller do
-    def new
-      @gig = Lml::Gig.new(start_time: Time.now)
-    end
   end
 end
