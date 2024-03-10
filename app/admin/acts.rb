@@ -27,6 +27,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       row :name
       row :country
       row :location
+      row :genre_list
       row :created_at
       row :updated_at
     end

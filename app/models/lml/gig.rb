@@ -28,5 +28,13 @@ module Lml
     def headline_act_label
       headline_act&.label
     end
+
+    def tag_list
+      (tags || []).join(", ")
+    end
+
+    def tag_list=(value)
+      self.tags = value.split(",").map(&:strip)
+    end
   end
 end
