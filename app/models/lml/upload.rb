@@ -19,11 +19,11 @@ module Lml
 
       content.lines.each do |line|
         key, *rest = line.chomp.strip.split(":")
-        value = rest.join(":")
+        value = rest.join(":").strip
         key = key.downcase.gsub(" ", "_")
         case key
-        when "act_name"
-          details[:act_name] = value
+        when "acts"
+          details[:act_names] = value.split("|").map(&:strip)
         when "venue_name"
           details[:venue_name] = value
         when "gig_name"
@@ -35,8 +35,8 @@ module Lml
         end
       end
 
-      gig = Lml::Gig.find_or_create_by(name: details[:gig_name])
-      append_act(gig, details[:act_name])
+      gig = find_or_create_gig(details[:gig_name])
+      append_acts(gig, details[:act_names])
       append_venue(gig, details[:venue_name])
       append_date_time(gig, details[:date], details[:time])
       gig.save
@@ -44,18 +44,29 @@ module Lml
 
     private
 
-    def append_act(gig, name)
-      return unless name
+    def find_or_create_gig(name)
+      gig = Lml::Gig.where("lower(name) = ?", name.downcase).first
+      gig || Lml::Gig.create(name: name)
+    end
 
-      act = Lml::Act.find_or_create_by(name: name)
-      gig.headline_act = act
-      Lml::Set.find_or_create_by(gig: gig, act: act)
+    def append_acts(gig, names)
+      return unless names.present?
+
+      acts = []
+      names.each do |name|
+        act = Lml::Act.where("lower(name) = ?", name.downcase).first
+        act ||= Lml::Act.create(name: name)
+        Lml::Set.find_or_create_by(gig: gig, act: act)
+        acts << act
+      end
+      gig.headline_act = acts.first
     end
 
     def append_venue(gig, name)
       return unless name
 
-      gig.venue = Lml::Venue.find_or_create_by(name: name)
+      gig.venue = Lml::Venue.where("lower(name) = ?", name.downcase).first
+      gig.venue ||= Lml::Venue.create(name: name)
     end
 
     def append_date_time(gig, date, time)
@@ -67,4 +78,4 @@ module Lml
       gig.start_time = "#{date.iso8601}T#{time.strftime("%H:%M")}:00"
     end
   end
- end
+end
