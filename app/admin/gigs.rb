@@ -15,7 +15,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
   index do
     selectable_column
-    column :name
+    column :name do |gig|
+      link_to(gig.name, admin_gig_path(gig))
+    end
     column :date
     column :venue
     column :headline_act
@@ -39,8 +41,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
     panel "Sets" do
       table_for gig.sets do
-        column :id do |set|
-          link_to set.id, admin_set_path(set)
+        column :link do |set|
+          link_to "link", admin_set_path(set)
         end
         column :act
         column :start_time

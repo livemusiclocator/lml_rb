@@ -12,7 +12,9 @@ ActiveAdmin.register Lml::Act, as: "Act" do
 
   index do
     selectable_column
-    column :name
+    column :name do |act|
+      link_to(act.name, admin_act_path(act))
+    end
     column :country
     column :location
     column :created_at

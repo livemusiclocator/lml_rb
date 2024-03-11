@@ -13,7 +13,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
 
   index do
     selectable_column
-    column :name
+    column :name do |venue|
+      link_to(venue.name, admin_venue_path(venue))
+    end
     column :location
     column :created_at
     column :updated_at

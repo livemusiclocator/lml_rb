@@ -8,6 +8,8 @@ module Lml
       []
     end
 
+    enum :format, { clipper: "clipper" }, prefix: true
+
     validates :format, presence: true
     validates :source, presence: true
     validates :content, presence: true

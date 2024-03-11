@@ -8,7 +8,9 @@ ActiveAdmin.register AdminUser do
 
   index do
     selectable_column
-    column :email
+    column :email do |admin_user|
+      link_to(admin_user.email, admin_admin_user_path(admin_user))
+    end
     column :time_zone
     column :created_at
     column :updated_at

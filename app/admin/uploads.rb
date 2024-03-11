@@ -10,9 +10,11 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
 
   index do
     selectable_column
+    column :created_at do |upload|
+      link_to(upload.created_at, admin_upload_path(upload))
+    end
     column :format
     column :source
-    column :created_at
     column :updated_at
     actions
   end
@@ -31,7 +33,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
 
   form do |f|
     f.inputs do
-      f.input :format
+      f.input :format, as: :select, collection: Lml::Upload.formats.keys
       f.input :source
       f.input :content
     end
