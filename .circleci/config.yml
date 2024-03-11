@@ -13,7 +13,7 @@ jobs:
         environment:
           RAILS_ENV: test
           DATABASE_URL: postgresql://postgres@localhost/circle_test
-      - image: circleci/postgres:14.0
+      - image: cimg/postgres:14.0
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: test
