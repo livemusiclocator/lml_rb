@@ -40,7 +40,7 @@ class GigsController < ApplicationController
         href: url_for(
           action: :query,
           format: request.params[:format],
-          date_from: Date.today.end_of_week.advance(days:-2),
+          date_from: Date.today.end_of_week.advance(days: -2),
           date_to: Date.today.end_of_week,
         ),
       },

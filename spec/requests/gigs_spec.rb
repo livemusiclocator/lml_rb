@@ -3,7 +3,7 @@ require "rails_helper"
 describe "gigs" do
   describe "index" do
     it "returns links to query endpoints" do
-      travel_to(Time.iso8601("2001-06-01T19:00:00Z")) do
+      travel_to(Time.iso8601("2001-06-02T00:00:00Z")) do
         get "/gigs"
       end
 
