@@ -22,7 +22,7 @@ jobs:
       - ruby/install-deps
       - run:
           name: Database setup
-          command: bundle exec rails db:create db:schema:load --trace
+          command: bundle exec rails db:create db:migrate db:seed
       - run:
           name: specs
           command: bundle exec rails spec
