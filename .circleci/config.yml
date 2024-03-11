@@ -10,9 +10,19 @@ jobs:
     # Install gems, run rails tests
     docker:
       - image: cimg/ruby:3.3.0-node
+        environment:
+          RAILS_ENV: test
+          DATABASE_URL: "postgresql://postgres:@localhost/test"
+      - image: circleci/postgres:13.3
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: test
     steps:
       - checkout
       - ruby/install-deps
+      - run:
+          name: Database setup
+          command: bundle exec rails db:create db:schema:load --trace
       - run:
           name: specs
           command: bundle exec rails spec
