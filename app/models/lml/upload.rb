@@ -8,7 +8,7 @@ module Lml
       []
     end
 
-    enum :format, { clipper: "clipper" }, prefix: true
+    enum :format, { clipper: "clipper", schema_org_events: "schema_org_events" }, prefix: true
 
     validates :format, presence: true
     validates :source, presence: true
@@ -20,6 +20,8 @@ module Lml
       case format
       when "clipper"
         Lml::Processors::Clipper.new(self).process!
+      when "schema_org_events"
+        Lml::Processors::SchemaOrgEvents.new(self).process!
       end
     end
   end
