@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+RAILS_ENV=test bin/rails db:create db:migrate db:seed
+TZ=UTC bin/rails spec
