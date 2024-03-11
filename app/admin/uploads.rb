@@ -8,6 +8,27 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   filter :format_cont, label: "Format"
   filter :source_cont, label: "Source"
 
+  index do
+    selectable_column
+    column :format
+    column :source
+    column :created_at
+    column :updated_at
+    actions
+  end
+
+  show do
+    attributes_table do
+      row :format
+      row :source
+      row :content do |upload|
+        simple_format upload.content
+      end
+      row :created_at
+      row :updated_at
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :format
