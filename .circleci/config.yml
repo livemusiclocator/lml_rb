@@ -12,8 +12,8 @@ jobs:
       - image: cimg/ruby:3.3.0-node
         environment:
           RAILS_ENV: test
-          DATABASE_URL: "postgresql://postgres:@localhost:5432/test"
-      - image: circleci/postgres:13.3
+          DATABASE_URL: postgresql://postgres@localhost/circle_test
+      - image: circleci/postgres:14.0
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: test
