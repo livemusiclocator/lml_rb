@@ -53,10 +53,11 @@ module Lml
       return unless names.present?
 
       acts = []
+      gig.sets.destroy_all
       names.each do |name|
         act = Lml::Act.where("lower(name) = ?", name.downcase).first
         act ||= Lml::Act.create(name: name)
-        Lml::Set.find_or_create_by(gig: gig, act: act)
+        Lml::Set.create(gig: gig, act: act)
         acts << act
       end
       gig.headline_act = acts.first
