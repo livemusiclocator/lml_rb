@@ -17,15 +17,38 @@ module Lml
           gig.start_time = data["startDate"]
           gig.ticketing_url = data["url"]
           append_venue(gig, data["location"])
+          append_acts(gig, data["performers"])
           gig.save
         end
       end
 
       private
 
+      def event?(data)
+        %w[http://schema.org https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
+      end
+
       def find_or_create_gig(name)
         gig = Lml::Gig.where("lower(name) = ?", name.downcase).first
         gig || Lml::Gig.create(name: name)
+      end
+
+      def append_acts(gig, data_list)
+        return unless data_list.present?
+
+        acts = []
+        data_list.each do |data|
+          next unless data["@type"] == "Person"
+
+          name = CGI.unescapeHTML(data["name"])
+          next if ["Northcote Theatre"].include?(name)
+
+          act = Lml::Act.where("lower(name) = ?", name.downcase).first
+          act ||= Lml::Act.create(name: name)
+          Lml::Set.create(gig: gig, act: act)
+          acts << act
+        end
+        gig.headline_act = acts.first
       end
 
       def append_venue(gig, data)
@@ -62,10 +85,6 @@ module Lml
           data["postalCode"],
         ].join(" ")
         venue.location = data["addressRegion"]
-      end
-
-      def event?(data)
-        data["@context"] == "http://schema.org" && data["@type"] == "Event"
       end
     end
   end
