@@ -25,7 +25,8 @@ module Lml
       private
 
       def event?(data)
-        %w[http://schema.org https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
+        %w[http://schema.org
+           https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
       end
 
       def find_or_create_gig(name)
@@ -41,7 +42,7 @@ module Lml
           next unless data["@type"] == "Person"
 
           name = CGI.unescapeHTML(data["name"])
-          next if ["Northcote Theatre"].include?(name)
+          next if ["northcote theatre", "howler", "hwlr"].include?(name.downcase)
 
           act = Lml::Act.where("lower(name) = ?", name.downcase).first
           act ||= Lml::Act.create(name: name)
