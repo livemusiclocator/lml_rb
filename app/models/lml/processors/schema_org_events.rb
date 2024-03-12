@@ -38,6 +38,7 @@ module Lml
         return unless data_list.present?
 
         acts = []
+        gig.sets.destroy_all
         data_list.each do |data|
           next unless data["@type"] == "Person"
 
