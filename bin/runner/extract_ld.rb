@@ -2,7 +2,6 @@
 
 require "open-uri"
 
-file = ARGV.shift
 url = ARGV.shift
 
 docs = []
@@ -16,6 +15,22 @@ page.css('script[type="application/ld+json"]').each do |ld|
     docs << doc
   end
 end
-File.open(file, "w") do |file|
-  file.puts JSON.pretty_generate(docs)
+
+content = JSON.pretty_generate(docs)
+
+upload = Lml::Upload.find_by(
+  source: url,
+  format: "schema_org_events",
+)
+
+if upload
+  upload.update!(content: content)
+else
+  upload = Lml::Upload.create!(
+    source: url,
+    format: "schema_org_events",
+    content: content,
+  )
 end
+
+upload.process!
