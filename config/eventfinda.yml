@@ -1,0 +1,15 @@
+shared:
+  credentials:
+# todo: can we just store this as the u:p or u:p base64 encoded?
+    username:  <%= ENV['EVENTFINDA_USERNAME'] %>
+    password:  <%= ENV['EVENTFINDA_PASSWORD'] %>
+  endpoint_url: https://api.eventfinda.com.au
+  page_size: 10
+
+development:
+  # mistakeproofing so we dont spam the endpoint in dev
+  enabled: <%= ENV['ENABLE_EVENTFINDA'] %>
+  max_pages: 10
+production:
+  enabled: true
+  max_pages: 200
