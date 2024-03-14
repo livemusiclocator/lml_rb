@@ -90,3 +90,9 @@ heroku ps:exec --app=live-music-locator
 # tail logs
 heroku logs -t
 ```
+
+# Running eventfinda import (temp)
+
+```
+EVENTFINDA_USERNAME=******* EVENTFINDA_PASSWORD=********** ENABLE_EVENTFINDA=1 ./bin/rails runner 'FetchEventfindaJob.perform_now'
+```
