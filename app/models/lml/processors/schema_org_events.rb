@@ -7,23 +7,30 @@ module Lml
 
       def process!
         JSON.parse(@upload.content).each do |data|
-          next unless event?(data)
-
-          name = data["name"]
-
-          gig = find_or_create_gig(name)
-          gig.description = data["description"]
-          gig.date = data["endDate"]
-          gig.start_time = data["startDate"]
-          gig.ticketing_url = data["url"]
-          gig.status = status(data)
-          append_venue(gig, data["location"])
-          append_acts(gig, data["performers"])
-          gig.save
+          process_event(data)
+          (data["@graph"] || []).each do |child_element|
+            process_event(child_element)
+          end
         end
       end
 
       private
+
+      def process_event(data)
+        return unless event?(data)
+
+        name = data["name"]
+
+        gig = find_or_create_gig(name)
+        gig.description = data["description"]
+        gig.date = data["startDate"].slice(0, 10)
+        gig.start_time = data["startDate"]
+        gig.ticketing_url = data["url"]
+        gig.status = status(data)
+        append_venue(gig, data["location"])
+        append_acts(gig, data["performers"])
+        gig.save
+      end
 
       def status(data)
         case (data["eventStatus"] || "").split("/").last
