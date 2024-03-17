@@ -9,19 +9,23 @@ json.array! @gigs do |gig|
   json.finish_time gig.finish_time
 
   venue = gig.venue
-  json.venue do
-    json.id venue.id
-    json.name venue.name
-    json.address venue.address
-    json.latitude venue.latitude
-    json.longitude venue.longitude
+  if venue
+    json.venue do
+      json.id venue.id
+      json.name venue.name
+      json.address venue.address
+      json.latitude venue.latitude
+      json.longitude venue.longitude
+    end
   end
 
   headline_act = gig.headline_act
-  json.headline_act do
-    json.id headline_act.id
-    json.name headline_act.name
-    json.genres headline_act.genres
+  if headline_act
+    json.headline_act do
+      json.id headline_act.id
+      json.name headline_act.name
+      json.genres headline_act.genres
+    end
   end
 
   json.sets gig.sets do |set|
