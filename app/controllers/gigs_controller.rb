@@ -71,10 +71,10 @@ class GigsController < ApplicationController
     date_from = params[:date_from]
     date_to = params[:date_to]
     @gigs = if date_from && date_to
-              Lml::Gig.status_confirmed.filter_by_date((date_from..date_to))
+              Lml::Gig.eager.status_confirmed.filter_by_date((date_from..date_to))
             else
               # TODO: move time based filtering to the client?
-              Lml::Gig.status_confirmed.upcoming
+              Lml::Gig.eager.status_confirmed.upcoming
             end
   end
 
