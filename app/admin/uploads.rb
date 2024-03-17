@@ -24,7 +24,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
       row :format
       row :source
       row :content do |upload|
-        simple_format upload.content
+        pre { upload.content }
       end
       row :created_at
       row :updated_at

@@ -1,6 +1,7 @@
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :date,
+    :description,
     :status,
     :finish_time,
     :headline_act_id,
@@ -18,6 +19,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :name do |gig|
       link_to(gig.name, admin_gig_path(gig))
     end
+    column :status
+    column :start_time
     column :date
     column :venue
     column :headline_act
@@ -30,7 +33,13 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     attributes_table do
       row :id
       row :name
+      row :status
       row :date
+      row :start_time
+      row :finish_time
+      row :description do |gig|
+        pre { gig.description }
+      end
       row :venue
       row :ticketing_url
       row :tag_list
@@ -52,7 +61,11 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   action_item :add_set, only: %i[show] do
-    link_to "Add Set", new_admin_set_path(gig_id: gig.id, start_time: gig.start_time, end_time: gig.finish_time), method: :get
+    link_to(
+      "Add Set",
+      new_admin_set_path(gig_id: gig.id, start_time: gig.start_time, end_time: gig.finish_time),
+      method: :get,
+    )
   end
 
   form do |f|
@@ -68,6 +81,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :start_time, as: :datetime_picker
       f.input :finish_time, as: :datetime_picker
+      f.input :description
     end
     script <<~SCRIPT.html_safe
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
