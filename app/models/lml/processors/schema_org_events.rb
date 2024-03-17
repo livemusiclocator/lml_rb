@@ -19,11 +19,11 @@ module Lml
       def process_event(data)
         return unless event?(data)
 
-        name = CGI.unescapeHTML(data["name"])
+        name = CGI.unescapeHTML(data["name"].strip)
 
         gig = find_or_create_gig(name)
-        gig.description = CGI.unescapeHTML(data["description"])
-        gig.date = data["startDate"].slice(0, 10)
+        gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
+        gig.date = data["startDate"].slice(0, 10) if data["startDate"]
         gig.start_time = data["startDate"]
         gig.ticketing_url = data["url"]
         gig.status = status(data)
@@ -60,7 +60,7 @@ module Lml
         data_list.each do |data|
           next unless data["@type"] == "Person"
 
-          name = CGI.unescapeHTML(data["name"])
+          name = CGI.unescapeHTML(data["name"].strip)
           next if ["northcote theatre", "howler", "hwlr"].include?(name.downcase)
 
           act = Lml::Act.where("lower(name) = ?", name.downcase).first
@@ -75,7 +75,7 @@ module Lml
         return unless data.present?
         return unless data["@type"] == "Place"
 
-        name = CGI.unescapeHTML(data["name"])
+        name = CGI.unescapeHTML(data["name"].strip)
 
         venue = Lml::Venue.where("lower(name) = ?", name.downcase).first
         venue ||= Lml::Venue.create(name: name)
