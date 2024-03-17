@@ -19,10 +19,10 @@ module Lml
       def process_event(data)
         return unless event?(data)
 
-        name = data["name"]
+        name = CGI.unescapeHTML(data["name"])
 
         gig = find_or_create_gig(name)
-        gig.description = data["description"]
+        gig.description = CGI.unescapeHTML(data["description"])
         gig.date = data["startDate"].slice(0, 10)
         gig.start_time = data["startDate"]
         gig.ticketing_url = data["url"]
@@ -75,7 +75,7 @@ module Lml
         return unless data.present?
         return unless data["@type"] == "Place"
 
-        name = data["name"]
+        name = CGI.unescapeHTML(data["name"])
 
         venue = Lml::Venue.where("lower(name) = ?", name.downcase).first
         venue ||= Lml::Venue.create(name: name)
