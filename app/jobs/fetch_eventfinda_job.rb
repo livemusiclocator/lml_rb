@@ -16,15 +16,17 @@ class FetchEventfindaJob < ApplicationJob
 
     all_events = []
     page = 0
+
+    # todo: make this cooler
     loop do
-      response = conn.get("/v2/events.json", offset: page * config.page_size, rows: config.page_size)
-      all_events += response.body[:events]
-      count = response.body[:@attributes][:count]
-      break if (all_events.length >= count) or response.body[:events].empty?
-      page += 1
-      # TEMP? or probably not the way these things go.
-      break if page > 5
+        break if page >= config.max_pages
+        response = conn.get("/v2/events.json", offset: page * config.page_size, rows: config.page_size)
+        all_events += response.body[:events]
+        count = response.body[:@attributes][:count]
+        break if (all_events.length >= count) or response.body[:events].empty?
+        page += 1
     end
+
     Lml::Upload.create(format: "eventfinda_events", source: "eventfinda_com_au", content: {events: all_events}.to_json)
-    end
+  end
 end
