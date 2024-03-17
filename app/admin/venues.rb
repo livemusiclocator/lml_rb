@@ -36,6 +36,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
   end
 
+  sidebar "Links", only: :show do
+    ul do
+      li link_to "Gigs", admin_gigs_path("q[venue_id_eq]" => resource.id)
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :name

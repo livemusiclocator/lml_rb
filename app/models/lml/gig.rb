@@ -1,11 +1,11 @@
 module Lml
   class Gig < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
-      %w[name headline_act_id]
+      %w[name headline_act_id venue_id]
     end
 
     def self.ransackable_associations(_auth_object = nil)
-      []
+      %w[headline_act venue]
     end
 
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
