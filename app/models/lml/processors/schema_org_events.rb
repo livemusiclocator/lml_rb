@@ -16,6 +16,7 @@ module Lml
           gig.date = data["endDate"]
           gig.start_time = data["startDate"]
           gig.ticketing_url = data["url"]
+          gig.status = status(data)
           append_venue(gig, data["location"])
           append_acts(gig, data["performers"])
           gig.save
@@ -24,9 +25,19 @@ module Lml
 
       private
 
+      def status(data)
+        case (data["eventStatus"] || "").split("/").last
+        when "EventScheduled", "EventRescheduled"
+          "confirmed"
+        when "EventCancelled"
+          "cancelled"
+        else
+          "draft"
+        end
+      end
+
       def event?(data)
-        %w[http://schema.org
-           https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
+        %w[http://schema.org https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
       end
 
       def find_or_create_gig(name)
