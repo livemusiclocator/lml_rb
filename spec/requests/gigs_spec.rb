@@ -53,7 +53,7 @@ describe "gigs" do
         @venue = Lml::Venue.create!(name: "The Gig Place")
         @act = Lml::Act.create!(
           name: "The Really Quite Good Music People",
-          genres: %w[good loud people]
+          genres: %w[good loud people],
         )
         @gig = Lml::Gig.create!(
           name: "The One Gig You Should Not Miss Out On",
@@ -61,6 +61,7 @@ describe "gigs" do
           venue: @venue,
           date: "2001-06-08",
           status: :confirmed,
+          tags: %w[all-ages free],
         )
       end
 
@@ -81,6 +82,7 @@ describe "gigs" do
                 "name" => "The One Gig You Should Not Miss Out On",
                 "sets" => [],
                 "start_time" => nil,
+                "tags" => %w[all-ages free],
                 "venue" => {
                   "address" => nil,
                   "id" => @venue.id,
