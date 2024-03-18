@@ -4,7 +4,17 @@ shared:
     username:  <%= ENV['EVENTFINDA_USERNAME'] %>
     password:  <%= ENV['EVENTFINDA_PASSWORD'] %>
   endpoint_url: https://api.eventfinda.com.au
-  page_size: 10
+  query:
+    category_slug: concerts-gig-guide
+    rows: 10
+
+  # above filter returns some we would like to exclude
+  skip_category_slugs:
+    - quiz-kareoke
+    - djs-clubbing
+    - world-music
+    - variety
+    - bars-dj
 
 development:
   # mistakeproofing so we dont spam the endpoint in dev
