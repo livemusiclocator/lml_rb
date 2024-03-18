@@ -13,9 +13,12 @@ module Lml
     validates :format, presence: true
     validates :source, presence: true
     validates :content, presence: true
+    validates :time_zone, presence: true
 
     def process!
       return unless valid?
+
+      Time.zone = time_zone
 
       case format
       when "clipper"

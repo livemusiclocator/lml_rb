@@ -2,6 +2,7 @@
 
 require "open-uri"
 
+time_zone = ARGV.shift
 url = ARGV.shift
 
 docs = []
@@ -24,9 +25,13 @@ upload = Lml::Upload.find_by(
 )
 
 if upload
-  upload.update!(content: content)
+  upload.update!(
+    time_zone: time_zone,
+    content: content,
+  )
 else
   upload = Lml::Upload.create!(
+    time_zone: time_zone,
     source: url,
     format: "schema_org_events",
     content: content,

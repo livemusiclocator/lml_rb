@@ -3,6 +3,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     :format,
     :source,
     :content,
+    :time_zone,
   )
 
   filter :format_cont, label: "Format"
@@ -15,6 +16,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     end
     column :format
     column :source
+    column :time_zone
     column :updated_at
     actions
   end
@@ -23,6 +25,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     attributes_table do
       row :format
       row :source
+      row :time_zone
       row :content do |upload|
         pre { upload.content }
       end
@@ -34,6 +37,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   form do |f|
     f.inputs do
       f.input :format, as: :select, collection: Lml::Upload.formats.keys
+      f.input :time_zone
       f.input :source
       f.input :content
     end
