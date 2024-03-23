@@ -27,7 +27,11 @@ module Lml
         gig.start_time = data["startDate"]
         gig.ticketing_url = data["url"]
         gig.status = status(data)
-        append_venue(gig, data["location"])
+        if @upload.venue
+          gig.venue = @upload.venue
+        else
+          append_venue(gig, data["location"])
+        end
         append_acts(gig, data["performers"])
         gig.save
       end
