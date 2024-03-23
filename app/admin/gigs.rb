@@ -3,6 +3,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :date,
     :description,
     :status,
+    :from,
     :finish_time,
     :headline_act_id,
     :ticketing_url,
@@ -20,6 +21,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       link_to(gig.name, admin_gig_path(gig))
     end
     column :status
+    column :from
     column :start_time
     column :date
     column :venue
@@ -35,6 +37,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :name
       row :status
       row :date
+      row :from
       row :start_time
       row :finish_time
       row :description do |gig|
@@ -54,6 +57,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
           link_to "link", admin_set_path(set)
         end
         column :act
+        column :from
         column :start_time
         column :finish_time
       end
@@ -63,7 +67,11 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   action_item :add_set, only: %i[show] do
     link_to(
       "Add Set",
-      new_admin_set_path(gig_id: gig.id, start_time: gig.start_time, end_time: gig.finish_time),
+      new_admin_set_path(
+        gig_id: gig.id,
+        start_time: gig.start_time,
+        end_time: gig.finish_time,
+      ),
       method: :get,
     )
   end
@@ -76,6 +84,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :headline_act_label, label: "Headline Act"
       f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
+      f.input :from, as: :time_picker
       f.input :ticketing_url
       f.input :tag_list
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys

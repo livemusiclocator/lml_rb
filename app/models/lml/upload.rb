@@ -14,6 +14,7 @@ module Lml
     validates :source, presence: true
     validates :content, presence: true
     validates :time_zone, presence: true
+    belongs_to :venue, optional: true
 
     def process!
       return unless valid?

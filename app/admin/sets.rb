@@ -2,6 +2,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
   permit_params(
     :gig_id,
     :act_id,
+    :from,
     :start_time,
     :finish_time,
   )
@@ -12,6 +13,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     selectable_column
     column :gig
     column :act
+    column :from
     column :start_time
     column :finish_time
     column :created_at
@@ -24,6 +26,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       row :id
       row :gig
       row :act
+      row :from
       row :start_time
       row :finish_time
       row :created_at
@@ -32,7 +35,15 @@ ActiveAdmin.register Lml::Set, as: "Set" do
   end
 
   action_item :clone, only: %i[show] do
-    link_to "Clone", new_admin_set_path(gig_id: set.gig_id, start_time: set.start_time, end_time: set.finish_time), method: :get
+    link_to(
+      "Clone",
+      new_admin_set_path(
+        gig_id: set.gig_id,
+        start_time: set.start_time,
+        end_time: set.finish_time,
+      ),
+      method: :get,
+    )
   end
 
   form do |f|
@@ -41,6 +52,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       f.input :gig_id, as: "hidden"
       f.input :act_label, label: "Act"
       f.input :act_id, as: "hidden"
+      f.input :from, as: :time_picker
       f.input :start_time, as: :datetime_picker
       f.input :finish_time, as: :datetime_picker
     end
