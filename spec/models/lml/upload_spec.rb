@@ -5,6 +5,7 @@ describe Lml::Upload do
     context "where no data already existed" do
       it "creates a gig when only gig name is present" do
         upload = Lml::Upload.create!(
+          time_zone: "Melbourne",
           format: "clipper",
           source: "a website",
           content: <<~CONTENT,
@@ -19,6 +20,7 @@ describe Lml::Upload do
 
       it "creates a gig and venue" do
         upload = Lml::Upload.create!(
+          time_zone: "Melbourne",
           format: "clipper",
           source: "a website",
           content: <<~CONTENT,
@@ -34,6 +36,7 @@ describe Lml::Upload do
 
       it "creates a gig, an act and sets" do
         upload = Lml::Upload.create!(
+          time_zone: "Melbourne",
           format: "clipper",
           source: "a website",
           content: <<~CONTENT,
@@ -68,6 +71,7 @@ describe Lml::Upload do
 
       it "leaves gig and venue with existing names that match on case" do
         upload = Lml::Upload.create!(
+          time_zone: "Melbourne",
           format: "clipper",
           source: "a website",
           content: <<~CONTENT,
@@ -83,6 +87,7 @@ describe Lml::Upload do
 
       it "leaves existing gig and act names, replaces headline act and sets" do
         upload = Lml::Upload.create!(
+          time_zone: "Melbourne",
           format: "clipper",
           source: "a website",
           content: <<~CONTENT,
