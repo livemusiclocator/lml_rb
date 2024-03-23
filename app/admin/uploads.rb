@@ -1,9 +1,10 @@
 ActiveAdmin.register Lml::Upload, as: "Upload" do
   permit_params(
+    :content,
     :format,
     :source,
-    :content,
     :time_zone,
+    :venue_id,
   )
 
   filter :format_cont, label: "Format"
@@ -16,6 +17,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     end
     column :format
     column :source
+    column :venue
     column :time_zone
     column :updated_at
     actions
@@ -25,6 +27,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     attributes_table do
       row :format
       row :source
+      row :venue
       row :time_zone
       row :content do |upload|
         pre { upload.content }
@@ -36,11 +39,24 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
 
   form do |f|
     f.inputs do
-      f.input :format, as: :select, collection: Lml::Upload.formats.keys
-      f.input :time_zone, as: :select, collection: ActiveSupport::TimeZone.country_zones("AU").map { |t| t.name }.sort
+      f.input(
+        :format,
+        as: :select,
+        collection: Lml::Upload.formats.keys,
+      )
+      f.input :venue_label, label: "Venue"
+      f.input :venue_id, as: "hidden"
+      f.input(
+        :time_zone,
+        as: :select,
+        collection: ActiveSupport::TimeZone.country_zones("AU").map(&:name).sort,
+      )
       f.input :source
       f.input :content
     end
+    script <<~SCRIPT.html_safe
+      attachAutocomplete("lml_upload_venue", "/venues/autocomplete", "Select Venue");
+    SCRIPT
     f.actions
   end
 
