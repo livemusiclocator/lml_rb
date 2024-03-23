@@ -1,14 +1,16 @@
 ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
-    :name,
     :address,
+    :latitude,
     :location,
     :location_url,
-    :latitude,
     :longitude,
+    :name,
+    :time_zone,
   )
 
   filter :name_cont, label: "Name"
+  filter :time_zone_cont, label: "Time Zone"
   filter :location_cont, label: "Location"
 
   index do
@@ -16,6 +18,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     column :name do |venue|
       link_to(venue.name, admin_venue_path(venue))
     end
+    column :time_zone
     column :location
     column :created_at
     column :updated_at
@@ -27,6 +30,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :id
       row :name
       row :address
+      row :time_zone
       row :location
       row :location_url
       row :latitude
@@ -46,6 +50,11 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     f.inputs do
       f.input :name
       f.input :address
+      f.input(
+        :time_zone,
+        as: :select,
+        collection: ActiveSupport::TimeZone.country_zones("AU").map(&:name).sort,
+      )
       f.input :location
       f.input :location_url
       f.input :latitude
