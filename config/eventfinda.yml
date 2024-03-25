@@ -1,0 +1,25 @@
+shared:
+  credentials:
+# todo: can we just store this as the u:p or u:p base64 encoded?
+    username:  <%= ENV['EVENTFINDA_USERNAME'] %>
+    password:  <%= ENV['EVENTFINDA_PASSWORD'] %>
+  endpoint_url: https://api.eventfinda.com.au
+  query:
+    category_slug: concerts-gig-guide
+    rows: 10
+
+  # above filter returns some we would like to exclude
+  skip_category_slugs:
+    - quiz-kareoke
+    - djs-clubbing
+    - world-music
+    - variety
+    - bars-dj
+
+development:
+  # mistakeproofing so we dont spam the endpoint in dev
+  enabled: <%= ENV['ENABLE_EVENTFINDA'] %>
+  max_pages: 10
+production:
+  enabled: true
+  max_pages: 200

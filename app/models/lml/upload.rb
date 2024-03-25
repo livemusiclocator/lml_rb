@@ -53,5 +53,7 @@ module Lml
         Lml::Processors::SchemaOrgEvents.new(self).process!
       end
     end
+
+    scope :filter_by_source, ->(source) { where(source: source) }
   end
 end
