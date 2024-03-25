@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_25_105056) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_111112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -54,7 +54,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_25_105056) do
     t.string "ticketing_url"
     t.jsonb "tags"
     t.text "description"
-    t.time "from"
     t.string "from_time"
     t.integer "start_offset"
     t.integer "duration"
@@ -69,7 +68,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_25_105056) do
     t.datetime "updated_at", null: false
     t.uuid "gig_id"
     t.uuid "act_id"
-    t.time "from"
     t.string "from_time"
     t.integer "start_offset"
     t.integer "duration"
