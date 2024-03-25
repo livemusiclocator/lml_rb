@@ -20,6 +20,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     column :status
     column :start_offset_time
+    column :tickets do |gig|
+      link_to("link", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
+    end
     column :date
     column :venue
     column :headline_act
@@ -43,7 +46,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
         pre { gig.description }
       end
       row :venue
-      row :ticketing_url
+      row :tickets do |gig|
+        link_to("tickets", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
+      end
       row :tag_list
       row :headline_act
       row :created_at
