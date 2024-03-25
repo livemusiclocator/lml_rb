@@ -20,8 +20,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
     column :time_zone
     column :location
-    column :created_at
-    column :updated_at
+    column :created_at do |resource|
+      admin_time(resource.created_at)
+    end
+    column :updated_at do |resource|
+      admin_time(resource.updated_at)
+    end
     actions
   end
 
@@ -35,8 +39,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :location_url
       row :latitude
       row :longitude
-      row :created_at
-      row :updated_at
+      row :created_at do |resource|
+        admin_time(resource.updated_at)
+      end
+      row :updated_at do |resource|
+        admin_time(resource.updated_at)
+      end
     end
   end
 

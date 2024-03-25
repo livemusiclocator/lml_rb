@@ -12,8 +12,12 @@ ActiveAdmin.register AdminUser do
       link_to(admin_user.email, admin_admin_user_path(admin_user))
     end
     column :time_zone
-    column :created_at
-    column :updated_at
+    column :created_at do |resource|
+      admin_time(resource.created_at)
+    end
+    column :updated_at do |resource|
+      admin_time(resource.updated_at)
+    end
     actions
   end
 
@@ -22,8 +26,12 @@ ActiveAdmin.register AdminUser do
       row :id
       row :email
       row :time_zone
-      row :created_at
-      row :updated_at
+      row :created_at do |resource|
+        admin_time(resource.updated_at)
+      end
+      row :updated_at do |resource|
+        admin_time(resource.updated_at)
+      end
     end
   end
 

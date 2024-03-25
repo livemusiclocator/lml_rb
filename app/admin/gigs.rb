@@ -23,11 +23,17 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :tickets do |gig|
       link_to("link", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
     end
-    column :date
+    column :date do |resource|
+      admin_date(resource.date)
+    end
     column :venue
     column :headline_act
-    column :created_at
-    column :updated_at
+    column :created_at do |resource|
+      admin_time(resource.created_at)
+    end
+    column :updated_at do |resource|
+      admin_time(resource.updated_at)
+    end
     actions
   end
 
@@ -36,12 +42,20 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :id
       row :name
       row :status
-      row :date
+      row :date do |resource|
+        admin_date(resource.date)
+      end
       row :start_offset_time
-      row :start_at
+      row :start_at do |resource|
+        admin_time(resource.start_at)
+      end
       row :duration
-      row :start_time
-      row :finish_time
+      row :start_time do |resource|
+        admin_time(resource.start_time)
+      end
+      row :finish_time do |resource|
+        admin_time(resource.finish_time)
+      end
       row :description do |gig|
         pre { gig.description }
       end
@@ -51,8 +65,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       end
       row :tag_list
       row :headline_act
-      row :created_at
-      row :updated_at
+      row :created_at do |resource|
+        admin_time(resource.updated_at)
+      end
+      row :updated_at do |resource|
+        admin_time(resource.updated_at)
+      end
     end
 
     panel "Sets" do

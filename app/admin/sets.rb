@@ -14,8 +14,12 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     column :act
     column :start_time
     column :finish_time
-    column :created_at
-    column :updated_at
+    column :created_at do |resource|
+      admin_time(resource.created_at)
+    end
+    column :updated_at do |resource|
+      admin_time(resource.updated_at)
+    end
     actions
   end
 
@@ -26,11 +30,21 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       row :act
       row :start_offset_time
       row :duration
-      row :start_at
-      row :start_time
-      row :finish_time
-      row :created_at
-      row :updated_at
+      row :start_at do |resource|
+        admin_time(resource.start_at)
+      end
+      row :start_time do |resource|
+        admin_time(resource.start_time)
+      end
+      row :finish_time do |resource|
+        admin_time(resource.finish_time)
+      end
+      row :created_at do |resource|
+        admin_time(resource.updated_at)
+      end
+      row :updated_at do |resource|
+        admin_time(resource.updated_at)
+      end
     end
   end
 

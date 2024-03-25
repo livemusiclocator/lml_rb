@@ -12,10 +12,12 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
 
   index do
     selectable_column
-    column :created_at do |upload|
-      link_to(upload.created_at, admin_upload_path(upload))
+    column :created_at do |resource|
+      link_to(admin_time(resource.created_at), admin_upload_path(resource))
     end
-    column :updated_at
+    column :updated_at do |resource|
+      admin_time(resource.updated_at)
+    end
     column :format
     column :source
     column :venue
@@ -29,8 +31,12 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
       row :source
       row :venue
       row :time_zone
-      row :created_at
-      row :updated_at
+      row :created_at do |resource|
+        admin_time(resource.updated_at)
+      end
+      row :updated_at do |resource|
+        admin_time(resource.updated_at)
+      end
     end
 
     panel "Gigs" do

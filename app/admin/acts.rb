@@ -17,8 +17,12 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     end
     column :country
     column :location
-    column :created_at
-    column :updated_at
+    column :created_at do |resource|
+      admin_time(resource.created_at)
+    end
+    column :updated_at do |resource|
+      admin_time(resource.updated_at)
+    end
     actions
   end
 
@@ -29,8 +33,12 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       row :country
       row :location
       row :genre_list
-      row :created_at
-      row :updated_at
+      row :created_at do |resource|
+        admin_time(resource.updated_at)
+      end
+      row :updated_at do |resource|
+        admin_time(resource.updated_at)
+      end
     end
   end
 
