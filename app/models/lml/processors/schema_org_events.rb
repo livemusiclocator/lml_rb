@@ -6,12 +6,14 @@ module Lml
       end
 
       def process!
+        @upload.gig_ids = []
         JSON.parse(@upload.content).each do |data|
           process_event(data)
           (data["@graph"] || []).each do |child_element|
             process_event(child_element)
           end
         end
+        @upload.save!
       end
 
       private
@@ -36,7 +38,8 @@ module Lml
           append_venue(gig, data["location"])
         end
         append_acts(gig, data["performers"])
-        gig.save
+        gig.save!
+        @upload.gig_ids << gig.id
       end
 
       def status(data)

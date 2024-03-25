@@ -15,11 +15,11 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     column :created_at do |upload|
       link_to(upload.created_at, admin_upload_path(upload))
     end
+    column :updated_at
     column :format
     column :source
     column :venue
     column :time_zone
-    column :updated_at
     actions
   end
 
@@ -29,11 +29,27 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
       row :source
       row :venue
       row :time_zone
+      row :created_at
+      row :updated_at
+    end
+
+    panel "Gigs" do
+      table_for (upload.gig_ids || []) do
+        column :link do |id|
+          gig = Lml::Gig.find_by(id: id)
+          if gig
+            link_to gig.name, admin_gig_path(id)
+          else
+            "deleted gig"
+          end
+        end
+      end
+    end
+
+    attributes_table do
       row :content do |upload|
         pre { upload.content }
       end
-      row :created_at
-      row :updated_at
     end
   end
 

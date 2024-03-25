@@ -4,13 +4,14 @@ describe Lml::Processors::SchemaOrgEvents do
   describe "process!" do
     context "when venue is not specified" do
       it "creates gigs and venue" do
-        upload = double(
-          "upload",
+        upload = Lml::Upload.create!(
           content: File.read("spec/files/tivoli_schema_org_events.json"),
-          venue: nil,
+          format: "schema_org_events",
+          source: "original url",
+          time_zone: "Melbourne",
         )
 
-        Lml::Processors::SchemaOrgEvents.new(upload).process!
+        upload.process!
 
         expect(Lml::Venue.count).to eq(1)
         expect(Lml::Venue.first.name).to eq("The Tivoli")
@@ -21,13 +22,15 @@ describe Lml::Processors::SchemaOrgEvents do
     context "when venue is specified" do
       it "creates gigs" do
         venue = Lml::Venue.create!(name: "The Venue")
-        upload = double(
-          "upload",
+        upload = Lml::Upload.create!(
           content: File.read("spec/files/tivoli_schema_org_events.json"),
+          format: "schema_org_events",
+          source: "original url",
+          time_zone: "Melbourne",
           venue: venue,
         )
 
-        Lml::Processors::SchemaOrgEvents.new(upload).process!
+        upload.process!
 
         expect(Lml::Venue.count).to eq(1)
         expect(Lml::Venue.first.name).to eq("The Venue")
