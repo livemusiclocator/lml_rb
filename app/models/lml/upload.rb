@@ -1,3 +1,5 @@
+require "open-uri"
+
 module Lml
   class Upload < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
@@ -19,6 +21,24 @@ module Lml
 
     def venue_label
       venue&.label
+    end
+
+    def rescrape!
+      docs = []
+      page = Nokogiri::HTML(URI.open(source))
+      page.css('script[type="application/ld+json"]').each do |ld|
+        html_content = ld.inner_html.strip
+        doc = JSON.parse(html_content)
+        if html_content[0] == "["
+          docs += doc
+        else
+          docs << doc
+        end
+      end
+
+      update!(content: JSON.pretty_generate(docs))
+
+      process!
     end
 
     def process!

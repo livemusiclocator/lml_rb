@@ -69,6 +69,15 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     redirect_to resource_path, notice: "Reprocessed"
   end
 
+  action_item :rescrape, only: %i[show] do
+    link_to "Rescrape", rescrape_admin_upload_path(upload), method: :put
+  end
+
+  member_action :rescrape, method: :put do
+    resource.rescrape!
+    redirect_to resource_path, notice: "Rescraped"
+  end
+
   controller do
     def create
       super
