@@ -52,7 +52,7 @@ module Eventfinda
     def initialize(raw)
       super(raw)
       @location = Location.new(raw[:location]) if raw[:location]
-      @images = Images.new(raw[:images]) if raw[:image]
+      @images = Images.new(raw[:images]) if raw[:images]
       @category = Category.new(raw[:category]) if raw[:category]
     end
 

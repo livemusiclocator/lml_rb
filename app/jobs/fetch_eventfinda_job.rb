@@ -32,7 +32,7 @@ class FetchEventfindaJob < ApplicationJob
     end
 
     # TODO: Maybe push more work into the eventfinda model/namespace thingo
-    Lml::Upload.create(format: "schema_org_events", source: "eventfinda_com_au", content: Eventfinda.to_schema_org_events(all_events.reject do |e|
+    Lml::Upload.create!(time_zone: "UTC", format: "schema_org_events", source: "eventfinda_com_au", content: Eventfinda.to_schema_org_events(all_events.reject do |e|
                                                                                                                             config.skip_category_slugs.include?(e.category_url_slug)
                                                                                                                           end),)
   end
