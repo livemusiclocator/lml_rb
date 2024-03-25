@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_23_014826) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_105056) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -55,6 +55,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_014826) do
     t.jsonb "tags"
     t.text "description"
     t.time "from"
+    t.string "from_time"
+    t.integer "start_offset"
+    t.integer "duration"
     t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
@@ -67,6 +70,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_23_014826) do
     t.uuid "gig_id"
     t.uuid "act_id"
     t.time "from"
+    t.string "from_time"
+    t.integer "start_offset"
+    t.integer "duration"
     t.index ["act_id"], name: "index_sets_on_act_id"
     t.index ["gig_id"], name: "index_sets_on_gig_id"
   end

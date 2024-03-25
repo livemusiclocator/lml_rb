@@ -2,14 +2,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :date,
     :description,
-    :status,
-    :from,
-    :finish_time,
     :headline_act_id,
-    :ticketing_url,
-    :tag_list,
     :name,
-    :start_time,
+    :start_offset_time,
+    :status,
+    :tag_list,
+    :ticketing_url,
     :venue_id,
   )
 
@@ -21,8 +19,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       link_to(gig.name, admin_gig_path(gig))
     end
     column :status
-    column :from
-    column :start_time
+    column :start_offset_time
     column :date
     column :venue
     column :headline_act
@@ -37,7 +34,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :name
       row :status
       row :date
-      row :from
+      row :start_offset_time
+      row :start_at
+      row :duration
       row :start_time
       row :finish_time
       row :description do |gig|
@@ -84,12 +83,11 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :headline_act_label, label: "Headline Act"
       f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
-      f.input :from, as: :time_picker
+      f.input :start_offset_time, as: :time_picker, label: "Start Time"
+      f.input :duration, label: "Duration (mins)"
       f.input :ticketing_url
       f.input :tag_list
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
-      f.input :start_time, as: :datetime_picker
-      f.input :finish_time, as: :datetime_picker
       f.input :description
     end
     script <<~SCRIPT.html_safe

@@ -26,7 +26,9 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       row :id
       row :gig
       row :act
-      row :from
+      row :start_offset_time
+      row :duration
+      row :start_at
       row :start_time
       row :finish_time
       row :created_at
@@ -52,9 +54,8 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       f.input :gig_id, as: "hidden"
       f.input :act_label, label: "Act"
       f.input :act_id, as: "hidden"
-      f.input :from, as: :time_picker
-      f.input :start_time, as: :datetime_picker
-      f.input :finish_time, as: :datetime_picker
+      f.input :start_offset_time, as: :time_picker, label: "Start Time"
+      f.input :duration, label: "Duration (mins)"
     end
     script <<~SCRIPT.html_safe
       attachAutocomplete("lml_set_gig", "/gigs/autocomplete", "Select Gig");

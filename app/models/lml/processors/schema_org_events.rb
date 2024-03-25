@@ -23,8 +23,11 @@ module Lml
 
         gig = find_or_create_gig(name)
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
-        gig.date = data["startDate"].slice(0, 10) if data["startDate"]
-        gig.start_time = data["startDate"]
+        if data["startDate"]
+          gig.date = data["startDate"].slice(0, 10)
+          gig.start_time = data["startDate"]
+          gig.start_offset_time = gig.start_time.strftime("%H:%M")
+        end
         gig.ticketing_url = data["url"]
         gig.status = status(data)
         if @upload.venue

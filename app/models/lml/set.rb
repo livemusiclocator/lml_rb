@@ -18,5 +18,26 @@ module Lml
     def act_label
       act&.label
     end
+
+    def start_offset_time=(value)
+      self.start_offset = nil
+
+      return unless value
+
+      hours, mins = value.split(":").map(&:to_i)
+      self.start_offset = (hours * 60) + mins
+    end
+
+    def start_offset_time
+      return nil unless start_offset
+
+      hours = start_offset / 60
+      mins = start_offset % 60
+      "#{format("%02d", hours)}:#{format("%02d", mins)}"
+    end
+
+    def start_at
+      date.in_time_zone(venue.time_zone) + start_offset.minutes
+    end
   end
 end
