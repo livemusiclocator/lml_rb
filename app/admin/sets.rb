@@ -2,9 +2,8 @@ ActiveAdmin.register Lml::Set, as: "Set" do
   permit_params(
     :gig_id,
     :act_id,
-    :from,
-    :start_time,
-    :finish_time,
+    :start_offset_time,
+    :duration,
   )
 
   filter :none
@@ -13,7 +12,6 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     selectable_column
     column :gig
     column :act
-    column :from
     column :start_time
     column :finish_time
     column :created_at
@@ -41,8 +39,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       "Clone",
       new_admin_set_path(
         gig_id: set.gig_id,
-        start_time: set.start_time,
-        end_time: set.finish_time,
+        start_offset: set.start_offset,
       ),
       method: :get,
     )

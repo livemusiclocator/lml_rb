@@ -55,6 +55,8 @@ module Lml
     end
 
     def start_at
+      return unless date && venue&.time_zone && start_offset
+
       date.in_time_zone(venue.time_zone) + start_offset.minutes
     end
   end

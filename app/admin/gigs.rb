@@ -56,9 +56,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
           link_to "link", admin_set_path(set)
         end
         column :act
-        column :from
-        column :start_time
-        column :finish_time
+        column :start_offset_time
+        column :duration
       end
     end
   end
