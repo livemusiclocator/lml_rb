@@ -37,7 +37,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :id
       row :name
       row :website do |resource|
-        if resource.website
+        if resource.website.present?
           link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer")
         end
       end
@@ -51,7 +51,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         link_to(point, "https://maps.google.com/?q=#{point}", target: "_blank", rel: "noopener noreferrer")
       end
       row :location_url do |resource|
-        if resource.location_url
+        if resource.location_url.present?
           link_to(resource.location_url, resource.location_url, target: "_blank", rel: "noopener noreferrer")
         end
       end
