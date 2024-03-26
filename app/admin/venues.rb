@@ -44,9 +44,10 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :postcode
       row :time_zone
       row :location
-      row :location_url
-      row :latitude
-      row :longitude
+      row :lat_long do |resource|
+        point = [resource.latitude, resource.longitude].join(",")
+        link_to(point, "https://maps.google.com/?q=#{point}", target: "_blank", rel: "noopener noreferrer")
+      end
       row :created_at do |resource|
         admin_time(resource.updated_at)
       end
