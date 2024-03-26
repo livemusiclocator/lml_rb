@@ -21,7 +21,8 @@ module Lml
       def process_event(data)
         return unless event?(data)
 
-        name = CGI.unescapeHTML(data["name"].strip)
+        name = data["name"] || ""
+        name = CGI.unescapeHTML(name.strip)
 
         gig = find_or_create_gig(name)
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
