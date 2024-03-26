@@ -32,8 +32,27 @@ class FetchEventfindaJob < ApplicationJob
     end
 
     # TODO: Maybe push more work into the eventfinda model/namespace thingo
-    Lml::Upload.create!(time_zone: "UTC", format: "schema_org_events", source: "eventfinda_com_au", content: Eventfinda.to_schema_org_events(all_events.reject do |e|
-                                                                                                                            config.skip_category_slugs.include?(e.category_url_slug)
-                                                                                                                          end),)
+    events = all_events.reject { |e| config.skip_category_slugs.include?(e.category_url_slug) }
+    json = Eventfinda.to_schema_org_events(events)
+    # this is silly but makes the upload content easier to read
+    content = JSON.pretty_generate(JSON.parse(json))
+
+    source = "eventfinda_com_au"
+    upload = Lml::Upload.find_by(
+      source: source,
+      format: "schema_org_events",
+    )
+
+    if upload
+      upload.update!(content: content)
+    else
+      upload = Lml::Upload.create!(
+        source: source,
+        format: "schema_org_events",
+        content: content,
+      )
+    end
+
+    upload.process!
   end
 end
