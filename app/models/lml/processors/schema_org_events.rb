@@ -26,6 +26,9 @@ module Lml
 
         gig = find_or_create_gig(name)
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
+
+        Time.zone = data["timezone"] if data["timezone"]
+
         if data["startDate"]
           gig.date = data["startDate"].slice(0, 10)
           gig.start_time = data["startDate"]

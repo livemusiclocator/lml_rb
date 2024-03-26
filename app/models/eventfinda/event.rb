@@ -16,34 +16,36 @@ module Eventfinda
 
   class Event
     include ActiveModel::Model
-    attr_accessor :address,
-                  :artists,
-                  :category,
-                  :datetime_end,
-                  :datetime_start,
-                  :datetime_summary,
-                  :description,
-                  :external_reference,
-                  :id,
-                  :images,
-                  :is_cancelled,
-                  :is_featured,
-                  :is_free,
-                  :is_sold_out,
-                  :location,
-                  :location_summary,
-                  :name,
-                  :point,
-                  :presented_by,
-                  :restrictions,
-                  :sessions,
-                  :ticket_types,
-                  :timezone,
-                  :url,
-                  :url_slug,
-                  :username,
-                  :video,
-                  :web_sites
+    attr_accessor(
+      :address,
+      :artists,
+      :category,
+      :datetime_end,
+      :datetime_start,
+      :datetime_summary,
+      :description,
+      :external_reference,
+      :id,
+      :images,
+      :is_cancelled,
+      :is_featured,
+      :is_free,
+      :is_sold_out,
+      :location,
+      :location_summary,
+      :name,
+      :point,
+      :presented_by,
+      :restrictions,
+      :sessions,
+      :ticket_types,
+      :timezone,
+      :url,
+      :url_slug,
+      :username,
+      :video,
+      :web_sites,
+    )
 
     def category_url_slug
       category&.url_slug
@@ -64,6 +66,7 @@ module Eventfinda
         result.url url
         result.name name
         result.description description
+        result.timezone timezone if timezone
         result.startDate ActiveSupport::TimeZone[timezone].parse(datetime_start).iso8601 if timezone && datetime_start
         result.endDate ActiveSupport::TimeZone[timezone].parse(datetime_end).iso8601 if timezone && datetime_end
         result.eventStatus is_cancelled ? EVENT_STATUS[:cancelled] : EVENT_STATUS[:scheduled]
