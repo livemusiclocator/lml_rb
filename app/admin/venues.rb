@@ -1,12 +1,15 @@
 ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
     :address,
+    :capacity,
     :latitude,
     :location,
     :location_url,
     :longitude,
     :name,
+    :postcode,
     :time_zone,
+    :website,
   )
 
   filter :name_cont, label: "Name"
@@ -33,7 +36,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     attributes_table do
       row :id
       row :name
+      row :website do |resource|
+        link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer") if resource.website
+      end
+      row :capacity
       row :address
+      row :postcode
       row :time_zone
       row :location
       row :location_url
@@ -57,12 +65,15 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :address
+      f.input :website
+      f.input :capacity
       f.input(
         :time_zone,
         as: :select,
         collection: ActiveSupport::TimeZone.country_zones("AU").map(&:name).sort,
       )
+      f.input :address
+      f.input :postcode
       f.input :location
       f.input :location_url
       f.input :latitude
