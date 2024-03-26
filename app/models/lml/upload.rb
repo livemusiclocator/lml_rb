@@ -10,12 +10,19 @@ module Lml
       []
     end
 
-    enum :format, { clipper: "clipper", schema_org_events: "schema_org_events" }, prefix: true
+    enum(
+      :format,
+      {
+        clipper: "clipper",
+        schema_org_events: "schema_org_events",
+        venue_csv: "venue_csv",
+      },
+      prefix: true,
+    )
 
     validates :format, presence: true
     validates :source, presence: true
     validates :content, presence: true
-    validates :time_zone, presence: true
 
     belongs_to :venue, optional: true
 
@@ -44,13 +51,15 @@ module Lml
     def process!
       return unless valid?
 
-      Time.zone = time_zone
+      Time.zone = time_zone unless time_zone.blank?
 
       case format
       when "clipper"
         Lml::Processors::Clipper.new(self).process!
       when "schema_org_events"
         Lml::Processors::SchemaOrgEvents.new(self).process!
+      when "venue_csv"
+        Lml::Processors::VenueCsv.new(self).process!
       end
     end
 
