@@ -37,7 +37,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :id
       row :name
       row :website do |resource|
-        link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer") if resource.website
+        if resource.website
+          link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer")
+        end
       end
       row :capacity
       row :address
@@ -47,6 +49,11 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :lat_long do |resource|
         point = [resource.latitude, resource.longitude].join(",")
         link_to(point, "https://maps.google.com/?q=#{point}", target: "_blank", rel: "noopener noreferrer")
+      end
+      row :location_url do |resource|
+        if resource.location_url
+          link_to(resource.location_url, resource.location_url, target: "_blank", rel: "noopener noreferrer")
+        end
       end
       row :created_at do |resource|
         admin_time(resource.updated_at)
