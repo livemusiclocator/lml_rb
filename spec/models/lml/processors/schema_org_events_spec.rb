@@ -15,7 +15,7 @@ describe Lml::Processors::SchemaOrgEvents do
 
         expect(Lml::Venue.count).to eq(1)
         expect(Lml::Venue.first.name).to eq("The Tivoli")
-        expect(Lml::Gig.count).to eq(16)
+        expect(Lml::Gig.count).to eq(20)
       end
     end
 
@@ -34,7 +34,7 @@ describe Lml::Processors::SchemaOrgEvents do
 
         expect(Lml::Venue.count).to eq(1)
         expect(Lml::Venue.first.name).to eq("The Venue")
-        expect(Lml::Gig.count).to eq(16)
+        expect(Lml::Gig.count).to eq(20)
       end
     end
   end

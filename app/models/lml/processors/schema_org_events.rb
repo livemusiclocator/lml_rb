@@ -26,16 +26,15 @@ module Lml
         name = data["name"] || ""
         name = CGI.unescapeHTML(name.strip)
 
-        date = data["startDate"].slice(0, 10)
+        date = data["startDate"].slice(0, 10) if data["startDate"].present?
         venue = @upload.venue
         venue ||= find_or_create_venue(data["location"])
 
         gig = find_or_create_gig(name, date, venue)
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
 
-        gig.date = data["startDate"].slice(0, 10)
         gig.start_time = data["startDate"]
-        gig.start_offset_time = gig.start_time.strftime("%H:%M")
+        gig.start_offset_time = gig.start_time.strftime("%H:%M") if gig.start_time
 
         gig.ticketing_url = data["url"]
         gig.status = status(data)
