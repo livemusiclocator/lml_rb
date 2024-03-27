@@ -119,15 +119,19 @@ module Lml
 
       def append_address(venue, data)
         return unless data.present?
-        return unless data["@type"] == "PostalAddress"
 
-        venue.address = [
-          "#{data["streetAddress"]},",
-          data["addressLocality"],
-          data["addressRegion"],
-          data["postalCode"],
-        ].join(" ")
-        venue.location = data["addressRegion"]
+        if data["@type"] == "PostalAddress"
+
+          venue.address = [
+            "#{data["streetAddress"]},",
+            data["addressLocality"],
+            data["addressRegion"],
+            data["postalCode"],
+          ].join(" ")
+          venue.location = data["addressRegion"]
+        elsif data.is_a? String
+          venue.address = data
+        end
       end
     end
   end
