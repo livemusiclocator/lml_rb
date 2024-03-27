@@ -21,26 +21,24 @@ module Lml
       def process_event(data)
         return unless event?(data)
 
+        Time.zone = data["timezone"] if data["timezone"]
+
         name = data["name"] || ""
         name = CGI.unescapeHTML(name.strip)
 
-        gig = find_or_create_gig(name)
+        date = data["startDate"].slice(0, 10)
+        venue = @upload.venue
+        venue ||= find_or_create_venue(data["location"])
+
+        gig = find_or_create_gig(name, date, venue)
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
 
-        Time.zone = data["timezone"] if data["timezone"]
+        gig.date = data["startDate"].slice(0, 10)
+        gig.start_time = data["startDate"]
+        gig.start_offset_time = gig.start_time.strftime("%H:%M")
 
-        if data["startDate"]
-          gig.date = data["startDate"].slice(0, 10)
-          gig.start_time = data["startDate"]
-          gig.start_offset_time = gig.start_time.strftime("%H:%M")
-        end
         gig.ticketing_url = data["url"]
         gig.status = status(data)
-        if @upload.venue
-          gig.venue = @upload.venue
-        else
-          append_venue(gig, data["location"])
-        end
         append_acts(gig, data["performers"])
         gig.save!
         @upload.gig_ids << gig.id
@@ -61,10 +59,22 @@ module Lml
         %w[http://schema.org https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
       end
 
-      def find_or_create_gig(name)
-        gig = Lml::Gig.where("lower(name) = ?", name.downcase).first
-        gig || Lml::Gig.create(name: name)
+      def find_or_create_gig(name, date, venue)
+        gig = Lml::Gig.where(date: date, venue: venue).where("lower(name) = ?", name.downcase).first
+        gig || Lml::Gig.create(
+          name: name,
+          date: date,
+          venue: venue,
+        )
       end
+
+      RIDICULOUS_NONSENSE = [
+        "brunswick ballroom homepage",
+        "brunswick ballroom",
+        "howler",
+        "hwlr",
+        "northcote theatre",
+      ]
 
       def append_acts(gig, data_list)
         return unless data_list.present?
@@ -75,7 +85,7 @@ module Lml
           next unless data["@type"] == "Person"
 
           name = CGI.unescapeHTML(data["name"].strip)
-          next if ["northcote theatre", "howler", "hwlr"].include?(name.downcase)
+          next if RIDICULOUS_NONSENSE.include?(name.downcase)
 
           act = Lml::Act.where("lower(name) = ?", name.downcase).first
           act ||= Lml::Act.create(name: name)
@@ -85,7 +95,7 @@ module Lml
         gig.headline_act = acts.first
       end
 
-      def append_venue(gig, data)
+      def find_or_create_venue(data)
         return unless data.present?
         return unless data["@type"] == "Place"
 
@@ -97,7 +107,7 @@ module Lml
         append_address(venue, data["address"])
         venue.save
 
-        gig.venue = venue
+        venue
       end
 
       def append_geo(venue, data)
