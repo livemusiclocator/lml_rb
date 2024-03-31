@@ -6,6 +6,8 @@ namespace :scrape do
   desc "rescrape all existing schema_org_events uploads"
   task ld_json_all: :environment do
     Lml::Upload.where(format: "schema_org_events").each do |upload|
+      next unless upload.source.start_with?("https://")
+
       puts "Rescraping #{upload.source}"
       upload.rescrape!
     end
