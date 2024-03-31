@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Eventfinda::Location do
-  subject { Eventfinda::Location.new({ point: { lat: 0, lng: 20 } }) }
+  subject { Eventfinda::Location.new("the address", "country/place", { point: { lat: 0, lng: 20 } }) }
   let(:result) { JSON.parse(subject.to_schema_org_builder.target!) }
 
   it "createas a schema org object of type Place" do
@@ -10,13 +10,14 @@ describe Eventfinda::Location do
 
   it "populates basic information relating to the location" do
     subject.name = "The Moon"
-    subject.summary = "Earth's Orbit"
-    expect(result).to include("name" => "The Moon", "address" => "Earth's Orbit")
+    expect(result).to include("name" => "The Moon", "address" => "the address", "timezone" => "place")
   end
+
   it "adds links back to original location using url-slug" do
     subject.url_slug = "the-moon"
     expect(result).to include("sameAs" => "https://www.eventfinda.com.au/venue/the-moon")
   end
+
   it "adds a geo for the lat/long point data" do
     subject.point.lat = 51.4419
     subject.point.lng = 0.3708
