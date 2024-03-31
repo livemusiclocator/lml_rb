@@ -10,7 +10,14 @@ describe Eventfinda::Location do
 
   it "populates basic information relating to the location" do
     subject.name = "The Moon"
-    expect(result).to include("name" => "The Moon", "address" => "the address", "timezone" => "place")
+    expect(result).to(
+      include(
+        "name" => "The Moon",
+        "address" => "the address",
+        "timezone" => "country/place",
+        "location" => "place",
+      ),
+    )
   end
 
   it "adds links back to original location using url-slug" do
