@@ -6,6 +6,7 @@ module Lml
       end
 
       def process!
+        @upload.gig_ids = []
         details = {}
 
         @upload.content.lines.each do |line|
@@ -31,6 +32,9 @@ module Lml
         append_venue(gig, details[:venue_name])
         append_date_time(gig, details[:date], details[:time])
         gig.save
+
+        @upload.gig_ids << gig.id
+        @upload.save!
       end
 
       private
@@ -68,6 +72,7 @@ module Lml
         return unless time
 
         gig.start_time = "#{date.iso8601}T#{time.strftime("%H:%M")}:00"
+        gig.start_offset_time = gig.start_time.strftime("%H:%M") if gig.start_time
       end
     end
   end
