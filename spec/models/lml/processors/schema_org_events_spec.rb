@@ -21,12 +21,11 @@ describe Lml::Processors::SchemaOrgEvents do
 
     context "when venue is specified" do
       it "creates gigs" do
-        venue = Lml::Venue.create!(name: "The Venue")
+        venue = Lml::Venue.create!(name: "The Venue", time_zone: "Melbourne")
         upload = Lml::Upload.create!(
           content: File.read("spec/files/tivoli_schema_org_events.json"),
           format: "schema_org_events",
           source: "original url",
-          time_zone: "Melbourne",
           venue: venue,
         )
 

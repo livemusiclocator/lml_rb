@@ -10,7 +10,7 @@ module Lml
 
     def self.find_or_create_gig(name:, date:, venue:, details: {})
       gig = Lml::Gig.where(date: date, venue: venue).where("lower(name) = ?", name.downcase).first
-      gig || Lml::Gig.create(
+      gig ||= Lml::Gig.create!(
         name: name,
         date: date,
         venue: venue,

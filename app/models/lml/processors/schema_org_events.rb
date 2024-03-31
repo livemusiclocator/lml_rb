@@ -41,7 +41,13 @@ module Lml
       def process_event(data)
         return unless event?(data)
 
-        Time.zone = data["timezone"] if data["timezone"]
+        venue = @upload.venue
+
+        time_zone = venue.time_zone if venue
+        time_zone = @upload.time_zone if time_zone.blank?
+        time_zone = data["timezone"].split("/").last if data["timezone"].present? && time_zone.blank?
+
+        Time.zone = time_zone if time_zone
 
         name = data["name"] || ""
         name = CGI.unescapeHTML(name.strip)
@@ -50,7 +56,12 @@ module Lml
         venue = @upload.venue
         venue ||= find_or_create_venue(data["location"])
 
-        gig = Lml::Gig.find_or_create_gig(name, date, venue)
+        gig = Lml::Gig.find_or_create_gig(
+          name: name,
+          date: date,
+          venue: venue,
+        )
+
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
 
         gig.start_time = data["startDate"]
