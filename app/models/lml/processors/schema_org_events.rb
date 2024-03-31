@@ -54,7 +54,7 @@ module Lml
 
         date = data["startDate"].slice(0, 10) if data["startDate"].present?
         venue = @upload.venue
-        venue ||= find_or_create_venue(data["location"])
+        venue ||= find_or_create_venue(data["location"], time_zone)
 
         gig = Lml::Gig.find_or_create_gig(
           name: name,
@@ -116,7 +116,7 @@ module Lml
         gig.headline_act = acts.first
       end
 
-      def find_or_create_venue(data)
+      def find_or_create_venue(data, time_zone)
         return unless data.present?
         return unless data["@type"] == "Place"
 
@@ -124,8 +124,9 @@ module Lml
 
         venue = Lml::Venue.where("lower(name) = ?", name.downcase).first
         venue ||= Lml::Venue.create(name: name)
+
         append_geo(venue, data["geo"])
-        venue.time_zone = data["timezone"] if data["timezone"]
+        venue.time_zone = time_zone
         venue.location = data["location"] if data["location"]
         append_address(venue, data["address"])
         venue.save
