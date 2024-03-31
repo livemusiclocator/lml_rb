@@ -29,7 +29,11 @@ module Lml
 
         gig = find_or_create_gig(details[:gig_name])
         append_acts(gig, details[:act_names])
-        append_venue(gig, details[:venue_name])
+        if @upload.venue
+          gig.venue = @upload.venue
+        else
+          append_venue(gig, details[:venue_name])
+        end
         append_date_time(gig, details[:date], details[:time])
         gig.save
 
