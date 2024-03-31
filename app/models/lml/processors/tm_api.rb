@@ -66,6 +66,8 @@ module Lml
         name = CGI.unescapeHTML(name.strip)
 
         start_time = data["dates"]["startDate"]
+        return unless start_time
+
         date = start_time.slice(0, 10)
 
         gig = Lml::Gig.find_or_create_gig(
