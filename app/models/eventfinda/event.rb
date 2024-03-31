@@ -66,7 +66,7 @@ module Eventfinda
         result.url url
         result.name name
         result.description description
-        result.timezone timezone if timezone
+        result.timezone Lml::Timezone.convert(timezone) if timezone
         result.startDate ActiveSupport::TimeZone[timezone].parse(datetime_start).iso8601 if timezone && datetime_start
         result.endDate ActiveSupport::TimeZone[timezone].parse(datetime_end).iso8601 if timezone && datetime_end
         result.eventStatus is_cancelled ? EVENT_STATUS[:cancelled] : EVENT_STATUS[:scheduled]
