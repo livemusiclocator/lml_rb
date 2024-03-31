@@ -21,7 +21,7 @@ module Eventfinda
     def initialize(address, timezone, raw)
       super(raw)
       @address = address
-      @timezone = (timezone || "").split("/").last
+      @timezone = timezone
       @point = Point.new(raw[:point])
     end
 
@@ -30,7 +30,7 @@ module Eventfinda
         location.set! "@type", :Place
         location.name name
         location.timezone @timezone
-        location.location @timezone
+        location.location (@timezone || "").split("/").last
         location.address @address
         location.sameAs "https://www.eventfinda.com.au/venue/#{url_slug}"
         location.geo point.to_schema_org_builder if point
