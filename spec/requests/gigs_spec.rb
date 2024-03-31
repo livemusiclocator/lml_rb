@@ -18,20 +18,20 @@ describe "gigs" do
                 "href" => "http://www.example.com/gigs/query",
               },
               "next_seven_days" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-02&date_to=2001-06-09",
+                "href" => "http://www.example.com/gigs/query?date_from=2001-06-02&date_to=2001-06-09&location=castlemaine",
               },
               "next_weekend" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-08&date_to=2001-06-10",
+                "href" => "http://www.example.com/gigs/query?date_from=2001-06-08&date_to=2001-06-10&location=castlemaine",
               },
               "on_date" => {
-                "href" => "http://www.example.com/gigs/query?date_from=date&date_to=date",
+                "href" => "http://www.example.com/gigs/query?date_from=date&date_to=date&location=castlemaine",
                 "templated" => true,
               },
               "this_weekend" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-01&date_to=2001-06-03",
+                "href" => "http://www.example.com/gigs/query?date_from=2001-06-01&date_to=2001-06-03&location=castlemaine",
               },
               "today" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-02&date_to=2001-06-02",
+                "href" => "http://www.example.com/gigs/query?date_from=2001-06-02&date_to=2001-06-02&location=castlemaine",
               },
             },
           },
@@ -41,16 +41,28 @@ describe "gigs" do
   end
 
   describe "query" do
-    context "when there are no gigs" do
+    context "when there are no provided params" do
       it "returns empty result" do
         get "/gigs/query"
         expect(JSON.parse(response.body)).to eq([])
       end
     end
 
+    context "when there are no gigs" do
+      it "returns empty result" do
+        get "/gigs/query?location=a+location&date_from=2001-06-08&date_to=2001-06-08"
+        expect(JSON.parse(response.body)).to eq([])
+      end
+    end
+
     context "when there are gigs" do
       before do
-        @venue = Lml::Venue.create!(name: "The Gig Place")
+        @venue = Lml::Venue.create!(
+          name: "The Gig Place",
+          location: "a location",
+          capacity: 500,
+          website: "https://gigplace.com.au",
+        )
         @act = Lml::Act.create!(
           name: "The Really Quite Good Music People",
           genres: %w[good loud people],
@@ -65,8 +77,8 @@ describe "gigs" do
         )
       end
 
-      it "returns matching gigs when dates are specified" do
-        get "/gigs/query?date_from=2001-06-08&date_to=2001-06-08"
+      it "returns matching gigs when location and dates are specified" do
+        get "/gigs/query?location=a+location&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to(
           eq(
             [
@@ -85,10 +97,12 @@ describe "gigs" do
                 "tags" => %w[all-ages free],
                 "venue" => {
                   "address" => nil,
+                  "capacity" => 500,
                   "id" => @venue.id,
                   "latitude" => nil,
                   "longitude" => nil,
                   "name" => "The Gig Place",
+                  "website" => "https://gigplace.com.au",
                 },
               },
             ],

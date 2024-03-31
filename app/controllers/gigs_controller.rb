@@ -22,6 +22,7 @@ class GigsController < ApplicationController
         href: url_for(
           action: :query,
           format: request.params[:format],
+          location: "castlemaine",
           date_from: Date.today,
           date_to: Date.today,
         ),
@@ -31,6 +32,7 @@ class GigsController < ApplicationController
         href: url_for(
           action: :query,
           format: request.params[:format],
+          location: "castlemaine",
           date_from: Date.today,
           date_to: Date.today.advance(days:7),
         ),
@@ -40,6 +42,7 @@ class GigsController < ApplicationController
         href: url_for(
           action: :query,
           format: request.params[:format],
+          location: "castlemaine",
           date_from: Date.today.end_of_week.advance(days: -2),
           date_to: Date.today.end_of_week,
         ),
@@ -49,6 +52,7 @@ class GigsController < ApplicationController
         href: url_for(
           action: :query,
           format: request.params[:format],
+          location: "castlemaine",
           date_from: Date.today.next_week.end_of_week.advance(days: -2),
           date_to: Date.today.next_week.end_of_week,
         ),
@@ -60,6 +64,7 @@ class GigsController < ApplicationController
         href: url_for(
           action: :query,
           format: request.params[:format],
+          location: "castlemaine",
           date_from: "date",
           date_to: "date",
         ),
@@ -68,14 +73,14 @@ class GigsController < ApplicationController
   end
 
   def query
+    location = params[:location] || "nowhere"
+
     date_from = params[:date_from]
     date_to = params[:date_to]
-    @gigs = if date_from && date_to
-              Lml::Gig.eager.status_confirmed.filter_by_date((date_from..date_to))
-            else
-              # TODO: move time based filtering to the client?
-              Lml::Gig.eager.status_confirmed.upcoming
-            end
+
+    venue_ids = Lml::Venue.where("lower(location) = ?", location.downcase).pluck(:id)
+
+    @gigs = Lml::Gig.eager.status_confirmed.where(date: (date_from..date_to), venue_id: venue_ids)
   end
 
   def autocomplete
