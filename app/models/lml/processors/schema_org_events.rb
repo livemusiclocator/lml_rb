@@ -5,6 +5,26 @@ module Lml
         @upload = upload
       end
 
+      def scrape
+        return unless @upload.source.start_with?("https://")
+
+        docs = []
+
+        response = Faraday.get(@upload.source)
+        page = Nokogiri::HTML(response.body)
+        page.css('script[type="application/ld+json"]').each do |ld|
+          html_content = ld.inner_html.strip
+          doc = JSON.parse(html_content)
+          if html_content[0] == "["
+            docs += doc
+          else
+            docs << doc
+          end
+        end
+
+        @upload.update!(content: JSON.pretty_generate(docs))
+      end
+
       def process!
         @upload.gig_ids = []
         JSON.parse(@upload.content).each do |data|
@@ -30,7 +50,7 @@ module Lml
         venue = @upload.venue
         venue ||= find_or_create_venue(data["location"])
 
-        gig = find_or_create_gig(name, date, venue)
+        gig = Lml::Gig.find_or_create_gig(name, date, venue)
         gig.description = CGI.unescapeHTML(data["description"]) if data["description"]
 
         gig.start_time = data["startDate"]
@@ -56,15 +76,6 @@ module Lml
 
       def event?(data)
         %w[http://schema.org https://schema.org].include?(data["@context"]) && %w[Event MusicEvent].include?(data["@type"])
-      end
-
-      def find_or_create_gig(name, date, venue)
-        gig = Lml::Gig.where(date: date, venue: venue).where("lower(name) = ?", name.downcase).first
-        gig || Lml::Gig.create(
-          name: name,
-          date: date,
-          venue: venue,
-        )
       end
 
       RIDICULOUS_NONSENSE = [

@@ -8,6 +8,17 @@ module Lml
       %w[headline_act venue]
     end
 
+    def self.find_or_create_gig(name:, date:, venue:, details: {})
+      gig = Lml::Gig.where(date: date, venue: venue).where("lower(name) = ?", name.downcase).first
+      gig || Lml::Gig.create(
+        name: name,
+        date: date,
+        venue: venue,
+      )
+      gig.update!(details) unless details.empty?
+      gig
+    end
+
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
 
     belongs_to :venue, optional: true

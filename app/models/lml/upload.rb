@@ -1,5 +1,3 @@
-require "open-uri"
-
 module Lml
   class Upload < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
@@ -16,6 +14,7 @@ module Lml
         clipper: "clipper",
         schema_org_events: "schema_org_events",
         venue_csv: "venue_csv",
+        tm_api: "tm_api",
       },
       prefix: true,
     )
@@ -31,19 +30,12 @@ module Lml
     end
 
     def rescrape!
-      docs = []
-      page = Nokogiri::HTML(URI.open(source))
-      page.css('script[type="application/ld+json"]').each do |ld|
-        html_content = ld.inner_html.strip
-        doc = JSON.parse(html_content)
-        if html_content[0] == "["
-          docs += doc
-        else
-          docs << doc
-        end
+      case format
+      when "schema_org_events"
+        Lml::Processors::SchemaOrgEvents.new(self).scrape
+      when "tm_api"
+        Lml::Processors::TmApi.new(self).scrape
       end
-
-      update!(content: JSON.pretty_generate(docs))
 
       process!
     end
@@ -60,6 +52,8 @@ module Lml
         Lml::Processors::SchemaOrgEvents.new(self).process!
       when "venue_csv"
         Lml::Processors::VenueCsv.new(self).process!
+      when "tm_api"
+        Lml::Processors::TmApi.new(self).process!
       end
     end
 

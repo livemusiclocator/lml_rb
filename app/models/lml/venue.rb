@@ -8,6 +8,17 @@ module Lml
       []
     end
 
+    def self.find_or_create_venue(name:, time_zone:, details: {})
+      name = CGI.unescapeHTML(name.strip)
+
+      venue = Lml::Venue.where("lower(name) = ?", name.downcase)
+                        .where("lower(time_zone) = ?", time_zone.downcase)
+                        .first
+      venue ||= Lml::Venue.create!(name: name, time_zone: time_zone)
+      venue.update!(details) unless details.empty?
+      venue
+    end
+
     has_many :gigs
 
     def label
