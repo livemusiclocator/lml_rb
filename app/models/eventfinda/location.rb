@@ -18,8 +18,10 @@ module Eventfinda
     include ActiveModel::Model
     attr_accessor :count_current_events, :description, :id, :images, :is_venue, :name, :point, :summary, :url_slug
 
-    def initialize(raw)
+    def initialize(address, timezone, raw)
       super(raw)
+      @address = address
+      @timezone = (timezone || "").split("/").last
       @point = Point.new(raw[:point])
     end
 
@@ -27,7 +29,9 @@ module Eventfinda
       Jbuilder.new do |location|
         location.set! "@type", :Place
         location.name name
-        location.address summary
+        location.timezone @timezone
+        location.location @timezone
+        location.address @address
         location.sameAs "https://www.eventfinda.com.au/venue/#{url_slug}"
         location.geo point.to_schema_org_builder if point
       end
