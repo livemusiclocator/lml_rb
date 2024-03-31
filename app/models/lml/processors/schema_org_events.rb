@@ -45,7 +45,7 @@ module Lml
 
         time_zone = venue.time_zone if venue
         time_zone = @upload.time_zone if time_zone.blank?
-        time_zone = data["timezone"].split("/").last if data["timezone"].present? && time_zone.blank?
+        time_zone = data["timezone"] if data["timezone"].present? && time_zone.blank?
 
         Time.zone = time_zone if time_zone
 
