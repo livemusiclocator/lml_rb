@@ -5,7 +5,8 @@ json.array! @gigs do |gig|
   json.name gig.name
   json.date gig.date
   json.tags gig.tags || []
-  json.start_time gig.start_time
+  json.ticketing_url gig.ticketing_url
+  json.start_time gig.start_at
   json.finish_time gig.finish_time
 
   venue = gig.venue
@@ -31,7 +32,7 @@ json.array! @gigs do |gig|
   end
 
   json.sets gig.sets do |set|
-    json.start_time set.start_time
+    json.start_time set.start_at
 
     act = set.act
     json.act do
