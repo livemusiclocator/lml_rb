@@ -21,7 +21,7 @@ module Eventfinda
     def initialize(address, timezone, raw)
       super(raw)
       @address = address
-      @timezone = timezone
+      @timezone = Lml::Timezone.convert(timezone)
       @point = Point.new(raw[:point])
     end
 

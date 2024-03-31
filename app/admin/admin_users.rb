@@ -43,7 +43,11 @@ ActiveAdmin.register AdminUser do
   form do |f|
     f.inputs do
       f.input :email
-      f.input :time_zone, as: :select, collection: ActiveSupport::TimeZone.country_zones("AU").map { |t| t.name }.sort
+      f.input(
+        :time_zone,
+        as: :select,
+        collection: Lml::Timezone::CANONICAL_TIMEZONES,
+      )
       f.input :password
       f.input :password_confirmation
     end

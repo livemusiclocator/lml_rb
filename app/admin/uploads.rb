@@ -71,7 +71,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
       f.input(
         :time_zone,
         as: :select,
-        collection: ActiveSupport::TimeZone.country_zones("AU").map(&:name).sort,
+        collection: Lml::Timezone::CANONICAL_TIMEZONES,
       )
       f.input :source
       f.input :content

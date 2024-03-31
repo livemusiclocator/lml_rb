@@ -78,7 +78,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input(
         :time_zone,
         as: :select,
-        collection: ActiveSupport::TimeZone.country_zones("AU").map(&:name).sort,
+        collection: Lml::Timezone::CANONICAL_TIMEZONES,
       )
       f.input :address
       f.input :postcode
