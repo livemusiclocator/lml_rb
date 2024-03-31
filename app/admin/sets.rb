@@ -78,13 +78,11 @@ ActiveAdmin.register Lml::Set, as: "Set" do
   controller do
     def new
       gig_id = params[:gig_id]
-      start_time = params[:start_time]
-      finish_time = params[:finish_time]
+      start_offset = params[:start_offset]
 
       @set = Lml::Set.new(
         gig_id: gig_id,
-        start_time: start_time,
-        finish_time: finish_time,
+        start_offset: start_offset,
       )
     end
   end

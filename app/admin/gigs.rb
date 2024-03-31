@@ -90,8 +90,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       "Add Set",
       new_admin_set_path(
         gig_id: gig.id,
-        start_time: gig.start_time,
-        end_time: gig.finish_time,
+        start_offset: gig.start_offset,
       ),
       method: :get,
     )

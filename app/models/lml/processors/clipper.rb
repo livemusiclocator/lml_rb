@@ -63,6 +63,13 @@ module Lml
 
         gig.venue = Lml::Venue.where("lower(name) = ?", name.downcase).first
         gig.venue ||= Lml::Venue.create(name: name)
+
+        return unless @upload.time_zone
+
+        gig.venue.update!(
+          location: @upload.time_zone,
+          time_zone: @upload.time_zone,
+        )
       end
 
       def append_date_time(gig, date, time)
