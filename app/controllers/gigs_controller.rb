@@ -72,13 +72,21 @@ class GigsController < ApplicationController
     ]
   end
 
+  INCLUDE_LOCATIONS = {
+    "melbourne" => %w[vic victoria],
+    "brisbane" => %w[qld queensland],
+    "sydney" => %w[nsw],
+    "adelaide" => %w[sa],
+  }.freeze
+
   def query
     location = params[:location] || "nowhere"
+    locations = [location] + (INCLUDE_LOCATIONS[location.downcase] || [])
 
     date_from = params[:date_from]
     date_to = params[:date_to]
 
-    venue_ids = Lml::Venue.where("lower(location) = ?", location.downcase).pluck(:id)
+    venue_ids = Lml::Venue.where("lower(location) in (?)", locations).pluck(:id)
 
     @gigs = Lml::Gig.eager.status_confirmed.where(date: (date_from..date_to), venue_id: venue_ids)
   end
