@@ -118,4 +118,16 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     SCRIPT
     f.actions
   end
+
+  controller do
+    def create
+      super
+      resource.update!(start_time: resource.start_at)
+    end
+
+    def update
+      super
+      resource.update!(start_time: resource.start_at)
+    end
+  end
 end
