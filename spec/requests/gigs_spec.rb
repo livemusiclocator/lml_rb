@@ -73,6 +73,7 @@ describe "gigs" do
           venue: @venue,
           date: "2001-06-08",
           status: :confirmed,
+          ticketing_url: "the ticketing url",
           tags: %w[all-ages free],
         )
       end
@@ -95,6 +96,7 @@ describe "gigs" do
                 "sets" => [],
                 "start_time" => nil,
                 "tags" => %w[all-ages free],
+                "ticketing_url" => "the ticketing url",
                 "venue" => {
                   "address" => nil,
                   "capacity" => 500,
