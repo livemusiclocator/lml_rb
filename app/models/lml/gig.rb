@@ -65,9 +65,9 @@ module Lml
     end
 
     def start_at
-      return unless date && venue&.time_zone && start_offset
+      return unless date && start_offset && venue&.time_zone
 
-      date.in_time_zone(venue.time_zone) + start_offset.minutes
+      date.in_time_zone(venue.time_zone) + (start_offset / 1_440.0).days
     end
   end
 end
