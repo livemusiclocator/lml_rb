@@ -101,6 +101,10 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   end
 
   controller do
+    def new
+      @upload = Lml::Upload.new(time_zone: current_admin_user.time_zone)
+    end
+
     def create
       super
       resource.process!
