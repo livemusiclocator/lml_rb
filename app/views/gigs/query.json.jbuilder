@@ -41,4 +41,9 @@ json.array! @gigs do |gig|
       json.genres act.genres
     end
   end
+
+  json.prices gig.prices do |price|
+    json.amount price.amount.format if price.amount
+    json.description price.description if price.description
+  end
 end

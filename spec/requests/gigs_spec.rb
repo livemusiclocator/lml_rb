@@ -76,6 +76,11 @@ describe "gigs" do
           ticketing_url: "the ticketing url",
           tags: %w[all-ages free],
         )
+        Lml::Price.create!(
+          gig: @gig,
+          amount: "75",
+          description: "GA",
+        )
       end
 
       it "returns matching gigs when location and dates are specified" do
@@ -93,6 +98,12 @@ describe "gigs" do
                 },
                 "id" => @gig.id,
                 "name" => "The One Gig You Should Not Miss Out On",
+                "prices" => [
+                  {
+                    "amount" => "$75.00",
+                    "description" => "GA",
+                  }
+                ],
                 "sets" => [],
                 "start_time" => nil,
                 "tags" => %w[all-ages free],
