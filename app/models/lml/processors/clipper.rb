@@ -15,11 +15,11 @@ module Lml
           key = key.downcase.gsub(" ", "_")
           case key
           when "act", "acts"
-            details[:act_names] = value.split("|").map(&:strip)
+            details[:acts] = value.split("|").map(&:strip)
           when "date", "gig_date", "gig_start_date"
             details[:date] = Date.parse(value)
           when "name", "gig_name"
-            details[:gig_name] = value
+            details[:name] = value
           when "price", "prices"
             details[:prices] = value.split("|").map(&:strip)
           when "tag", "tags"
@@ -27,21 +27,27 @@ module Lml
           when "time", "gig_start_time"
             details[:time] = Time.parse(value)
           when "venue", "venue_name"
-            details[:venue_name] = value
+            details[:venue] = value
           when "url", "gig_url"
             details[:url] = value
           end
         end
 
-        gig = find_or_create_gig(details[:gig_name])
+        venue = @upload.venue
+        venue ||= Lml::Venue.find_or_create_venue(
+          name: details[:venue],
+          time_zone: @upload.time_zone,
+        )
+
+        gig = Lml::Gig.find_or_create_gig(
+          name: details[:name],
+          date: details[:date],
+          venue: venue,
+        )
+
         append_prices(gig, details[:prices])
         gig.tags = details[:tags] if details[:tags].present?
-        append_acts(gig, details[:act_names])
-        if @upload.venue
-          gig.venue = @upload.venue
-        else
-          append_venue(gig, details[:venue_name])
-        end
+        append_acts(gig, details[:acts])
         append_date_time(gig, details[:date], details[:time])
         gig.save
 
@@ -51,11 +57,6 @@ module Lml
       end
 
       private
-
-      def find_or_create_gig(name)
-        gig = Lml::Gig.where("lower(name) = ?", name.downcase).first
-        gig || Lml::Gig.create(name: name)
-      end
 
       def append_prices(gig, prices)
         return unless prices.present?
@@ -84,20 +85,6 @@ module Lml
           acts << act
         end
         gig.headline_act = acts.first
-      end
-
-      def append_venue(gig, name)
-        return unless name
-
-        gig.venue = Lml::Venue.where("lower(name) = ?", name.downcase).first
-        gig.venue ||= Lml::Venue.create(name: name)
-
-        return unless @upload.time_zone
-
-        gig.venue.update!(
-          location: @upload.time_zone,
-          time_zone: @upload.time_zone,
-        )
       end
 
       def append_date_time(gig, date, time)
