@@ -26,19 +26,13 @@ module Lml
             details[:time] = Time.parse(value)
           when "gig_url"
             details[:url] = value
-          when "price"
-            details[:price] = value
+          when "price", "prices"
+            details[:prices] = value.split("|").map(&:strip)
           end
         end
 
         gig = find_or_create_gig(details[:gig_name])
-        if details[:price]
-          gig.prices.destroy_all
-          Lml::Price.create(
-            gig: gig,
-            amount: details[:price],
-          )
-        end
+        append_prices(gig, details[:prices])
         append_acts(gig, details[:act_names])
         if @upload.venue
           gig.venue = @upload.venue
@@ -58,6 +52,21 @@ module Lml
       def find_or_create_gig(name)
         gig = Lml::Gig.where("lower(name) = ?", name.downcase).first
         gig || Lml::Gig.create(name: name)
+      end
+
+      def append_prices(gig, prices)
+        return unless prices.present?
+
+        gig.prices.destroy_all
+        prices.each do |price|
+          amount, *remaining = price.split
+
+          Lml::Price.create(
+            gig: gig,
+            amount: amount,
+            description: remaining.join(" "),
+          )
+        end
       end
 
       def append_acts(gig, names)
