@@ -42,7 +42,9 @@ module Lml
     def process!
       return unless valid?
 
-      Time.zone = time_zone unless time_zone.blank?
+      tz = venue.time_zone if venue
+      tz = time_zone if tz.blank?
+      Time.zone = tz unless tz.blank?
 
       case format
       when "clipper"
