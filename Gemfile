@@ -13,6 +13,8 @@ gem "rails", "~> 7.1.3"
 
 gem "arctic_admin"
 
+gem "money-rails"
+
 # allow CORS
 gem "rack-cors"
 

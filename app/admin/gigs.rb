@@ -83,6 +83,16 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
         column :duration
       end
     end
+
+    panel "Prices" do
+      table_for gig.prices do
+        column :link do |price|
+          link_to "link", admin_price_path(price)
+        end
+        column :description
+        column :amount
+      end
+    end
   end
 
   action_item :add_set, only: %i[show] do
@@ -91,6 +101,16 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       new_admin_set_path(
         gig_id: gig.id,
         start_offset: gig.start_offset,
+      ),
+      method: :get,
+    )
+  end
+
+  action_item :add_price, only: %i[show] do
+    link_to(
+      "Add Price",
+      new_admin_price_path(
+        gig_id: gig.id,
       ),
       method: :get,
     )

@@ -24,6 +24,7 @@ module Lml
     belongs_to :venue, optional: true
     belongs_to :headline_act, class_name: "Lml::Act", optional: true
     has_many :sets
+    has_many :prices
 
     scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act) }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_26_095329) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_13_101019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -58,6 +58,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_26_095329) do
     t.integer "duration"
     t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
+  end
+
+  create_table "prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "gig_id"
+    t.integer "cents"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
