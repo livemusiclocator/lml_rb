@@ -14,22 +14,22 @@ module Lml
           value = rest.join(":").strip
           key = key.downcase.gsub(" ", "_")
           case key
-          when "acts"
+          when "act", "acts"
             details[:act_names] = value.split("|").map(&:strip)
-          when "venue", "venue_name"
-            details[:venue_name] = value
-          when "gig_name", "name"
-            details[:gig_name] = value
-          when "gig_date", "gig_start_date", "date"
+          when "date", "gig_date", "gig_start_date"
             details[:date] = Date.parse(value)
-          when "gig_start_time", "time"
-            details[:time] = Time.parse(value)
-          when "gig_url", "url"
-            details[:url] = value
+          when "name", "gig_name"
+            details[:gig_name] = value
           when "price", "prices"
             details[:prices] = value.split("|").map(&:strip)
           when "tag", "tags"
             details[:tags] = value.split("|").map(&:strip)
+          when "time", "gig_start_time"
+            details[:time] = Time.parse(value)
+          when "venue", "venue_name"
+            details[:venue_name] = value
+          when "url", "gig_url"
+            details[:url] = value
           end
         end
 
