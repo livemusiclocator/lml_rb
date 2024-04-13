@@ -16,23 +16,26 @@ module Lml
           case key
           when "acts"
             details[:act_names] = value.split("|").map(&:strip)
-          when "venue_name"
+          when "venue", "venue_name"
             details[:venue_name] = value
-          when "gig_name"
+          when "gig_name", "name"
             details[:gig_name] = value
-          when "gig_date", "gig_start_date"
+          when "gig_date", "gig_start_date", "date"
             details[:date] = Date.parse(value)
-          when "gig_start_time"
+          when "gig_start_time", "time"
             details[:time] = Time.parse(value)
-          when "gig_url"
+          when "gig_url", "url"
             details[:url] = value
           when "price", "prices"
             details[:prices] = value.split("|").map(&:strip)
+          when "tag", "tags"
+            details[:tags] = value.split("|").map(&:strip)
           end
         end
 
         gig = find_or_create_gig(details[:gig_name])
         append_prices(gig, details[:prices])
+        gig.tags = details[:tags] if details[:tags].present?
         append_acts(gig, details[:act_names])
         if @upload.venue
           gig.venue = @upload.venue
