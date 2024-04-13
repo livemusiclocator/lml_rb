@@ -24,10 +24,21 @@ module Lml
             details[:date] = Date.parse(value)
           when "gig_start_time"
             details[:time] = Time.parse(value)
+          when "gig_url"
+            details[:url] = value
+          when "price"
+            details[:price] = value
           end
         end
 
         gig = find_or_create_gig(details[:gig_name])
+        if details[:price]
+          gig.prices.destroy_all
+          Lml::Price.create(
+            gig: gig,
+            amount: details[:price],
+          )
+        end
         append_acts(gig, details[:act_names])
         if @upload.venue
           gig.venue = @upload.venue
@@ -37,6 +48,7 @@ module Lml
         append_date_time(gig, details[:date], details[:time])
         gig.save
 
+        @upload.source = details[:url] if details[:url]
         @upload.gig_ids << gig.id
         @upload.save!
       end

@@ -20,7 +20,6 @@ module Lml
     )
 
     validates :format, presence: true
-    validates :source, presence: true
     validates :content, presence: true
 
     belongs_to :venue, optional: true
