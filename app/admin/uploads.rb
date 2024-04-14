@@ -3,6 +3,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     :content,
     :format,
     :source,
+    :status,
     :time_zone,
     :venue_id,
   )
@@ -31,6 +32,8 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
       row :source
       row :venue
       row :time_zone
+      row :status
+      row :error_description
       row :created_at do |resource|
         admin_time(resource.updated_at)
       end

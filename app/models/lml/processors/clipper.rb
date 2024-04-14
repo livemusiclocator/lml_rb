@@ -7,37 +7,33 @@ module Lml
 
       def process!
         @upload.gig_ids = []
-        details = {}
 
-        @upload.content.lines.each do |line|
-          key, *rest = line.chomp.strip.split(":")
-          value = rest.join(":").strip
-          key = key.downcase.gsub(" ", "_")
-          case key
-          when "act", "acts"
-            details[:acts] = value.split("|").map(&:strip)
-          when "date", "gig_date", "gig_start_date"
-            details[:date] = Date.parse(value)
-          when "name", "gig_name"
-            details[:name] = value
-          when "price", "prices"
-            details[:prices] = value.split("|").map(&:strip)
-          when "tag", "tags"
-            details[:tags] = value.split("|").map(&:strip)
-          when "time", "gig_start_time"
-            details[:time] = Time.parse(value)
-          when "venue", "venue_name"
-            details[:venue] = value
-          when "url", "gig_url"
-            details[:url] = value
-          end
-        end
+        details = extract_details(@upload.content.lines)
+
+        @upload.source = details[:url] if details[:url]
 
         venue = @upload.venue
-        venue ||= Lml::Venue.find_or_create_venue(
-          name: details[:venue],
-          time_zone: @upload.time_zone,
-        )
+
+        unless venue
+          unless details[:venue].present?
+            @upload.status = "Failed"
+            @upload.error_description = "A venue is required"
+            @upload.save!
+            return
+          end
+
+          venue = Lml::Venue.find_or_create_venue(
+            name: details[:venue],
+            time_zone: @upload.time_zone,
+          )
+        end
+
+        unless details[:name].present? && details[:date].present?
+          @upload.status = "Failed"
+          @upload.error_description = "A gig name and date is required"
+          @upload.save!
+          return
+        end
 
         gig = Lml::Gig.find_or_create_gig(
           name: details[:name],
@@ -51,12 +47,41 @@ module Lml
         append_date_time(gig, details[:date], details[:time])
         gig.save
 
-        @upload.source = details[:url] if details[:url]
+        @upload.status = "Succeeded"
+        @upload.error_description = ""
         @upload.gig_ids << gig.id
         @upload.save!
       end
 
       private
+
+      def extract_details(lines)
+        {}.tap do |details|
+          lines.each do |line|
+            key, *rest = line.chomp.strip.split(":")
+            value = rest.join(":").strip
+            key = key.downcase.gsub(" ", "_")
+            case key
+            when "act", "acts"
+              details[:acts] = value.split("|").map(&:strip)
+            when "date", "gig_date", "gig_start_date"
+              details[:date] = Date.parse(value)
+            when "name", "gig_name"
+              details[:name] = value
+            when "price", "prices"
+              details[:prices] = value.split("|").map(&:strip)
+            when "tag", "tags"
+              details[:tags] = value.split("|").map(&:strip)
+            when "time", "gig_start_time"
+              details[:time] = Time.parse(value)
+            when "venue", "venue_name"
+              details[:venue] = value
+            when "url", "gig_url"
+              details[:url] = value
+            end
+          end
+        end
+      end
 
       def append_prices(gig, prices)
         return unless prices.present?

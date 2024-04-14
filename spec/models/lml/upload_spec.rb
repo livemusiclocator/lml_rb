@@ -3,6 +3,57 @@ require "rails_helper"
 describe Lml::Upload do
   describe "process!" do
     context "where no data already existed" do
+      it "populates status with failed when venue is missing" do
+        upload = Lml::Upload.create!(
+          time_zone: "Australia/Melbourne",
+          format: "clipper",
+          content: <<~CONTENT,
+            url: the url
+          CONTENT
+        )
+        upload.process!
+        upload.reload
+
+        expect(upload.source).to eq("the url")
+        expect(upload.status).to eq("Failed")
+        expect(upload.error_description).to eq("A venue is required")
+      end
+
+      it "populates status with failed when name is missing" do
+        upload = Lml::Upload.create!(
+          time_zone: "Australia/Melbourne",
+          format: "clipper",
+          content: <<~CONTENT,
+            url: the url
+            venue: the venue
+          CONTENT
+        )
+        upload.process!
+        upload.reload
+
+        expect(upload.source).to eq("the url")
+        expect(upload.status).to eq("Failed")
+        expect(upload.error_description).to eq("A gig name and date is required")
+      end
+
+      it "populates status with failed when date is missing" do
+        upload = Lml::Upload.create!(
+          time_zone: "Australia/Melbourne",
+          format: "clipper",
+          content: <<~CONTENT,
+            url: the url
+            venue: the venue
+            name: the gig name
+          CONTENT
+        )
+        upload.process!
+        upload.reload
+
+        expect(upload.source).to eq("the url")
+        expect(upload.status).to eq("Failed")
+        expect(upload.error_description).to eq("A gig name and date is required")
+      end
+
       it "creates a gig and venue" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
@@ -15,26 +66,32 @@ describe Lml::Upload do
           CONTENT
         )
         upload.process!
+        upload.reload
 
         gig = Lml::Gig.find_by!(name: "the gig name")
         venue = Lml::Venue.find_by!(name: "the venue name")
 
-        expect(upload.reload.source).to eq("the url")
+        expect(upload.source).to eq("the url")
+        expect(upload.status).to eq("Succeeded")
         expect(gig.date).to eq(Date.iso8601("2024-03-01"))
         expect(gig.venue).to eq(venue)
       end
 
-      it "creates a gig, an act and sets" do
+      it "creates a gig, acts and sets" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
           format: "clipper",
           content: <<~CONTENT,
             gig name: the gig name
-            acts: band 1 | band 2
             venue: the venue
+            date: 2024-03-01
+            acts: band 1 | band 2
           CONTENT
         )
         upload.process!
+        upload.reload
+
+        expect(upload.status).to eq("Succeeded")
         gig = Lml::Gig.find_by!(name: "the gig name")
         act1 = Lml::Act.find_by!(name: "band 1")
         act2 = Lml::Act.find_by!(name: "band 2")
@@ -55,6 +112,7 @@ describe Lml::Upload do
         gig = Lml::Gig.create!(
           name: "THE GIG NAME",
           venue: @venue,
+          date: "2024-03-01",
           headline_act: band3,
         )
         Lml::Set.create!(gig: gig, act: band3)
@@ -70,9 +128,13 @@ describe Lml::Upload do
           content: <<~CONTENT,
             name: the gig name
             venue: the venue name
+            date: 2024-03-01
           CONTENT
         )
         upload.process!
+        upload.reload
+
+        expect(upload.status).to eq("Succeeded")
         gig = Lml::Gig.find_by!(name: "THE GIG NAME")
         venue = Lml::Venue.find_by!(name: "THE VENUE NAME")
         expect(gig.venue).to eq(venue)
@@ -86,10 +148,14 @@ describe Lml::Upload do
           venue: @venue,
           content: <<~CONTENT,
             name: the gig name
+            date: 2024-03-01
             acts: band 1 | band 2
           CONTENT
         )
         upload.process!
+        upload.reload
+
+        expect(upload.status).to eq("Succeeded")
         gig = Lml::Gig.find_by!(name: "THE GIG NAME")
         act1 = Lml::Act.find_by!(name: "band 1")
         act2 = Lml::Act.find_by!(name: "BAND 2")
