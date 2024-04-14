@@ -3,45 +3,35 @@ require "rails_helper"
 describe Lml::Upload do
   describe "process!" do
     context "where no data already existed" do
-      it "creates a gig when only gig name is present" do
-        upload = Lml::Upload.create!(
-          time_zone: "Melbourne",
-          format: "clipper",
-          source: "a website",
-          content: <<~CONTENT,
-            gig name: the gig name
-          CONTENT
-        )
-        upload.process!
-        gig = Lml::Gig.find_by!(name: "the gig name")
-        expect(gig.venue).to be_nil
-        expect(gig.headline_act).to be_nil
-      end
-
       it "creates a gig and venue" do
         upload = Lml::Upload.create!(
-          time_zone: "Melbourne",
+          time_zone: "Australia/Melbourne",
           format: "clipper",
-          source: "a website",
           content: <<~CONTENT,
-            gig name: the gig name
-            venue name: the venue name
+            name: the gig name
+            venue: the venue name
+            date: 2024-03-01
+            url: the url
           CONTENT
         )
         upload.process!
+
         gig = Lml::Gig.find_by!(name: "the gig name")
         venue = Lml::Venue.find_by!(name: "the venue name")
+
+        expect(upload.reload.source).to eq("the url")
+        expect(gig.date).to eq(Date.iso8601("2024-03-01"))
         expect(gig.venue).to eq(venue)
       end
 
       it "creates a gig, an act and sets" do
         upload = Lml::Upload.create!(
-          time_zone: "Melbourne",
+          time_zone: "Australia/Melbourne",
           format: "clipper",
-          source: "a website",
           content: <<~CONTENT,
             gig name: the gig name
             acts: band 1 | band 2
+            venue: the venue
           CONTENT
         )
         upload.process!
@@ -57,11 +47,14 @@ describe Lml::Upload do
 
     context "where data already existed" do
       before do
-        venue = Lml::Venue.create!(name: "THE VENUE NAME")
+        @venue = Lml::Venue.create!(
+          name: "THE VENUE NAME",
+          time_zone: "Australia/Melbourne",
+        )
         band3 = Lml::Act.create!(name: "BAND 3")
         gig = Lml::Gig.create!(
           name: "THE GIG NAME",
-          venue: venue,
+          venue: @venue,
           headline_act: band3,
         )
         Lml::Set.create!(gig: gig, act: band3)
@@ -71,12 +64,12 @@ describe Lml::Upload do
 
       it "leaves gig and venue with existing names that match on case" do
         upload = Lml::Upload.create!(
-          time_zone: "Melbourne",
+          time_zone: "Australia/Melbourne",
           format: "clipper",
           source: "a website",
           content: <<~CONTENT,
-            gig name: the gig name
-            venue name: the venue name
+            name: the gig name
+            venue: the venue name
           CONTENT
         )
         upload.process!
@@ -87,11 +80,12 @@ describe Lml::Upload do
 
       it "leaves existing gig and act names, replaces headline act and sets" do
         upload = Lml::Upload.create!(
-          time_zone: "Melbourne",
+          time_zone: "Australia/Melbourne",
           format: "clipper",
           source: "a website",
+          venue: @venue,
           content: <<~CONTENT,
-            gig name: the gig name
+            name: the gig name
             acts: band 1 | band 2
           CONTENT
         )
