@@ -59,7 +59,7 @@ describe "gigs" do
       before do
         @venue = Lml::Venue.create!(
           name: "The Gig Place",
-          location: "a location",
+          location: "melbourne",
           capacity: 500,
           website: "https://gigplace.com.au",
         )
@@ -74,7 +74,7 @@ describe "gigs" do
           date: "2001-06-08",
           status: :confirmed,
           ticketing_url: "the ticketing url",
-          tags: %w[all-ages free],
+          tags: %w[all-ages free lbmf],
         )
         Lml::Price.create!(
           gig: @gig,
@@ -84,7 +84,7 @@ describe "gigs" do
       end
 
       it "returns matching gigs when location and dates are specified" do
-        get "/gigs/query?location=a+location&date_from=2001-06-08&date_to=2001-06-08"
+        get "/gigs/query?location=lbmf&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to(
           eq(
             [
@@ -106,7 +106,7 @@ describe "gigs" do
                 ],
                 "sets" => [],
                 "start_time" => nil,
-                "tags" => %w[all-ages free],
+                "tags" => %w[all-ages free lbmf],
                 "ticketing_url" => "the ticketing url",
                 "venue" => {
                   "address" => nil,

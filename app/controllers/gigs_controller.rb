@@ -77,6 +77,7 @@ class GigsController < ApplicationController
     "brisbane" => %w[qld queensland],
     "sydney" => %w[nsw],
     "adelaide" => %w[sa],
+    "lbmf" => %w[melbourne vic victoria],
   }.freeze
 
   def query
@@ -88,7 +89,11 @@ class GigsController < ApplicationController
 
     venue_ids = Lml::Venue.where("lower(location) in (?)", locations).pluck(:id)
 
-    @gigs = Lml::Gig.eager.status_confirmed.where(date: (date_from..date_to), venue_id: venue_ids)
+    gigs_relation = Lml::Gig.eager.status_confirmed
+
+    gigs_relation = gigs_relation.where("tags @> ?", ["lbmf"].to_json) if location == "lbmf"
+
+    @gigs = gigs_relation.where(date: (date_from..date_to), venue_id: venue_ids)
   end
 
   def autocomplete
