@@ -91,7 +91,7 @@ class GigsController < ApplicationController
 
     gigs_relation = Lml::Gig.eager.status_confirmed
 
-    gigs_relation = gigs_relation.where("tags @> ?", ["lbmf"].to_json) if location == "lbmf"
+    gigs_relation = gigs_relation.where("tags @> ?", %w[lbmf].to_json) if location == "lbmf"
 
     @gigs = gigs_relation.where(date: (date_from..date_to), venue_id: venue_ids)
   end
