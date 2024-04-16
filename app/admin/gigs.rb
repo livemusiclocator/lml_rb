@@ -3,6 +3,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :date,
     :description,
     :headline_act_id,
+    :hidden,
     :name,
     :start_offset_time,
     :status,
@@ -12,6 +13,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   )
 
   filter :name_cont, label: "Name"
+  filter :status
 
   index do
     selectable_column
@@ -125,6 +127,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
       f.input :start_offset_time, as: :time_picker, label: "Start Time"
+      f.input :hidden
       f.input :duration, label: "Duration (mins)"
       f.input :ticketing_url
       f.input :tag_list

@@ -89,7 +89,7 @@ class GigsController < ApplicationController
 
     venue_ids = Lml::Venue.where("lower(location) in (?)", locations).pluck(:id)
 
-    gigs_relation = Lml::Gig.eager.status_confirmed
+    gigs_relation = Lml::Gig.eager.visible.status_confirmed
 
     gigs_relation = gigs_relation.where("tags @> ?", %w[lbmf].to_json) if location == "lbmf"
 

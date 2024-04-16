@@ -27,6 +27,7 @@ module Lml
     has_many :prices
 
     scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act) }
+    scope :visible, -> { where(hidden: [nil, false]) }
 
     def label
       "#{name} (#{date})"
