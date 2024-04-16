@@ -60,6 +60,7 @@ describe "gigs" do
         @venue = Lml::Venue.create!(
           name: "The Gig Place",
           location: "melbourne",
+          time_zone: "Australia/Melbourne",
           capacity: 500,
           website: "https://gigplace.com.au",
         )

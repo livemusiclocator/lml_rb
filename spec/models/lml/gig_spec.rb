@@ -31,19 +31,11 @@ module Lml
 
           context "when there is a venue" do
             before do
-              @venue = Venue.create!
+              @venue = Venue.create!(time_zone: "Australia/Melbourne")
               @gig.venue = @venue
             end
 
-            context "when the venue has no timezone" do
-              it "returns nil" do
-                expect(@gig.start_at).to be_nil
-              end
-            end
-
             context "when the venue has a timezone" do
-              before { @venue.update!(time_zone: "Australia/Melbourne") }
-
               it "converts to the local time in venue's timezone" do
                 expect(@gig.start_at.iso8601).to eq("2024-01-01T19:30:00+11:00")
               end
