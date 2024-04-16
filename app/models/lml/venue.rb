@@ -19,6 +19,14 @@ module Lml
       venue
     end
 
+    validates(
+      :time_zone,
+      inclusion: {
+        in: Lml::Timezone::CANONICAL_TIMEZONES,
+        message: "invalid time zone",
+      },
+    )
+
     has_many :gigs
 
     def label
