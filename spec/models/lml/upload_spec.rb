@@ -16,7 +16,7 @@ describe Lml::Upload do
 
         expect(upload.source).to eq("the url")
         expect(upload.status).to eq("Failed")
-        expect(upload.error_description).to eq("A venue is required")
+        expect(upload.error_description).to eq("A venue, date and gig name is required")
       end
 
       it "populates status with failed when name is missing" do
@@ -33,7 +33,7 @@ describe Lml::Upload do
 
         expect(upload.source).to eq("the url")
         expect(upload.status).to eq("Failed")
-        expect(upload.error_description).to eq("A gig name and date is required")
+        expect(upload.error_description).to eq("A venue, date and gig name is required")
       end
 
       it "populates status with failed when date is missing" do
@@ -51,54 +51,7 @@ describe Lml::Upload do
 
         expect(upload.source).to eq("the url")
         expect(upload.status).to eq("Failed")
-        expect(upload.error_description).to eq("A gig name and date is required")
-      end
-
-      it "creates a gig and venue" do
-        upload = Lml::Upload.create!(
-          time_zone: "Australia/Melbourne",
-          format: "clipper",
-          content: <<~CONTENT,
-            name: the gig name
-            venue: the venue name
-            date: 2024-03-01
-            url: the url
-          CONTENT
-        )
-        upload.process!
-        upload.reload
-
-        gig = Lml::Gig.find_by!(name: "the gig name")
-        venue = Lml::Venue.find_by!(name: "the venue name")
-
-        expect(upload.source).to eq("the url")
-        expect(upload.status).to eq("Succeeded")
-        expect(gig.date).to eq(Date.iso8601("2024-03-01"))
-        expect(gig.venue).to eq(venue)
-      end
-
-      it "creates a gig, acts and sets" do
-        upload = Lml::Upload.create!(
-          time_zone: "Australia/Melbourne",
-          format: "clipper",
-          content: <<~CONTENT,
-            gig name: the gig name
-            venue: the venue
-            date: 2024-03-01
-            acts: band 1 | band 2
-          CONTENT
-        )
-        upload.process!
-        upload.reload
-
-        expect(upload.status).to eq("Succeeded")
-        gig = Lml::Gig.find_by!(name: "the gig name")
-        act1 = Lml::Act.find_by!(name: "band 1")
-        act2 = Lml::Act.find_by!(name: "band 2")
-        expect(gig.headline_act).to eq(act1)
-        expect(gig.sets.count).to eq(2)
-        expect(Lml::Set.where(gig: gig, act: act1).count).to eq(1)
-        expect(Lml::Set.where(gig: gig, act: act2).count).to eq(1)
+        expect(upload.error_description).to eq("A venue, date and gig name is required")
       end
     end
 
@@ -120,14 +73,14 @@ describe Lml::Upload do
         Lml::Set.create!(gig: gig, act: band2)
       end
 
-      it "leaves gig and venue with existing names that match on case" do
+      it "leaves gig with existing names that match on case" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
           format: "clipper",
           source: "a website",
+          venue: @venue,
           content: <<~CONTENT,
             name: the gig name
-            venue: the venue name
             date: 2024-03-01
           CONTENT
         )

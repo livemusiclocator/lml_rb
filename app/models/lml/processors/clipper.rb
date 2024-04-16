@@ -14,23 +14,9 @@ module Lml
 
         venue = @upload.venue
 
-        unless venue
-          unless details[:venue].present?
-            @upload.status = "Failed"
-            @upload.error_description = "A venue is required"
-            @upload.save!
-            return
-          end
-
-          venue = Lml::Venue.find_or_create_venue(
-            name: details[:venue],
-            time_zone: @upload.time_zone,
-          )
-        end
-
-        unless details[:name].present? && details[:date].present?
+        unless venue && details[:name].present? && details[:date].present?
           @upload.status = "Failed"
-          @upload.error_description = "A gig name and date is required"
+          @upload.error_description = "A venue, date and gig name is required"
           @upload.save!
           return
         end
