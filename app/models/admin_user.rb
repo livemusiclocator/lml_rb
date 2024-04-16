@@ -17,4 +17,12 @@ class AdminUser < ApplicationRecord
   def self.ransackable_associations(_auth_object = nil)
     []
   end
+
+  validates(
+    :time_zone,
+    inclusion: {
+      in: Lml::Timezone::CANONICAL_TIMEZONES,
+      message: "invalid time zone",
+    },
+  )
 end
