@@ -20,13 +20,14 @@ module Lml
     end
 
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
-
     belongs_to :venue, optional: true
     belongs_to :headline_act, class_name: "Lml::Act", optional: true
     has_many :sets
     has_many :prices
 
-    scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act) }
+    accepts_nested_attributes_for :prices, :allow_destroy => true
+    accepts_nested_attributes_for :sets, :allow_destroy => true
+    scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]) }
 
     def label

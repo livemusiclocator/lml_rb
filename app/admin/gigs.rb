@@ -10,6 +10,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :tag_list,
     :ticketing_url,
     :venue_id,
+    prices_attributes: [:id, :amount, :description],
+    sets_attributes: [:act_id, :start_offset_time, :duration]
   )
 
   filter :name_cont, label: "Name"
@@ -133,8 +135,29 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :tag_list
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :description
+      f.inputs 'Prices' do
+        f.has_many :prices,
+                 heading: false,
+                 new_record: 'Add Ticket Price',
+                 remove_record: 'Remove Ticket Price' do |b|
+                  b.input :amount
+                  b.input :description
+        end
+      end
+      f.inputs "Set List" do
+        f.has_many :sets  do |s|
+          s.input :act_label, label: "Act"
+          s.input :act_id, as: "hidden"
+          s.input :start_offset_time, as: :time_picker, label: "Start Time"
+          s.input :duration, label: "Duration (mins)"
+          script <<~SCRIPT.html_safe
+            attachAutocomplete(`lml_gig_sets_attributes_#{s.index}_act`, "/acts/autocomplete", "Select Act");
+          SCRIPT
+        end
+      end
     end
     script <<~SCRIPT.html_safe
+      attachAutocompleteForNewHasMany('lml_gig_sets_attributes_INDEX_act', "/acts/autocomplete", "Select Act");
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
       attachAutocomplete("lml_gig_headline_act", "/acts/autocomplete", "Select Headline Act");
     SCRIPT
