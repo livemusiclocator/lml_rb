@@ -85,7 +85,7 @@ heroku run bundle exec rails console
 AdminUser.create!(email: "your email", password: "some password", time_zone: "Melbourne")
 
 # to get a console
-heroku ps:exec --app=live-music-locator
+heroku ps:exec --app=live-music-locator 
 
 # tail logs
 heroku logs -t
