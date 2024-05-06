@@ -40,6 +40,76 @@ describe "gigs" do
     end
   end
 
+  describe "show" do
+    before do
+      @venue = Lml::Venue.create!(
+        name: "The Gig Place",
+        location: "melbourne",
+        time_zone: "Australia/Melbourne",
+        capacity: 500,
+        website: "https://gigplace.com.au",
+      )
+      @act = Lml::Act.create!(
+        name: "The Really Quite Good Music People",
+        genres: %w[good loud people],
+      )
+      @gig = Lml::Gig.create!(
+        name: "The One Gig You Should Not Miss Out On",
+        description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+        headline_act: @act,
+        venue: @venue,
+        date: "2001-06-08",
+        status: :confirmed,
+        ticketing_url: "the ticketing url",
+        tags: %w[all-ages free lbmf],
+      )
+      Lml::Price.create!(
+        gig: @gig,
+        amount: "75",
+        description: "GA",
+      )
+    end
+
+    it "returns gig" do
+      get "/gigs/#{@gig.id}"
+      expect(JSON.parse(response.body)).to(
+        eq(
+          {
+            "date" => "2001-06-08",
+            "finish_time" => nil,
+            "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+            "headline_act" => {
+              "genres" => %w[good loud people],
+              "id" => @act.id,
+              "name" => "The Really Quite Good Music People",
+            },
+            "id" => @gig.id,
+            "name" => "The One Gig You Should Not Miss Out On",
+            "prices" => [
+              {
+                "amount" => "$75.00",
+                "description" => "GA",
+              }
+            ],
+            "sets" => [],
+            "start_time" => nil,
+            "tags" => %w[all-ages free lbmf],
+            "ticketing_url" => "the ticketing url",
+            "venue" => {
+              "address" => nil,
+              "capacity" => 500,
+              "id" => @venue.id,
+              "latitude" => nil,
+              "longitude" => nil,
+              "name" => "The Gig Place",
+              "website" => "https://gigplace.com.au",
+            },
+          },
+        ),
+      )
+    end
+  end
+
   describe "query" do
     context "when there are no provided params" do
       it "returns empty result" do

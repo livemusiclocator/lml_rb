@@ -96,6 +96,10 @@ class GigsController < ApplicationController
     @gigs = gigs_relation.where(date: (date_from..date_to), venue_id: venue_ids)
   end
 
+  def show
+    @gig = Lml::Gig.find(params[:id])
+  end
+
   def autocomplete
     @gigs = Lml::Gig.order(:name)
   end
