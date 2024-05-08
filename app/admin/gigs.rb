@@ -15,7 +15,10 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   )
 
   filter :name_cont, label: "Name"
-  filter :status
+  filter :venue_location_cont, label: "Location"
+  filter :date
+  filter :status, as: :select, collection: Lml::Gig.statuses.keys
+  filter :checked
 
   index do
     selectable_column
