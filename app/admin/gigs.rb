@@ -19,6 +19,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :date
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
   filter :checked
+  filter :created_at
+  filter :updated_at
 
   index do
     selectable_column
