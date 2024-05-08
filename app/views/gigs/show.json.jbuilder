@@ -6,6 +6,7 @@ json.date gig.date
 json.tags gig.tags || []
 json.ticketing_url gig.ticketing_url
 json.start_time gig.start_at
+json.status gig.status
 json.finish_time gig.finish_time
 json.description gig.description
 

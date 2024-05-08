@@ -28,7 +28,7 @@ module Lml
     accepts_nested_attributes_for :prices, :allow_destroy => true
     accepts_nested_attributes_for :sets, :allow_destroy => true
     scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
-    scope :visible, -> { where(hidden: [nil, false]) }
+    scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
 
     def label
       "#{name} (#{date})"

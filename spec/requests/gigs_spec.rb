@@ -93,6 +93,7 @@ describe "gigs" do
             ],
             "sets" => [],
             "start_time" => nil,
+            "status" => "confirmed",
             "tags" => %w[all-ages free lbmf],
             "ticketing_url" => "the ticketing url",
             "venue" => {
@@ -185,6 +186,7 @@ describe "gigs" do
                 ],
                 "sets" => [],
                 "start_time" => nil,
+                "status" => "confirmed",
                 "tags" => %w[all-ages free lbmf],
                 "ticketing_url" => "the ticketing url",
                 "venue" => {
