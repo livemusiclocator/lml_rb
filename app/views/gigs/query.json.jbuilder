@@ -19,6 +19,7 @@ json.array! @gigs do |gig|
       json.address venue.address
       json.capacity venue.capacity
       json.website venue.website
+      json.location_url venue.location_url
       json.latitude venue.latitude
       json.longitude venue.longitude
     end
