@@ -137,7 +137,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :hidden
       f.input :duration, label: "Duration (mins)"
       f.input :ticketing_url
-      f.input :tag_list
+      f.input :tag_list, as: "text"
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :description
       f.inputs 'Prices' do
