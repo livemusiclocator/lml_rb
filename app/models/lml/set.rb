@@ -22,7 +22,7 @@ module Lml
     def start_offset_time=(value)
       self.start_offset = nil
 
-      return unless value
+      return if value.blank?
 
       hours, mins = value.split(":").map(&:to_i)
       self.start_offset = (hours * 60) + mins
