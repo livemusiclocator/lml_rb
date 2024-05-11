@@ -22,8 +22,8 @@ module Lml
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
     belongs_to :venue, optional: true
     belongs_to :headline_act, class_name: "Lml::Act", optional: true
-    has_many :sets
-    has_many :prices
+    has_many :sets, dependent: :delete_all
+    has_many :prices, dependent: :delete_all
 
     accepts_nested_attributes_for :prices, :allow_destroy => true
     accepts_nested_attributes_for :sets, :allow_destroy => true
