@@ -81,6 +81,8 @@ class GigsController < ApplicationController
   }.freeze
 
   def query
+    expires_in 1.minutes, public: true
+
     location = params[:location] || "nowhere"
     locations = [location] + (INCLUDE_LOCATIONS[location.downcase] || [])
 
