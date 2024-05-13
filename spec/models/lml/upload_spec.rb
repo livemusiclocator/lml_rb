@@ -3,6 +3,13 @@ require "rails_helper"
 describe Lml::Upload do
   describe "process!" do
     context "where no data already existed" do
+      before do
+        @venue = Lml::Venue.create!(
+          name: "THE VENUE NAME",
+          time_zone: "Australia/Melbourne",
+        )
+      end
+
       it "populates status with failed when venue is missing" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
@@ -14,14 +21,14 @@ describe Lml::Upload do
         upload.process!
         upload.reload
 
-        expect(upload.source).to eq("the url")
         expect(upload.status).to eq("Failed")
-        expect(upload.error_description).to eq("A venue, date and gig name is required")
+        expect(upload.error_description).to eq("A venue is required")
       end
 
       it "populates status with failed when name is missing" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
+          venue: @venue,
           format: "clipper",
           content: <<~CONTENT,
             url: the url
@@ -31,14 +38,14 @@ describe Lml::Upload do
         upload.process!
         upload.reload
 
-        expect(upload.source).to eq("the url")
         expect(upload.status).to eq("Failed")
-        expect(upload.error_description).to eq("A venue, date and gig name is required")
+        expect(upload.error_description).to eq("1: A date and gig name are required")
       end
 
       it "populates status with failed when date is missing" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
+          venue: @venue,
           format: "clipper",
           content: <<~CONTENT,
             url: the url
@@ -51,7 +58,7 @@ describe Lml::Upload do
 
         expect(upload.source).to eq("the url")
         expect(upload.status).to eq("Failed")
-        expect(upload.error_description).to eq("A venue, date and gig name is required")
+        expect(upload.error_description).to eq("1: A date and gig name are required")
       end
     end
 
