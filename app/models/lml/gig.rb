@@ -25,8 +25,6 @@ module Lml
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all
 
-    accepts_nested_attributes_for :prices, :allow_destroy => true
-    accepts_nested_attributes_for :sets, :allow_destroy => true
     scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
 
@@ -48,6 +46,49 @@ module Lml
 
     def tag_list=(value)
       self.tags = value.split(",").map(&:strip)
+    end
+
+    def set_list
+      sets.map do |set|
+        "#{set.act.name}|#{set.start_offset_time}|#{set.duration}"
+      end.join("\n")
+    end
+
+    def set_list=(value)
+      sets.delete_all
+      value.split("\n") do |line|
+        act_name, start_offset_time, duration = line.split("|").map(&:strip)
+        next if act_name.blank?
+
+        act = Lml::Act.where("lower(name) = ?", act_name.downcase).first
+        act ||= Lml::Act.create(name: name)
+        Lml::Set.create(
+          gig: self,
+          act: act,
+          start_offset_time: start_offset_time,
+          duration: duration,
+        )
+      end
+    end
+
+    def price_list
+      prices.map do |price|
+        "#{price.amount}|#{price.description}"
+      end.join("\n")
+    end
+
+    def price_list=(value)
+      prices.delete_all
+      value.split("\n") do |line|
+        amount, description = line.split("|").map(&:strip)
+        next if amount.blank?
+
+        Lml::Price.create(
+          gig: self,
+          amount: amount,
+          description: description,
+        )
+      end
     end
 
     def start_offset_time=(value)

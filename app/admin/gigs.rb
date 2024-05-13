@@ -10,8 +10,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :tag_list,
     :ticketing_url,
     :venue_id,
-    prices_attributes: [:id, :amount, :description],
-    sets_attributes: [:act_id, :start_offset_time, :duration]
+    :set_list,
+    :price_list,
   )
 
   filter :name_cont, label: "Name"
@@ -126,43 +126,43 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   form do |f|
+    f.semantic_errors
     f.inputs do
       f.input :name
-      f.input :venue_label, label: "Venue"
-      f.input :venue_id, as: "hidden"
-      f.input :headline_act_label, label: "Headline Act"
-      f.input :headline_act_id, as: "hidden"
       f.input :date, as: :date_picker
       f.input :start_offset_time, as: :time_picker, label: "Start Time"
-      f.input :hidden
       f.input :duration, label: "Duration (mins)"
+      f.input :venue_label, label: "Venue"
+      f.input :venue_id, as: "hidden"
       f.input :ticketing_url
-      f.input :tag_list, as: "text"
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
-      f.input :description
-      f.inputs 'Prices' do
-        f.has_many :prices,
-                 heading: false,
-                 new_record: 'Add Ticket Price',
-                 remove_record: 'Remove Ticket Price' do |b|
-                  b.input :amount
-                  b.input :description
-        end
-      end
-      f.inputs "Set List" do
-        f.has_many :sets  do |s|
-          s.input :act_label, label: "Act"
-          s.input :act_id, as: "hidden"
-          s.input :start_offset_time, as: :time_picker, label: "Start Time"
-          s.input :duration, label: "Duration (mins)"
-          script <<~SCRIPT.html_safe
-            attachAutocomplete(`lml_gig_sets_attributes_#{s.index}_act`, "/acts/autocomplete", "Select Act");
-          SCRIPT
-        end
-      end
+      f.input :hidden
+      f.input :headline_act_label, label: "Headline Act"
+      f.input :headline_act_id, as: "hidden"
+      f.input :description, input_html: { rows: 5 }
+    end
+    f.inputs "Tags" do
+      f.input :tag_list
+      para(
+        "Separate tags with commas (eg. genre:Punk, information:18+, category:Band, series: LBMF2024)",
+        style: "font-size: small",
+      )
+    end
+    f.inputs "Sets" do
+      f.input :set_list, as: :text, input_html: { rows: 5 }
+      para(
+        "One set per line, enter act name, start time and duration separated by pipes (eg. The Beatles|19:00|60)",
+        style: "font-size: small",
+      )
+    end
+    f.inputs "Prices" do
+      f.input :price_list, as: :text, input_html: { rows: 5 }
+      para(
+        "One price per line, enter amount and description separated by pipes (eg. 10.00|Concession)",
+        style: "font-size: small",
+      )
     end
     script <<~SCRIPT.html_safe
-      attachAutocompleteForNewHasMany('lml_gig_sets_attributes_INDEX_act', "/acts/autocomplete", "Select Act");
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
       attachAutocomplete("lml_gig_headline_act", "/acts/autocomplete", "Select Headline Act");
     SCRIPT

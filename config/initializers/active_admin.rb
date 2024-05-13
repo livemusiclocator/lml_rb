@@ -340,11 +340,6 @@ ActiveAdmin.setup do |config|
       .autoComplete_wrapper { display: block }
     </style>
     <script>
-      function attachAutocompleteForNewHasMany(selector_template, endpoint, placeholder){
-        $(document).on( 'has_many_add:after', '.has_many_container.sets', function(e) {
-          attachAutocomplete(selector_template.replace("INDEX", $(this).children('fieldset').length-1), endpoint, placeholder);
-        });
-      }
       function attachAutocomplete(selector, endpoint, placeholder) {
         const label_field = `${selector}_label`;
         const id_field = `${selector}_id`;
