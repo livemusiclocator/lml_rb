@@ -80,6 +80,7 @@ describe Lml::Upload do
         expect(gig.date).to eq(Date.iso8601("2024-03-01"))
         expect(gig.venue).to eq(@venue)
         expect(gig.status).to eq("confirmed")
+        expect(gig.source).to eq("a website")
       end
     end
 
