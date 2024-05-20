@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_08_030118) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_20_103329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_030118) do
     t.integer "duration"
     t.boolean "hidden"
     t.boolean "checked"
+    t.string "source"
     t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end

@@ -10,6 +10,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :tag_list,
     :ticketing_url,
     :venue_id,
+    :source,
     :set_list,
     :price_list,
   )
@@ -17,6 +18,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :name_cont, label: "Name"
   filter :venue_location_cont, label: "Location"
   filter :date
+  filter :source_cont, label: "Source"
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
   filter :checked
   filter :created_at
@@ -27,16 +29,13 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :name do |gig|
       link_to(gig.name, admin_gig_path(gig))
     end
-    column :status
-    column :start_offset_time
-    column :tickets do |gig|
-      link_to("link", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
-    end
+    column :venue
     column :date do |resource|
       admin_date(resource.date)
     end
-    column :venue
-    column :headline_act
+    column :start_offset_time
+    column :status
+    column :source
     column :created_at do |resource|
       admin_time(resource.created_at)
     end
@@ -50,25 +49,26 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     attributes_table do
       row :id
       row :name
-      row :status
+      row :venue
       row :date do |resource|
         admin_date(resource.date)
       end
       row :start_offset_time
-      row :start_at do |resource|
-        admin_time(resource.start_at)
-      end
-      row :duration
       row :start_time do |resource|
         admin_time(resource.start_time)
       end
+      row :start_at do |resource|
+        admin_time(resource.start_at)
+      end
+      row :status
+      row :source
+      row :duration
       row :finish_time do |resource|
         admin_time(resource.finish_time)
       end
       row :description do |gig|
         pre { gig.description }
       end
-      row :venue
       row :tickets do |gig|
         link_to("tickets", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
       end
@@ -129,13 +129,14 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     f.semantic_errors
     f.inputs do
       f.input :name
+      f.input :venue_label, label: "Venue"
+      f.input :venue_id, as: "hidden"
       f.input :date, as: :date_picker
       f.input :start_offset_time, as: :time_picker, label: "Start Time"
       f.input :duration, label: "Duration (mins)"
-      f.input :venue_label, label: "Venue"
-      f.input :venue_id, as: "hidden"
       f.input :ticketing_url
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
+      f.input :source
       f.input :hidden
       f.input :headline_act_label, label: "Headline Act"
       f.input :headline_act_id, as: "hidden"
