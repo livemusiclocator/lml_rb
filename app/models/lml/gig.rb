@@ -31,6 +31,7 @@ module Lml
 
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
     belongs_to :venue, optional: true
+    belongs_to :upload, optional: true
     belongs_to :headline_act, class_name: "Lml::Act", optional: true
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all

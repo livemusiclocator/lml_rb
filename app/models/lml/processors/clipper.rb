@@ -36,6 +36,7 @@ module Lml
           )
 
           append_prices(gig, details[:prices])
+          gig.upload = @upload
           gig.status = :confirmed
           gig.source = @upload.source
           gig.tags = details[:tags] if details[:tags].present?

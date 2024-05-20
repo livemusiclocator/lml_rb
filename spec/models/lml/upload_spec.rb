@@ -81,6 +81,7 @@ describe Lml::Upload do
         expect(gig.venue).to eq(@venue)
         expect(gig.status).to eq("confirmed")
         expect(gig.source).to eq("a website")
+        expect(gig.upload).to eq(upload)
       end
     end
 
