@@ -36,6 +36,7 @@ module Lml
           )
 
           append_prices(gig, details[:prices])
+          gig.status = :confirmed
           gig.tags = details[:tags] if details[:tags].present?
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
           append_acts(gig, details[:acts])
