@@ -9,7 +9,7 @@ gem "devise"
 gem "sass-rails"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.1.3"
+gem "rails"
 
 gem "arctic_admin"
 
@@ -22,10 +22,10 @@ gem "rack-cors"
 gem "sprockets-rails"
 
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem "pg"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
+gem "puma"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -60,8 +60,8 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
-  gem "rspec-rails", "~> 6.1.0"
-  gem "webmock", "~> 3.23"
+  gem "rspec-rails"
+  gem "webmock"
 end
 
 group :development do
@@ -77,4 +77,4 @@ group :development do
   # gem "spring"
 end
 
-gem "faraday", "~> 2.9"
+gem "faraday"
