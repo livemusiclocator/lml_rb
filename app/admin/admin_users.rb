@@ -1,7 +1,7 @@
 ActiveAdmin.register AdminUser do
   permit_params do
     permitted = %i[email time_zone password password_confirmation]
-    if params[:admin_user][:password].blank? && params[:admin_user][:password_confirmation].blank?
+    if params[:admin_user] && params[:admin_user][:password].blank? && params[:admin_user][:password_confirmation].blank?
       params[:admin_user].delete(:password)
       params[:admin_user].delete(:password_confirmation)
     end
