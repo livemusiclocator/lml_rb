@@ -18,11 +18,15 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :name_cont, label: "Name"
   filter :venue_location_cont, label: "Location"
   filter :date
+  filter :tags, as: :check_boxes, collection: Lml::Gig.visible.map{|gig| gig.tags.grep(/genre/)}.flatten.uniq,label: "Genre tags"
+
   filter :source_cont, label: "Source"
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
   filter :checked
   filter :created_at
   filter :updated_at
+
+
 
   index do
     selectable_column
@@ -36,6 +40,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :start_offset_time
     column :status
     column :source
+    column :tag_list
+
     column :created_at do |resource|
       admin_time(resource.created_at)
     end
@@ -44,6 +50,13 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     actions
   end
+  index as: ActiveAdmin::Views::CanvaCustomIndex do
+    column :venue
+    column :name
+    column :start_time
+    actions
+  end
+
 
   show do
     attributes_table do

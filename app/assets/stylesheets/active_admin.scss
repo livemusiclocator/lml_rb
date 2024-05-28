@@ -15,3 +15,11 @@
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+#sidebar .sidebar_section .check_boxes .choices input {
+    height: 1rem;
+    //hack to align boxes lazyily
+    margin-top: 1px;
+}
+#sidebar .sidebar_section .check_boxes .choices label {
+    display: inline-flex;
+}

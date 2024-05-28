@@ -11,6 +11,7 @@ module Lml
         status
         updated_at
         venue_id
+        tags
       ]
     end
 
@@ -18,6 +19,12 @@ module Lml
       %w[headline_act venue]
     end
 
+    def self.ransackable_scopes(_auth_object = nil)
+      %w[
+        tags_in
+        visible
+      ]
+    end
     def self.find_or_create_gig(name:, date:, venue:, details: {})
       gig = Lml::Gig.where(date: date, venue: venue).where("lower(name) = ?", name.downcase).first
       gig ||= Lml::Gig.create!(
@@ -38,6 +45,7 @@ module Lml
 
     scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
+    scope :tags_in, ->(*tags) { where("tags ?| array[:matches]", matches:tags) }
 
     def label
       "#{name} (#{date})"

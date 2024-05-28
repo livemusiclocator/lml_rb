@@ -338,6 +338,18 @@ ActiveAdmin.setup do |config|
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
     <style>
       .autoComplete_wrapper { display: block }
+      .canva_panel {
+border: 1px black dashed;
+padding: 2rem;
+margin: 2rem;
+      }
+      .canva_panel thead {
+      display:none;
+}
+.canva_panel table {
+   font-size: 1rem;
+   margin-top: 2rem;
+}
     </style>
     <script>
       function attachAutocomplete(selector, endpoint, placeholder) {
