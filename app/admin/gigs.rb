@@ -18,7 +18,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :name_cont, label: "Name"
   filter :venue_location_cont, label: "Location"
   filter :date
-  filter :tags, as: :check_boxes, collection: Lml::Gig.visible.map{|gig| gig.tags.grep(/genre/)}.flatten.uniq,label: "Genre tags"
+  filter :tags, as: :check_boxes, collection: ["genre:comedy"] # Lml::Gig.visible.map{|gig| gig.tags.grep(/genre/)}.flatten.uniq,label: "Genre tags"
 
   filter :source_cont, label: "Source"
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
