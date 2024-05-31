@@ -17,6 +17,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
   filter :name_cont, label: "Name"
   filter :venue_location_cont, label: "Location"
+  filter :venue, as: :select, collection: -> { Lml::Venue.all.pluck(:name, :id) }
   filter :date
   filter :tags, as: :check_boxes, collection: ["genre:comedy"] # Lml::Gig.visible.map{|gig| gig.tags.grep(/genre/)}.flatten.uniq,label: "Genre tags"
 
