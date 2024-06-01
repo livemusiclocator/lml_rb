@@ -17,17 +17,14 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
   filter :name_cont, label: "Name"
   filter :venue_location_cont, label: "Location"
-  filter :venue, as: :select, collection: -> { Lml::Venue.all.pluck(:name, :id) }
+  filter :venue, as: :select, collection: -> { Lml::Venue.order(:name).pluck(:name, :id) }
   filter :date
   filter :tags, as: :check_boxes, collection: ["genre:comedy"] # Lml::Gig.visible.map{|gig| gig.tags.grep(/genre/)}.flatten.uniq,label: "Genre tags"
-
   filter :source_cont, label: "Source"
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
   filter :checked
   filter :created_at
   filter :updated_at
-
-
 
   index do
     selectable_column
@@ -57,7 +54,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :start_time
     actions
   end
-
 
   show do
     attributes_table do
