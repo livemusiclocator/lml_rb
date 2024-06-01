@@ -44,7 +44,7 @@ bin/rails db:reset
 Start rails
 
 ```
-bin/rails start
+bin/rails server
 ```
 
 Browse to https://localhost:3000/admin and log in as admin@example.com and password password
