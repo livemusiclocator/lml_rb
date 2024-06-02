@@ -70,6 +70,18 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
   end
 
+  action_item :download_gigs, only: [:show] do
+    link_to "Download Gigs", download_gigs_admin_venue_path(resource, format: :txt)
+  end
+
+  member_action :download_gigs, method: :get do
+    send_data(
+      Lml::Processors::ClipperSerialiser.new(resource).serialise,
+      type: "application/txt",
+      filename: "gigs_#{resource.id}.txt",
+    )
+  end
+
   form do |f|
     f.inputs do
       f.input :name

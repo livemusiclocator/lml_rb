@@ -43,7 +43,7 @@ module Lml
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all
 
-    scope :eager, -> { order(start_time: :desc).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
+    scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :tags_in, ->(*tags) { where("tags ?| array[:matches]", matches:tags) }
 
