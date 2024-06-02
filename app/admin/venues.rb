@@ -78,7 +78,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     send_data(
       Lml::Processors::ClipperSerialiser.new(resource).serialise,
       type: "application/txt",
-      filename: "gigs_#{resource.id}.txt",
+      filename: "gigs_#{resource.name.downcase.gsub(" ", "_")}.txt",
     )
   end
 
