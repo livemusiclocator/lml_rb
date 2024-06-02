@@ -27,6 +27,8 @@ module Lml
               details[:name] = value
             when "price", "prices"
               details[:prices] = value.split("|").map(&:strip)
+            when "status"
+              details[:status] = value
             when "tag", "tags"
               details[:tags] = value.split("|").map(&:strip)
             when "tickets", "ticketing_url"

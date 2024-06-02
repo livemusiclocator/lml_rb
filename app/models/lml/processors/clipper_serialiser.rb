@@ -13,6 +13,7 @@ module Lml
           row(out, :name, gig.name)
           row(out, :date, gig.date.iso8601)
           row(out, :time, gig.start_offset_time)
+          row(out, :status, gig.status)
           row(out, :acts, acts(gig)) if gig.sets.count > 0
           row(out, :prices, prices(gig)) if gig.prices.count > 0
           row(out, :tags, tags(gig)) if gig.tags.present? && gig.tags.count > 0

@@ -35,9 +35,14 @@ module Lml
             venue: venue,
           )
 
+          if details[:status] == "delete"
+            gig.destroy
+            next
+          end
+
           append_prices(gig, details[:prices])
           gig.upload = @upload
-          gig.status = :confirmed
+          gig.status = details[:status] || "confirmed"
           gig.source = @upload.source
           gig.tags = details[:tags] if details[:tags].present?
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
