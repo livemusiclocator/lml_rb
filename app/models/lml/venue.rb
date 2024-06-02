@@ -32,5 +32,19 @@ module Lml
     def label
       "#{name} (#{location})"
     end
+
+    def lat_lng
+      return nil unless latitude && longitude
+
+      [latitude, longitude].join(", ")
+    end
+
+    def lat_lng=(value)
+      lat, lng = value.split(",").map(&:strip)
+      return if lat.blank? && lng.blank?
+
+      self.latitude = lat
+      self.longitude = lng
+    end
   end
 end

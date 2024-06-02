@@ -2,10 +2,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
     :address,
     :capacity,
-    :latitude,
+    :lat_lng,
     :location,
     :location_url,
-    :longitude,
     :name,
     :postcode,
     :time_zone,
@@ -46,9 +45,14 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :postcode
       row :time_zone
       row :location
-      row :lat_long do |resource|
-        point = [resource.latitude, resource.longitude].join(",")
-        link_to(point, "https://maps.google.com/?q=#{point}", target: "_blank", rel: "noopener noreferrer")
+      row :lat_lng do |resource|
+        point = resource.lat_lng
+        link_to(
+          point,
+          "https://maps.google.com/?q=#{point}",
+          target: "_blank",
+          rel: "noopener noreferrer",
+        ) unless point.blank?
       end
       row :location_url do |resource|
         if resource.location_url.present?
@@ -96,8 +100,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input :postcode
       f.input :location
       f.input :location_url
-      f.input :latitude
-      f.input :longitude
+      f.input :lat_lng
     end
     f.actions
   end
