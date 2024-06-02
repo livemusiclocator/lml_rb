@@ -2,7 +2,7 @@ module Lml
   module Processors
     module ClipperParser
       def self.extract_entries(lines)
-        extract_line_groups(lines).map { |group| extract_entry(group) }
+        extract_line_groups(lines).map { |group| extract_entry(group) }.filter { |details| details.keys.count > 0 }
       end
 
       def self.extract_line_groups(lines)
