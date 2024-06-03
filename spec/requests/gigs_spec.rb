@@ -92,6 +92,7 @@ describe "gigs" do
               }
             ],
             "sets" => [],
+            "start_offset_time" => nil,
             "start_time" => nil,
             "status" => "confirmed",
             "tags" => %w[all-ages free lbmf],
@@ -186,6 +187,7 @@ describe "gigs" do
                   }
                 ],
                 "sets" => [],
+                "start_offset_time" => nil,
                 "start_time" => nil,
                 "status" => "confirmed",
                 "tags" => %w[all-ages free lbmf],
