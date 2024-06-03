@@ -92,7 +92,6 @@ describe Lml::Upload do
           name: "THE GIG NAME",
           venue: @venue,
           date: "2024-03-01",
-          headline_act: band3,
         )
         Lml::Set.create!(gig: gig, act: band3)
         band2 = Lml::Act.create!(name: "BAND 2")
@@ -120,7 +119,7 @@ describe Lml::Upload do
         expect(gig.status).to eq("confirmed")
       end
 
-      it "leaves existing gig and act names, replaces headline act and sets" do
+      it "leaves existing gig and act names, replaces sets" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
           format: "clipper",
@@ -129,7 +128,8 @@ describe Lml::Upload do
           content: <<~CONTENT,
             name: the gig name
             date: 2024-03-01
-            acts: band 1 | band 2
+            set: band 1
+            set: band 2
           CONTENT
         )
         upload.process!
@@ -139,7 +139,6 @@ describe Lml::Upload do
         gig = Lml::Gig.find_by!(name: "THE GIG NAME")
         act1 = Lml::Act.find_by!(name: "band 1")
         act2 = Lml::Act.find_by!(name: "BAND 2")
-        expect(gig.headline_act).to eq(act1)
         expect(gig.sets.count).to eq(2)
         expect(Lml::Set.where(gig: gig, act: act1).count).to eq(1)
         expect(Lml::Set.where(gig: gig, act: act2).count).to eq(1)

@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 module Lml
   module Processors
     module ClipperParser
       def self.extract_entries(lines)
-        extract_line_groups(lines).map { |group| extract_entry(group) }.filter { |details| details.keys.count > 0 }
+        extract_line_groups(lines).map do |group|
+          extract_entry(group)
+        end.filter { |details| details.keys.count.positive? }
       end
 
       def self.extract_line_groups(lines)
@@ -19,14 +23,37 @@ module Lml
             key = key.downcase.gsub(" ", "_")
 
             case key
-            when "act", "acts"
-              details[:acts] = value.split("|").map(&:strip)
-            when "date", "gig_date", "gig_start_date"
+            when "date"
               details[:date] = Date.parse(value)
+            when "category"
+              details[:category] = value
+            when "duration"
+              details[:duration] = value
+            when "genre"
+              details[:tags] ||= []
+              details[:tags] << "genre:#{value}"
+            when "information"
+              details[:tags] ||= []
+              details[:tags] << "information:#{value}"
             when "name", "gig_name"
               details[:name] = value
-            when "price", "prices"
-              details[:prices] = value.split("|").map(&:strip)
+            when "price"
+              details[:prices] ||= []
+              amount, description = value.split.map(&:strip)
+              details[:prices] << {
+                amount: amount,
+                description: description,
+              }
+            when "series"
+              details[:series] = value
+            when "set"
+              details[:sets] ||= []
+              act_name, start_offset_time, duration  = value.split("|").map(&:strip)
+              details[:sets] << {
+                act_name: act_name,
+                start_offset_time: start_offset_time,
+                duration: duration,
+              }
             when "status"
               details[:status] = value
             when "tag", "tags"
@@ -35,8 +62,6 @@ module Lml
               details[:ticketing_url] = value
             when "time", "start_time", "gig_start_time"
               details[:time] = Time.parse(value)
-            when "venue", "venue_name"
-              details[:venue] = value
             when "url", "gig_url"
               details[:url] = value
             end

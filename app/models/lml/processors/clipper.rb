@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lml
   module Processors
     class Clipper
@@ -46,7 +48,7 @@ module Lml
           gig.source = @upload.source
           gig.tags = details[:tags] if details[:tags].present?
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
-          append_acts(gig, details[:acts])
+          append_sets(gig, details[:sets])
           append_date_time(gig, details[:date], details[:time])
           gig.save
           @upload.status = "Succeeded"
@@ -60,32 +62,24 @@ module Lml
       private
 
       def append_prices(gig, prices)
-        return unless prices.present?
+        return if prices.blank?
 
         gig.prices.destroy_all
         prices.each do |price|
-          amount, *remaining = price.split
-
-          Lml::Price.create(
-            gig: gig,
-            amount: amount,
-            description: remaining.join(" "),
-          )
+          Lml::Price.create(price.merge(gig: gig))
         end
       end
 
-      def append_acts(gig, names)
-        return unless names.present?
+      def append_sets(gig, sets)
+        return if sets.blank?
 
-        acts = []
         gig.sets.destroy_all
-        names.each do |name|
-          act = Lml::Act.where("lower(name) = ?", name.downcase).first
-          act ||= Lml::Act.create(name: name)
-          Lml::Set.create(gig: gig, act: act)
-          acts << act
+        sets.each do |set|
+          act_name = set.delete(:act_name)
+          act = Lml::Act.where("lower(name) = ?", act_name.downcase).first
+          act ||= Lml::Act.create(name: act_name)
+          Lml::Set.create(set.merge(gig: gig, act: act))
         end
-        gig.headline_act = acts.first
       end
 
       def append_date_time(gig, date, time)
