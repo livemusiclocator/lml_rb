@@ -78,6 +78,7 @@ describe "gigs" do
             "date" => "2001-06-08",
             "finish_time" => nil,
             "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+            "duration" => nil,
             "headline_act" => {
               "genres" => %w[good loud people],
               "id" => @act.id,
@@ -173,6 +174,7 @@ describe "gigs" do
                 "date" => "2001-06-08",
                 "finish_time" => nil,
                 "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+                "duration" => nil,
                 "headline_act" => {
                   "genres" => %w[good loud people],
                   "id" => @act.id,

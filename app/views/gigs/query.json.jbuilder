@@ -8,9 +8,10 @@ json.array! @gigs do |gig|
   json.ticketing_url gig.ticketing_url
   json.start_offset_time gig.start_offset_time
   json.start_time gig.start_at
-  json.status gig.status
+  json.duration gig.duration
   json.finish_time gig.finish_time
   json.description gig.description
+  json.status gig.status
 
   venue = gig.venue
   if venue
@@ -38,6 +39,7 @@ json.array! @gigs do |gig|
   json.sets gig.sets do |set|
     json.start_time set.start_at
     json.start_offset_time set.start_offset_time
+    json.duration set.duration
 
     act = set.act
     json.act do
