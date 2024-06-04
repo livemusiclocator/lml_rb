@@ -128,20 +128,32 @@ describe Lml::Upload do
           content: <<~CONTENT,
             name: the gig name
             date: 2024-03-01
-            set: band 1
-            set: band 2
+            set: band 1 (Melbourne)
+            set: band 2 (Glasgow/Scotland)
+            set: band 4
           CONTENT
         )
         upload.process!
         upload.reload
 
         expect(upload.status).to eq("Succeeded")
-        gig = Lml::Gig.find_by!(name: "THE GIG NAME")
+
+
         act1 = Lml::Act.find_by!(name: "band 1")
+        expect(act1.location).to eq("Melbourne")
+        expect(act1.country).to eq("Australia")
         act2 = Lml::Act.find_by!(name: "BAND 2")
-        expect(gig.sets.count).to eq(2)
+        expect(act2.location).to eq("Glasgow")
+        expect(act2.country).to eq("Scotland")
+        act4 = Lml::Act.find_by!(name: "band 4")
+        expect(act4.location).to eq(nil)
+        expect(act4.country).to eq(nil)
+
+        gig = Lml::Gig.find_by!(name: "THE GIG NAME")
+        expect(gig.sets.count).to eq(3)
         expect(Lml::Set.where(gig: gig, act: act1).count).to eq(1)
         expect(Lml::Set.where(gig: gig, act: act2).count).to eq(1)
+        expect(Lml::Set.where(gig: gig, act: act4).count).to eq(1)
       end
     end
   end
