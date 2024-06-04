@@ -75,11 +75,33 @@ module Lml
 
         gig.sets.destroy_all
         sets.each do |set|
-          act_name = set.delete(:act_name)
-          act = Lml::Act.where("lower(name) = ?", act_name.downcase).first
-          act ||= Lml::Act.create(name: act_name)
+          act = find_or_create_act(set.delete(:act_name))
           Lml::Set.create(set.merge(gig: gig, act: act))
         end
+      end
+
+      def find_or_create_act(details)
+        name, location, country = extract_name_location_country(details)
+        act = Lml::Act.where("lower(name) = ?", name.downcase).first
+        if act
+          act.update!(location: location, country: country)
+          act
+        else
+          Lml::Act.create(name: name, location: location, country: country)
+        end
+      end
+
+      def extract_name_location_country(details)
+        match = /(.*) \((.*)\)/.match(details)
+        return details unless match
+
+        name = match[1].strip
+        location = match[2].strip
+        match = %r{(.*)/(.*)}.match(location)
+
+        return [name, location, "Australia"] unless match
+
+        [name, match[1], match[2]]
       end
 
       def append_date_time(gig, date, time)
