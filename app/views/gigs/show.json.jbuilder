@@ -26,15 +26,6 @@ if venue
   end
 end
 
-headline_act = gig.headline_act
-if headline_act
-  json.headline_act do
-    json.id headline_act.id
-    json.name headline_act.name
-    json.genres headline_act.genres
-  end
-end
-
 json.sets gig.sets do |set|
   json.start_time set.start_at
   json.start_offset_time set.start_offset_time
@@ -45,6 +36,8 @@ json.sets gig.sets do |set|
     json.id act.id
     json.name act.name
     json.genres act.genres
+    json.location act.location if act.location
+    json.country act.country if act.country
   end
 end
 

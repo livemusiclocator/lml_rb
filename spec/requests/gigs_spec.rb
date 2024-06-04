@@ -56,7 +56,6 @@ describe "gigs" do
       @gig = Lml::Gig.create!(
         name: "The One Gig You Should Not Miss Out On",
         description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
-        headline_act: @act,
         venue: @venue,
         date: "2001-06-08",
         status: :confirmed,
@@ -79,11 +78,6 @@ describe "gigs" do
             "finish_time" => nil,
             "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
             "duration" => nil,
-            "headline_act" => {
-              "genres" => %w[good loud people],
-              "id" => @act.id,
-              "name" => "The Really Quite Good Music People",
-            },
             "id" => @gig.id,
             "name" => "The One Gig You Should Not Miss Out On",
             "prices" => [
@@ -175,11 +169,6 @@ describe "gigs" do
                 "finish_time" => nil,
                 "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
                 "duration" => nil,
-                "headline_act" => {
-                  "genres" => %w[good loud people],
-                  "id" => @act.id,
-                  "name" => "The Really Quite Good Music People",
-                },
                 "id" => @gig.id,
                 "name" => "The One Gig You Should Not Miss Out On",
                 "prices" => [

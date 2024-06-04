@@ -27,15 +27,6 @@ json.array! @gigs do |gig|
     end
   end
 
-  headline_act = gig.headline_act
-  if headline_act
-    json.headline_act do
-      json.id headline_act.id
-      json.name headline_act.name
-      json.genres headline_act.genres
-    end
-  end
-
   json.sets gig.sets do |set|
     json.start_time set.start_at
     json.start_offset_time set.start_offset_time
@@ -45,6 +36,8 @@ json.array! @gigs do |gig|
     json.act do
       json.id act.id
       json.name act.name
+      json.location act.location if act.location
+      json.country act.country if act.country
       json.genres act.genres
     end
   end
