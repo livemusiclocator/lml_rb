@@ -111,7 +111,6 @@ module Lml
           Lml::Set.create(gig: gig, act: act)
           acts << act
         end
-        gig.headline_act = acts.first
       end
     end
   end

@@ -139,7 +139,6 @@ describe "gigs" do
         @gig = Lml::Gig.create!(
           name: "The One Gig You Should Not Miss Out On",
           description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
-          headline_act: @act,
           venue: @venue,
           date: "2001-06-08",
           status: :confirmed,

@@ -2,7 +2,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :date,
     :description,
-    :headline_act_id,
     :hidden,
     :name,
     :start_offset_time,
@@ -48,6 +47,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     actions
   end
+
   index as: ActiveAdmin::Views::CanvaCustomIndex do
     column :venue
     column :name
@@ -83,7 +83,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
         link_to("tickets", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
       end
       row :tag_list
-      row :headline_act
       row :created_at do |resource|
         admin_time(resource.updated_at)
       end
@@ -148,8 +147,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :source
       f.input :hidden
-      f.input :headline_act_label, label: "Headline Act"
-      f.input :headline_act_id, as: "hidden"
       f.input :description, input_html: { rows: 5 }
     end
     f.inputs "Tags" do
@@ -175,7 +172,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     script <<~SCRIPT.html_safe
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
-      attachAutocomplete("lml_gig_headline_act", "/acts/autocomplete", "Select Headline Act");
     SCRIPT
     f.actions
   end

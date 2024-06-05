@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_20_105446) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_05_091046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -49,7 +49,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_105446) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "venue_id"
-    t.uuid "headline_act_id"
     t.enum "status", default: "draft", null: false, enum_type: "status"
     t.string "ticketing_url"
     t.jsonb "tags"
@@ -60,7 +59,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_105446) do
     t.boolean "checked"
     t.string "source"
     t.uuid "upload_id"
-    t.index ["headline_act_id"], name: "index_gigs_on_headline_act_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 
@@ -81,6 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_105446) do
     t.uuid "act_id"
     t.integer "start_offset"
     t.integer "duration"
+    t.string "stage"
     t.index ["act_id"], name: "index_sets_on_act_id"
     t.index ["gig_id"], name: "index_sets_on_gig_id"
   end
@@ -113,7 +112,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_105446) do
     t.string "postcode"
   end
 
-  add_foreign_key "gigs", "acts", column: "headline_act_id"
   add_foreign_key "gigs", "venues"
   add_foreign_key "sets", "acts"
   add_foreign_key "sets", "gigs"

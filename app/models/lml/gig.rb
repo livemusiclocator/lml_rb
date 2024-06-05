@@ -5,7 +5,6 @@ module Lml
         checked
         created_at
         date
-        headline_act_id
         name
         source
         status
@@ -16,7 +15,7 @@ module Lml
     end
 
     def self.ransackable_associations(_auth_object = nil)
-      %w[headline_act venue]
+      %w[venue]
     end
 
     def self.ransackable_scopes(_auth_object = nil)
@@ -25,6 +24,7 @@ module Lml
         visible
       ]
     end
+
     def self.find_or_create_gig(name:, date:, venue:, details: {})
       gig = Lml::Gig.where(date: date, venue: venue).where("lower(name) = ?", name.downcase).first
       gig ||= Lml::Gig.create!(
@@ -39,11 +39,10 @@ module Lml
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
     belongs_to :venue, optional: true
     belongs_to :upload, optional: true
-    belongs_to :headline_act, class_name: "Lml::Act", optional: true
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all
 
-    scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:headline_act).includes(:prices) }
+    scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :tags_in, ->(*tags) { where("tags ?| array[:matches]", matches:tags) }
 
@@ -53,10 +52,6 @@ module Lml
 
     def venue_label
       venue&.label
-    end
-
-    def headline_act_label
-      headline_act&.label
     end
 
     def tag_list

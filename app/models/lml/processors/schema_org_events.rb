@@ -113,7 +113,6 @@ module Lml
           Lml::Set.create(gig: gig, act: act)
           acts << act
         end
-        gig.headline_act = acts.first
       end
 
       def find_or_create_venue(data, time_zone)
