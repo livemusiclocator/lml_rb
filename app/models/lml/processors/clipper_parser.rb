@@ -48,11 +48,12 @@ module Lml
               details[:series] = value
             when "set"
               details[:sets] ||= []
-              act_name, start_offset_time, duration  = value.split("|").map(&:strip)
+              act_name, start_offset_time, duration, stage  = value.split("|").map(&:strip)
               details[:sets] << {
                 act_name: act_name,
                 start_offset_time: start_offset_time,
                 duration: duration,
+                stage: stage,
               }
             when "status"
               details[:status] = value

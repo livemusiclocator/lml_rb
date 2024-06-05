@@ -99,6 +99,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
         column :act
         column :start_offset_time
         column :duration
+        column :stage
       end
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "gigs" do
@@ -49,10 +51,6 @@ describe "gigs" do
         capacity: 500,
         website: "https://gigplace.com.au",
       )
-      @act = Lml::Act.create!(
-        name: "The Really Quite Good Music People",
-        genres: %w[good loud people],
-      )
       @gig = Lml::Gig.create!(
         name: "The One Gig You Should Not Miss Out On",
         description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
@@ -61,6 +59,33 @@ describe "gigs" do
         status: :confirmed,
         ticketing_url: "the ticketing url",
         tags: %w[all-ages free lbmf],
+      )
+      @main_act = Lml::Act.create!(
+        name: "The Really Quite Good Music People",
+        genres: %w[good loud people],
+      )
+      @first_support = Lml::Act.create!(name: "first support")
+      @second_support = Lml::Act.create!(name: "second support")
+      Lml::Set.create!(
+        act: @first_support,
+        gig: @gig,
+        start_offset_time: "18:00",
+        duration: 30,
+        stage: "main",
+      )
+      Lml::Set.create!(
+        act: @main_act,
+        gig: @gig,
+        start_offset_time: "20:00",
+        duration: 60,
+        stage: "main",
+      )
+      Lml::Set.create!(
+        act: @second_support,
+        gig: @gig,
+        start_offset_time: "19:00",
+        duration: 30,
+        stage: "main",
       )
       Lml::Price.create!(
         gig: @gig,
@@ -84,9 +109,40 @@ describe "gigs" do
               {
                 "amount" => "$75.00",
                 "description" => "GA",
-              }
+              },
             ],
-            "sets" => [],
+            "sets" => [
+              {
+                "act" => {
+                  "genres" => nil,
+                  "id" => @first_support.id,
+                  "name" => "first support",
+                },
+                "duration" => 30,
+                "start_offset_time" => "18:00",
+                "start_time" => "2001-06-08T18:00:00.000+10:00",
+              },
+              {
+                "act" => {
+                  "genres" => nil,
+                  "id" => @second_support.id,
+                  "name" => "second support",
+                },
+                "duration" => 30,
+                "start_offset_time" => "19:00",
+                "start_time" => "2001-06-08T19:00:00.000+10:00",
+              },
+              {
+                "act" => {
+                  "genres" => %w[good loud people],
+                  "id" => @main_act.id,
+                  "name" => "The Really Quite Good Music People",
+                },
+                "duration" => 60,
+                "start_offset_time" => "20:00",
+                "start_time" => "2001-06-08T20:00:00.000+10:00",
+              },
+            ],
             "start_offset_time" => nil,
             "start_time" => nil,
             "status" => "confirmed",
@@ -132,10 +188,6 @@ describe "gigs" do
           capacity: 500,
           website: "https://gigplace.com.au",
         )
-        @act = Lml::Act.create!(
-          name: "The Really Quite Good Music People",
-          genres: %w[good loud people],
-        )
         @gig = Lml::Gig.create!(
           name: "The One Gig You Should Not Miss Out On",
           description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
@@ -144,6 +196,33 @@ describe "gigs" do
           status: :confirmed,
           ticketing_url: "the ticketing url",
           tags: %w[all-ages free lbmf],
+        )
+        @main_act = Lml::Act.create!(
+          name: "The Really Quite Good Music People",
+          genres: %w[good loud people],
+        )
+        @first_support = Lml::Act.create!(name: "first support")
+        @second_support = Lml::Act.create!(name: "second support")
+        Lml::Set.create!(
+          act: @first_support,
+          gig: @gig,
+          start_offset_time: "18:00",
+          duration: 30,
+          stage: "main",
+        )
+        Lml::Set.create!(
+          act: @main_act,
+          gig: @gig,
+          start_offset_time: "20:00",
+          duration: 60,
+          stage: "main",
+        )
+        Lml::Set.create!(
+          act: @second_support,
+          gig: @gig,
+          start_offset_time: "19:00",
+          duration: 30,
+          stage: "main",
         )
         Lml::Price.create!(
           gig: @gig,
@@ -174,9 +253,40 @@ describe "gigs" do
                   {
                     "amount" => "$75.00",
                     "description" => "GA",
-                  }
+                  },
                 ],
-                "sets" => [],
+                "sets" => [
+                  {
+                    "act" => {
+                      "genres" => nil,
+                      "id" => @first_support.id,
+                      "name" => "first support",
+                    },
+                    "duration" => 30,
+                    "start_offset_time" => "18:00",
+                    "start_time" => "2001-06-08T18:00:00.000+10:00",
+                  },
+                  {
+                    "act" => {
+                      "genres" => nil,
+                      "id" => @second_support.id,
+                      "name" => "second support",
+                    },
+                    "duration" => 30,
+                    "start_offset_time" => "19:00",
+                    "start_time" => "2001-06-08T19:00:00.000+10:00",
+                  },
+                  {
+                    "act" => {
+                      "genres" => %w[good loud people],
+                      "id" => @main_act.id,
+                      "name" => "The Really Quite Good Music People",
+                    },
+                    "duration" => 60,
+                    "start_offset_time" => "20:00",
+                    "start_time" => "2001-06-08T20:00:00.000+10:00",
+                  },
+                ],
                 "start_offset_time" => nil,
                 "start_time" => nil,
                 "status" => "confirmed",

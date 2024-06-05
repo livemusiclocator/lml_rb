@@ -36,7 +36,7 @@ module Lml
                   "#{act} (#{set.act.location}/Australia)"
                 end
         end
-        "#{act}|#{set.start_offset_time}|#{set.duration}"
+        "#{act}|#{set.start_offset_time}|#{set.duration}|#{set.stage}"
       end
 
       def build_price(price)

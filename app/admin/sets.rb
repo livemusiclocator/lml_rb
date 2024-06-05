@@ -3,6 +3,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     :gig_id,
     :act_id,
     :start_offset_time,
+    :stage,
     :duration,
   )
 
@@ -12,8 +13,9 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     selectable_column
     column :gig
     column :act
-    column :start_time
-    column :finish_time
+    column :stage
+    column :start_offset_time
+    column :duration
     column :created_at do |resource|
       admin_time(resource.created_at)
     end
@@ -28,6 +30,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       row :id
       row :gig
       row :act
+      row :stage
       row :start_offset_time
       row :duration
       row :start_at do |resource|
@@ -65,6 +68,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       f.input :gig_id, as: "hidden"
       f.input :act_label, label: "Act"
       f.input :act_id, as: "hidden"
+      f.input :stage
       f.input :start_offset_time, as: :time_picker, label: "Start Time"
       f.input :duration, label: "Duration (mins)"
     end

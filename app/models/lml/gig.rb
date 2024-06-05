@@ -71,7 +71,7 @@ module Lml
     def set_list=(value)
       sets.delete_all
       value.split("\n") do |line|
-        act_name, start_offset_time, duration = line.split("|").map(&:strip)
+        act_name, start_offset_time, duration, stage = line.split("|").map(&:strip)
         next if act_name.blank?
 
         act = Lml::Act.where("lower(name) = ?", act_name.downcase).first
@@ -81,6 +81,7 @@ module Lml
           act: act,
           start_offset_time: start_offset_time,
           duration: duration,
+          stage: stage,
         )
       end
     end

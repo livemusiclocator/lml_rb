@@ -26,7 +26,7 @@ if venue
   end
 end
 
-json.sets gig.sets do |set|
+json.sets gig.sets.order(:start_offset) do |set|
   json.start_time set.start_at
   json.start_offset_time set.start_offset_time
   json.duration set.duration
