@@ -27,7 +27,8 @@ module Lml
       },
     )
 
-    has_many :gigs
+    has_many :gigs, dependent: :delete_all
+    has_many :uploads, dependent: :delete_all
 
     def label
       "#{name} (#{location})"
