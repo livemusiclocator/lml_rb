@@ -56,6 +56,7 @@ module Lml
           append_prices(gig, details[:prices])
           gig.name = details[:name]
           gig.date = details[:date]
+          gig.venue = venue
           gig.upload = @upload
           gig.status = details[:status] || "confirmed"
           gig.source = @upload.source
