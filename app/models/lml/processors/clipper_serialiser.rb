@@ -12,6 +12,7 @@ module Lml
 
         @venue.gigs.eager.each do |gig|
           out.puts "---"
+          row(out, :id, gig.id)
           row(out, :name, gig.name)
           row(out, :date, gig.date.iso8601)
           row(out, :time, gig.start_offset_time)

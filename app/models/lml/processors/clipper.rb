@@ -28,10 +28,21 @@ module Lml
             @upload.status = "Failed"
             @upload.error_description = "#{index + 1}: A date and gig name are required"
             @upload.save!
-            return
+            return 1
           end
 
-          gig = Lml::Gig.find_or_create_gig(
+          id = details[:id]
+          if id
+            gig = Lml::Gig.find_by(id: id)
+            unless gig
+              @upload.status = "Failed"
+              @upload.error_description = "#{index + 1}: A gig with id #{id} could not be found"
+              @upload.save!
+              return 1
+            end
+          end
+
+          gig ||= Lml::Gig.find_or_create_gig(
             name: details[:name],
             date: details[:date],
             venue: venue,
@@ -43,6 +54,8 @@ module Lml
           end
 
           append_prices(gig, details[:prices])
+          gig.name = details[:name]
+          gig.date = details[:date]
           gig.upload = @upload
           gig.status = details[:status] || "confirmed"
           gig.source = @upload.source

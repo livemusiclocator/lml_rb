@@ -32,6 +32,8 @@ module Lml
             when "genre"
               details[:tags] ||= []
               details[:tags] << "genre:#{value}"
+            when "id"
+              details[:id] = value
             when "information"
               details[:tags] ||= []
               details[:tags] << "information:#{value}"
