@@ -32,7 +32,7 @@ module Lml
           end
 
           id = details[:id]
-          if id
+          if id.present?
             gig = Lml::Gig.find_by(id: id)
             unless gig
               @upload.status = "Failed"

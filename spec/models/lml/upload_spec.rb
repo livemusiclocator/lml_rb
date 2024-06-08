@@ -98,7 +98,7 @@ describe Lml::Upload do
         Lml::Set.create!(gig: gig, act: band2)
       end
 
-      it "leaves gig with existing names that match on case" do
+      it "changes gig names that match on case" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
           format: "clipper",
@@ -113,9 +113,8 @@ describe Lml::Upload do
         upload.reload
 
         expect(upload.status).to eq("Succeeded")
-        gig = Lml::Gig.find_by!(name: "THE GIG NAME")
-        venue = Lml::Venue.find_by!(name: "THE VENUE NAME")
-        expect(gig.venue).to eq(venue)
+        gig = Lml::Gig.find_by!(name: "the gig name")
+        expect(gig.venue).to eq(@venue)
         expect(gig.status).to eq("confirmed")
       end
 
@@ -138,7 +137,6 @@ describe Lml::Upload do
 
         expect(upload.status).to eq("Succeeded")
 
-
         act1 = Lml::Act.find_by!(name: "band 1")
         expect(act1.location).to eq("Melbourne")
         expect(act1.country).to eq("Australia")
@@ -149,7 +147,7 @@ describe Lml::Upload do
         expect(act4.location).to eq(nil)
         expect(act4.country).to eq(nil)
 
-        gig = Lml::Gig.find_by!(name: "THE GIG NAME")
+        gig = Lml::Gig.find_by!(name: "the gig name")
         expect(gig.sets.count).to eq(3)
         expect(Lml::Set.where(gig: gig, act: act1).count).to eq(1)
         expect(Lml::Set.where(gig: gig, act: act2).count).to eq(1)
