@@ -27,6 +27,7 @@ module Lml
               details[:date] = Date.parse(value)
             when "category"
               details[:category] = value
+              details[:tags] ||= []
               details[:tags] << "category:#{value}"
             when "duration"
               details[:duration] = value
@@ -49,6 +50,7 @@ module Lml
               }
             when "series"
               details[:series] = value
+              details[:tags] ||= []
               details[:tags] << "series:#{value}"
             when "set"
               details[:sets] ||= []
@@ -62,7 +64,8 @@ module Lml
             when "status"
               details[:status] = value
             when "tag", "tags"
-              details[:tags] = value.split("|").map(&:strip)
+              details[:tags] ||= []
+              details[:tags] += value.split("|").map(&:strip)
             when "tickets", "ticketing_url"
               details[:ticketing_url] = value
             when "time", "start_time", "gig_start_time"
