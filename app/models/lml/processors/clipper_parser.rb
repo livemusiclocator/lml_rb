@@ -27,6 +27,7 @@ module Lml
               details[:date] = Date.parse(value)
             when "category"
               details[:category] = value
+              details[:tags] << "category:#{value}"
             when "duration"
               details[:duration] = value
             when "genre"
@@ -48,6 +49,7 @@ module Lml
               }
             when "series"
               details[:series] = value
+              details[:tags] << "series:#{value}"
             when "set"
               details[:sets] ||= []
               act_name, start_offset_time, duration, stage  = value.split("|").map(&:strip)

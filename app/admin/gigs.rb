@@ -153,7 +153,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     f.inputs "Tags" do
       f.input :tag_list
       para(
-        "Separate tags with commas (eg. genre:Punk, information:18+, category:Band, series: LBMF2024)",
+        "Separate tags with commas (eg. genre:punk, information:18+, category:spoken-word, series:lbmf)",
         style: "font-size: small",
       )
     end
