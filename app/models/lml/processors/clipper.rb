@@ -24,13 +24,18 @@ module Lml
         entries = ClipperParser.extract_entries(@upload.content.lines)
 
         entries.each_with_index do |details, index|
-          @upload.source = details[:url] if details[:url]
+          unless details[:name].present?
+            @upload.status = "Failed"
+            @upload.error_description = "#{index + 1}: A gig name is required"
+            @upload.save!
+            return 1
+          end
 
           begin
-            date = Date.parse(details[:date])
+            date = Date.parse(details[:date] || "")
           rescue Date::Error
             @upload.status = "Failed"
-            @upload.error_description = "#{index + 1}: #{details[:date]} is not a valid date"
+            @upload.error_description = "#{index + 1}: '#{details[:date]}' is not a valid date"
             @upload.save!
             return 1
           end
@@ -40,17 +45,10 @@ module Lml
               time = Time.parse(details[:time])
             rescue ArgumentError
               @upload.status = "Failed"
-              @upload.error_description = "#{index + 1}: #{details[:time]} is not a valid time"
+              @upload.error_description = "#{index + 1}: '#{details[:time]}' is not a valid time"
               @upload.save!
               return 1
             end
-          end
-
-          unless details[:name].present?
-            @upload.status = "Failed"
-            @upload.error_description = "#{index + 1}: A gig name is required"
-            @upload.save!
-            return 1
           end
 
           id = details[:id]
@@ -86,6 +84,7 @@ module Lml
           append_sets(gig, details[:sets])
           append_date_time(gig, date, time)
           gig.save
+          @upload.source = details[:url] if details[:url]
           @upload.status = "Succeeded"
           @upload.error_description = ""
           @upload.gig_ids << gig.id

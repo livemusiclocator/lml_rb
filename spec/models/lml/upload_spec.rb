@@ -23,7 +23,7 @@ describe Lml::Upload do
       upload.reload
 
       expect(upload.status).to eq("Failed")
-      expect(upload.error_description).to eq("1: A date and gig name are required")
+      expect(upload.error_description).to eq("1: A gig name is required")
     end
 
     it "populates status with failed when date is missing" do
@@ -40,9 +40,8 @@ describe Lml::Upload do
       upload.process!
       upload.reload
 
-      expect(upload.source).to eq("the url")
       expect(upload.status).to eq("Failed")
-      expect(upload.error_description).to eq("1: A date and gig name are required")
+      expect(upload.error_description).to eq("1: '' is not a valid date")
     end
 
     context "where the gig did not already exist" do
