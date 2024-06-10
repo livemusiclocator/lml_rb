@@ -1,14 +1,12 @@
 ActiveAdmin.register Lml::Upload, as: "Upload" do
   permit_params(
     :content,
-    :format,
     :source,
     :status,
     :time_zone,
     :venue_id,
   )
 
-  filter :format_cont, label: "Format"
   filter :source_cont, label: "Source"
 
   index do
@@ -19,7 +17,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     column :updated_at do |resource|
       admin_time(resource.updated_at)
     end
-    column :format
     column :source
     column :venue
     column :time_zone
@@ -28,7 +25,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
 
   show do
     attributes_table do
-      row :format
       row :source
       row :venue
       row :time_zone
@@ -64,11 +60,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
 
   form do |f|
     f.inputs do
-      f.input(
-        :format,
-        as: :select,
-        collection: Lml::Upload.formats.keys,
-      )
       f.input :venue_label, label: "Venue"
       f.input :venue_id, as: "hidden"
       f.input(
@@ -92,15 +83,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   member_action :reprocess, method: :put do
     resource.process!
     redirect_to resource_path, notice: "Reprocessed"
-  end
-
-  action_item :rescrape, only: %i[show] do
-    link_to "Rescrape", rescrape_admin_upload_path(upload), method: :put
-  end
-
-  member_action :rescrape, method: :put do
-    resource.rescrape!
-    redirect_to resource_path, notice: "Rescraped"
   end
 
   controller do
