@@ -26,9 +26,29 @@ module Lml
         entries.each_with_index do |details, index|
           @upload.source = details[:url] if details[:url]
 
-          unless details[:name].present? && details[:date].present?
+          begin
+            date = Date.parse(details[:date])
+          rescue Date::Error
             @upload.status = "Failed"
-            @upload.error_description = "#{index + 1}: A date and gig name are required"
+            @upload.error_description = "#{index + 1}: #{details[:date]} is not a valid date"
+            @upload.save!
+            return 1
+          end
+
+          unless details[:time].blank?
+            begin
+              time = Time.parse(details[:time])
+            rescue ArgumentError
+              @upload.status = "Failed"
+              @upload.error_description = "#{index + 1}: #{details[:time]} is not a valid time"
+              @upload.save!
+              return 1
+            end
+          end
+
+          unless details[:name].present?
+            @upload.status = "Failed"
+            @upload.error_description = "#{index + 1}: A gig name is required"
             @upload.save!
             return 1
           end
@@ -46,7 +66,7 @@ module Lml
 
           gig ||= Lml::Gig.find_or_create_gig(
             name: details[:name],
-            date: details[:date],
+            date: date,
             venue: venue,
           )
 
@@ -57,7 +77,6 @@ module Lml
 
           append_prices(gig, details[:prices])
           gig.name = details[:name]
-          gig.date = details[:date]
           gig.venue = venue
           gig.upload = @upload
           gig.status = details[:status] || "confirmed"
@@ -65,7 +84,7 @@ module Lml
           gig.tags = details[:tags] if details[:tags].present?
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
           append_sets(gig, details[:sets])
-          append_date_time(gig, details[:date], details[:time])
+          append_date_time(gig, date, time)
           gig.save
           @upload.status = "Succeeded"
           @upload.error_description = ""
@@ -121,10 +140,8 @@ module Lml
       end
 
       def append_date_time(gig, date, time)
-        return unless date
-
         gig.date = date
-        return unless time
+        return if time.blank?
 
         gig.start_time = "#{date.iso8601}T#{time.strftime("%H:%M")}:00"
         gig.start_offset_time = gig.start_time.strftime("%H:%M") if gig.start_time

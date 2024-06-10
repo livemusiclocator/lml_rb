@@ -24,7 +24,7 @@ module Lml
 
             case key
             when "date"
-              details[:date] = Date.parse(value)
+              details[:date] = value
             when "category"
               details[:category] = value
               details[:tags] ||= []
@@ -69,7 +69,7 @@ module Lml
             when "tickets", "ticketing_url"
               details[:ticketing_url] = value
             when "time", "start_time", "gig_start_time"
-              details[:time] = Time.parse(value)
+              details[:time] = value
             when "url", "gig_url"
               details[:url] = value
             end
