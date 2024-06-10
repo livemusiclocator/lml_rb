@@ -7,7 +7,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :location_url,
     :name,
     :postcode,
+    :tag_list,
     :time_zone,
+    :vibe,
     :website,
   )
 
@@ -43,6 +45,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :capacity
       row :address
       row :postcode
+      row :tag_list
+      row :vibe
       row :time_zone
       row :location
       row :lat_lng do |resource|
@@ -101,6 +105,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input :location
       f.input :location_url
       f.input :lat_lng
+      f.input :vibe
+      f.input :tag_list
     end
     f.actions
   end

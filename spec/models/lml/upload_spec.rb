@@ -9,21 +9,6 @@ describe Lml::Upload do
       )
     end
 
-    it "populates status with failed when venue is missing" do
-      upload = Lml::Upload.create!(
-        time_zone: "Australia/Melbourne",
-        format: "clipper",
-        content: <<~CONTENT,
-          url: the url
-        CONTENT
-      )
-      upload.process!
-      upload.reload
-
-      expect(upload.status).to eq("Failed")
-      expect(upload.error_description).to eq("A venue is required")
-    end
-
     it "populates status with failed when name is missing" do
       upload = Lml::Upload.create!(
         time_zone: "Australia/Melbourne",

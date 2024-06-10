@@ -23,6 +23,14 @@ module Lml
       "#{name} (#{location})"
     end
 
+    def tag_list
+      (tags || []).join(", ")
+    end
+
+    def tag_list=(value)
+      self.tags = value.split(",").map(&:strip)
+    end
+
     def lat_lng
       return nil unless latitude && longitude
 
