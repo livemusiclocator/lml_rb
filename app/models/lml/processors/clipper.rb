@@ -17,6 +17,8 @@ module Lml
           return
         end
 
+        Time.zone = venue.time_zone
+
         @upload.gig_ids = []
 
         entries = ClipperParser.extract_entries(@upload.content.lines)

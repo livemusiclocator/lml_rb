@@ -3,7 +3,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     :content,
     :source,
     :status,
-    :time_zone,
     :venue_id,
   )
 
@@ -19,7 +18,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     end
     column :source
     column :venue
-    column :time_zone
     actions
   end
 
@@ -27,7 +25,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     attributes_table do
       row :source
       row :venue
-      row :time_zone
       row :status
       row :error_description
       row :created_at do |resource|
@@ -62,11 +59,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     f.inputs do
       f.input :venue_label, label: "Venue"
       f.input :venue_id, as: "hidden"
-      f.input(
-        :time_zone,
-        as: :select,
-        collection: Lml::Timezone::CANONICAL_TIMEZONES,
-      )
       f.input :source
       f.input :content
     end
@@ -86,10 +78,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   end
 
   controller do
-    def new
-      @upload = Lml::Upload.new(time_zone: current_admin_user.time_zone)
-    end
-
     def create
       super
       resource.process!
