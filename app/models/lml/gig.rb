@@ -2,10 +2,12 @@ module Lml
   class Gig < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
       %w[
+        category
         checked
         created_at
         date
         name
+        series
         source
         status
         updated_at

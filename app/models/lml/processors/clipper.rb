@@ -80,6 +80,8 @@ module Lml
           gig.status = details[:status] || "confirmed"
           gig.source = @upload.source
           gig.tags = details[:tags] if details[:tags].present?
+          gig.series = details[:series]
+          gig.category = details[:category]
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
           append_sets(gig, details[:sets])
           append_date_time(gig, date, time)

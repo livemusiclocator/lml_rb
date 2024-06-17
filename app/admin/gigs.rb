@@ -1,9 +1,11 @@
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
+    :category,
     :date,
     :description,
     :hidden,
     :name,
+    :series,
     :start_offset_time,
     :status,
     :tag_list,
@@ -18,12 +20,11 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :venue_location_cont, label: "Location"
   filter :venue, as: :select, collection: -> { Lml::Venue.order(:name).pluck(:name, :id) }
   filter :date
-  filter :tags, as: :check_boxes, collection: ["genre:comedy", "series:lbmf"] # Lml::Gig.visible.map{|gig| gig.tags.grep(/genre/)}.flatten.uniq,label: "Genre tags"
+  filter :series_cont, label: "Series"
+  filter :category_cont, label: "Category"
   filter :source_cont, label: "Source"
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
   filter :checked
-  filter :created_at
-  filter :updated_at
 
   index do
     selectable_column
@@ -34,7 +35,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :date do |resource|
       admin_date(resource.date)
     end
-    column :start_offset_time
+    column :category
+    column :series
     column :status
     column :source
     column :tag_list
@@ -70,6 +72,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :start_at do |resource|
         admin_time(resource.start_at)
       end
+      row :category
+      row :series
       row :status
       row :source
       row :duration
@@ -148,6 +152,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :source
       f.input :hidden
+      f.input :series
+      f.input :category
       f.input :description, input_html: { rows: 5 }
     end
     f.inputs "Tags" do
