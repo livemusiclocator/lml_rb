@@ -59,6 +59,8 @@ describe "gigs" do
         status: :confirmed,
         ticketing_url: "the ticketing url",
         tags: %w[all-ages free lbmf],
+        series: "ohm",
+        category: "music",
       )
       @main_act = Lml::Act.create!(
         name: "The Really Quite Good Music People",
@@ -105,6 +107,8 @@ describe "gigs" do
             "duration" => nil,
             "id" => @gig.id,
             "name" => "The One Gig You Should Not Miss Out On",
+            "series" => "ohm",
+            "category" => "music",
             "prices" => [
               {
                 "amount" => "$75.00",
@@ -196,6 +200,8 @@ describe "gigs" do
           status: :confirmed,
           ticketing_url: "the ticketing url",
           tags: %w[all-ages free lbmf],
+          series: "ohm",
+          category: "music",
         )
         @main_act = Lml::Act.create!(
           name: "The Really Quite Good Music People",
@@ -249,6 +255,8 @@ describe "gigs" do
                 "duration" => nil,
                 "id" => @gig.id,
                 "name" => "The One Gig You Should Not Miss Out On",
+                "series" => "ohm",
+                "category" => "music",
                 "prices" => [
                   {
                     "amount" => "$75.00",

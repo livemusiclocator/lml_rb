@@ -12,6 +12,8 @@ json.array! @gigs do |gig|
   json.finish_time gig.finish_time
   json.description gig.description
   json.status gig.status
+  json.series gig.series
+  json.category gig.category
 
   venue = gig.venue
   if venue
