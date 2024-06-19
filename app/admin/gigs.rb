@@ -159,30 +159,30 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :description, input_html: { rows: 5 }
     end
     f.inputs "Genre Tags" do
-      f.input :genre_tag_list
+      f.input :genre_tag_list, as: :text, input_html: { rows: 5 }
       para(
-        "Separate tags with commas (eg. punk,post-punk)",
+        "One tag per line",
         style: "font-size: small",
       )
     end
     f.inputs "Information Tags" do
-      f.input :information_tag_list
+      f.input :information_tag_list, as: :text, input_html: { rows: 5 }
       para(
-        "Separate tags with commas (eg. 18+, dog-friendly)",
+        "One tag per line",
         style: "font-size: small",
       )
     end
     f.inputs "Sets" do
       f.input :set_list, as: :text, input_html: { rows: 5 }
       para(
-        "One set per line, enter act name, start time and duration separated by pipes (eg. The Beatles|19:00|60)",
+        "One set per line, enter act name, start time, duration and stage separated by pipes (eg. The Beatles | 19:00 | 60 | main stage)",
         style: "font-size: small",
       )
     end
     f.inputs "Prices" do
       f.input :price_list, as: :text, input_html: { rows: 5 }
       para(
-        "One price per line, enter amount and description separated by pipes (eg. 10.00|Concession)",
+        "One price per line, enter amount and description separated by pipes (eg. 10.00 | Concession)",
         style: "font-size: small",
       )
     end

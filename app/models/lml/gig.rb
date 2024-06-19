@@ -66,19 +66,19 @@ module Lml
     end
 
     def genre_tag_list
-      (genre_tags || []).join(", ")
+      (genre_tags || []).join("\n")
     end
 
     def genre_tag_list=(value)
-      self.genre_tags = value.split(",").map(&:strip)
+      self.genre_tags = value.split("\n").map(&:strip)
     end
 
     def information_tag_list
-      (information_tags || []).join(", ")
+      (information_tags || []).join("\n")
     end
 
     def information_tag_list=(value)
-      self.information_tags = value.split(",").map(&:strip)
+      self.information_tags = value.split("\n").map(&:strip)
     end
 
     def set_list
