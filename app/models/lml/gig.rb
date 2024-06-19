@@ -91,23 +91,12 @@ module Lml
     end
 
     def price_list
-      prices.map do |price|
-        "#{price.amount}|#{price.description}"
-      end.join("\n")
+      prices.map(&:line).join("\n")
     end
 
     def price_list=(value)
       prices.delete_all
-      value.split("\n") do |line|
-        amount, description = line.split("|").map(&:strip)
-        next if amount.blank?
-
-        Lml::Price.create(
-          gig: self,
-          amount: amount,
-          description: description,
-        )
-      end
+      value.split("\n") { |line| Lml::Price.create_for_gig_from_line!(self, line) }
     end
 
     def start_offset_time=(value)

@@ -23,7 +23,7 @@ module Lml
           (gig.genre_tags || []).each { |tag| row(out, :genre, tag) }
           (gig.information_tags || []).each { |tag| row(out, :information, tag) }
           gig.sets.each { |set| row(out, :set, set.line) }
-          gig.prices.each { |price| row(out, :price, "#{price.amount.format}|#{price.description}") }
+          gig.prices.each { |price| row(out, :price, price.line) }
         end
 
         out.string
