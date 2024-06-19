@@ -130,8 +130,8 @@ module Lml
 
       return if value.blank?
 
-      hours, mins = value.split(":").map(&:to_i)
-      self.start_offset = (hours * 60) + mins
+      time = Time.parse(value)
+      self.start_offset = (time.hour * 60) + time.min
     end
 
     def start_offset_time
