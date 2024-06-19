@@ -73,7 +73,6 @@ module Lml
             next
           end
 
-          append_prices(gig, details[:prices])
           gig.name = details[:name]
           gig.venue = venue
           gig.upload = @upload
@@ -84,7 +83,8 @@ module Lml
           gig.series = details[:series]
           gig.category = details[:category]
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
-          append_sets(gig, details[:sets])
+          gig.set_list = details[:sets].join("\n") if details[:sets].present?
+          gig.price_list = details[:prices].join("\n") if details[:prices].present?
           append_date_time(gig, date, time)
           gig.save
           @upload.source = details[:url] if details[:url]
@@ -97,49 +97,6 @@ module Lml
       end
 
       private
-
-      def append_prices(gig, prices)
-        return if prices.blank?
-
-        gig.prices.destroy_all
-        prices.each do |price|
-          Lml::Price.create(price.merge(gig: gig))
-        end
-      end
-
-      def append_sets(gig, sets)
-        return if sets.blank?
-
-        gig.sets.destroy_all
-        sets.each do |set|
-          act = find_or_create_act(set.delete(:act_name))
-          Lml::Set.create(set.merge(gig: gig, act: act))
-        end
-      end
-
-      def find_or_create_act(details)
-        name, location, country = extract_name_location_country(details)
-        act = Lml::Act.where("lower(name) = ?", name.downcase).first
-        if act
-          act.update!(location: location, country: country)
-          act
-        else
-          Lml::Act.create(name: name, location: location, country: country)
-        end
-      end
-
-      def extract_name_location_country(details)
-        match = /(.*) \((.*)\)/.match(details)
-        return details unless match
-
-        name = match[1].strip
-        location = match[2].strip
-        match = %r{(.*)/(.*)}.match(location)
-
-        return [name, location, "Australia"] unless match
-
-        [name, match[1], match[2]]
-      end
 
       def append_date_time(gig, date, time)
         gig.date = date

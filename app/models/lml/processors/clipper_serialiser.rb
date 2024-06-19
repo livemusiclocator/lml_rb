@@ -22,30 +22,14 @@ module Lml
           row(out, :category, gig.category)
           (gig.genre_tags || []).each { |tag| row(out, :genre, tag) }
           (gig.information_tags || []).each { |tag| row(out, :information, tag) }
-          gig.sets.each { |set| row(out, :set, build_set(set)) }
-          gig.prices.each { |price| row(out, :price, build_price(price)) }
+          gig.sets.each { |set| row(out, :set, set.line) }
+          gig.prices.each { |price| row(out, :price, "#{price.amount.format}|#{price.description}") }
         end
 
         out.string
       end
 
       private
-
-      def build_set(set)
-        act = set.act.name
-        if set.act.location
-          act = if set.act.country
-                  "#{act} (#{set.act.location}/#{set.act.country})"
-                else
-                  "#{act} (#{set.act.location}/Australia)"
-                end
-        end
-        "#{act}|#{set.start_offset_time}|#{set.duration}|#{set.stage}"
-      end
-
-      def build_price(price)
-        "#{price.amount.format} #{price.description}"
-      end
 
       def row(io, heading, value)
         io.puts [heading, value].join(": ")

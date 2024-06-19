@@ -41,22 +41,12 @@ module Lml
               details[:name] = value
             when "price"
               details[:prices] ||= []
-              amount, description = value.split.map(&:strip)
-              details[:prices] << {
-                amount: amount,
-                description: description,
-              }
+              details[:prices] << value
             when "series"
               details[:series] = value
             when "set"
               details[:sets] ||= []
-              act_name, start_offset_time, duration, stage  = value.split("|").map(&:strip)
-              details[:sets] << {
-                act_name: act_name,
-                start_offset_time: start_offset_time,
-                duration: duration,
-                stage: stage,
-              }
+              details[:sets] << value
             when "status"
               details[:status] = value
             when "tickets", "ticketing_url"
