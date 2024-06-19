@@ -72,30 +72,16 @@ class GigsController < ApplicationController
     ]
   end
 
-  INCLUDE_LOCATIONS = {
-    "melbourne" => %w[vic victoria],
-    "brisbane" => %w[qld queensland],
-    "sydney" => %w[nsw],
-    "adelaide" => %w[sa],
-    "lbmf" => %w[melbourne vic victoria],
-  }.freeze
-
   def query
     expires_in 1.minutes, public: true
 
     location = params[:location] || "nowhere"
-    locations = [location] + (INCLUDE_LOCATIONS[location.downcase] || [])
-
     date_from = params[:date_from]
     date_to = params[:date_to]
 
-    venue_ids = Lml::Venue.where("lower(location) in (?)", locations).pluck(:id)
+    venue_ids = Lml::Venue.where("lower(location) = ?", location).pluck(:id)
 
-    gigs_relation = Lml::Gig.eager.visible
-
-    gigs_relation = gigs_relation.where("tags @> ?", %w[lbmf].to_json) if location == "lbmf"
-
-    @gigs = gigs_relation.where(date: (date_from..date_to), venue_id: venue_ids)
+    @gigs = Lml::Gig.eager.visible.where(date: (date_from..date_to), venue_id: venue_ids)
   end
 
   def show

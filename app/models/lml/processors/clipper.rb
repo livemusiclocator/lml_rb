@@ -79,7 +79,8 @@ module Lml
           gig.upload = @upload
           gig.status = details[:status] || "confirmed"
           gig.source = @upload.source
-          gig.tags = details[:tags] if details[:tags].present?
+          gig.information_tags = details[:information_tags] if details[:information_tags].present?
+          gig.genre_tags = details[:genre_tags] if details[:genre_tags].present?
           gig.series = details[:series]
           gig.category = details[:category]
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?

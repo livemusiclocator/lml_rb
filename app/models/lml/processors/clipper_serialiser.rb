@@ -18,9 +18,12 @@ module Lml
           row(out, :time, gig.start_offset_time)
           row(out, :status, gig.status)
           row(out, :tickets, gig.ticketing_url) if gig.ticketing_url.present?
+          row(out, :series, gig.series)
+          row(out, :category, gig.category)
+          (gig.genre_tags || []).each { |tag| row(out, :genre, tag) }
+          (gig.information_tags || []).each { |tag| row(out, :information, tag) }
           gig.sets.each { |set| row(out, :set, build_set(set)) }
           gig.prices.each { |price| row(out, :price, build_price(price)) }
-          (gig.tags || []).each { |tag| write_tag(out, tag) }
         end
 
         out.string
@@ -42,11 +45,6 @@ module Lml
 
       def build_price(price)
         "#{price.amount.format} #{price.description}"
-      end
-
-      def write_tag(out, value)
-        prefix, *rest = value.split(":")
-        row(out, prefix, rest.join(":"))
       end
 
       def row(io, heading, value)

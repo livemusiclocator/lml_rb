@@ -3,17 +3,18 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :category,
     :date,
     :description,
+    :genre_tag_list,
     :hidden,
+    :information_tag_list,
     :name,
+    :price_list,
     :series,
+    :set_list,
+    :source,
     :start_offset_time,
     :status,
-    :tag_list,
     :ticketing_url,
     :venue_id,
-    :source,
-    :set_list,
-    :price_list,
   )
 
   filter :name_cont, label: "Name"
@@ -75,6 +76,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :category
       row :series
       row :status
+      row :information_tag_list
+      row :genre_tag_list
       row :source
       row :duration
       row :finish_time do |resource|
@@ -86,7 +89,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :tickets do |gig|
         link_to("tickets", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
       end
-      row :tag_list
       row :created_at do |resource|
         admin_time(resource.updated_at)
       end
@@ -156,10 +158,17 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :category
       f.input :description, input_html: { rows: 5 }
     end
-    f.inputs "Tags" do
-      f.input :tag_list
+    f.inputs "Genre Tags" do
+      f.input :genre_tag_list
       para(
-        "Separate tags with commas (eg. genre:punk, information:18+, category:spoken-word, series:lbmf)",
+        "Separate tags with commas (eg. punk,post-punk)",
+        style: "font-size: small",
+      )
+    end
+    f.inputs "Information Tags" do
+      f.input :information_tag_list
+      para(
+        "Separate tags with commas (eg. 18+, dog-friendly)",
         style: "font-size: small",
       )
     end

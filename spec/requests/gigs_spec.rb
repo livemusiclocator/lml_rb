@@ -58,7 +58,8 @@ describe "gigs" do
         date: "2001-06-08",
         status: :confirmed,
         ticketing_url: "the ticketing url",
-        tags: %w[all-ages free lbmf],
+        information_tags: %w[all-ages free],
+        genre_tags: %w[post-punk dream-pop],
         series: "ohm",
         category: "music",
       )
@@ -150,7 +151,16 @@ describe "gigs" do
             "start_offset_time" => nil,
             "start_time" => nil,
             "status" => "confirmed",
-            "tags" => %w[all-ages free lbmf],
+            "genre_tags" => %w[post-punk dream-pop],
+            "information_tags" => %w[all-ages free],
+            "tags" => [
+              "series:ohm",
+              "category:music",
+              "information:all-ages",
+              "information:free",
+              "genre:post-punk",
+              "genre:dream-pop",
+            ],
             "ticketing_url" => "the ticketing url",
             "venue" => {
               "address" => nil,
@@ -199,7 +209,8 @@ describe "gigs" do
           date: "2001-06-08",
           status: :confirmed,
           ticketing_url: "the ticketing url",
-          tags: %w[all-ages free lbmf],
+          information_tags: %w[all-ages free],
+          genre_tags: %w[post-punk dream-pop],
           series: "ohm",
           category: "music",
         )
@@ -239,12 +250,12 @@ describe "gigs" do
 
       it "removes hidden gigs" do
         @gig.update!(hidden: true)
-        get "/gigs/query?location=lbmf&date_from=2001-06-08&date_to=2001-06-08"
+        get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to eq([])
       end
 
       it "returns matching gigs when location and dates are specified" do
-        get "/gigs/query?location=lbmf&date_from=2001-06-08&date_to=2001-06-08"
+        get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to(
           eq(
             [
@@ -298,7 +309,16 @@ describe "gigs" do
                 "start_offset_time" => nil,
                 "start_time" => nil,
                 "status" => "confirmed",
-                "tags" => %w[all-ages free lbmf],
+                "genre_tags" => %w[post-punk dream-pop],
+                "information_tags" => %w[all-ages free],
+                "tags" => [
+                  "series:ohm",
+                  "category:music",
+                  "information:all-ages",
+                  "information:free",
+                  "genre:post-punk",
+                  "genre:dream-pop",
+                ],
                 "ticketing_url" => "the ticketing url",
                 "venue" => {
                   "address" => nil,

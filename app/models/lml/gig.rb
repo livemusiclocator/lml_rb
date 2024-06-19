@@ -46,7 +46,7 @@ module Lml
 
     scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
-    scope :tags_in, ->(*tags) { where("tags ?| array[:matches]", matches:tags) }
+    # scope :tags_in, ->(*tags) { where("tags ?| array[:matches]", matches:tags) }
 
     def label
       "#{name} (#{date})"
@@ -56,12 +56,29 @@ module Lml
       venue&.label
     end
 
-    def tag_list
-      (tags || []).join(", ")
+    def tags
+      result = []
+      result << "series:#{series}" if series
+      result << "category:#{category}" if category
+      (information_tags || []).each { |tag| result << "information:#{tag}" }
+      (genre_tags || []).each { |tag| result << "genre:#{tag}" }
+      result
     end
 
-    def tag_list=(value)
-      self.tags = value.split(",").map(&:strip)
+    def genre_tag_list
+      (genre_tags || []).join(", ")
+    end
+
+    def genre_tag_list=(value)
+      self.genre_tags = value.split(",").map(&:strip)
+    end
+
+    def information_tag_list
+      (information_tags || []).join(", ")
+    end
+
+    def information_tag_list=(value)
+      self.information_tags = value.split(",").map(&:strip)
     end
 
     def set_list

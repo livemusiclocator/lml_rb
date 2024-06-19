@@ -27,18 +27,16 @@ module Lml
               details[:date] = value
             when "category"
               details[:category] = value
-              details[:tags] ||= []
-              details[:tags] << "category:#{value}"
             when "duration"
               details[:duration] = value
             when "genre"
-              details[:tags] ||= []
-              details[:tags] << "genre:#{value}"
+              details[:genre_tags] ||= []
+              details[:genre_tags] << value
             when "id"
               details[:id] = value
             when "information"
-              details[:tags] ||= []
-              details[:tags] << "information:#{value}"
+              details[:information_tags] ||= []
+              details[:information_tags] << value
             when "name", "gig_name"
               details[:name] = value
             when "price"
@@ -50,8 +48,6 @@ module Lml
               }
             when "series"
               details[:series] = value
-              details[:tags] ||= []
-              details[:tags] << "series:#{value}"
             when "set"
               details[:sets] ||= []
               act_name, start_offset_time, duration, stage  = value.split("|").map(&:strip)
@@ -63,9 +59,6 @@ module Lml
               }
             when "status"
               details[:status] = value
-            when "tag", "tags"
-              details[:tags] ||= []
-              details[:tags] += value.split("|").map(&:strip)
             when "tickets", "ticketing_url"
               details[:ticketing_url] = value
             when "time", "start_time", "gig_start_time"
