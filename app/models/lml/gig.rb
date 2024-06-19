@@ -94,7 +94,7 @@ module Lml
         next if act_name.blank?
 
         act = Lml::Act.where("lower(name) = ?", act_name.downcase).first
-        act ||= Lml::Act.create(name: name)
+        act ||= Lml::Act.create(name: act_name)
         Lml::Set.create(
           gig: self,
           act: act,
