@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_17_103510) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_19_042435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -61,6 +61,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_17_103510) do
     t.uuid "upload_id"
     t.string "series"
     t.string "category"
+    t.string "information_tags", array: true
+    t.string "genre_tags", array: true
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 
