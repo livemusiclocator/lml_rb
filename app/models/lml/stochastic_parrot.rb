@@ -39,7 +39,7 @@ module Lml
         },
       )
       content = response["choices"].first["message"]["content"]
-      JSON.parse(content)["gist_tags"]
+      JSON.parse(content)["gist_tags"].map(&:downcase)
     end
   end
 end

@@ -46,7 +46,12 @@ module Lml
 
     scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
-    # scope :tags_in, ->(*tags) { where("tags ?| array[:matches]", matches:tags) }
+
+    def suggest_tags!
+      return if internal_description.blank?
+
+      update!(proposed_genre_tags: Lml::StochasticParrot.new.gist(internal_description))
+    end
 
     def label
       "#{name} (#{date})"
@@ -63,6 +68,10 @@ module Lml
       (information_tags || []).each { |tag| result << "information:#{tag}" }
       (genre_tags || []).each { |tag| result << "genre:#{tag}" }
       result
+    end
+
+    def proposed_genre_tag_list
+      (proposed_genre_tags || []).join("\n")
     end
 
     def genre_tag_list

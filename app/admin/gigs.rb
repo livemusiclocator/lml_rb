@@ -6,6 +6,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :genre_tag_list,
     :hidden,
     :information_tag_list,
+    :internal_description,
     :name,
     :price_list,
     :series,
@@ -77,6 +78,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :series
       row :status
       row :information_tag_list
+      row :proposed_genre_tag_list
       row :genre_tag_list
       row :source
       row :duration
@@ -85,6 +87,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       end
       row :description do |gig|
         pre { gig.description }
+      end
+      row :internal_description do |gig|
+        pre { gig.internal_description }
       end
       row :tickets do |gig|
         link_to("tickets", gig.ticketing_url, target: "_blank", rel: "noopener noreferrer") if gig.ticketing_url
@@ -141,6 +146,15 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     )
   end
 
+  action_item :suggest_tags, only: %i[show] do
+    link_to "Suggest tags", suggest_tags_admin_gig_path(resource), method: :put
+  end
+
+  member_action :suggest_tags, method: :put do
+    resource.suggest_tags!
+    redirect_to resource_path, notice: "Added tags"
+  end
+
   form do |f|
     f.semantic_errors
     f.inputs do
@@ -157,13 +171,16 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :series
       f.input :category
       f.input :description, input_html: { rows: 5 }
+      f.input :internal_description, input_html: { rows: 5 }
     end
     f.inputs "Genre Tags" do
       f.input :genre_tag_list, as: :text, input_html: { rows: 5 }
-      para(
-        "One tag per line",
-        style: "font-size: small",
-      )
+      content = if f.object.proposed_genre_tags
+                  "One tag per line (proposed: #{f.object.proposed_genre_tags.join(", ")})"
+                else
+                  "One tag per line"
+                end
+      para(content, style: "font-size: small")
     end
     f.inputs "Information Tags" do
       f.input :information_tag_list, as: :text, input_html: { rows: 5 }

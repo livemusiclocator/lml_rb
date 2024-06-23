@@ -13,8 +13,10 @@ json.description gig.description
 json.status gig.status
 json.series gig.series
 json.category gig.category
-json.information_tags gig.information_tags
-json.genre_tags gig.genre_tags
+json.information_tags (gig.information_tags || [])
+genres = gig.genre_tags
+genres = gig.proposed_genre_tags if genres.empty?
+json.genre_tags (genres || [])
 
 venue = gig.venue
 if venue
