@@ -78,3 +78,4 @@ group :development do
 end
 
 gem "faraday"
+gem "ruby-openai"
