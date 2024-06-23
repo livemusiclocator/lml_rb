@@ -66,7 +66,9 @@ module Lml
       result << "series:#{series}" if series
       result << "category:#{category}" if category
       (information_tags || []).each { |tag| result << "information:#{tag}" }
-      (genre_tags || []).each { |tag| result << "genre:#{tag}" }
+      genres = genre_tags || []
+      genres = proposed_genre_tags || [] if genres.empty?
+      genres.each { |tag| result << "genre:#{tag}" }
       result
     end
 
