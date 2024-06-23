@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :category,
@@ -144,6 +146,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       ),
       method: :get,
     )
+  end
+
+  batch_action :suggest_tags do |ids|
+    batch_action_collection.find(ids).each(&:suggest_tags!)
+
+    redirect_to collection_path, notice: "Added tags"
   end
 
   action_item :suggest_tags, only: %i[show] do
