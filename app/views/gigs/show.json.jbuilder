@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 gig = @gig
 
 json.id gig.id
@@ -13,9 +15,9 @@ json.description gig.description
 json.status gig.status
 json.series gig.series
 json.category gig.category
-json.information_tags (gig.information_tags || [])
-genres = (gig.genre_tags || [])
-genres = (gig.proposed_genre_tags || []) if genres.empty?
+json.information_tags(gig.information_tags || [])
+genres = gig.genre_tags || []
+genres = gig.proposed_genre_tags || [] if genres.empty?
 json.genre_tags genres
 
 venue = gig.venue
@@ -26,6 +28,8 @@ if venue
     json.address venue.address
     json.capacity venue.capacity
     json.website venue.website
+    json.vibe venue.vibe
+    json.tags venue.tags || []
     json.location_url venue.location_url
     json.latitude venue.latitude
     json.longitude venue.longitude
