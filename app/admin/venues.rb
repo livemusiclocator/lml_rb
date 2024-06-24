@@ -2,10 +2,13 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
     :address,
     :capacity,
+    :email,
     :lat_lng,
     :location,
     :location_url,
     :name,
+    :notes,
+    :phone,
     :postcode,
     :tag_list,
     :time_zone,
@@ -37,18 +40,23 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     attributes_table do
       row :id
       row :name
+      row :time_zone
+      row :location
+      row :email
+      row :phone
+      row :address
+      row :postcode
       row :website do |resource|
         if resource.website.present?
           link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer")
         end
       end
       row :capacity
-      row :address
-      row :postcode
-      row :tag_list
-      row :vibe
-      row :time_zone
-      row :location
+      row :location_url do |resource|
+        if resource.location_url.present?
+          link_to(resource.location_url, resource.location_url, target: "_blank", rel: "noopener noreferrer")
+        end
+      end
       row :lat_lng do |resource|
         point = resource.lat_lng
         link_to(
@@ -58,10 +66,10 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
           rel: "noopener noreferrer",
         ) unless point.blank?
       end
-      row :location_url do |resource|
-        if resource.location_url.present?
-          link_to(resource.location_url, resource.location_url, target: "_blank", rel: "noopener noreferrer")
-        end
+      row :vibe
+      row :tag_list
+      row :notes do |resource|
+        pre { resource.notes }
       end
       row :created_at do |resource|
         admin_time(resource.updated_at)
@@ -93,20 +101,23 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :website
-      f.input :capacity
       f.input(
         :time_zone,
         as: :select,
         collection: Lml::Timezone::CANONICAL_TIMEZONES,
       )
+      f.input :location
+      f.input :email, input_html: { type: "email" }
+      f.input :phone
       f.input :address
       f.input :postcode
-      f.input :location
+      f.input :website
+      f.input :capacity
       f.input :location_url
       f.input :lat_lng
       f.input :vibe
       f.input :tag_list
+      f.input :notes, as: :text, input_html: { rows: 5 }
     end
     f.actions
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_23_051008) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_24_093842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -117,6 +117,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_23_051008) do
     t.string "postcode"
     t.string "vibe"
     t.jsonb "tags"
+    t.string "email"
+    t.string "phone"
+    t.text "notes"
   end
 
   add_foreign_key "gigs", "venues"
