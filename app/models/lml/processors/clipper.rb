@@ -78,6 +78,7 @@ module Lml
           gig.upload = @upload
           gig.status = details[:status] || "confirmed"
           gig.source = @upload.source
+          gig.url = details[:url]
           gig.information_tags = details[:information_tags] if details[:information_tags].present?
           gig.genre_tags = details[:genre_tags] if details[:genre_tags].present?
           gig.series = details[:series]
@@ -87,7 +88,6 @@ module Lml
           gig.price_list = details[:prices].join("\n") if details[:prices].present?
           append_date_time(gig, date, time)
           gig.save
-          @upload.source = details[:url] if details[:url]
           @upload.status = "Succeeded"
           @upload.error_description = ""
           @upload.gig_ids << gig.id

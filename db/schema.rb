@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_24_093842) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_24_095344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_24_093842) do
     t.string "genre_tags", array: true
     t.string "proposed_genre_tags", array: true
     t.text "internal_description"
+    t.string "url"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 

@@ -18,6 +18,7 @@ module Lml
           row(out, :time, gig.start_offset_time)
           row(out, :status, gig.status)
           row(out, :tickets, gig.ticketing_url) if gig.ticketing_url.present?
+          row(out, :url, gig.url) if gig.url.present?
           row(out, :series, gig.series)
           row(out, :category, gig.category)
           (gig.genre_tags || []).each { |tag| row(out, :genre, tag) }

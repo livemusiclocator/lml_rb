@@ -17,6 +17,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :start_offset_time,
     :status,
     :ticketing_url,
+    :url,
     :venue_id,
   )
 
@@ -86,6 +87,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :duration
       row :finish_time do |resource|
         admin_time(resource.finish_time)
+      end
+      row :url do |gig|
+        link_to("url", gig.url, target: "_blank", rel: "noopener noreferrer") if gig.url
       end
       row :description do |gig|
         pre { gig.description }
@@ -172,6 +176,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :date, as: :date_picker
       f.input :start_offset_time, as: :time_picker, label: "Start Time"
       f.input :duration, label: "Duration (mins)"
+      f.input :url
       f.input :ticketing_url
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :source
