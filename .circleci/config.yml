@@ -9,7 +9,7 @@ jobs:
   test:
     # Install gems, run rails tests
     docker:
-      - image: cimg/ruby:3.3.0-node
+      - image: cimg/ruby:3.3.3-node
         environment:
           RAILS_ENV: test
           DATABASE_URL: postgresql://postgres@localhost/circle_test
@@ -29,7 +29,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.3
     steps:
       - checkout
       - heroku/install
@@ -46,7 +46,7 @@ jobs:
 
   migrate:
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.3
     steps:
       - checkout
       - heroku/install
