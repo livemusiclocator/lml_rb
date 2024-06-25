@@ -39,6 +39,8 @@ module Lml
     end
 
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
+    enum :ticket_status, { selling_fast: "selling_fast", sold_out: "sold_out" }, prefix: true
+
     belongs_to :venue, optional: true
     belongs_to :upload, optional: true
     has_many :sets, dependent: :delete_all

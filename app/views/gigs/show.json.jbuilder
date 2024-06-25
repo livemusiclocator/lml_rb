@@ -13,6 +13,7 @@ json.duration gig.duration
 json.finish_time gig.finish_time
 json.description gig.description
 json.status gig.status
+json.ticket_status gig.ticket_status
 json.series gig.series
 json.category gig.category
 json.information_tags(gig.information_tags || [])

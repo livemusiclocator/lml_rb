@@ -59,11 +59,13 @@ describe "gigs" do
         venue: @venue,
         date: "2001-06-08",
         status: :confirmed,
+        ticket_status: :sold_out,
         ticketing_url: "the ticketing url",
         information_tags: %w[all-ages free],
         genre_tags: %w[post-punk dream-pop],
         series: "ohm",
         category: "music",
+
       )
       @main_act = Lml::Act.create!(
         name: "The Really Quite Good Music People",
@@ -153,6 +155,7 @@ describe "gigs" do
             "start_offset_time" => nil,
             "start_time" => nil,
             "status" => "confirmed",
+            "ticket_status" => "sold_out",
             "genre_tags" => %w[post-punk dream-pop],
             "information_tags" => %w[all-ages free],
             "tags" => [
@@ -316,6 +319,7 @@ describe "gigs" do
                 "start_offset_time" => nil,
                 "start_time" => nil,
                 "status" => "confirmed",
+                "ticket_status" => nil,
                 "genre_tags" => %w[post-punk dream-pop],
                 "information_tags" => %w[all-ages free],
                 "tags" => [

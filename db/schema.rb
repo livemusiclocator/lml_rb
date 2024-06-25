@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_24_095344) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_25_111152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_24_095344) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "status", ["draft", "confirmed", "cancelled"]
+  create_enum "ticket_status", ["selling_fast", "sold_out"]
 
   create_table "acts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
@@ -65,6 +66,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_24_095344) do
     t.string "proposed_genre_tags", array: true
     t.text "internal_description"
     t.string "url"
+    t.enum "ticket_status", enum_type: "ticket_status"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 

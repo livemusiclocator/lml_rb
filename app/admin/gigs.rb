@@ -16,6 +16,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :source,
     :start_offset_time,
     :status,
+    :ticket_status,
     :ticketing_url,
     :url,
     :venue_id,
@@ -80,6 +81,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :category
       row :series
       row :status
+      row :ticket_status
       row :information_tag_list
       row :proposed_genre_tag_list
       row :genre_tag_list
@@ -179,6 +181,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :url
       f.input :ticketing_url
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
+      f.input :ticket_status, as: :select, collection: Lml::Gig.ticket_statuses.keys
       f.input :source
       f.input :hidden
       f.input :series
