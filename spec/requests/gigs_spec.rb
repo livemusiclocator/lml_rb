@@ -159,8 +159,6 @@ describe "gigs" do
             "genre_tags" => %w[post-punk dream-pop],
             "information_tags" => %w[all-ages free],
             "tags" => [
-              "series:ohm",
-              "category:music",
               "information:all-ages",
               "information:free",
               "genre:post-punk",
@@ -323,8 +321,6 @@ describe "gigs" do
                 "genre_tags" => %w[post-punk dream-pop],
                 "information_tags" => %w[all-ages free],
                 "tags" => [
-                  "series:ohm",
-                  "category:music",
                   "information:all-ages",
                   "information:free",
                   "genre:post-punk",
