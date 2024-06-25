@@ -27,6 +27,7 @@ json.array! @gigs do |gig|
       json.address venue.address
       json.capacity venue.capacity
       json.website venue.website
+      json.postcode venue.postcode
       json.vibe venue.vibe
       json.tags venue.tags || []
       json.location_url venue.location_url

@@ -46,6 +46,8 @@ describe "gigs" do
     before do
       @venue = Lml::Venue.create!(
         name: "The Gig Place",
+        address: "the address",
+        postcode: 1234,
         location: "melbourne",
         time_zone: "Australia/Melbourne",
         capacity: 500,
@@ -163,7 +165,8 @@ describe "gigs" do
             ],
             "ticketing_url" => "the ticketing url",
             "venue" => {
-              "address" => nil,
+              "address" => "the address",
+              "postcode" => "1234",
               "capacity" => 500,
               "id" => @venue.id,
               "latitude" => nil,
@@ -200,6 +203,8 @@ describe "gigs" do
         @venue = Lml::Venue.create!(
           name: "The Gig Place",
           location: "melbourne",
+          address: "the address",
+          postcode: 1234,
           time_zone: "Australia/Melbourne",
           capacity: 500,
           website: "https://gigplace.com.au",
@@ -323,7 +328,8 @@ describe "gigs" do
                 ],
                 "ticketing_url" => "the ticketing url",
                 "venue" => {
-                  "address" => nil,
+                  "address" => "the address",
+                  "postcode" => "1234",
                   "capacity" => 500,
                   "id" => @venue.id,
                   "latitude" => nil,
