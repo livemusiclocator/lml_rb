@@ -85,7 +85,9 @@ module Lml
           gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
           gig.set_list = details[:sets].join("\n") if details[:sets].present?
           gig.price_list = details[:prices].join("\n") if details[:prices].present?
-          append_date_time(gig, date, time)
+          gig.date = date
+          gig.start_time = time.strftime("%H:%M") if time
+          gig.duration = details[:duration]
           gig.save!
           gig.suggest_tags!
           @upload.status = "Succeeded"
@@ -93,16 +95,6 @@ module Lml
         end
 
         @upload.save!
-      end
-
-      private
-
-      def append_date_time(gig, date, time)
-        gig.date = date
-        return if time.blank?
-
-        gig.start_time = "#{date.iso8601}T#{time.strftime("%H:%M")}:00"
-        gig.start_offset_time = gig.start_time.strftime("%H:%M") if gig.start_time
       end
     end
   end

@@ -54,6 +54,7 @@ describe Lml::Upload do
           content: <<~CONTENT,
             name: the gig name
             date: 2024-03-01
+            time: 19:00
           CONTENT
         )
         upload.process!
@@ -62,6 +63,7 @@ describe Lml::Upload do
         expect(upload.status).to eq("Succeeded")
         gig = Lml::Gig.find_by!(name: "the gig name")
         expect(gig.date).to eq(Date.iso8601("2024-03-01"))
+        expect(gig.start_time).to eq("19:00")
         expect(gig.venue).to eq(@venue)
         expect(gig.status).to eq("confirmed")
         expect(gig.source).to eq("a website")

@@ -110,7 +110,7 @@ module Lml
       value.split("\n") { |line| Lml::Price.create_for_gig_from_line!(self, line) }
     end
 
-    def start_offset_time=(value)
+    def start_time=(value)
       self.start_offset = nil
 
       return if value.blank?
@@ -119,12 +119,16 @@ module Lml
       self.start_offset = (time.hour * 60) + time.min
     end
 
-    def start_offset_time
+    def start_time
       return nil unless start_offset
 
-      hours = start_offset / 60
-      mins = start_offset % 60
-      "#{format("%02d", hours)}:#{format("%02d", mins)}"
+      Lml::Formatting.offset_to_time(start_offset)
+    end
+
+    def finish_time
+      return nil unless start_offset && duration
+
+      Lml::Formatting.offset_to_time(start_offset + duration)
     end
 
     def start_timestamp

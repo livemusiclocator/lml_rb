@@ -14,7 +14,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :series,
     :set_list,
     :source,
-    :start_offset_time,
+    :start_time,
     :status,
     :ticket_status,
     :ticketing_url,
@@ -178,7 +178,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :venue_label, label: "Venue"
       f.input :venue_id, as: "hidden"
       f.input :date, as: :date_picker
-      f.input :start_offset_time, as: :time_picker, label: "Start Time"
+      f.input :start_time, as: :time_picker
       f.input :duration, label: "Duration (mins)"
       f.input :url
       f.input :ticketing_url

@@ -14,14 +14,14 @@ module Lml
       context "there is a date" do
         before { @gig.date = "2024-01-01" }
 
-        context "there is no start_offset" do
+        context "there is no start_time" do
           it "returns nil" do
             expect(@gig.start_timestamp).to be_nil
           end
         end
 
-        context "there is a start_offset" do
-          before { @gig.start_offset_time = "19:30" }
+        context "there is a start_time" do
+          before { @gig.start_time = "19:30" }
 
           context "there is no venue" do
             it "returns nil" do
@@ -65,14 +65,14 @@ module Lml
       context "there is a date" do
         before { @gig.date = "2024-01-01" }
 
-        context "there is no finish_offset" do
+        context "there is no start_time" do
           it "returns nil" do
             expect(@gig.finish_timestamp).to be_nil
           end
         end
 
-        context "there is a start_offset" do
-          before { @gig.start_offset_time = "19:30" }
+        context "there is a start_time" do
+          before { @gig.start_time = "19:30" }
 
           context "there is no venue" do
             it "returns nil" do

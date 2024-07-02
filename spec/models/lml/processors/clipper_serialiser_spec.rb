@@ -15,7 +15,7 @@ module Lml
           name: "first",
           date: @today - 1.day,
           venue: @venue,
-          start_offset_time: "19:00",
+          start_time: "19:00",
           status: :draft,
           ticketing_url: "https://tickets.com/123",
           url: "https://gigs.com/567",
