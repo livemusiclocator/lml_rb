@@ -5,6 +5,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :category,
     :date,
     :description,
+    :duration,
     :genre_tag_list,
     :hidden,
     :information_tag_list,
@@ -41,6 +42,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :date do |resource|
       admin_date(resource.date)
     end
+    column :start_time
     column :category
     column :series
     column :status
@@ -71,12 +73,14 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :date do |resource|
         admin_date(resource.date)
       end
-      row :start_offset_time
-      row :start_time do |resource|
-        admin_time(resource.start_time)
+      row :start_time
+      row :start_timestamp do |resource|
+        admin_time(resource.start_timestamp)
       end
-      row :start_at do |resource|
-        admin_time(resource.start_at)
+      row :duration
+      row :finish_time
+      row :finish_timestamp do |resource|
+        admin_time(resource.finish_timestamp)
       end
       row :category
       row :series
@@ -86,10 +90,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :proposed_genre_tag_list
       row :genre_tag_list
       row :source
-      row :duration
-      row :finish_time do |resource|
-        admin_time(resource.finish_time)
-      end
       row :url do |gig|
         link_to("url", gig.url, target: "_blank", rel: "noopener noreferrer") if gig.url
       end
@@ -116,7 +116,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
           link_to "link", admin_set_path(set)
         end
         column :act
-        column :start_offset_time
+        column :start_time
         column :duration
         column :stage
       end
@@ -225,17 +225,5 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
     SCRIPT
     f.actions
-  end
-
-  controller do
-    def create
-      super
-      resource.update!(start_time: resource.start_at)
-    end
-
-    def update
-      super
-      resource.update!(start_time: resource.start_at)
-    end
   end
 end

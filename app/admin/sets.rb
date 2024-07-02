@@ -31,16 +31,14 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       row :gig
       row :act
       row :stage
-      row :start_offset_time
+      row :start_time
+      row :start_timestamp do |resource|
+        admin_time(resource.start_timestamp)
+      end
       row :duration
-      row :start_at do |resource|
-        admin_time(resource.start_at)
-      end
-      row :start_time do |resource|
-        admin_time(resource.start_time)
-      end
-      row :finish_time do |resource|
-        admin_time(resource.finish_time)
+      row :finish_time
+      row :finish_timestamp do |resource|
+        admin_time(resource.finish_timestamp)
       end
       row :created_at do |resource|
         admin_time(resource.updated_at)
