@@ -107,7 +107,6 @@ describe "gigs" do
         eq(
           {
             "date" => "2001-06-08",
-            "finish_time" => nil,
             "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
             "duration" => nil,
             "id" => @gig.id,
@@ -130,6 +129,8 @@ describe "gigs" do
                 "duration" => 30,
                 "start_offset_time" => "18:00",
                 "start_time" => "2001-06-08T18:00:00.000+10:00",
+                "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
+                "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
               },
               {
                 "act" => {
@@ -140,6 +141,8 @@ describe "gigs" do
                 "duration" => 30,
                 "start_offset_time" => "19:00",
                 "start_time" => "2001-06-08T19:00:00.000+10:00",
+                "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
+                "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
               },
               {
                 "act" => {
@@ -150,10 +153,15 @@ describe "gigs" do
                 "duration" => 60,
                 "start_offset_time" => "20:00",
                 "start_time" => "2001-06-08T20:00:00.000+10:00",
+                "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
+                "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
               },
             ],
             "start_offset_time" => nil,
             "start_time" => nil,
+            "start_timestamp" => nil,
+            "finish_time" => nil,
+            "finish_timestamp" => nil,
             "status" => "confirmed",
             "ticket_status" => "sold_out",
             "genre_tags" => %w[post-punk dream-pop],
@@ -269,7 +277,6 @@ describe "gigs" do
             [
               {
                 "date" => "2001-06-08",
-                "finish_time" => nil,
                 "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
                 "duration" => nil,
                 "id" => @gig.id,
@@ -292,6 +299,8 @@ describe "gigs" do
                     "duration" => 30,
                     "start_offset_time" => "18:00",
                     "start_time" => "2001-06-08T18:00:00.000+10:00",
+                    "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
+                    "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
                   },
                   {
                     "act" => {
@@ -302,6 +311,8 @@ describe "gigs" do
                     "duration" => 30,
                     "start_offset_time" => "19:00",
                     "start_time" => "2001-06-08T19:00:00.000+10:00",
+                    "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
+                    "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
                   },
                   {
                     "act" => {
@@ -312,10 +323,15 @@ describe "gigs" do
                     "duration" => 60,
                     "start_offset_time" => "20:00",
                     "start_time" => "2001-06-08T20:00:00.000+10:00",
+                    "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
+                    "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
                   },
                 ],
                 "start_offset_time" => nil,
                 "start_time" => nil,
+                "start_timestamp" => nil,
+                "finish_time" => nil,
+                "finish_timestamp" => nil,
                 "status" => "confirmed",
                 "ticket_status" => nil,
                 "genre_tags" => %w[post-punk dream-pop],

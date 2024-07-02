@@ -127,10 +127,16 @@ module Lml
       "#{format("%02d", hours)}:#{format("%02d", mins)}"
     end
 
-    def start_at
-      return unless date && start_offset && venue&.time_zone
+    def start_timestamp
+      return unless date && venue&.time_zone && start_offset
 
       date.in_time_zone(venue.time_zone) + (start_offset / 1_440.0).days
+    end
+
+    def finish_timestamp
+      return unless date && venue&.time_zone && start_offset && duration
+
+      date.in_time_zone(venue.time_zone) + ((start_offset + duration) / 1_440.0).days
     end
   end
 end

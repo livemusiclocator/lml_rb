@@ -64,10 +64,16 @@ module Lml
       "#{format("%02d", hours)}:#{format("%02d", mins)}"
     end
 
-    def start_at
+    def start_timestamp
       return unless gig&.date && gig&.venue&.time_zone && start_offset
 
-      gig.date.in_time_zone(gig.venue.time_zone) + start_offset.minutes
+      gig.date.in_time_zone(gig.venue.time_zone) + (start_offset / 1_440.0).days
+    end
+
+    def finish_timestamp
+      return unless gig&.date && gig&.venue&.time_zone && start_offset && duration
+
+      gig.date.in_time_zone(gig.venue.time_zone) + ((start_offset + duration) / 1_440.0).days
     end
   end
 end

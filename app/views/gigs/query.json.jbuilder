@@ -7,9 +7,11 @@ json.array! @gigs do |gig|
   json.tags gig.tags
   json.ticketing_url gig.ticketing_url
   json.start_offset_time gig.start_offset_time
-  json.start_time gig.start_at
+  json.start_time gig.start_timestamp
+  json.start_timestamp gig.start_timestamp
   json.duration gig.duration
-  json.finish_time gig.finish_time
+  json.finish_time gig.finish_timestamp
+  json.finish_timestamp gig.finish_timestamp
   json.description gig.description
   json.status gig.status
   json.ticket_status gig.ticket_status
@@ -36,7 +38,9 @@ json.array! @gigs do |gig|
   end
 
   json.sets gig.sets.order(:start_offset) do |set|
-    json.start_time set.start_at
+    json.start_time set.start_timestamp
+    json.start_timestamp set.start_timestamp
+    json.finish_timestamp set.finish_timestamp
     json.start_offset_time set.start_offset_time
     json.duration set.duration
 
