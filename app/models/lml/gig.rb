@@ -49,9 +49,9 @@ module Lml
     scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices) }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
 
-    def suggest_tags!
+    def suggest_tags!(force: false)
       return if internal_description.blank?
-      return unless (proposed_genre_tags || []).empty?
+      return if !force && (proposed_genre_tags || []).present?
 
       update!(proposed_genre_tags: Lml::StochasticParrot.new.gist(internal_description))
     end

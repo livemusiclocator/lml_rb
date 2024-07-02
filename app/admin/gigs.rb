@@ -155,7 +155,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   batch_action :suggest_tags do |ids|
-    batch_action_collection.find(ids).each(&:suggest_tags!)
+    batch_action_collection.find(ids).each do |gig|
+      gig.suggest_tags!(force: true)
+    end
 
     redirect_to collection_path, notice: "Added tags"
   end
@@ -165,7 +167,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   member_action :suggest_tags, method: :put do
-    resource.suggest_tags!
+    resource.suggest_tags!(force: true)
     redirect_to resource_path, notice: "Added tags"
   end
 
