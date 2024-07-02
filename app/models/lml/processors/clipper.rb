@@ -77,6 +77,7 @@ module Lml
           gig.venue = venue
           gig.upload = @upload
           gig.status = details[:status] || "confirmed"
+          gig.internal_description = details[:internal_description]
           gig.source = @upload.source
           gig.url = details[:url]
           gig.information_tags = details[:information_tags] if details[:information_tags].present?
@@ -87,7 +88,8 @@ module Lml
           gig.set_list = details[:sets].join("\n") if details[:sets].present?
           gig.price_list = details[:prices].join("\n") if details[:prices].present?
           append_date_time(gig, date, time)
-          gig.save
+          gig.save!
+          gig.suggest_tags!
           @upload.status = "Succeeded"
           @upload.error_description = ""
           @upload.gig_ids << gig.id

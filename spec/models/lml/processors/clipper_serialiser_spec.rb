@@ -23,6 +23,7 @@ module Lml
           category: "gig category",
           genre_tags: %w[genre1 genre2],
           information_tags: %w[info1 info2],
+          internal_description: "one\ntwo\nthree",
         )
         @old = Gig.create!(
           name: "old",
@@ -45,6 +46,7 @@ module Lml
             url: https://gigs.com/567
             series: gig series
             category: gig category
+            internal_description: one two three
             genre: genre1
             genre: genre2
             information: info1

@@ -37,6 +37,8 @@ module Lml
             when "information"
               details[:information_tags] ||= []
               details[:information_tags] << value
+            when "internal_description"
+              details[:internal_description] = value
             when "name", "gig_name"
               details[:name] = value
             when "price"

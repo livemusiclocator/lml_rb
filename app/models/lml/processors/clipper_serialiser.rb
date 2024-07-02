@@ -21,6 +21,7 @@ module Lml
           row(out, :url, gig.url) if gig.url.present?
           row(out, :series, gig.series)
           row(out, :category, gig.category)
+          row(out, :internal_description, (gig.internal_description || "").lines.map(&:chomp).join(" "))
           (gig.genre_tags || []).each { |tag| row(out, :genre, tag) }
           (gig.information_tags || []).each { |tag| row(out, :information, tag) }
           gig.sets.each { |set| row(out, :set, set.line) }
