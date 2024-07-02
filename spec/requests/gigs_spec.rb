@@ -65,7 +65,6 @@ describe "gigs" do
         genre_tags: %w[post-punk dream-pop],
         series: "ohm",
         category: "music",
-
       )
       @main_act = Lml::Act.create!(
         name: "The Really Quite Good Music People",
@@ -255,6 +254,11 @@ describe "gigs" do
           amount: "75",
           description: "GA",
         )
+        Lml::Gig.create!(
+          name: "The Other Gig You Should Not Miss Out On",
+          venue: @venue,
+          date: "2001-08-08",
+        )
       end
 
       it "removes hidden gigs" do
@@ -263,8 +267,18 @@ describe "gigs" do
         expect(JSON.parse(response.body)).to eq([])
       end
 
+      it "returns no gigs when location has no gigs" do
+        get "/gigs/query?location=brisbane&date_from=2001-06-08&date_to=2001-06-08"
+        expect(JSON.parse(response.body)).to eq([])
+      end
+
+      it "returns no gigs when there are no gigs for the specified dates" do
+        get "/gigs/query?location=melbourne&date_from=2011-06-08&date_to=2011-06-08"
+        expect(JSON.parse(response.body)).to eq([])
+      end
+
       it "returns matching gigs when location and dates are specified" do
-        get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
+        get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
         expect(JSON.parse(response.body)).to(
           eq(
             [

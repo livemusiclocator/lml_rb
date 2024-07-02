@@ -76,8 +76,9 @@ class GigsController < ApplicationController
     expires_in 1.minutes, public: true
 
     location = params[:location] || "nowhere"
-    date_from = params[:date_from]
-    date_to = params[:date_to]
+    date_from = Date.parse(params[:date_from] || "2000-01-01")
+    date_to = Date.parse(params[:date_to] || "2000-01-01")
+    date_to = date_from + 7.days if date_to > date_from + 7.days
 
     venue_ids = Lml::Venue.where("lower(location) = ?", location).pluck(:id)
 
