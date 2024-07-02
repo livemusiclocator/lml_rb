@@ -98,6 +98,24 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     )
   end
 
+  action_item :generate_upload, only: [:show] do
+    link_to "Generate Upload", generate_upload_admin_venue_path(resource)
+  end
+
+  member_action :generate_upload, method: :get do
+    content = Lml::Processors::ClipperSerialiser.new(resource).serialise
+    upload = Lml::Upload.find_by(venue: resource)
+    if upload
+      upload.update!(content: content)
+    else
+      upload = Lml::Upload.create!(
+        content: content,
+        venue: resource,
+      )
+    end
+    redirect_to edit_admin_upload_path(upload)
+  end
+
   form do |f|
     f.inputs do
       f.input :name
