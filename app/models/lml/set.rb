@@ -36,7 +36,7 @@ module Lml
                             "#{act_description} (#{act.location}/Australia)"
                           end
       end
-      "#{act_description} | #{start_offset_time} | #{duration} | #{stage}"
+      "#{act_description} | #{start_time} | #{duration} | #{stage}"
     end
 
     def gig_label
