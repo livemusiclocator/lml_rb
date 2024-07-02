@@ -10,9 +10,10 @@ module Lml
         series
         source
         status
-        updated_at
-        venue_id
         tags
+        updated_at
+        upload_id
+        venue_id
       ]
     end
 

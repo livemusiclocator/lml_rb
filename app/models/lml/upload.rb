@@ -1,7 +1,10 @@
 module Lml
   class Upload < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
-      %w[source]
+      %w[
+        source
+        venue_id
+      ]
     end
 
     def self.ransackable_associations(_auth_object = nil)
