@@ -19,8 +19,6 @@ module Lml
 
         Time.zone = venue.time_zone
 
-        @upload.gig_ids = []
-
         entries = ClipperParser.extract_entries(@upload.content.lines)
 
         entries.each_with_index do |details, index|
@@ -92,7 +90,6 @@ module Lml
           gig.suggest_tags!
           @upload.status = "Succeeded"
           @upload.error_description = ""
-          @upload.gig_ids << gig.id
         end
 
         @upload.save!

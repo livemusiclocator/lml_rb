@@ -33,25 +33,15 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
       row :updated_at do |resource|
         admin_time(resource.updated_at)
       end
-    end
-
-    panel "Gigs" do
-      table_for (upload.gig_ids || []) do
-        column :link do |id|
-          gig = Lml::Gig.find_by(id: id)
-          if gig
-            link_to gig.name, admin_gig_path(id)
-          else
-            "deleted gig"
-          end
-        end
-      end
-    end
-
-    attributes_table do
       row :content do |upload|
         pre { upload.content }
       end
+    end
+  end
+
+  sidebar "Links", only: :show do
+    ul do
+      li link_to "Gigs", admin_gigs_path("q[upload_id_eq]" => resource.id)
     end
   end
 
