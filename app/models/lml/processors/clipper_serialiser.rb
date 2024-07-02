@@ -10,7 +10,7 @@ module Lml
       def serialise
         out = StringIO.new
 
-        @venue.gigs.eager.each do |gig|
+        @venue.gigs.where(date: Date.yesterday..).eager.each do |gig|
           out.puts "---"
           row(out, :id, gig.id)
           row(out, :name, gig.name)
@@ -33,7 +33,7 @@ module Lml
       private
 
       def row(io, heading, value)
-        io.puts [heading, value].join(": ")
+        io.puts [heading, value].join(": ") unless value.blank?
       end
     end
   end
