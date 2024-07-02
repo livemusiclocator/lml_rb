@@ -8,7 +8,6 @@ module Lml
       []
     end
 
-    validates :content, presence: true
     belongs_to :venue
 
     def venue_label
@@ -16,7 +15,7 @@ module Lml
     end
 
     def process!
-      return unless valid?
+      return if content.blank?
 
       Lml::Processors::Clipper.new(self).process!
     end
