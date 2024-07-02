@@ -66,10 +66,8 @@ module Lml
 
     def tags
       result = []
-      (information_tags || []).each { |tag| result << "information:#{tag}" }
-      genres = genre_tags || []
-      genres = proposed_genre_tags || [] if genres.empty?
-      genres.each { |tag| result << "genre:#{tag}" }
+      result += (information_tags || []).map { |tag| "information:#{tag}" }
+      result += (genre_tags || []).map { |tag| "genre:#{tag}" }
       result
     end
 
