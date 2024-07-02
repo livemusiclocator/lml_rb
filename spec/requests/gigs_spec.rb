@@ -165,12 +165,6 @@ describe "gigs" do
             "ticket_status" => "sold_out",
             "genre_tags" => %w[post-punk dream-pop],
             "information_tags" => %w[all-ages free],
-            "tags" => [
-              "information:all-ages",
-              "information:free",
-              "genre:post-punk",
-              "genre:dream-pop",
-            ],
             "ticketing_url" => "the ticketing url",
             "venue" => {
               "address" => "the address",
@@ -334,12 +328,6 @@ describe "gigs" do
                 "ticket_status" => nil,
                 "genre_tags" => %w[post-punk dream-pop],
                 "information_tags" => %w[all-ages free],
-                "tags" => [
-                  "information:all-ages",
-                  "information:free",
-                  "genre:post-punk",
-                  "genre:dream-pop",
-                ],
                 "ticketing_url" => "the ticketing url",
                 "venue" => {
                   "address" => "the address",

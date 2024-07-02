@@ -3,6 +3,7 @@
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :category,
+    :checked,
     :date,
     :description,
     :duration,
@@ -32,6 +33,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :source_cont, label: "Source"
   filter :status, as: :select, collection: Lml::Gig.statuses.keys
   filter :checked
+  filter :hidden
 
   index do
     selectable_column
@@ -43,11 +45,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       admin_date(resource.date)
     end
     column :start_time
+    column :checked
+    column :hidden
     column :category
     column :series
     column :status
     column :source
-    column :tag_list
 
     column :created_at do |resource|
       admin_time(resource.created_at)
@@ -82,6 +85,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       row :finish_timestamp do |resource|
         admin_time(resource.finish_timestamp)
       end
+      row :checked
+      row :hidden
       row :category
       row :series
       row :status
@@ -180,6 +185,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :date, as: :date_picker
       f.input :start_time, as: :time_picker
       f.input :duration, label: "Duration (mins)"
+      f.input :checked
       f.input :url
       f.input :ticketing_url
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys

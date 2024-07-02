@@ -6,11 +6,11 @@ module Lml
         checked
         created_at
         date
+        hidden
         name
         series
         source
         status
-        tags
         updated_at
         upload_id
         venue_id
@@ -19,13 +19,6 @@ module Lml
 
     def self.ransackable_associations(_auth_object = nil)
       %w[venue]
-    end
-
-    def self.ransackable_scopes(_auth_object = nil)
-      %w[
-        tags_in
-        visible
-      ]
     end
 
     def self.find_or_create_gig(name:, date:, venue:, details: {})
@@ -44,6 +37,7 @@ module Lml
 
     belongs_to :venue, optional: true
     belongs_to :upload, optional: true
+
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all
 
@@ -63,13 +57,6 @@ module Lml
 
     def venue_label
       venue&.label
-    end
-
-    def tags
-      result = []
-      result += (information_tags || []).map { |tag| "information:#{tag}" }
-      result += (genre_tags || []).map { |tag| "genre:#{tag}" }
-      result
     end
 
     def proposed_genre_tag_list

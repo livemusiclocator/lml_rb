@@ -4,7 +4,6 @@ json.array! @gigs do |gig|
   json.id gig.id
   json.name gig.name
   json.date gig.date
-  json.tags gig.tags
   json.ticketing_url gig.ticketing_url
   json.start_time gig.start_time
   json.start_timestamp gig.start_timestamp
