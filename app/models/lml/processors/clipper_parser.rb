@@ -31,12 +31,12 @@ module Lml
               details[:duration] = value
             when "genre"
               details[:genre_tags] ||= []
-              details[:genre_tags] << value
+              details[:genre_tags] << value unless value.blank?
             when "id"
               details[:id] = value
             when "information"
               details[:information_tags] ||= []
-              details[:information_tags] << value
+              details[:information_tags] << value unless value.blank?
             when "internal_description"
               details[:internal_description] = value
             when "name", "gig_name"

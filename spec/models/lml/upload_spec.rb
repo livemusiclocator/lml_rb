@@ -84,6 +84,30 @@ describe Lml::Upload do
         Lml::Set.create!(gig: gig, act: band2)
       end
 
+      it "ignores empty tags" do
+        upload = Lml::Upload.create!(
+          time_zone: "Australia/Melbourne",
+          format: "clipper",
+          source: "a website",
+          venue: @venue,
+          content: <<~CONTENT,
+            name: the gig name
+            date: 2024-03-01
+            genre:
+            genre: post-rock
+            information:
+            information: 18+
+          CONTENT
+        )
+        upload.process!
+        upload.reload
+
+        gig = Lml::Gig.find_by!(name: "the gig name")
+        expect(gig.venue).to eq(@venue)
+        expect(gig.information_tags).to eq(%w[18+])
+        expect(gig.genre_tags).to eq(%w[post-rock])
+      end
+
       it "changes gig names that match on case" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
