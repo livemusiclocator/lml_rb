@@ -51,6 +51,7 @@ module Lml
 
     def suggest_tags!
       return if internal_description.blank?
+      return unless (proposed_genre_tags || []).empty?
 
       update!(proposed_genre_tags: Lml::StochasticParrot.new.gist(internal_description))
     end
