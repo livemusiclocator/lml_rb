@@ -194,7 +194,12 @@ describe "gigs" do
 
     context "when there are no gigs" do
       it "returns empty result" do
-        get "/gigs/query?location=a+location&date_from=2001-06-08&date_to=2001-06-08"
+        get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
+        expect(JSON.parse(response.body)).to eq([])
+      end
+
+      it "returns empty result" do
+        get "/gigs/for/melbourne/2001-06-08"
         expect(JSON.parse(response.body)).to eq([])
       end
     end
@@ -275,6 +280,91 @@ describe "gigs" do
       it "returns no gigs when there are no gigs for the specified dates" do
         get "/gigs/query?location=melbourne&date_from=2011-06-08&date_to=2011-06-08"
         expect(JSON.parse(response.body)).to eq([])
+      end
+
+      it "returns matching gigs when location and dates are specified" do
+        get "/gigs/for/melbourne/2001-06-08"
+        expect(JSON.parse(response.body)).to(
+          eq(
+            [
+              {
+                "date" => "2001-06-08",
+                "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+                "duration" => nil,
+                "id" => @gig.id,
+                "name" => "The One Gig You Should Not Miss Out On",
+                "series" => "ohm",
+                "category" => "music",
+                "prices" => [
+                  {
+                    "amount" => "$75.00",
+                    "description" => "GA",
+                  },
+                ],
+                "sets" => [
+                  {
+                    "act" => {
+                      "genres" => nil,
+                      "id" => @first_support.id,
+                      "name" => "first support",
+                    },
+                    "start_time" => "18:00",
+                    "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
+                    "duration" => 30,
+                    "finish_time" => "18:30",
+                    "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
+                  },
+                  {
+                    "act" => {
+                      "genres" => nil,
+                      "id" => @second_support.id,
+                      "name" => "second support",
+                    },
+                    "start_time" => "19:00",
+                    "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
+                    "duration" => 30,
+                    "finish_time" => "19:30",
+                    "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
+                  },
+                  {
+                    "act" => {
+                      "genres" => %w[good loud people],
+                      "id" => @main_act.id,
+                      "name" => "The Really Quite Good Music People",
+                    },
+                    "start_time" => "20:00",
+                    "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
+                    "duration" => 60,
+                    "finish_time" => "21:00",
+                    "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
+                  },
+                ],
+                "start_time" => nil,
+                "start_timestamp" => nil,
+                "finish_time" => nil,
+                "finish_timestamp" => nil,
+                "status" => "confirmed",
+                "ticket_status" => nil,
+                "genre_tags" => %w[post-punk dream-pop],
+                "information_tags" => %w[all-ages free],
+                "ticketing_url" => "the ticketing url",
+                "venue" => {
+                  "address" => "the address",
+                  "postcode" => "1234",
+                  "capacity" => 500,
+                  "id" => @venue.id,
+                  "latitude" => nil,
+                  "longitude" => nil,
+                  "name" => "The Gig Place",
+                  "website" => "https://gigplace.com.au",
+                  "tags" => [],
+                  "vibe" => nil,
+                  "location_url" => nil,
+                },
+              },
+            ],
+          ),
+        )
       end
 
       it "returns matching gigs when location and dates are specified" do

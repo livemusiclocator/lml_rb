@@ -34,7 +34,7 @@ class GigsController < ApplicationController
           format: request.params[:format],
           location: "castlemaine",
           date_from: Date.today,
-          date_to: Date.today.advance(days:7),
+          date_to: Date.today.advance(days: 7),
         ),
       },
       {
@@ -70,6 +70,19 @@ class GigsController < ApplicationController
         ),
       },
     ]
+  end
+
+  def for
+    expires_in 1.minutes, public: true
+
+    location = params[:location] || "nowhere"
+    date = Date.parse(params[:date] || "2000-01-01")
+
+    venue_ids = Lml::Venue.where("lower(location) = ?", location).pluck(:id)
+
+    @gigs = Lml::Gig.eager.visible.where(date: date, venue_id: venue_ids)
+
+    render :query
   end
 
   def query

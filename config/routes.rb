@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  get "/", to: redirect('https://www.livemusiclocator.com.au')
+  get "/", to: redirect("https://www.livemusiclocator.com.au")
 
   # Defines the root path route ("/")
   # root "posts#index"
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get "query", to: "gigs#query", defaults: { format: "json" }
     get "autocomplete", to: "gigs#autocomplete", defaults: { format: "json" }
     get ":id", to: "gigs#show", defaults: { format: "json" }
+    get "for/:location/:date", to: "gigs#for", defaults: { format: "json" }
   end
   scope "venues" do
     get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
