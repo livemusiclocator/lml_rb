@@ -23,7 +23,10 @@ module Lml
             key = key.downcase.gsub(" ", "_")
 
             case key
-            when "date"
+            when "acts"
+              details[:sets] ||= []
+              details[:sets] += value.split("|").map(&:strip)
+            when "date", "gig_date"
               details[:date] = value
             when "category"
               details[:category] = value
