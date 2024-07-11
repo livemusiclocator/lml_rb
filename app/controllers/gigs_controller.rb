@@ -91,7 +91,8 @@ class GigsController < ApplicationController
     location = params[:location] || "nowhere"
     date_from = Date.parse(params[:date_from] || "2000-01-01")
     date_to = Date.parse(params[:date_to] || "2000-01-01")
-    date_to = date_from + 7.days if date_to > date_from + 7.days
+
+    date_to = date_from + 7.days if !tokens.include?(params[:token]) && (date_to > date_from + 7.days)
 
     venue_ids = Lml::Venue.where("lower(location) = ?", location).pluck(:id)
 
@@ -104,5 +105,13 @@ class GigsController < ApplicationController
 
   def autocomplete
     @gigs = Lml::Gig.order(:name)
+  end
+
+  private
+
+  def tokens
+    return [] unless ENV["TOKENS"]
+
+    ENV.fetch("TOKENS").split(",").map(&:strip)
   end
 end
