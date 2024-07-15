@@ -58,6 +58,8 @@ module Lml
               details[:ticketing_url] = value
             when "time", "start_time", "gig_start_time"
               details[:time] = value
+            when "venue_id"
+              details[:venue_id] = value
             when "url", "gig_url"
               details[:url] = value
             end

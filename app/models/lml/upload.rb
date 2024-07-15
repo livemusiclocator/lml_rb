@@ -11,7 +11,7 @@ module Lml
       []
     end
 
-    belongs_to :venue
+    belongs_to :venue, optional: true
 
     def venue_label
       venue&.label

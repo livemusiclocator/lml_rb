@@ -9,6 +9,39 @@ describe Lml::Upload do
       )
     end
 
+    it "populates status with failed when venue is missing" do
+      upload = Lml::Upload.create!(
+        time_zone: "Australia/Melbourne",
+        format: "clipper",
+        content: <<~CONTENT,
+          url: the url
+          venue: the venue
+        CONTENT
+      )
+      upload.process!
+      upload.reload
+
+      expect(upload.status).to eq("Failed")
+      expect(upload.error_description).to eq("1: A venue is required")
+    end
+
+    it "populates status with failed when venue is missing" do
+      upload = Lml::Upload.create!(
+        time_zone: "Australia/Melbourne",
+        venue: @venue,
+        format: "clipper",
+        content: <<~CONTENT,
+          url: the url
+          venue_id: a_venue
+        CONTENT
+      )
+      upload.process!
+      upload.reload
+
+      expect(upload.status).to eq("Failed")
+      expect(upload.error_description).to eq("1: A venue is required")
+    end
+
     it "populates status with failed when name is missing" do
       upload = Lml::Upload.create!(
         time_zone: "Australia/Melbourne",
@@ -16,7 +49,6 @@ describe Lml::Upload do
         format: "clipper",
         content: <<~CONTENT,
           url: the url
-          venue: the venue
         CONTENT
       )
       upload.process!
@@ -45,7 +77,7 @@ describe Lml::Upload do
     end
 
     context "where the gig did not already exist" do
-      it "creates " do
+      it "creates the gig" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
           format: "clipper",
@@ -55,6 +87,33 @@ describe Lml::Upload do
             name: the gig name
             date: 2024-03-01
             time: 19:00
+          CONTENT
+        )
+        upload.process!
+        upload.reload
+
+        expect(upload.status).to eq("Succeeded")
+        gig = Lml::Gig.find_by!(name: "the gig name")
+        expect(gig.date).to eq(Date.iso8601("2024-03-01"))
+        expect(gig.start_time).to eq("19:00")
+        expect(gig.venue).to eq(@venue)
+        expect(gig.status).to eq("confirmed")
+        expect(gig.source).to eq("a website")
+        expect(gig.upload).to eq(upload)
+      end
+    end
+
+    context "where the gig did not already exist" do
+      it "creates the gig" do
+        upload = Lml::Upload.create!(
+          time_zone: "Australia/Melbourne",
+          format: "clipper",
+          source: "a website",
+          content: <<~CONTENT,
+            name: the gig name
+            date: 2024-03-01
+            time: 19:00
+            venue_id: #{@venue.id}
           CONTENT
         )
         upload.process!

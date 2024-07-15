@@ -8,20 +8,23 @@ module Lml
       end
 
       def process!
-        venue = @upload.venue
-
-        unless venue
-          @upload.status = "Failed"
-          @upload.error_description = "A venue is required"
-          @upload.save!
-          return
-        end
-
-        Time.zone = venue.time_zone
+        default_venue = @upload.venue
 
         entries = ClipperParser.extract_entries(@upload.content.lines)
 
         entries.each_with_index do |details, index|
+          venue = default_venue
+
+          venue = Lml::Venue.find_by(id: details[:venue_id]) if details[:venue_id]
+
+          unless venue
+            @upload.status = "Failed"
+            @upload.error_description = "#{index + 1}: A venue is required"
+            @upload.save!
+            return 1
+          end
+
+          Time.zone = venue.time_zone
           unless details[:name].present?
             @upload.status = "Failed"
             @upload.error_description = "#{index + 1}: A gig name is required"
