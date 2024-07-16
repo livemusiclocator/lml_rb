@@ -76,7 +76,7 @@ describe Lml::Upload do
       expect(upload.error_description).to eq("1: '' is not a valid date")
     end
 
-    context "where the gig did not already exist" do
+    context "where the finish time is after midnight" do
       it "creates the gig" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
@@ -86,7 +86,8 @@ describe Lml::Upload do
           content: <<~CONTENT,
             name: the gig name
             date: 2024-03-01
-            time: 19:00
+            start time: 19:00
+            finish time: 01:30
           CONTENT
         )
         upload.process!
@@ -96,6 +97,8 @@ describe Lml::Upload do
         gig = Lml::Gig.find_by!(name: "the gig name")
         expect(gig.date).to eq(Date.iso8601("2024-03-01"))
         expect(gig.start_time).to eq("19:00")
+        expect(gig.finish_time).to eq("01:30")
+        expect(gig.duration).to eq((6 * 60) + 30)
         expect(gig.venue).to eq(@venue)
         expect(gig.status).to eq("confirmed")
         expect(gig.source).to eq("a website")
@@ -196,9 +199,9 @@ describe Lml::Upload do
           content: <<~CONTENT,
             name: the gig name
             date: 2024-03-01
-            set: band 1 (Melbourne)
-            set: band 2 (Glasgow/Scotland)
-            set: band 4
+            set: band 1 (Melbourne) | 7pm | 8pm
+            set: band 2 (Glasgow/Scotland) | 8pm | 9pm
+            set: band 4 | 10pm | 1am
           CONTENT
         )
         upload.process!
@@ -218,9 +221,18 @@ describe Lml::Upload do
 
         gig = Lml::Gig.find_by!(name: "the gig name")
         expect(gig.sets.count).to eq(3)
-        expect(Lml::Set.where(gig: gig, act: act1).count).to eq(1)
-        expect(Lml::Set.where(gig: gig, act: act2).count).to eq(1)
-        expect(Lml::Set.where(gig: gig, act: act4).count).to eq(1)
+        set1 = gig.sets.find_by(act: act1)
+        expect(set1.start_time).to eq("19:00")
+        expect(set1.finish_time).to eq("20:00")
+        expect(set1.duration).to eq(60)
+        set2 = gig.sets.find_by(act: act2)
+        expect(set2.start_time).to eq("20:00")
+        expect(set2.finish_time).to eq("21:00")
+        expect(set2.duration).to eq(60)
+        set3 = gig.sets.find_by(act: act4)
+        expect(set3.start_time).to eq("22:00")
+        expect(set3.finish_time).to eq("01:00")
+        expect(set3.duration).to eq(180)
       end
     end
   end

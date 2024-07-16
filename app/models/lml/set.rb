@@ -11,7 +11,7 @@ module Lml
     end
 
     def self.create_for_gig_from_line!(gig, line)
-      act_name, start_time, duration, stage = line.split("|").map(&:strip)
+      act_name, start_time, finish_time, stage = line.split("|").map(&:strip)
       return if act_name.blank?
 
       act = Lml::Act.find_or_create_act_from_line!(act_name)
@@ -19,7 +19,7 @@ module Lml
         gig: gig,
         act: act,
         start_time: start_time,
-        duration: duration,
+        finish_time: finish_time,
         stage: stage,
       )
     end
@@ -36,7 +36,7 @@ module Lml
                             "#{act_description} (#{act.location}/Australia)"
                           end
       end
-      "#{act_description} | #{start_time} | #{duration} | #{stage}"
+      "#{act_description} | #{start_time} | #{finish_time} | #{stage}"
     end
 
     def gig_label
@@ -62,10 +62,24 @@ module Lml
       Lml::Formatting.offset_to_time(start_offset)
     end
 
+    def finish_time=(value)
+      self.duration = nil
+
+      return if value.blank?
+      return unless start_offset
+
+      time = Time.parse(value)
+      finish_offset = (time.hour * 60) + time.min
+      finish_offset += 24 * 60 if finish_offset < start_offset
+      self.duration = finish_offset - start_offset
+    end
+
     def finish_time
       return nil unless start_offset && duration
 
-      Lml::Formatting.offset_to_time(start_offset + duration)
+      finish_offset = start_offset + duration
+      finish_offset -= 24 * 60 if finish_offset > 24 * 60
+      Lml::Formatting.offset_to_time(finish_offset)
     end
 
     def start_timestamp

@@ -15,8 +15,8 @@ module Lml
           row(out, :id, gig.id)
           row(out, :name, gig.name)
           row(out, :date, gig.date.iso8601)
-          row(out, :time, gig.start_time)
-          row(out, :duration, gig.duration)
+          row(out, :start_time, gig.start_time)
+          row(out, :finish_time, gig.finish_time)
           row(out, :status, gig.status)
           row(out, :tickets, gig.ticketing_url) if gig.ticketing_url.present?
           row(out, :url, gig.url) if gig.url.present?

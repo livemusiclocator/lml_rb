@@ -16,6 +16,7 @@ module Lml
           date: @today - 1.day,
           venue: @venue,
           start_time: "19:00",
+          finish_time: "01:30",
           status: :draft,
           ticketing_url: "https://tickets.com/123",
           url: "https://gigs.com/567",
@@ -40,7 +41,8 @@ module Lml
             id: #{@first.id}
             name: first
             date: 2024-02-29
-            time: 19:00
+            start_time: 19:00
+            finish_time: 01:30
             status: draft
             tickets: https://tickets.com/123
             url: https://gigs.com/567

@@ -112,10 +112,24 @@ module Lml
       Lml::Formatting.offset_to_time(start_offset)
     end
 
+    def finish_time=(value)
+      self.duration = nil
+
+      return if value.blank?
+      return unless start_offset
+
+      time = Time.parse(value)
+      finish_offset = (time.hour * 60) + time.min
+      finish_offset += 24 * 60 if finish_offset < start_offset
+      self.duration = finish_offset - start_offset
+    end
+
     def finish_time
       return nil unless start_offset && duration
 
-      Lml::Formatting.offset_to_time(start_offset + duration)
+      finish_offset = start_offset + duration
+      finish_offset -= 24 * 60 if finish_offset > 24 * 60
+      Lml::Formatting.offset_to_time(finish_offset)
     end
 
     def start_timestamp

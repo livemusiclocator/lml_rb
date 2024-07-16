@@ -32,6 +32,8 @@ module Lml
               details[:category] = value
             when "duration"
               details[:duration] = value
+            when "finish_time"
+              details[:finish_time] = value
             when "genre"
               details[:genre_tags] ||= []
               details[:genre_tags] << value unless value.blank?
@@ -52,12 +54,12 @@ module Lml
             when "set"
               details[:sets] ||= []
               details[:sets] << value
+            when "start_time", "gig_start_time", "time"
+              details[:start_time] = value
             when "status"
               details[:status] = value
             when "tickets", "ticketing_url"
               details[:ticketing_url] = value
-            when "time", "start_time", "gig_start_time"
-              details[:time] = value
             when "venue_id"
               details[:venue_id] = value
             when "url", "gig_url"

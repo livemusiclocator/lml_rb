@@ -6,7 +6,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :checked,
     :date,
     :description,
-    :duration,
     :genre_tag_list,
     :hidden,
     :information_tag_list,
@@ -187,7 +186,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :venue_id, as: "hidden"
       f.input :date, as: :date_picker
       f.input :start_time, as: :time_picker
-      f.input :duration, label: "Duration (mins)"
+      f.input :finish_time, as: :time_picker
       f.input :checked
       f.input :url
       f.input :ticketing_url
@@ -234,5 +233,25 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
     SCRIPT
     f.actions
+  end
+
+  controller do
+    def create
+      # finish time needs to be assigned after start time
+      finish_time = params[:lml_gig].delete(:finish_time)
+
+      super
+
+      resource.update!(finish_time: finish_time) if resource.valid? && !finish_time.blank?
+    end
+
+    def update
+      # finish time needs to be assigned after start time
+      finish_time = params[:lml_gig].delete(:finish_time)
+
+      super
+
+      resource.update!(finish_time: finish_time) if resource.valid? && !finish_time.blank?
+    end
   end
 end

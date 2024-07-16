@@ -41,12 +41,23 @@ module Lml
             return 1
           end
 
-          unless details[:time].blank?
+          unless details[:start_time].blank?
             begin
-              time = Time.parse(details[:time])
+              start_time = Time.parse(details[:start_time])
             rescue ArgumentError
               @upload.status = "Failed"
-              @upload.error_description = "#{index + 1}: '#{details[:time]}' is not a valid time"
+              @upload.error_description = "#{index + 1}: '#{details[:start_time]}' is not a valid time"
+              @upload.save!
+              return 1
+            end
+          end
+
+          unless details[:finish_time].blank?
+            begin
+              finish_time = Time.parse(details[:finish_time])
+            rescue ArgumentError
+              @upload.status = "Failed"
+              @upload.error_description = "#{index + 1}: '#{details[:finish_time]}' is not a valid time"
               @upload.save!
               return 1
             end
@@ -89,8 +100,9 @@ module Lml
           gig.set_list = details[:sets].join("\n") if details[:sets].present?
           gig.price_list = details[:prices].join("\n") if details[:prices].present?
           gig.date = date
-          gig.start_time = time.strftime("%H:%M") if time
+          gig.start_time = start_time.strftime("%H:%M") if start_time
           gig.duration = details[:duration]
+          gig.finish_time = finish_time.strftime("%H:%M") if finish_time
           gig.save!
           gig.suggest_tags!
           @upload.status = "Succeeded"
