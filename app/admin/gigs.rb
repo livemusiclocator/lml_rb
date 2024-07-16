@@ -51,6 +51,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :series
     column :status
     column :source
+    column :genre_tag_count do |resource|
+      (resource.genre_tags || []).count
+    end
 
     column :created_at do |resource|
       admin_time(resource.created_at)
@@ -199,12 +202,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     f.inputs "Genre Tags" do
       f.input :genre_tag_list, as: :text, input_html: { rows: 5 }
-      content = if f.object.proposed_genre_tags
-                  "One tag per line (proposed: #{f.object.proposed_genre_tags.join(", ")})"
-                else
-                  "One tag per line"
-                end
-      para(content, style: "font-size: small")
+      para("One tag per line", style: "font-size: small")
+      proposed = f.object.proposed_genre_tags || []
+      if proposed.count.positive?
+        para("Proposed genre tags:", style: "font-size: small")
+        pre(proposed.join("\n"), style: "font-size: small")
+      end
     end
     f.inputs "Information Tags" do
       f.input :information_tag_list, as: :text, input_html: { rows: 5 }
