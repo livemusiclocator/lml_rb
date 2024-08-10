@@ -191,8 +191,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   collection_action :download_gigs, method: :get do
+    larger_collection = collection.offset(nil).limit(500)
     send_data(
-      Lml::Processors::ClipperSerialiser.for_collection(collection),
+      Lml::Processors::ClipperSerialiser.for_collection(larger_collection),
       type: "application/txt",
       filename: "gigs_#{Time.now.iso8601}.txt",
     )
