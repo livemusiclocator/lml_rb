@@ -59,12 +59,14 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       end
       row :lat_lng do |resource|
         point = resource.lat_lng
-        link_to(
-          point,
-          "https://maps.google.com/?q=#{point}",
-          target: "_blank",
-          rel: "noopener noreferrer",
-        ) unless point.blank?
+        unless point.blank?
+          link_to(
+            point,
+            "https://maps.google.com/?q=#{point}",
+            target: "_blank",
+            rel: "noopener noreferrer",
+          )
+        end
       end
       row :vibe
       row :tag_list
@@ -93,7 +95,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
 
   member_action :download_gigs, method: :get do
     send_data(
-      Lml::Processors::ClipperSerialiser.new(resource).serialise,
+      Lml::Processors::ClipperSerialiser.for_venue(resource),
       type: "application/txt",
       filename: "gigs_#{resource.name.downcase.gsub(" ", "_")}.txt",
     )

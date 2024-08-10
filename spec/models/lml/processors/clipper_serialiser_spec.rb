@@ -35,29 +35,31 @@ module Lml
 
       it "exports all non blank information" do
         travel_to(@today) do
-          expect(ClipperSerialiser.new(@venue).serialise).to(
-            eq(<<~TEXT)
-            ---
-            id: #{@first.id}
-            name: first
-            date: 2024-02-29
-            start_time: 19:00
-            finish_time: 01:30
-            status: draft
-            tickets: https://tickets.com/123
-            url: https://gigs.com/567
-            series: gig series
-            category: gig category
-            internal_description: one two three
-            genre: genre1
-            genre: genre2
-            information: info1
-            information: info2
-            ---
-            id: #{@second.id}
-            name: second
-            date: 2024-03-01
-            status: confirmed
+          expect(ClipperSerialiser.for_venue(@venue)).to(
+            eq(<<~TEXT),
+              ---
+              id: #{@first.id}
+              name: first
+              venue_id: #{@venue.id}
+              date: 2024-02-29
+              start_time: 19:00
+              finish_time: 01:30
+              status: draft
+              tickets: https://tickets.com/123
+              url: https://gigs.com/567
+              series: gig series
+              category: gig category
+              internal_description: one two three
+              genre: genre1
+              genre: genre2
+              information: info1
+              information: info2
+              ---
+              id: #{@second.id}
+              name: second
+              venue_id: #{@venue.id}
+              date: 2024-03-01
+              status: confirmed
             TEXT
           )
         end

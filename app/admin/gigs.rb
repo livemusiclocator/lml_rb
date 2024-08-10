@@ -180,6 +180,24 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     redirect_to resource_path, notice: "Added tags"
   end
 
+  action_item :download_gigs, only: [:index] do
+    params = { format: :txt }
+    params.merge!({ order: params[:order] }) if params[:order]
+    params.merge!(params[:q].permit!) if params[:q]
+    link_to(
+      "Download Gigs",
+      download_gigs_admin_gigs_path(params),
+    )
+  end
+
+  collection_action :download_gigs, method: :get do
+    send_data(
+      Lml::Processors::ClipperSerialiser.for_collection(collection),
+      type: "application/txt",
+      filename: "gigs_#{Time.now.iso8601}.txt",
+    )
+  end
+
   form do |f|
     f.semantic_errors
     f.inputs do
