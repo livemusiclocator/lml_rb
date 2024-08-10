@@ -23,6 +23,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :venue_id,
   )
 
+  config.sort_order = "created_at_desc"
+
   filter :name_cont, label: "Name"
   filter :venue_location_cont, label: "Location"
   filter :venue, as: :select, collection: -> { Lml::Venue.order(:name).pluck(:name, :id) }
