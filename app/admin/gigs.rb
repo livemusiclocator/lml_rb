@@ -256,6 +256,10 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   controller do
+    def scoped_collection
+      super.eager
+    end
+
     def create
       # finish time needs to be assigned after start time
       finish_time = params[:lml_gig].delete(:finish_time)
