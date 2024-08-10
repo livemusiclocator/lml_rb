@@ -181,12 +181,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   action_item :download_gigs, only: [:index] do
-    params = { format: :txt }
-    params.merge!({ order: params[:order] }) if params[:order]
-    params.merge!(params[:q].permit!) if params[:q]
+    action_params = { format: :txt }
+    action_params.merge!({ order: params[:order] }) if params[:order]
+    action_params.merge!({ q: params[:q].permit! }) if params[:q]
     link_to(
       "Download Gigs",
-      download_gigs_admin_gigs_path(params),
+      download_gigs_admin_gigs_path(action_params),
     )
   end
 
