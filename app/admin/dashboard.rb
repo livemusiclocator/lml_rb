@@ -1,33 +1,53 @@
 # frozen_string_literal: true
+
 ActiveAdmin.register_page "Dashboard" do
   menu priority: 1, label: proc { I18n.t("active_admin.dashboard") }
 
-  content title: proc { I18n.t("active_admin.dashboard") } do
-    div class: "blank_slate_container", id: "dashboard_default_message" do
-      span class: "blank_slate" do
-        span I18n.t("active_admin.dashboard_welcome.welcome")
-        small I18n.t("active_admin.dashboard_welcome.call_to_action")
+  content title: "Live Music Locator Admin" do
+    start_of_week = Date.today.beginning_of_week
+    start_of_last_week = start_of_week - 7
+    end_of_week = start_of_week + 6
+
+    gigs = Lml::Gig.where(date: (start_of_last_week..end_of_week)).group(:date).count
+
+    last_week_total = 0
+    panel "Last week's gigs" do
+      table do
+        tbody do
+          (start_of_last_week...start_of_week).each do |date| # 7 days
+            count = gigs[date] || 0
+            last_week_total += count
+            tr do
+              td { link_to admin_date(date), admin_gigs_path(q: { date_gteq: date, date_lteq: date }) }
+              td count
+            end
+          end
+          tr do
+            td(b { "Total" })
+            td(b { last_week_total })
+          end
+        end
       end
     end
 
-    # Here is an example of a simple dashboard with columns and panels.
-    #
-    # columns do
-    #   column do
-    #     panel "Recent Posts" do
-    #       ul do
-    #         Post.recent(5).map do |post|
-    #           li link_to(post.title, admin_post_path(post))
-    #         end
-    #       end
-    #     end
-    #   end
-
-    #   column do
-    #     panel "Info" do
-    #       para "Welcome to ActiveAdmin."
-    #     end
-    #   end
-    # end
-  end # content
+    this_week_total = 0
+    panel "This week's gigs" do
+      table do
+        tbody do
+          (start_of_week..end_of_week).each do |date| # 7 days
+            count = gigs[date] || 0
+            this_week_total += count
+            tr do
+              td { link_to admin_date(date), admin_gigs_path(q: { date_gteq: date, date_lteq: date }) }
+              td count
+            end
+          end
+          tr do
+            td(b { "Total" })
+            td(b { this_week_total })
+          end
+        end
+      end
+    end
+  end
 end
