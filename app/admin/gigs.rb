@@ -209,15 +209,15 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :start_time, as: :time_picker
       f.input :finish_time, as: :time_picker
       f.input :checked
-      f.input :url
       f.input :ticketing_url
+      if f.object.ticketing_url.present?
+        li do
+          link_to("(current ticketing url)", f.object.ticketing_url, target: "_blank", rel: "noopener noreferrer")
+        end
+      end
       f.input :status, as: :select, collection: Lml::Gig.statuses.keys
       f.input :ticket_status, as: :select, collection: Lml::Gig.ticket_statuses.keys
-      f.input :source
       f.input :hidden
-      f.input :series
-      f.input :category
-      f.input :description, input_html: { rows: 5 }
       f.input :internal_description, input_html: { rows: 5 }
     end
     f.inputs "Genre Tags" do
