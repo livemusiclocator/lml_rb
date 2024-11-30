@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.3.3"
+ruby "3.3.5"
 
 # a hopefully temporary fix for an issue with ruby 3.3.3 and net-pop
 gem "net-pop", github: "ruby/net-pop"
