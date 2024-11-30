@@ -64,49 +64,55 @@ module Lml
           end
 
           id = details[:id]
-          if id.present?
-            gig = Lml::Gig.find_by(id: id)
-            unless gig
-              @upload.status = "Failed"
-              @upload.error_description = "#{index + 1}: A gig with id #{id} could not be found"
-              @upload.save!
-              return 1
+          weeks = details[:weeks] || 1
+
+          weeks.times do |week_offset|
+            if id.present?
+              gig = Lml::Gig.find_by(id: id)
+              unless gig
+                @upload.status = "Failed"
+                @upload.error_description = "#{index + 1}: A gig with id #{id} could not be found"
+                @upload.save!
+                return 1
+              end
             end
+
+            gig_date = date + (week_offset * 7)
+
+            gig ||= Lml::Gig.find_or_create_gig(
+              name: details[:name],
+              date: gig_date,
+              venue: venue,
+            )
+
+            if details[:status] == "delete"
+              gig.destroy
+              next
+            end
+
+            gig.name = details[:name]
+            gig.venue = venue
+            gig.upload = @upload
+            gig.status = details[:status] || "confirmed"
+            gig.internal_description = details[:internal_description]
+            gig.source = @upload.source
+            gig.url = details[:url]
+            gig.information_tags = details[:information_tags] if details[:information_tags].present?
+            gig.genre_tags = details[:genre_tags] if details[:genre_tags].present?
+            gig.series = details[:series]
+            gig.category = details[:category]
+            gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
+            gig.set_list = details[:sets].join("\n") if details[:sets].present?
+            gig.price_list = details[:prices].join("\n") if details[:prices].present?
+            gig.date = gig_date
+            gig.start_time = start_time.strftime("%H:%M") if start_time
+            gig.duration = details[:duration]
+            gig.finish_time = finish_time.strftime("%H:%M") if finish_time
+            gig.save!
+            gig.suggest_tags!
+            @upload.status = "Succeeded"
+            @upload.error_description = ""
           end
-
-          gig ||= Lml::Gig.find_or_create_gig(
-            name: details[:name],
-            date: date,
-            venue: venue,
-          )
-
-          if details[:status] == "delete"
-            gig.destroy
-            next
-          end
-
-          gig.name = details[:name]
-          gig.venue = venue
-          gig.upload = @upload
-          gig.status = details[:status] || "confirmed"
-          gig.internal_description = details[:internal_description]
-          gig.source = @upload.source
-          gig.url = details[:url]
-          gig.information_tags = details[:information_tags] if details[:information_tags].present?
-          gig.genre_tags = details[:genre_tags] if details[:genre_tags].present?
-          gig.series = details[:series]
-          gig.category = details[:category]
-          gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
-          gig.set_list = details[:sets].join("\n") if details[:sets].present?
-          gig.price_list = details[:prices].join("\n") if details[:prices].present?
-          gig.date = date
-          gig.start_time = start_time.strftime("%H:%M") if start_time
-          gig.duration = details[:duration]
-          gig.finish_time = finish_time.strftime("%H:%M") if finish_time
-          gig.save!
-          gig.suggest_tags!
-          @upload.status = "Succeeded"
-          @upload.error_description = ""
         end
 
         @upload.save!

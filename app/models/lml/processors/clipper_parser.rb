@@ -64,6 +64,8 @@ module Lml
               details[:venue_id] = value
             when "url", "gig_url"
               details[:url] = value
+            when "weeks"
+              details[:weeks] = value.to_i
             end
           end
         end
