@@ -38,5 +38,8 @@ module Lml
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Default number of items to fetch for RSS feed
+    config.rss_items = 24
   end
 end

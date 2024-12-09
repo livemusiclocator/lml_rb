@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     root to: "gigs#index", defaults: { format: "json" }
     get "query", to: "gigs#query", defaults: { format: "json" }
     get "autocomplete", to: "gigs#autocomplete", defaults: { format: "json" }
+    get "feed", to: "gigs#feed", defaults: { format: "rss" }
     get ":id", to: "gigs#show", defaults: { format: "json" }
     get "for/:location/:date", to: "gigs#for", defaults: { format: "json" }
   end

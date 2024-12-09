@@ -107,6 +107,14 @@ class GigsController < ApplicationController
     @gigs = Lml::Gig.order(:name)
   end
 
+  def feed
+    @gigs = Lml::Gig.order("date DESC").limit(Rails.configuration.rss_items)
+
+    respond_to do |format|
+      format.rss { render :layout => false }
+    end
+  end
+
   private
 
   def tokens
