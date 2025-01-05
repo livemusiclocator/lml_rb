@@ -108,7 +108,9 @@ class GigsController < ApplicationController
   end
 
   def feed
-    @gigs = Lml::Gig.order("date DESC").limit(Rails.configuration.rss_items)
+    date_from = Date.today
+    date_to = date_from + 7.days
+    @gigs = Lml::Gig.eager.visible.where(date: (date_from..date_to))
 
     respond_to do |format|
       format.rss { render :layout => false }
