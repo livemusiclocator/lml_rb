@@ -107,6 +107,43 @@ describe Lml::Upload do
     end
 
     context "where the gig did not already exist" do
+      it "creates multiple gigs with weeks specified" do
+        upload = Lml::Upload.create!(
+          time_zone: "Australia/Melbourne",
+          format: "clipper",
+          source: "a website",
+          content: <<~CONTENT,
+            name: the gig name
+            date: 2024-03-01
+            time: 19:00
+            venue_id: #{@venue.id}
+            weeks: 5
+          CONTENT
+        )
+        upload.process!
+        upload.reload
+
+        expect(upload.status).to eq("Succeeded")
+        gigs = Lml::Gig.where(name: "the gig name")
+        expect(gigs.count).to eq(5)
+        expect(gigs.map(&:date).sort).to(
+          eq(
+            [
+              Date.iso8601("2024-03-01"),
+              Date.iso8601("2024-03-08"),
+              Date.iso8601("2024-03-15"),
+              Date.iso8601("2024-03-22"),
+              Date.iso8601("2024-03-29"),
+            ],
+          ),
+        )
+        expect(gigs.map(&:start_time).uniq).to eq(["19:00"])
+        expect(gigs.map(&:venue).uniq).to eq([@venue])
+        expect(gigs.map(&:status).uniq).to eq(["confirmed"])
+        expect(gigs.map(&:source).uniq).to eq(["a website"])
+        expect(gigs.map(&:upload).uniq).to eq([upload])
+      end
+
       it "creates the gig" do
         upload = Lml::Upload.create!(
           time_zone: "Australia/Melbourne",
