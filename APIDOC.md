@@ -16,7 +16,7 @@ All API endpoints are open and do not require authentication.
 
 ### Gigs
 
-**GET /gigs**
+#### GET /gigs
 
 Index endpoint which returns a list of commonly used API queries.
 
@@ -57,7 +57,7 @@ curl https://api.lml.live/gigs | jq
 }
 ```
 
-**GET /gigs/query**
+#### GET /gigs/query
 
 Query all gigs by date range and location.
 
@@ -145,7 +145,7 @@ curl https://api.lml.live/gigs/query \
 ]
 ```
 
-**GET /gigs/:id**
+#### GET /gigs/:id
 
 Find a gig by id.
 
@@ -203,7 +203,7 @@ curl https://api.lml.live/gigs/0a4427bc-8968-4253-9cb5-b906ec121b42 | jq
 }
 ```
 
-**GET /gigs/for/:location/:date**
+#### GET /gigs/for/:location/:date
 
 List gigs at specified location and date.
 
@@ -287,7 +287,7 @@ curl https://api.lml.live/gigs/for/melbourne/2025-01-06 | jq '.[:1]'
 ]
 ```
 
-**GET /gigs/autocomplete**
+#### GET /gigs/autocomplete
 
 List all gigs for autocomplete.
 
@@ -318,7 +318,7 @@ curl https://api.lml.live/gigs/autocomplete | jq '.[:3]'
 
 ### Venues
 
-**GET /venues/autocomplete**
+#### GET /venues/autocomplete
 
 List all venues for autocomplete.
 
@@ -349,7 +349,7 @@ curl https://api.lml.live/venues/autocomplete | jq '.[:3]'
 
 ### Acts
 
-**GET /acts/autocomplete**
+#### GET /acts/autocomplete
 
 List all acts for autocomplete.
 
