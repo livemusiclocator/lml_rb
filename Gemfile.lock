@@ -137,6 +137,7 @@ GEM
       multipart-post (~> 2)
     faraday-net_http (3.3.0)
       net-http
+    ffi (1.17.0)
     ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-aarch64-linux-musl)
     ffi (1.17.0-arm-linux-gnu)
@@ -414,6 +415,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  amd64-freebsd-14
   aarch64-linux-gnu
   aarch64-linux-musl
   arm-linux
@@ -424,6 +426,7 @@ PLATFORMS
   x86-linux-gnu
   x86-linux-musl
   x86_64-darwin
+  x86_64-freebsd-14
   x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl

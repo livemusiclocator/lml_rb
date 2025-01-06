@@ -143,5 +143,17 @@ module Lml
 
       date.in_time_zone(venue.time_zone) + ((start_offset + duration) / 1_440.0).days
     end
+
+    def lml_url
+      "https://lml.live/gigs/#{id}"
+    end
+
+    def display_name
+      "#{name} - #{venue_label} - #{date.to_formatted_s}"
+    end
+
+    def rss_description
+      "#{name} - #{venue_label} - #{date.to_formatted_s}"
+    end
   end
 end

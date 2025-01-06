@@ -107,6 +107,16 @@ class GigsController < ApplicationController
     @gigs = Lml::Gig.order(:name)
   end
 
+  def feed
+    date_from = Date.today
+    date_to = date_from + 7.days
+    @gigs = Lml::Gig.eager.visible.where(date: (date_from..date_to))
+
+    respond_to do |format|
+      format.rss { render :layout => false }
+    end
+  end
+
   private
 
   def tokens

@@ -1,0 +1,10 @@
+# .editorconfig: https://editorconfig.org
+
+root = true
+
+[*]
+end_of_line = lf
+
+[*.rb]
+indent_style = space
+indent_size = 2
