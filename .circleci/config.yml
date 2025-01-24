@@ -9,7 +9,7 @@ jobs:
   test:
     # Install gems, run rails tests
     docker:
-      - image: cimg/ruby:3.3.3-node
+      - image: cimg/ruby:3.3.5-node
         environment:
           RAILS_ENV: test
           DATABASE_URL: postgresql://postgres@localhost/circle_test
