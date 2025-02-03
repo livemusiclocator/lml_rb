@@ -34,7 +34,8 @@ ActiveAdmin.register_page "Dashboard" do
           gigs.each do |gig|
             tr do
               td(gig.date)
-              td(gig.venue.name)
+              venue_name =  if gig.venue then gig.venue.name else "(no venue)" end
+              td(venue_name)
               td(gig.name)
               td { link_to "Edit", admin_gig_path(gig) }
             end
