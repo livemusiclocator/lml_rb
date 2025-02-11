@@ -1,8 +1,7 @@
 module Lml
   # special handling for locations we may wish to move to database
   LocationParameters = {"stkilda"=>
-                        {postcodes:[3182,3183],
-                         location:"melbourne"}
+                        {postcodes:[3182,3183]}
                        }
   class Venue < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
@@ -27,7 +26,7 @@ module Lml
     scope :in_location, ->(location) {
       if LocationParameters[location]
         params = LocationParameters[location]
-        return where(postcode: params[:postcodes]).where("lower(location) = ?",params[:location])
+        return where(postcode: params[:postcodes])
       else
         return where("lower(location) = ?", location)
       end
