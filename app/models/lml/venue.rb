@@ -27,7 +27,7 @@ module Lml
     scope :in_location, ->(location) {
       if LocationParameters[location]
         params = LocationParameters[location]
-        return where(postcode: params[:postcodes]).where(location: params[:location])
+        return where(postcode: params[:postcodes]).where("lower(location) = ?",params[:location])
       else
         return where("lower(location) = ?", location)
       end
