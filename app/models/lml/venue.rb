@@ -1,4 +1,9 @@
 module Lml
+  # special handling for locations we may wish to move to database
+  LocationParameters = {"stkilda"=>
+                        {postcodes:[3182],
+                         location:"melbourne"}
+                       }
   class Venue < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
       %w[name location time_zone]
@@ -18,6 +23,15 @@ module Lml
 
     has_many :gigs, dependent: :delete_all
     has_many :uploads, dependent: :delete_all
+
+    scope :in_location, ->(location) {
+      if LocationParameters[location]
+        params = LocationParameters[location]
+        return where(postcode: params[:postcodes]).where(location: params[:location])
+      else
+        return where("lower(location) = ?", location)
+      end
+    }
 
     def label
       "#{name} (#{location})"

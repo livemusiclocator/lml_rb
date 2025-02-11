@@ -215,6 +215,16 @@ describe "gigs" do
           capacity: 500,
           website: "https://gigplace.com.au",
         )
+        @stKildaVenue = Lml::Venue.create!(
+          name: "The Escry",
+          location: "melbourne",
+          address: "the address",
+          postcode: 3182, # St Kilda Postcode
+          time_zone: "Australia/Melbourne",
+          capacity: 100,
+          website: "https://definitelyTheEscryNotATypo.com.au",
+        )
+
         @gig = Lml::Gig.create!(
           name: "The One Gig You Should Not Miss Out On",
           description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
@@ -264,10 +274,16 @@ describe "gigs" do
           venue: @venue,
           date: "2001-08-08",
         )
+        @gigInStKilda = Lml::Gig.create!(
+          name: "A gig in st kilda",
+          venue: @stKildaVenue,
+          date: "2001-06-08",
+        )
       end
 
       it "removes hidden gigs" do
         @gig.update!(hidden: true)
+        @gigInStKilda.update!(hidden: true)
         get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to eq([])
       end
@@ -362,9 +378,75 @@ describe "gigs" do
                   "location_url" => nil,
                 },
               },
-            ],
+              { "category" => nil,
+                "date" => "2001-06-08",
+                "description" => nil,
+                "duration" => nil,
+                "finish_time" => nil,
+                "finish_timestamp" => nil,
+                "genre_tags" => [],
+                "id" => @gigInStKilda.id,
+                "information_tags" => [],
+                "name" => "A gig in st kilda",
+                "prices" => [],
+                "series" => nil,
+                "sets" => [],
+                "start_time" => nil,
+                "start_timestamp" => nil,
+                "status" => "confirmed",
+                "ticket_status" => nil,
+                "ticketing_url" => nil,
+                "venue" =>
+          { "address" => "the address",
+            "capacity" => 100,
+            "id" => @stKildaVenue.id,
+            "latitude" => nil,
+            "location_url" => nil,
+            "longitude" => nil,
+            "name" => "The Escry",
+            "postcode" => "3182",
+            "tags" => [],
+            "vibe" => nil,
+            "website" => "https://definitelyTheEscryNotATypo.com.au" } }
+            ]
           ),
         )
+      end
+
+      describe "matching sub-geographies of Melbourne" do
+        it "returns St Kilda postcodes when location=stkilda" do
+          get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
+          expect(JSON.parse(response.body)).to(eq([{ "category" => nil,
+                                                     "date" => "2001-06-08",
+                                                     "description" => nil,
+                                                     "duration" => nil,
+                                                     "finish_time" => nil,
+                                                     "finish_timestamp" => nil,
+                                                     "genre_tags" => [],
+                                                     "id" => @gigInStKilda.id,
+                                                     "information_tags" => [],
+                                                     "name" => "A gig in st kilda",
+                                                     "prices" => [],
+                                                     "series" => nil,
+                                                     "sets" => [],
+                                                     "start_time" => nil,
+                                                     "start_timestamp" => nil,
+                                                     "status" => "confirmed",
+                                                     "ticket_status" => nil,
+                                                     "ticketing_url" => nil,
+                                                     "venue" =>
+          { "address" => "the address",
+            "capacity" => 100,
+            "id" => @stKildaVenue.id,
+            "latitude" => nil,
+            "location_url" => nil,
+            "longitude" => nil,
+            "name" => "The Escry",
+            "postcode" => "3182",
+            "tags" => [],
+            "vibe" => nil,
+            "website" => "https://definitelyTheEscryNotATypo.com.au" } }]))
+        end
       end
 
       it "returns matching gigs when location and dates are specified" do
@@ -447,7 +529,37 @@ describe "gigs" do
                   "location_url" => nil,
                 },
               },
-            ],
+              { "category" => nil,
+                "date" => "2001-06-08",
+                "description" => nil,
+                "duration" => nil,
+                "finish_time" => nil,
+                "finish_timestamp" => nil,
+                "genre_tags" => [],
+                "id" => @gigInStKilda.id,
+                "information_tags" => [],
+                "name" => "A gig in st kilda",
+                "prices" => [],
+                "series" => nil,
+                "sets" => [],
+                "start_time" => nil,
+                "start_timestamp" => nil,
+                "status" => "confirmed",
+                "ticket_status" => nil,
+                "ticketing_url" => nil,
+                "venue" =>
+         { "address" => "the address",
+           "capacity" => 100,
+           "id" => @stKildaVenue.id,
+           "latitude" => nil,
+           "location_url" => nil,
+           "longitude" => nil,
+           "name" => "The Escry",
+           "postcode" => "3182",
+           "tags" => [],
+           "vibe" => nil,
+           "website" => "https://definitelyTheEscryNotATypo.com.au" } }
+            ]
           ),
         )
       end

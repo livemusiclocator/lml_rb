@@ -94,7 +94,8 @@ class GigsController < ApplicationController
 
     date_to = date_from + 7.days if !tokens.include?(params[:token]) && (date_to > date_from + 7.days)
 
-    venue_ids = Lml::Venue.where("lower(location) = ?", location).pluck(:id)
+    venue_query = Lml::Venue.in_location(location)
+    venue_ids = venue_query.pluck(:id)
 
     @gigs = Lml::Gig.eager.visible.where(date: (date_from..date_to), venue_id: venue_ids)
   end
