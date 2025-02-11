@@ -1,7 +1,7 @@
 module Lml
   # special handling for locations we may wish to move to database
   LocationParameters = {"stkilda"=>
-                        {postcodes:[3182],
+                        {postcodes:[3182,3183],
                          location:"melbourne"}
                        }
   class Venue < ApplicationRecord
