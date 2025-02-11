@@ -1,8 +1,9 @@
 module Lml
   # special handling for locations we may wish to move to database
-  LocationParameters = {"stkilda"=>
-                        {postcodes:[3182,3183]}
-                       }
+  POSTCODES = {
+    "stkilda" => [3182, 3183, 3185],
+  }
+
   class Venue < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
       %w[name location time_zone]
@@ -23,13 +24,10 @@ module Lml
     has_many :gigs, dependent: :delete_all
     has_many :uploads, dependent: :delete_all
 
-    scope :in_location, ->(location) {
-      if LocationParameters[location]
-        params = LocationParameters[location]
-        return where(postcode: params[:postcodes])
-      else
-        return where("lower(location) = ?", location)
-      end
+    scope :in_location, lambda { |location|
+      postcodes = POSTCODES[location]
+
+      postcodes ? where(postcode: postcodes) : where("lower(location) = ?", location)
     }
 
     def label
