@@ -180,6 +180,20 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     redirect_to resource_path, notice: "Added tags"
   end
 
+  action_item :clone, only: %i[show] do
+    link_to "Clone", clone_admin_gig_path(resource), method: :put
+  end
+
+  member_action :clone, method: :put do
+    new_gig = Lml::Gig.new
+    new_gig.attributes = resource.attributes.except("id", "created_at", "updated_at", "upload_id")
+    new_gig.date = new_gig.date + 7.days
+    new_gig.price_list = resource.price_list
+    new_gig.set_list = resource.set_list
+    new_gig.save!
+    redirect_to edit_admin_gig_path(new_gig)
+  end
+
   action_item :download_gigs, only: [:index] do
     action_params = { format: :txt }
     action_params.merge!({ order: params[:order] }) if params[:order]
