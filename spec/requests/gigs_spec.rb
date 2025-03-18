@@ -565,4 +565,101 @@ describe "gigs" do
       end
     end
   end
+
+  describe "feed" do
+    before do
+      @venue = Lml::Venue.create!(
+        name: "The Gig Place",
+        address: "the address",
+        postcode: 1234,
+        location: "melbourne",
+        time_zone: "Australia/Melbourne",
+        capacity: 500,
+        website: "https://gigplace.com.au",
+      )
+      @second_gig = Lml::Gig.create!(
+        name: "Second gig",
+        description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+        venue: @venue,
+        date: "2001-06-09",
+        status: :confirmed,
+        ticket_status: :sold_out,
+        ticketing_url: "the ticketing url",
+        information_tags: %w[all-ages free],
+        genre_tags: %w[post-punk dream-pop],
+        series: "ohm",
+        category: "music",
+      )
+      @first_gig = Lml::Gig.create!(
+        name: "First gig",
+        description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+        venue: @venue,
+        date: "2001-06-08",
+        status: :confirmed,
+        ticket_status: :sold_out,
+        ticketing_url: "the ticketing url",
+        information_tags: %w[all-ages free],
+        genre_tags: %w[post-punk dream-pop],
+        series: "ohm",
+        category: "music",
+      )
+      @more_than_seven_days = Lml::Gig.create!(
+        name: "A gig more than seven days away",
+        description: "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+        venue: @venue,
+        date: "2001-07-08",
+        status: :confirmed,
+        ticket_status: :sold_out,
+        ticketing_url: "the ticketing url",
+        information_tags: %w[all-ages free],
+        genre_tags: %w[post-punk dream-pop],
+        series: "ohm",
+        category: "music",
+      )
+
+      travel_to(Time.iso8601("2001-06-08T00:00:00Z")) do
+        get "/gigs/feed.rss"
+      end
+
+      @doc = Nokogiri::XML(response.body)
+    end
+
+    it "returns a valid rss document" do
+      expect(@doc.at_xpath("/rss/@version").value).to eq("2.0")
+    end
+
+    it "has the correct title" do
+      expect(@doc.at_xpath("/rss/channel/title").text).to eq("Live Music Locator - gig feed")
+    end
+
+    it "has the correct description" do
+      expect(@doc.at_xpath("/rss/channel/description").text).to eq("Discover all live music events in the City of Yarra.")
+    end
+
+    it "has the correct link" do
+      expect(@doc.at_xpath("/rss/channel/link").text).to eq("https://lml.live")
+    end
+
+    it "has the correct language" do
+      expect(@doc.at_xpath("/rss/channel/language").text).to eq("en")
+    end
+
+    it "shows items in chronological order" do
+      expect(@doc.xpath("//item/title")[0].text).to include("First gig")
+      expect(@doc.xpath("//item/title")[1].text).to include("Second gig")
+    end
+
+    it "only shows next seven days worth of gigs" do
+      expect(@doc.xpath("//item/title").map { |t| t.text }).not_to include("A gig more than seven days away")
+    end
+
+    it "has the correct gig information" do
+      expect(@doc.xpath("//item/title").first.text).to eq("First gig - The Gig Place (melbourne) - Fri, 08 Jun 2001")
+      expect(@doc.xpath("//item/description").first.text).to eq("First gig - The Gig Place (melbourne) - Fri, 08 Jun 2001")
+      expect(@doc.xpath("//item/author").first.text).to eq("LML")
+      expect(@doc.xpath("//item/pubDate").first.text).to eq(@first_gig.updated_at.rfc822)
+      expect(@doc.xpath("//item/link").first.text).to eq("https://lml.live/gigs/#{@first_gig.id}")
+      expect(@doc.xpath("//item/guid").first.text).to eq("https://lml.live/gigs/#{@first_gig.id}")
+    end
+  end
 end
