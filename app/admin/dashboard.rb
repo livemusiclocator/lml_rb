@@ -15,6 +15,7 @@ ActiveAdmin.register_page "Dashboard" do
         thead do
           tr do
             td("Date")
+            td("Time")
             td("Venue")
             td("Gig")
             td("")
@@ -34,7 +35,8 @@ ActiveAdmin.register_page "Dashboard" do
           gigs.each do |gig|
             tr do
               td(gig.date)
-              venue_name =  if gig.venue then gig.venue.name else "(no venue)" end
+              td(gig.start_time)
+              venue_name = gig.venue ? gig.venue.name : "(no venue)"
               td(venue_name)
               td(gig.name)
               td { link_to "Edit", admin_gig_path(gig) }
