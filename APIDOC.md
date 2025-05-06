@@ -1,4 +1,4 @@
-# API documentation
+# Live Music Locatior - API Documentation
 
 ## Introduction
 
@@ -70,10 +70,7 @@ location: String (required)
 token: An API token
 ```
 
-If no `location`, `date_from`, and `date_to` are provided, returns an empty
-array. The `location` parameter is a string representing the gig location, for
-example *melbourne* or *goldfields*. Only fetches gigs for up to 7 days from
-`date_from` unless a valid `token` is supplied. 
+If no `location`, `date_from`, and `date_to` are provided, returns an empty array. The `location` parameter is a string representing the gig location, for example *melbourne* or *goldfields*. Only fetches gigs for up to 7 days from `date_from` unless a valid `token` is supplied. 
 
 Example:
 
@@ -220,9 +217,7 @@ location: String (required)
 date: Date in format `YYYY-MM-DD` (required)
 ```
 
-If no `location` and `date` are provided, returns an empty array. The
-`location` parameter is a string representing the gig location, for example
-*melbourne* or *goldfields*.
+If no `location` and `date` are provided, returns an empty array. The `location` parameter is a string representing the gig location, for example *melbourne* or *goldfields*.
 
 Example:
 

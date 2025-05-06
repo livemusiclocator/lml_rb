@@ -25,4 +25,7 @@ Rails.application.routes.draw do
   scope "acts" do
     get "autocomplete", to: "acts#autocomplete", defaults: { format: "json" }
   end
+  scope "docs" do
+    get "/", to: "docs#index"
+  end
 end
