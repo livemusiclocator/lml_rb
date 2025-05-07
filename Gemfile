@@ -82,3 +82,4 @@ end
 
 gem "faraday"
 gem "ruby-openai"
+gem "kramdown"

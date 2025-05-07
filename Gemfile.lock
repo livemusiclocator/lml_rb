@@ -467,6 +467,7 @@ DEPENDENCIES
   faraday
   importmap-rails
   jbuilder
+  kramdown
   money-rails
   net-pop!
   pg
