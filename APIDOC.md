@@ -2,11 +2,17 @@
 
 ## Introduction
 
+If you are using this dataset, please acknowledge it with the following:
+
+> Data courtesy of Live Music Locator: https://lml.live
+
 The base URL for the API is:
 
 ```
 https://api.lml.live
 ```
+
+A note about timezones: dates do not have a time component, and times are stored as minutes since midnight in the local timezone of the gig. The API will show gigs for a specified date and location - it's up to the client to decide what "today" means.
 
 ## Authentication
 
