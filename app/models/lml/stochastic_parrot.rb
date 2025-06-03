@@ -9,7 +9,7 @@ module Lml
     def gist(description)
       response = @client.chat(
         parameters: {
-          model: "gpt-4o",
+          model: "gpt-4.1",
           response_format: { type: "json_object" },
           messages: [
             {
@@ -19,10 +19,17 @@ module Lml
             {
               role: "user",
               content: <<~PROMPT,
-                Given the gig described, generate a list of up to four tags that describe music genres
-                mentioned or implied. Put the tags in order of relevance. If an act is definitely playing
-                the music of another artist and you have confidence of over .85 of this, please add
-                the tag "covers".
+                Given the gig described, generate a list of up to four tags that describe music genres mentioned or implied.  Put
+                the tags in order of relevance. Only use the tag "covers" if an act is definitely performing
+                the music of another artist and you have confidence of over .95 of this. Many descriptions list influences
+                of bands but this does not mean a "covers" tag is appropriate. If a band plays ONLY the material of a single band,
+                they are a tribute band.
+
+                The first tag should come from this whitelist:
+
+                Rock, Pop, Hip-Hop, R&B, Soul, Jazz, Classical, Electronic, Country, Metal, Folk, Blues, Reggae, Latin, World, Gospel, Dance, Punk, Alternative, Experimental, Indie, Ambient, Hardcore, Industrial, Garage, Trance, House, Techno, Drum and Bass, Dubstep, Funk, Chill, Disco, Opera, Swing, Acoustic, New Wave, DJ, Covers, Tribute.
+
+                Subsequent tags can be more detailed.
 
                 Format JSON output like this:
                 {
