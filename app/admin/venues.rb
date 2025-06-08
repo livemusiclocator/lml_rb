@@ -3,6 +3,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :address,
     :capacity,
     :email,
+    :facebook_url,
+    :instagram_url,
     :lat_lng,
     :location,
     :location_url,
@@ -49,6 +51,16 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :website do |resource|
         if resource.website.present?
           link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer")
+        end
+      end
+      row :instagram_url do |resource|
+        if resource.instagram_url.present?
+          link_to(resource.instagram_url, resource.instagram_url, target: "_blank", rel: "noopener noreferrer")
+        end
+      end
+      row :facebook_url do |resource|
+        if resource.facebook_url.present?
+          link_to(resource.facebook_url, resource.facebook_url, target: "_blank", rel: "noopener noreferrer")
         end
       end
       row :capacity
@@ -133,6 +145,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input :address
       f.input :postcode
       f.input :website
+      f.input :instagram_url
+      f.input :facebook_url
       f.input :capacity
       f.input :location_url
       f.input :lat_lng

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_07_02_113832) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_08_014227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -118,6 +118,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_02_113832) do
     t.string "email"
     t.string "phone"
     t.text "notes"
+    t.string "facebook_url"
+    t.string "instagram_url"
   end
 
   add_foreign_key "gigs", "venues"
