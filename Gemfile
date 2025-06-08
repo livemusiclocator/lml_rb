@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.4.2"
+ruby "3.4.4"
 
 # a hopefully temporary fix for an issue with ruby 3.3.3 and net-pop
 gem "net-pop", github: "ruby/net-pop"
@@ -81,5 +81,5 @@ group :development do
 end
 
 gem "faraday"
-gem "ruby-openai"
 gem "kramdown"
+gem "ruby-openai"
