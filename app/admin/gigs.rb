@@ -253,7 +253,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     f.inputs "Sets" do
       f.input :set_list, as: :text, input_html: { rows: 5 }
       para(
-        "One set per line, enter act name, start time, duration and stage separated by pipes (eg. The Beatles | 19:00 | 60 | main stage)",
+        "One set per line, enter act name, start time, finish time and stage separated by pipes (eg. The Beatles | 7:30pm | 8:30pm | main stage)",
         style: "font-size: small",
       )
     end
