@@ -46,15 +46,24 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   end
 
   form do |f|
+
     f.inputs do
       f.input :venue_label, label: "Venue"
       f.input :venue_id, as: "hidden"
       f.input :source
       f.input :content
+      div do
+        link_to(
+          "Detailed documentation on content formatting",
+          "https://docs.google.com/document/d/1o-3VA5yghojXBiSHworXDHJfGp7NOUZgbpnGN1lhzio/edit?tab=t.0#heading=h.lqx2443ai69m",
+        )
+      end
     end
+
     script <<~SCRIPT.html_safe
       attachAutocomplete("lml_upload_venue", "/venues/autocomplete", "Select Venue");
     SCRIPT
+
     f.actions
   end
 
