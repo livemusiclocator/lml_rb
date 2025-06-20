@@ -149,11 +149,11 @@ module Lml
     end
 
     def display_name
-      "#{name} - #{venue_label} - #{date.to_formatted_s}"
+      [name, venue_label, date&.to_formatted_s].compact.join(" - ")
     end
 
     def rss_description
-      "#{name} - #{venue_label} - #{date.to_formatted_s}"
+      [name, venue_label, date&.to_formatted_s].compact.join(" - ")
     end
   end
 end
