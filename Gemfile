@@ -83,3 +83,7 @@ end
 gem "faraday"
 gem "kramdown"
 gem "ruby-openai"
+
+# web front end things
+#
+gem "tailwindcss-rails"
