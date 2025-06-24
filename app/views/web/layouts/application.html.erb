@@ -1,0 +1,26 @@
+<!-- app/views/web/layouts/application.html.erb -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your Web App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "web/application", "data-turbo-track": "reload" %>
+    <%= javascript_import_module_tag "../assets/web/application" %>
+
+  </head>
+
+  <body>
+    <nav>
+      <%= link_to "Dashboard", web_root_path %>
+      <%= link_to "Users", web_users_path %>
+      <%= link_to "Posts", web_posts_path %>
+    </nav>
+    
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>
