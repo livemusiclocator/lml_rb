@@ -1,49 +1,49 @@
 :root {
-	--background-color: aliceblue;
-	--accent-color: #337ab7;
-	--accent-color-light: #337ab71e;
-	--border-color: grey;
-	--code-background-color: #e3e3e3;
+    --background-color: aliceblue;
+    --accent-color: #337ab7;
+    --accent-color-light: #337ab71e;
+    --border-color: grey;
+    --code-background-color: #e3e3e3;
 }
 
 body {
-	background-color: var(--background-color);
-	width: 50%;
-	margin: auto;
-	margin-top: 3rem;
+    background-color: var(--background-color);
+    width: 50%;
+    margin: auto;
+    margin-top: 3rem;
 }
 
 h1,
 h2,
 h3 {
-	color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 h2 {
-	border-bottom: 1px solid var(--accent-color);
+    border-bottom: 1px solid var(--accent-color);
 }
 
 h4 {
-	padding: 0.5rem;
-	border: 1px solid var(--accent-color);
-	border-radius: 4px;
-	background-color: var(--accent-color-light);
-	color: var(--accent-color);
+    padding: 0.5rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background-color: var(--accent-color-light);
+    color: var(--accent-color);
 }
 
 code {
-	display: inline;
-	color: unset;
-	background-color: unset;
-	padding: 0;
+    display: inline;
+    color: unset;
+    background-color: unset;
+    padding: 0;
 }
 
 pre code {
-	display: block;
-	padding: 0.5rem;
-	border: 1px solid var(--border-color);
-	border-radius: 4px;
-	background-color: var(--code-background-color);
-	color: black;
-	overflow-x: scroll;
+    display: block;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--code-background-color);
+    color: black;
+    overflow-x: scroll;
 }
