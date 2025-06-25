@@ -1,10 +1,11 @@
-<% content_for :content do %>
+
+<% content_for :content do  %>
 
 <main class="relative z-40 flex-1">
   <!-- Background Map Component -->
   <%= render 'web/explorer/shared/map' %>
   
-  <!-- Filter Overlay Panel -->
+  <!-- Filter Overlay Panel (FilterWrapper styled-component equivalent) -->
   <div 
     class="z-20 absolute bottom-0 left-0 w-full max-w-2xl p-0 h-full md:max-h-full flex flex-col py-2 overflow-hidden group bg-white md:rounded-3xl md:shadow-xl ease-in-out duration-150 transition-[height] m-0 md:m-2"
     data-controller="explorer-overlay"
@@ -18,27 +19,24 @@
     aria-label="Content overlay"
   >
     <!-- Navigation Bar -->
-    <div class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
+    <nav class="flex items-center border-b w-full p-2">
       <!-- Back Button (when applicable) -->
-      <div class="flex items-center">
-        <% if content_for?(:show_back_button) %>
-          <%= button_to "javascript:history.back()", 
-              class: "flex items-center space-x-2 text-blue-600 hover:text-blue-800",
-              method: :get do %>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            <span>Back</span>
-          <% end %>
+      <% if content_for?(:show_back_button) %>
+        <%= link_to "javascript:history.back()", 
+            class: "flex items-center space-x-2 text-blue-600 hover:text-blue-800" do %>
+          <!-- ChevronLeftIcon equivalent -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
         <% end %>
-      </div>
+      <% end %>
       
       <!-- Toggle Button for Overlay Expansion -->
       <button 
-        class="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition-colors duration-200"
+        class="w-full p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition-colors duration-200"
         data-action="click->explorer-overlay#toggle"
         data-explorer-overlay-target="toggleButton"
-        title="Toggle view"
+        id="overlay-expand-button"
         type="button"
         aria-label="Toggle overlay"
       >
@@ -50,19 +48,15 @@
           <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
         </svg>
       </button>
-    </div>
+    </nav>
 
-    <!-- Content Area -->
-
+    <!-- Content Area (Outlet renders child components here) -->
+    <div class="flex-1 overflow-hidden" data-explorer-overlay-target="content">
       <%= yield %>
-
+    </div>
   </div>
 </main>
 
 <% end %>
 
-<!-- TODO: Add Stimulus controller for explorer-overlay functionality -->
-<!-- TODO: Implement overlay expansion/minimization logic -->
-<!-- TODO: Add responsive height transitions with CSS -->
-<!-- TODO: Integrate map interactions with overlay state -->
 <%= render template: "web/layouts/application" %>
