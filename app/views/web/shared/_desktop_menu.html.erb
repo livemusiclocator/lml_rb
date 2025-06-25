@@ -1,0 +1,19 @@
+<div class="hidden lg:block">
+  <ul class="px-2 pt-2 pb-3 flex flex-row sm:px-3">
+    <li>
+      <%= link_to web_root_path, class: nav_item_classes(current_page?(web_root_path)) do %>
+        Home
+      <% end %>
+    </li>
+    <li>
+      <%= link_to web_about_path, class: nav_item_classes(current_page?(web_about_path)) do %>
+        About
+      <% end %>
+    </li>
+    <li>
+      <%= link_to web_events_path, class: nav_item_classes(current_page?(web_events_path)) do %>
+        Events
+      <% end %>
+    </li>
+  </ul>
+</div>

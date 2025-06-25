@@ -1,3 +1,146 @@
-h1 {
-  color: #ff3300;
+// Web application styles
+// Convert styled-components to SASS
+
+// Custom colors from React app
+.text-customBlue {
+  color: #1e40af; // Blue-700
+
+  &:hover {
+    color: #1d4ed8; // Blue-600
+  }
+}
+
+// Pink color for genre tags (from bg-lmlpink)
+.bg-lmlpink {
+  background-color: #ec4899; // Pink-500
+}
+
+// Explorer overlay transitions and responsive behavior
+.explorer-overlay {
+  transition: height 0.15s ease-in-out;
+
+  &.is-minimised {
+    border: 1px solid #e5e7eb;
+    border-radius: 1.5rem 1.5rem 0 0;
+    height: 10rem; // 160px
+  }
+
+  @media (min-width: 768px) {
+    &.is-minimised {
+      border-radius: 1.5rem;
+    }
+  }
+}
+
+// Ticket status styling (from React styled-components)
+.ticket-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  background-color: #fecaca; // Red-200
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+
+// External link styling (from React styled-components)
+.external-link {
+  color: #2563eb; // Blue-600
+  display: inline-flex;
+  align-items: baseline;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: #7c3aed; // Purple-600
+  }
+}
+
+// Filter overlay responsive behavior (from FilterWrapper styled-component)
+.filter-overlay-wrapper {
+  z-index: 20;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: 32rem; // max-w-2xl
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  overflow: hidden;
+  background-color: white;
+  transition: height 0.15s ease-in-out;
+  margin: 0;
+
+  @media (min-width: 768px) {
+    max-height: 100%;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    margin: 0.5rem;
+  }
+
+  // Expanded state
+  &.expanded {
+    height: 100%;
+
+    @media (min-width: 768px) {
+      height: 55rem;
+    }
+  }
+
+  // Minimized state
+  &.minimized {
+    border: 1px solid #e5e7eb;
+    border-radius: 1.5rem 1.5rem 0 0;
+    height: 10rem;
+  }
+}
+
+// Custom scrollbar for gig lists
+.gig-list-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+// Responsive text sizing
+@media (max-width: 640px) {
+  .responsive-text {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+// Animation for loading states
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

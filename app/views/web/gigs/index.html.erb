@@ -1,2 +1,27 @@
-<h1>Web::Gigs#index</h1>
-<p>Find me in app/views/web/gigs/index.html.erb</p>
+<!-- Set back button for Explorer layout navigation -->
+<% content_for :show_back_button, false %>
+
+<div class="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
+  <!-- Gig Filter Component -->
+  <%= render 'web/shared/gig_filter' %>
+  
+  <!-- Gigs Content -->
+  <div class="flex flex-col overflow-y-auto divide-y divide-gray-200 px-2 w-full">
+    <% if @gigs&.any? %>
+      <!-- Group gigs by date -->
+      <% @gigs.group_by { |gig| gig[:start_time]&.to_date }.each do |date, gigs| %>
+        <% if date %>
+          <h2 class="font-semibold p-4">
+            <%= date.strftime("%A, %B %d, %Y") %>
+          </h2>
+        <% end %>
+        
+        <% gigs.each do |gig| %>
+          <%= render 'gig_row', gig: gig %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p class="italic p-4">No gigs found</p>
+    <% end %>
+  </div>
+</div>

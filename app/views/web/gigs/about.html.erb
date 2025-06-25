@@ -1,0 +1,73 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold text-center mb-6">About</h1>
+  
+  <div class="flex flex-col items-center">
+    <!-- TODO: Move lmllogo.png to Rails assets -->
+    <%= image_tag 'lmllogo.png', class: 'w-48 h-48 md:w-72 md:h-72 mb-10 object-contain', alt: 'Live Music Locator Logo' %>
+    
+    <!-- TODO: Implement getHeading() equivalent for location-specific content -->
+    <h2 class="text-2xl font-semibold text-center mb-4">About Live Music Locator</h2>
+    
+    <div class="max-w-4xl text-center space-y-4 mb-8">
+      <p>
+        All data is verified within 48 hours of show dates. If you notice any 
+        discrepancies, please send us an email.
+      </p>
+      
+      <!-- TODO: Implement getPartners() equivalent for location-specific partners -->
+      <p>
+        We work with local venues and promoters to provide the most accurate 
+        information about live music events in your area.
+      </p>
+      
+      <p>
+        Our free API is available for developers, venues, and anyone who wants 
+        to help promote live music. We're always looking for volunteers to help 
+        us expand to new areas.
+      </p>
+      
+      <div class="space-y-2">
+        <p>
+          Website: 
+          <%= link_to 'https://livemusiclocator.com.au', 
+              'https://livemusiclocator.com.au', 
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              class: 'text-customBlue underline hover:text-blue-700' %>
+        </p>
+        <p>
+          Email: 
+          <%= mail_to 'info@livemusiclocator.com.au', 
+              'info@livemusiclocator.com.au',
+              class: 'text-customBlue underline hover:text-blue-700' %>
+        </p>
+      </div>
+    </div>
+
+    <!-- Team Members Section -->
+    <div class="w-full max-w-4xl">
+      <h3 class="text-xl font-semibold mb-4">Volunteer Team</h3>
+      <div class="mb-8">
+        <% team_members.each do |member| %>
+          <div class="flex flex-col md:flex-row justify-between mb-2">
+            <span class="font-semibold md:w-1/3"><%= member[:name] %></span>
+            <span class="md:w-2/3"><%= member[:role] %></span>
+          </div>
+        <% end %>
+      </div>
+
+      <h3 class="text-xl font-semibold mb-4">Directors</h3>
+      <div>
+        <% key_members.each do |member| %>
+          <div class="flex flex-col md:flex-row justify-between mb-2">
+            <span class="font-semibold md:w-1/3"><%= member[:name] %></span>
+            <span class="md:w-2/3"><%= member[:role] %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TODO: Define text-customBlue CSS class -->
+<!-- TODO: Move team member data to Rails helpers or YAML file -->

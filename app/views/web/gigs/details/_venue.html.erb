@@ -1,0 +1,21 @@
+<div class="flex items-start space-x-3">
+  <!-- Heroicon: map-pin -->
+  <svg class="w-5 h-5 text-gray-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+  </svg>
+  <div class="flex-1">
+    <h3 class="text-sm font-medium text-gray-900 mb-1">Venue</h3>
+    <p class="text-sm text-gray-600 font-medium"><%= gig.dig(:venue, :name) || gig[:venue_name] %></p>
+    <% venue_address = gig.dig(:venue, :address) || gig[:address] %>
+    <% if venue_address.present? %>
+      <p class="text-sm text-gray-600"><%= venue_address %></p>
+      <div class="mt-2">
+        <%= link_to "Get Directions", 
+            "https://maps.google.com/?q=#{CGI.escape(venue_address)}", 
+            target: "_blank",
+            rel: "noopener noreferrer",
+            class: "inline-flex items-center text-sm text-blue-600 hover:text-blue-800 underline" %>
+      </div>
+    <% end %>
+  </div>
+</div>

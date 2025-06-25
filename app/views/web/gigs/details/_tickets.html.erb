@@ -1,0 +1,18 @@
+<div class="mt-4">
+  <%= link_to gig[:ticket_url], 
+      target: "_blank",
+      rel: "noopener noreferrer",
+      class: "inline-flex items-center justify-center w-full px-4 py-3 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200" do %>
+    Gig Details
+  <% end %>
+  <!-- TODO: Add ticket status support for selling_fast and sold_out states -->
+  <% if gig[:ticket_status] == 'selling_fast' %>
+    <div class="mt-2 text-xs text-center text-orange-600 font-medium">
+      Selling Fast!
+    </div>
+  <% elsif gig[:ticket_status] == 'sold_out' %>
+    <div class="mt-2 text-xs text-center text-red-600 font-medium">
+      Sold Out
+    </div>
+  <% end %>
+</div>

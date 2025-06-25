@@ -1,0 +1,112 @@
+<article class="flex flex-col snap-start p-4">
+  <!-- Gig Header -->
+  <header class="flex justify-between flex-row pb-2">
+    <hgroup class="break-words text-pretty leading-loose">
+      <h3 class="flex text-xl font-bold items-center">
+        <!-- Festival Logos -->
+        <% if gig[:series] == "lbmf" %>
+          <!-- TODO: Move lbmf2024logo.png to Rails assets -->
+          <%= image_tag 'lbmf2024logo.png', class: 'm-2 flex-shrink w-10', alt: 'LBMF Logo' %>
+        <% elsif gig[:series] == "stkildafestival2025" %>
+          <!-- TODO: Move skf_blacklogo.svg to Rails assets -->
+          <%= image_tag 'skf_blacklogo.svg', class: 'm-2 flex-shrink w-10', alt: 'St Kilda Festival Logo' %>
+        <% end %>
+        
+        <%= gig[:name] %>
+        
+        <!-- Status Indicators -->
+        <% if gig[:status] == "cancelled" %>
+          <span class="text-red-600 ml-2">(CANCELLED)</span>
+        <% end %>
+        
+        <% if gig[:ticket_status] == "selling_fast" %>
+          <div class="text-xs font-medium rounded-full bg-red-200 p-2 m-2">
+            SELLING FAST
+          </div>
+        <% elsif gig[:ticket_status] == "sold_out" %>
+          <div class="text-xs font-medium rounded-full bg-red-200 p-2 m-2">
+            SOLD OUT
+          </div>
+        <% end %>
+      </h3>
+    </hgroup>
+    
+    <!-- TODO: Implement SaveGigButton functionality -->
+    <button class="p-2 text-gray-400 hover:text-red-500 transition-colors duration-200" title="Save Gig">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Venue and Time Info -->
+  <aside class="flex flex-col">
+    <!-- Venue Information -->
+    <div class="flex gap-x-1 pb-2 items-start text-sm">
+      <!-- Heroicon: map-pin -->
+      <svg class="text-gray-500 size-4 shrink-0 m-1" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+      </svg>
+      <div aria-label="Venue">
+        <p class="font-semibold leading-6">
+          <%= gig.dig(:venue, :name) || gig[:venue_name] %>
+        </p>
+        <p class="text-gray-500" aria-label="Venue address">
+          <%= gig.dig(:venue, :address) || gig[:address] %>
+        </p>
+        <% venue_location_url = gig.dig(:venue, :location_url) %>
+        <% if venue_location_url.present? %>
+          <p>
+            <%= link_to venue_location_url, 
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                class: 'text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline' do %>
+              Get directions 
+              <!-- Heroicon: arrow-top-right-on-square -->
+              <svg class="size-4 self-center ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+            <% end %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Time Information -->
+    <% if gig[:start_time].present? %>
+      <div class="flex gap-x-1 items-start text-sm">
+        <!-- Heroicon: clock -->
+        <svg class="size-4 shrink-0 m-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <ul class="font-semibold">
+          <li aria-label="Time">
+            <!-- TODO: Implement DateTimeDisplay component functionality -->
+            <%= gig[:start_time]&.strftime("%A, %B %d, %Y at %l:%M %p") %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
+  </aside>
+
+  <!-- Genres -->
+  <% if gig[:genres]&.any? %>
+    <div class="flex gap-2 flex-wrap p-4">
+      <% gig[:genres].each do |genre| %>
+        <span class="bg-lmlpink text-white text-xs font-medium p-2">
+          <%= genre.is_a?(Hash) ? genre[:value] || genre['value'] : genre %>
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- More Information Link -->
+  <%= link_to web_gig_path(gig), 
+      class: 'text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline p-1 items-start text-sm' do %>
+    ... more information
+  <% end %>
+</article>
+
+<!-- TODO: Define bg-lmlpink CSS class -->
+<!-- TODO: Implement DateTimeDisplay component as Rails helper -->
+<!-- TODO: Implement SaveGigButton functionality -->

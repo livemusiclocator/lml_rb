@@ -1,0 +1,59 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold text-center mb-6">Events</h1>
+  
+  <div class="flex flex-col items-center">
+    <!-- TODO: Move lbmf2024logo.png to Rails assets -->
+    <%= image_tag 'lbmf2024logo.png', 
+        class: 'w-48 h-48 md:w-72 md:h-72 mb-10 object-contain', 
+        alt: 'Leaps and Bounds Music Festival 2024 Logo' %>
+    
+    <div class="max-w-4xl text-center space-y-6">
+      <h2 class="text-2xl font-semibold">Leaps and Bounds Music Festival</h2>
+      
+      <p class="text-lg font-medium">July 25-28, 2024</p>
+      
+      <div class="space-y-4 text-left">
+        <p>
+          The Leaps and Bounds Music Festival has grown from a small community 
+          gathering to one of the region's premier music events. What started as 
+          a single day celebration has evolved into a four-day festival showcasing 
+          the incredible diversity of our local music scene.
+        </p>
+        
+        <p>
+          Our mission is to provide a platform for emerging artists while bringing 
+          together established acts and music lovers from across the community. The 
+          festival celebrates all genres, from indie rock and electronic music to 
+          folk, jazz, and everything in between.
+        </p>
+        
+        <p>
+          This year's festival features over 100 performances across multiple venues, 
+          offering something for every musical taste. From intimate acoustic sets to 
+          high-energy main stage performances, the festival creates connections between 
+          artists and audiences that last long after the final note is played.
+        </p>
+        
+        <p>
+          Use Live Music Locator to navigate between venues, discover new artists, 
+          and plan your festival experience. Our real-time updates help you stay 
+          informed about set times, venue changes, and special announcements throughout 
+          the festival weekend.
+        </p>
+      </div>
+      
+      <div class="pt-4">
+        <p>
+          For more information and tickets, visit: 
+          <%= link_to 'https://leapsandboundsfestival.com.au', 
+              'https://leapsandboundsfestival.com.au', 
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              class: 'text-customBlue underline hover:text-blue-700' %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TODO: Define text-customBlue CSS class -->

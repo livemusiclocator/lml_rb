@@ -1,2 +1,103 @@
-<h1>Web::Gigs#show</h1>
-<p>Find me in app/views/web/gigs/show.html.erb</p>
+<!-- Set back button for Explorer layout navigation -->
+<% content_for :show_back_button, true %>
+
+<div class="bg-white min-h-screen">
+  <% if @gig %>
+    <!-- Hero Image Section -->
+    <div class="relative h-64">
+      <% if @gig[:hero_image].present? %>
+        <div class="absolute inset-0 bg-cover bg-center blur-sm" style="background-image: url('<%= @gig[:hero_image] %>')"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <%= image_tag @gig[:hero_image], class: "relative z-10 w-full h-full object-cover" %>
+      <% else %>
+        <!-- TODO: Hero image placeholder functionality needs implementation -->
+        <div class="w-full h-full flex items-center justify-center bg-gradient-to-r from-purple-400 to-pink-400">
+          <span class="text-white text-xl font-semibold">No Image Available</span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Content Section -->
+    <div class="max-w-6xl mx-auto p-6">
+      <!-- Title and Basic Info -->
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @gig[:name] %></h1>
+        <p class="text-lg text-gray-600"><%= @gig.dig(:venue, :name) || @gig[:venue_name] %></p>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content Column -->
+        <div class="lg:col-span-2">
+          <!-- Description Section -->
+          <% if @gig[:description].present? %>
+            <div class="mb-8">
+              <h2 class="text-2xl font-semibold text-gray-900 mb-4">About this event</h2>
+              <div class="prose max-w-none text-gray-700">
+                <!-- TODO: react-markdown with heading remapping needs implementation -->
+                <%= simple_format(@gig[:description]) %>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Genres Section -->
+          <% if @gig[:genres]&.any? %>
+            <%= render 'web/gigs/details/genres', gig: @gig %>
+          <% end %>
+
+          <!-- Festival Logos Section -->
+          <% if show_festival_logo?(@gig) %>
+            <div class="mb-8">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Part of</h2>
+              <div class="flex items-center space-x-4">
+                <% if @gig[:series]&.include?('lbmf') %>
+                  <!-- TODO: LBMF logo needs to be added to assets -->
+                  <%= image_tag 'lbmf2024logo.png', class: 'h-16', alt: 'LBMF Festival' %>
+                <% end %>
+                <% if @gig[:series]&.include?('stkildafestival') %>
+                  <!-- TODO: St Kilda Festival logo needs to be added to assets -->
+                  <%= image_tag 'skf_blacklogo.svg', class: 'h-16', alt: 'St Kilda Festival' %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Sidebar Column -->
+        <aside class="bg-gray-50 rounded-lg p-6 h-fit">
+          <div class="space-y-6">
+            <!-- DateTime Section -->
+            <%= render 'web/gigs/details/date_time', gig: @gig %>
+            
+            <!-- Venue Section -->
+            <%= render 'web/gigs/details/venue', gig: @gig %>
+            
+            <!-- Sets Section -->
+            <% if @gig[:sets]&.any? %>
+              <%= render 'web/gigs/details/sets', gig: @gig %>
+            <% end %>
+            
+            <!-- Prices Section -->
+            <% if @gig[:prices]&.any? %>
+              <%= render 'web/gigs/details/prices', gig: @gig %>
+            <% end %>
+            
+            <!-- Tickets Section -->
+            <% if @gig[:ticket_url].present? %>
+              <%= render 'web/gigs/details/tickets', gig: @gig %>
+            <% end %>
+            
+            <!-- Info Tags Section -->
+            <% if @gig[:info_tags]&.any? %>
+              <%= render 'web/gigs/details/info_tags', gig: @gig %>
+            <% end %>
+          </div>
+        </aside>
+      </div>
+    </div>
+  <% else %>
+    <div class="flex items-center justify-center min-h-screen">
+      <p class="text-gray-500 text-lg">Gig not found</p>
+    </div>
+  <% end %>
+</div>

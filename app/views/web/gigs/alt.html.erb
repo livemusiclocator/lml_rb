@@ -1,0 +1,54 @@
+<!-- Alternative gigs list view (without Explorer layout) -->
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold text-center mb-6">Live Music Events</h1>
+  
+  <!-- Simple Filter -->
+  <%= render 'web/shared/gig_filter' %>
+  
+  <!-- Gigs List -->
+  <div class="max-w-4xl mx-auto">
+    <% if @gigs&.any? %>
+      <div class="space-y-4">
+        <% @gigs.group_by { |gig| gig[:start_time]&.to_date }.each do |date, gigs| %>
+          <% if date %>
+            <h2 class="text-2xl font-semibold border-b border-gray-200 pb-2 mb-4">
+              <%= date.strftime("%A, %B %d, %Y") %>
+            </h2>
+          <% end %>
+          
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <% gigs.each do |gig| %>
+              <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h3 class="text-lg font-semibold mb-2">
+                  <%= link_to gig[:name], web_gig_path(gig), class: "text-blue-600 hover:text-blue-800" %>
+                </h3>
+                
+                <div class="text-sm text-gray-600 space-y-1">
+                  <p class="font-medium">
+                    <%= gig.dig(:venue, :name) || gig[:venue_name] %>
+                  </p>
+                  <p>
+                    <%= gig[:start_time]&.strftime("%l:%M %p") %>
+                  </p>
+                  <% if gig[:genres]&.any? %>
+                    <div class="flex flex-wrap gap-1 mt-2">
+                      <% gig[:genres].first(3).each do |genre| %>
+                        <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                          <%= genre.is_a?(Hash) ? genre[:value] || genre['value'] : genre %>
+                        </span>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center text-gray-500 py-8">
+        <p class="text-lg">No gigs found for the selected criteria.</p>
+      </div>
+    <% end %>
+  </div>
+</div>
