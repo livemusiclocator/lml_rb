@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   namespace :web do
-    root 'gigs#index'
+    # All routes come from gigs_controller for now
+    get '/', to: 'gigs#index'           # GigList (Explorer view)
+    get '/about', to: 'gigs#about'      # About page
+    get '/events', to: 'gigs#events'    # Events page
+    get '/alt', to: 'gigs#alt'          # Alternative GigList view
+    get '/gigs/:id', to: 'gigs#show'    # SingleGigDetails
+    get '/alt/gigs/:id', to: 'gigs#show' # Same SingleGigDetails (alternative route)
   end
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
