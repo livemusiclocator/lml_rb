@@ -16,20 +16,41 @@
 }
 
 // Explorer overlay transitions and responsive behavior
-.explorer-overlay {
+.explorer-overlay,
+[data-controller="explorer-overlay"] {
   transition: height 0.15s ease-in-out;
 
   &.is-minimised {
     border: 1px solid #e5e7eb;
     border-radius: 1.5rem 1.5rem 0 0;
     height: 10rem; // 160px
-  }
 
-  @media (min-width: 768px) {
-    &.is-minimised {
+    @media (min-width: 768px) {
       border-radius: 1.5rem;
     }
   }
+
+  // Expanded state
+  &:not(.is-minimised) {
+    height: 100%;
+
+    @media (min-width: 768px) {
+      height: 55rem;
+    }
+  }
+}
+
+// Screen reader only utility class
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 // Ticket status styling (from React styled-components)

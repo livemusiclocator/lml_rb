@@ -6,10 +6,16 @@
   
   <!-- Filter Overlay Panel -->
   <div 
-    class="z-20 absolute bottom-0 left-0 w-full max-w-2xl p-0 h-full md:max-h-full flex flex-col py-2 overflow-hidden group bg-white md:rounded-3xl md:shadow-xl ease-in-out duration-150 transition-[height] m-0 md:m-2 h-full md:h-[55rem]"
+    class="z-20 absolute bottom-0 left-0 w-full max-w-2xl p-0 h-full md:max-h-full flex flex-col py-2 overflow-hidden group bg-white md:rounded-3xl md:shadow-xl ease-in-out duration-150 transition-[height] m-0 md:m-2"
     data-controller="explorer-overlay"
     data-explorer-overlay-expanded-class="h-full md:h-[55rem]"
     data-explorer-overlay-minimized-class="is-minimised border rounded-t-3xl h-40"
+    data-explorer-overlay-expanded-value="true"
+    data-explorer-overlay-auto-expand-on-navigation-value="true"
+    data-action="keydown->explorer-overlay#keydown touchstart->explorer-overlay#touchStart touchend->explorer-overlay#touchEnd"
+    role="dialog"
+    aria-expanded="true"
+    aria-label="Content overlay"
   >
     <!-- Navigation Bar -->
     <div class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
@@ -33,6 +39,8 @@
         data-action="click->explorer-overlay#toggle"
         data-explorer-overlay-target="toggleButton"
         title="Toggle view"
+        type="button"
+        aria-label="Toggle overlay"
       >
         <!-- TODO: Use Bootstrap Icons bi-pin-map-fill (expanded) and bi-caret-up-fill (minimized) -->
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" data-explorer-overlay-target="expandIcon">
