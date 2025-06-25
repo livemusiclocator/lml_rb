@@ -60,7 +60,7 @@ class Web::GigsController < ApplicationController
     {
       id: id.to_i,
       name: 'Jazz Night at The Corner',
-      description: 'An amazing evening of jazz music featuring local and international artists.',
+      #description: 'An amazing evening of jazz music featuring local and international artists.',
       venue: {
         name: 'The Corner Hotel',
         address: '57 Swan St, Richmond VIC 3121'
