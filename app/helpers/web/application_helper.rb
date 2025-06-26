@@ -46,7 +46,7 @@ module Web::ApplicationHelper
         this_week: { id: 'this_week', caption: 'This Week', selected: false, ui: 'button' },
         next_week: { id: 'next_week', caption: 'Next Week', selected: false, ui: 'button' },
         this_month: { id: 'this_month', caption: 'This Month', selected: false, ui: 'button' },
-        custom_date: { id: 'customDate', caption: 'Custom Date', selected: false, ui: 'datetime' }
+        custom_date: { id: 'customDate', caption: 'Specific date', selected: false, ui: 'datetime' }
       },
       tag_categories: [
         {

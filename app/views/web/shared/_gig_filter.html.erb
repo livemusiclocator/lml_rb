@@ -1,19 +1,637 @@
-<!-- TODO: Implement GigFilter component functionality -->
-<!-- This is a simplified version - use the full GigFilters component when ready -->
-<div class="p-4 border-b border-gray-200">
-  <div class="mb-4">
-    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Date</label>
-    <%= form_with url: request.path, method: :get, local: true, class: "flex items-center space-x-4" do |form| %>
-      <%= form.date_field :start_date, 
-          value: params[:start_date], 
-          class: "px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500",
-          placeholder: "Start date" %>
-      <span class="text-gray-500">to</span>
-      <%= form.date_field :end_date, 
-          value: params[:end_date], 
-          class: "px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500",
-          placeholder: "End date" %>
-      <%= form.submit "Filter", class: "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
-    <% end %>
+<div
+  class="w-full min-width-sm border border-gray-200 rounded shadow transition-[max-height] flex flex-col bg-white overflow-none"
+>
+  <div
+    class="mb-2 px-4 min bg-white overflow-scroll flex-1 min-h-0 max-h-[50vh]"
+  >
+    <h2 class="font-semibold text-sm text-center">Filters</h2>
+    <form method="get">
+      <div class="flex flex-col">
+        <h3 class="text-sm font-medium">When</h3>
+        <div class="flex flex-row items-baseline flex-wrap justify-start gap-1">
+          <% gig_filter_options[:date_ranges].each do | k,v | %>
+            <%= k %>
+            <%= v %>
+            <label
+              for="toggle-<%=k %>"
+              class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+               type="radio"
+               class="absolute h-4 w-4 -left-4 -top-4"
+               name="dateRange"
+               id="toggle-<%=k %>"
+               value="<%=k %>"
+             />
+              <% if v[:ui] =="datetime"  %>
+              <input
+                type="date"
+                required=""
+                class="peer items-center disabled:hidden rounded-full text-sm font-medium text-gray-700 cursor-pointer mx-2 invalid:ring-2 invalid:ring-red-500 invalid:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 peer datetime"
+                id="<%=k %>"
+                disabled=""
+                name="customDate"
+              />
+              <% end %>
+              <span
+                class="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline"
+              ><%= v[:caption] %></span></label
+                                        >
+        <% end  %>
+        <label
+          for="toggle-tomorrow"
+          class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+        ><input
+           type="radio"
+           class="absolute h-4 w-4 -left-4 -top-4"
+           name="dateRange"
+           id="toggle-tomorrow"
+           value="tomorrow"
+         /><span
+             class="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline"
+           >Tomorrow</span
+                    ></label
+                     ><label
+                        for="toggle-weekend"
+                        class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+                      ><input
+                         type="radio"
+                         class="absolute h-4 w-4 -left-4 -top-4"
+                         name="dateRange"
+                         id="toggle-weekend"
+                         value="weekend"
+                       /><span
+                           class="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline"
+                         >Weekend</span
+                                 ></label
+                                  ><label
+                                     for="toggle-thisWeek"
+                                     class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+                                   ><input
+                                      type="radio"
+                                      class="absolute h-4 w-4 -left-4 -top-4"
+                                      name="dateRange"
+                                      id="toggle-thisWeek"
+                                      value="thisWeek"
+                                    /><span
+                                        class="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline"
+                                      >This Week</span
+                                                ></label
+                                                 ><label
+                                                    for="toggle-nextWeek"
+                                                    class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+                                                  ><input
+                                                     type="radio"
+                                                     class="absolute h-4 w-4 -left-4 -top-4"
+                                                     name="dateRange"
+                                                     id="toggle-nextWeek"
+                                                     value="nextWeek"
+                                                   /><span
+                                                       class="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline"
+                                                     >Next week</span
+                                                               ></label
+                                                                ><label
+                                                                   for="toggle-customDate"
+                                                                   class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+                                                                 ><input
+                                                                    type="radio"
+                                                                    class="absolute h-4 w-4 -left-4 -top-4"
+                                                                    name="dateRange"
+                                                                    id="toggle-customDate"
+                                                                    value="customDate"
+                                                                  /><input
+                                                                      type="date"
+                                                                      required=""
+                                                                      class="peer items-center disabled:hidden rounded-full text-sm font-medium text-gray-700 cursor-pointer mx-2 invalid:ring-2 invalid:ring-red-500 invalid:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 peer datetime"
+                                                                      id="customDate"
+                                                                      disabled=""
+                                                                      name="customDate"
+                                                                      value="2025-06-26"
+                                                                    /><span
+                                                                        class="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline"
+                                                                      >Specific date</span
+                                                                                    ></label
+                                                                                     >
+        </div>
+        <h3 class="text-sm font-medium">Genre</h3>
+        <div class="flex flex-row items-baseline flex-wrap justify-start gap-1">
+          <label
+            for="toggle-genre:pop"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:pop"
+              value="genre:pop"
+            /><span class="px-4 text-nowrap">pop (5)</span></label
+          ><label
+            for="toggle-genre:jazz"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:jazz"
+              value="genre:jazz"
+            /><span class="px-4 text-nowrap">jazz (4)</span></label
+          ><label
+            for="toggle-genre:rock"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:rock"
+              value="genre:rock"
+            /><span class="px-4 text-nowrap">rock (3)</span></label
+          ><label
+            for="toggle-genre:blues"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:blues"
+              value="genre:blues"
+            /><span class="px-4 text-nowrap">blues (2)</span></label
+          ><label
+            for="toggle-genre:acoustic"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:acoustic"
+              value="genre:acoustic"
+            /><span class="px-4 text-nowrap">acoustic (2)</span></label
+          ><label
+            for="toggle-genre:country"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:country"
+              value="genre:country"
+            /><span class="px-4 text-nowrap">country (2)</span></label
+          ><label
+            for="toggle-genre:dj"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:dj"
+              value="genre:dj"
+            /><span class="px-4 text-nowrap">dj (2)</span></label
+          ><label
+            for="toggle-genre:house"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:house"
+              value="genre:house"
+            /><span class="px-4 text-nowrap">house (2)</span></label
+          ><label
+            for="toggle-genre:r&amp;b and soul"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:r&amp;b and soul"
+              value="genre:r&amp;b and soul"
+            /><span class="px-4 text-nowrap">r&amp;b and soul (1)</span></label
+          ><label
+            for="toggle-genre:ska"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:ska"
+              value="genre:ska"
+            /><span class="px-4 text-nowrap">ska (1)</span></label
+          ><label
+            for="toggle-genre:reggae"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:reggae"
+              value="genre:reggae"
+            /><span class="px-4 text-nowrap">reggae (1)</span></label
+          ><label
+            for="toggle-genre:current"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:current"
+              value="genre:current"
+            /><span class="px-4 text-nowrap">current (1)</span></label
+          ><label
+            for="toggle-genre:funk"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:funk"
+              value="genre:funk"
+            /><span class="px-4 text-nowrap">funk (1)</span></label
+          ><label
+            for="toggle-genre:singalong"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:singalong"
+              value="genre:singalong"
+            /><span class="px-4 text-nowrap">singalong (1)</span></label
+          ><label
+            for="toggle-genre:open mic"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:open mic"
+              value="genre:open mic"
+            /><span class="px-4 text-nowrap">open mic (1)</span></label
+          ><label
+            for="toggle-genre:post punk"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:post punk"
+              value="genre:post punk"
+            /><span class="px-4 text-nowrap">post punk (1)</span></label
+          ><label
+            for="toggle-genre:folk"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:folk"
+              value="genre:folk"
+            /><span class="px-4 text-nowrap">folk (1)</span></label
+          ><label
+            for="toggle-genre:irish"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:irish"
+              value="genre:irish"
+            /><span class="px-4 text-nowrap">irish (1)</span></label
+          ><label
+            for="toggle-genre:afro-jazz"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:afro-jazz"
+              value="genre:afro-jazz"
+            /><span class="px-4 text-nowrap">afro-jazz (1)</span></label
+          ><label
+            for="toggle-genre:soul"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:soul"
+              value="genre:soul"
+            /><span class="px-4 text-nowrap">soul (1)</span></label
+          ><label
+            for="toggle-genre:honky-tonk"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:honky-tonk"
+              value="genre:honky-tonk"
+            /><span class="px-4 text-nowrap">honky-tonk (1)</span></label
+          ><label
+            for="toggle-genre:techno"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-genre:techno"
+              value="genre:techno"
+            /><span class="px-4 text-nowrap">techno (1)</span></label
+          >
+        </div>
+        <h3 class="text-sm font-medium">Other</h3>
+        <div class="flex flex-row items-baseline flex-wrap justify-start gap-1">
+          <label
+            for="toggle-information:free"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-information:free"
+              value="information:free"
+            /><span class="px-4 text-nowrap">free (10)</span></label
+          ><label
+            for="toggle-information:public bar"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="tags"
+              id="toggle-information:public bar"
+              value="information:public bar"
+            /><span class="px-4 text-nowrap">public bar (1)</span></label
+          >
+        </div>
+        <h3 class="text-sm font-medium">Venues</h3>
+        <div class="flex flex-row items-baseline flex-wrap justify-start gap-1">
+          <label
+            for="toggle-68524262-c33c-450c-856f-3a7f436fa441"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-68524262-c33c-450c-856f-3a7f436fa441"
+              value="68524262-c33c-450c-856f-3a7f436fa441"
+            /><span class="px-4 text-nowrap">Bar Open (2)</span></label
+          ><label
+            for="toggle-0f7d1c80-f3cf-4250-ba14-6ff5fa1a397a"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-0f7d1c80-f3cf-4250-ba14-6ff5fa1a397a"
+              value="0f7d1c80-f3cf-4250-ba14-6ff5fa1a397a"
+            /><span class="px-4 text-nowrap">Tote Hotel (2)</span></label
+          ><label
+            for="toggle-d4aeb9fa-a50a-4fb3-b7cd-b312ede051a1"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-d4aeb9fa-a50a-4fb3-b7cd-b312ede051a1"
+              value="d4aeb9fa-a50a-4fb3-b7cd-b312ede051a1"
+            /><span class="px-4 text-nowrap">The Old Bar (2)</span></label
+          ><label
+            for="toggle-3bbd543b-7624-42b1-8501-38a5056b0188"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-3bbd543b-7624-42b1-8501-38a5056b0188"
+              value="3bbd543b-7624-42b1-8501-38a5056b0188"
+            /><span class="px-4 text-nowrap">The Prince Hotel (1)</span></label
+          ><label
+            for="toggle-b7566ed1-b7cd-47cb-8045-50b30b0d6bf6"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-b7566ed1-b7cd-47cb-8045-50b30b0d6bf6"
+              value="b7566ed1-b7cd-47cb-8045-50b30b0d6bf6"
+            /><span class="px-4 text-nowrap"
+              >Hotel Esplanade - Main Bar (1)</span
+            ></label
+          ><label
+            for="toggle-2f971e3c-189d-45ae-91ce-f207a3fe523c"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-2f971e3c-189d-45ae-91ce-f207a3fe523c"
+              value="2f971e3c-189d-45ae-91ce-f207a3fe523c"
+            /><span class="px-4 text-nowrap">Freddie Wimpoles (1)</span></label
+          ><label
+            for="toggle-d8269190-9ef4-481e-b18f-1c4f20130d0d"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-d8269190-9ef4-481e-b18f-1c4f20130d0d"
+              value="d8269190-9ef4-481e-b18f-1c4f20130d0d"
+            /><span class="px-4 text-nowrap">Ellora (1)</span></label
+          ><label
+            for="toggle-ec6e1aaf-5d1b-4161-b6cf-48991a9a557e"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-ec6e1aaf-5d1b-4161-b6cf-48991a9a557e"
+              value="ec6e1aaf-5d1b-4161-b6cf-48991a9a557e"
+            /><span class="px-4 text-nowrap">The Dogs Bar (1)</span></label
+          ><label
+            for="toggle-ac2fa0b6-0f7d-4233-a514-262e6c6c113b"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-ac2fa0b6-0f7d-4233-a514-262e6c6c113b"
+              value="ac2fa0b6-0f7d-4233-a514-262e6c6c113b"
+            /><span class="px-4 text-nowrap">Bad Decisions Bar (1)</span></label
+          ><label
+            for="toggle-e8154d55-0ed5-4842-bfc1-d129fcc8f282"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-e8154d55-0ed5-4842-bfc1-d129fcc8f282"
+              value="e8154d55-0ed5-4842-bfc1-d129fcc8f282"
+            /><span class="px-4 text-nowrap">The Workers Club (1)</span></label
+          ><label
+            for="toggle-c4d6d559-dc0a-4c78-b58d-d67492eaf509"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-c4d6d559-dc0a-4c78-b58d-d67492eaf509"
+              value="c4d6d559-dc0a-4c78-b58d-d67492eaf509"
+            /><span class="px-4 text-nowrap">Johnny's (1)</span></label
+          ><label
+            for="toggle-e5e26799-1ae9-4196-9cbb-ff70083da58d"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-e5e26799-1ae9-4196-9cbb-ff70083da58d"
+              value="e5e26799-1ae9-4196-9cbb-ff70083da58d"
+            /><span class="px-4 text-nowrap"
+              >Grace Darling Hotel (1)</span
+            ></label
+          ><label
+            for="toggle-2407f3c0-6f4b-4f08-9e15-cb06127dd799"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-2407f3c0-6f4b-4f08-9e15-cb06127dd799"
+              value="2407f3c0-6f4b-4f08-9e15-cb06127dd799"
+            /><span class="px-4 text-nowrap">Bendigo Hotel (1)</span></label
+          ><label
+            for="toggle-c9c90e92-30fc-458e-a566-ef8d21cec26e"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-c9c90e92-30fc-458e-a566-ef8d21cec26e"
+              value="c9c90e92-30fc-458e-a566-ef8d21cec26e"
+            /><span class="px-4 text-nowrap">Railway Hotel (1)</span></label
+          ><label
+            for="toggle-840b43b6-b05c-477b-b0d3-275e72aedd73"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-840b43b6-b05c-477b-b0d3-275e72aedd73"
+              value="840b43b6-b05c-477b-b0d3-275e72aedd73"
+            /><span class="px-4 text-nowrap">Evelyn Hotel (1)</span></label
+          ><label
+            for="toggle-67eddef8-fb90-4c97-b06e-fd75abf2f306"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-67eddef8-fb90-4c97-b06e-fd75abf2f306"
+              value="67eddef8-fb90-4c97-b06e-fd75abf2f306"
+            /><span class="px-4 text-nowrap">Fifth Province (1)</span></label
+          ><label
+            for="toggle-70b63cf7-66f2-4e09-a8aa-b0dfc554ce8f"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-70b63cf7-66f2-4e09-a8aa-b0dfc554ce8f"
+              value="70b63cf7-66f2-4e09-a8aa-b0dfc554ce8f"
+            /><span class="px-4 text-nowrap">Lona (1)</span></label
+          ><label
+            for="toggle-0e9591fc-2b76-4735-8f63-5b105b657eae"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-0e9591fc-2b76-4735-8f63-5b105b657eae"
+              value="0e9591fc-2b76-4735-8f63-5b105b657eae"
+            /><span class="px-4 text-nowrap"
+              >the Horn African Cafe (1)</span
+            ></label
+          ><label
+            for="toggle-f4878849-c3c0-4947-80ec-05da163bacb5"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-f4878849-c3c0-4947-80ec-05da163bacb5"
+              value="f4878849-c3c0-4947-80ec-05da163bacb5"
+            /><span class="px-4 text-nowrap">Uptown Jazz Cafe (1)</span></label
+          ><label
+            for="toggle-efcaafa0-cc1e-4cab-bbdc-68cd51e05276"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-efcaafa0-cc1e-4cab-bbdc-68cd51e05276"
+              value="efcaafa0-cc1e-4cab-bbdc-68cd51e05276"
+            /><span class="px-4 text-nowrap"
+              >Old Plates Record Bar (1)</span
+            ></label
+          ><label
+            for="toggle-2a485a1e-dff0-4571-8cb4-d7ff9ec27404"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-2a485a1e-dff0-4571-8cb4-d7ff9ec27404"
+              value="2a485a1e-dff0-4571-8cb4-d7ff9ec27404"
+            /><span class="px-4 text-nowrap">Nighthawks Bar (1)</span></label
+          ><label
+            for="toggle-681152c0-2f78-43fe-bfc9-d126d4a6ed7f"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-681152c0-2f78-43fe-bfc9-d126d4a6ed7f"
+              value="681152c0-2f78-43fe-bfc9-d126d4a6ed7f"
+            /><span class="px-4 text-nowrap">the Rooks Return (1)</span></label
+          ><label
+            for="toggle-bdcfc167-cf3e-41fb-a829-7951e465b361"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-bdcfc167-cf3e-41fb-a829-7951e465b361"
+              value="bdcfc167-cf3e-41fb-a829-7951e465b361"
+            /><span class="px-4 text-nowrap">Baxter's Lot (1)</span></label
+          ><label
+            for="toggle-3ecc51ae-9cda-418a-9cf4-7d451f1c8e18"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-3ecc51ae-9cda-418a-9cf4-7d451f1c8e18"
+              value="3ecc51ae-9cda-418a-9cf4-7d451f1c8e18"
+            /><span class="px-4 text-nowrap">29th Apartment (1)</span></label
+          ><label
+            for="toggle-675066e5-363e-4d97-bbc7-172be0daf651"
+            class="inline-flex justify-center min-w-min py-1 text-xs font-medium cursor-pointer rounded-full transition-colors bg-gray-200 text-gray-700 has-[:checked]:bg-indigo-200 has-[:checked]:text-indigo-700 has-[:checked]:hover:bg-indigo-300 undefined relative overflow-hidden"
+            ><input
+              type="checkbox"
+              class="absolute h-4 w-4 -left-4 -top-4"
+              name="venues"
+              id="toggle-675066e5-363e-4d97-bbc7-172be0daf651"
+              value="675066e5-363e-4d97-bbc7-172be0daf651"
+            /><span class="px-4 text-nowrap">Bodriggy Brew Pub (1)</span></label
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="flex justify-between items-start p-1">
+    <div style="overflow: hidden"></div>
+    <button
+      style="margin-left: 1rem"
+      class="bg-gray-800 hover:bg-gray-900 text-white font-medium p-1 rounded text-xs"
+    >
+      close
+    </button>
   </div>
 </div>
