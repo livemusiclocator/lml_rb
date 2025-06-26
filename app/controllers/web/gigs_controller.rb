@@ -10,7 +10,7 @@ class Web::GigsController < ApplicationController
   def alt
     # Alternative gigs list view (without Explorer layout)
     @gigs = stub_gigs_data
-    render :index
+    render layout: 'web/layouts/application'
   end
 
   def show
