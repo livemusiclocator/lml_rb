@@ -8,7 +8,7 @@ module Tasks
 
     puts "Fetching SPA manifest from Firebase..."
 
-    firebase_base = ENV['SPA_BASE_URL'] || 'https://your-project.web.app'
+    firebase_base = ENV['SPA_BASE_URL'] || 'https://lml-seo.web.app/rails_spa' # temp endpoint name - probably needs to be configd
 
     manifest_url = "#{firebase_base}/manifest.json"
     manifest_response = fetch_url(manifest_url)
