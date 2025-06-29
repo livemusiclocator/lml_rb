@@ -1,0 +1,8 @@
+# Please run rake spa:fetch to update this file
+---
+production:
+  spa.js: https://lml-seo.web.app/rails_spa/lml.js
+  spa.css: https://lml-seo.web.app/rails_spa/assets/index-bPnIZX_I.css
+development:
+  spa.js: https://lml-seo.web.app/rails_spa/lml.js
+  spa.css: https://lml-seo.web.app/rails_spa/assets/index-bPnIZX_I.css
