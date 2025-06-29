@@ -1,5 +1,5 @@
 class Web::ExplorerController < Web::ApplicationController
-
+  layout 'web/layouts/explorer'
   def index
     render
   end

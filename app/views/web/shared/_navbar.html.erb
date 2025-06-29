@@ -1,0 +1,67 @@
+<header class="w-full bg-gray-800 text-white px-2 sticky top-0 z-50">
+  <div class="max-w-8xl mx-auto py-2 px-1">
+    <div class="flex justify-start items-center space-x-1">
+      <button
+  class="hamburger-menu text-gray-200 focus:outline-none lg:hidden"
+  data-controller="mobile-menu"
+  data-action="click->mobile-menu#toggle"
+>
+  <!-- TODO: Replace with actual Heroicons Bars3Icon -->
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <div class="flex-1 pl-2 logo">
+  <%= link_to web_root_path, class: "flex justify-start items-center text-slate-50 space-x-2 font-sans" do %>
+    <!-- TODO: Replace with actual theme brandmark -->
+    <%= image_tag 'web/lml-brandmark.svg', class: "flex-shrink w-10", alt: "Brand Logo" %>
+    <span class="text-xl"><!-- TODO: Replace with actual theme title -->Live Music Locator</span>
+  <% end %>
+      </div>
+      <div class="hidden lg:block desktop-menu">
+  <ul class="px-2 pt-2 pb-3 flex flex-row sm:px-3">
+    <li>
+      <%= link_to web_root_path, class: nav_item_classes(current_page?(web_root_path)) do %>
+        Home
+      <% end %>
+    </li>
+    <li>
+      <%= link_to web_about_path, class: nav_item_classes(current_page?(web_about_path)) do %>
+        About
+      <% end %>
+    </li>
+    <li>
+      <%= link_to web_events_path, class: nav_item_classes(current_page?(web_events_path)) do %>
+        Events
+      <% end %>
+    </li>
+  </ul>
+      </div>
+    </div>
+  </div>
+  <div
+  class="lg:hidden shadow-md"
+  data-mobile-menu-target="menu"
+  data-mobile-menu-class="absolute left-0"
+  data-mobile-menu-hidden-class="hidden"
+>
+  <!-- TODO: Mobile menu toggle functionality needs JavaScript implementation -->
+  <ul class="space-y-6 bg-gray-800 px-6 pt-4 pb-8 flex items-end flex-col">
+    <li>
+      <%= link_to web_root_path, class: nav_item_classes(current_page?(web_root_path)) do %>
+        Home
+      <% end %>
+    </li>
+    <li>
+      <%= link_to web_about_path, class: nav_item_classes(current_page?(web_about_path)) do %>
+        About
+      <% end %>
+    </li>
+    <li>
+      <%= link_to web_events_path, class: nav_item_classes(current_page?(web_events_path)) do %>
+        Events
+      <% end %>
+    </li>
+  </ul>
+  </div>
+</header>
