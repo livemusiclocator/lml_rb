@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   namespace :web do
-    get "explorer/index"
-    get "explorer/show"
+    root to: "explorer#index"
+    scope "gigs" do
+      get ":id", to: "explorer#show"
+    end
+    get "/events", to: "explorer#index"
+    get "/about", to: "explorer#index"
   end
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

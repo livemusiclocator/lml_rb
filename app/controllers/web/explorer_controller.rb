@@ -1,9 +1,11 @@
-class Web::ExplorerController < ApplicationController
+class Web::ExplorerController < Web::ApplicationController
+
   def index
-    render :layout => false
+    render
   end
 
   def show
-    render :layout => false
+    @gig = Lml::Gig.find(params[:id])
+    render
   end
 end

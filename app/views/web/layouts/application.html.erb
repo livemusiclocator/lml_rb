@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Google font loading bits  -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link rel="icon" href="/favicon.ico" sizes="48x48">
+        <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
+        <%= spa_preload_tags %>
+        <%= spa_stylesheet_tag %>
+        <title><%= page_title %></title>
+
+    <script>
+     window.APP_CONFIG = {
+         root_path: '/web',
+         gigs_endpoint: '/gigs',
+
+     };
+    </script>
+  </head>
+  <body style="margin: 0">
+      <div id="root"></div>
+      <%= spa_javascript_tag %>
+  </body>
+</html>
