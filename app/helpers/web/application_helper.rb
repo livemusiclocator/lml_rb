@@ -5,7 +5,14 @@ module Web::ApplicationHelper
   STATIC_PAGES = [
     { name: 'About (v2)', page_id: 'about_lml' },
     { name: 'The Team', page_id: 'the-team' },
-    { name: 'Contact', page_id: 'contact' }
+    { name: 'Contact', page_id: 'contact' },
+    {name: "Privacy Policy", page_id:"privacy-policy"},
+    {name: "Tech", page_id:"tech"},
+    {name: "Volunteering", page_id: 'volunteering'},
+    {name: "DIY Gig Guide", page_id: 'diy-gig-guide'},
+    {name: "Fresh Live Music Data", page_id: 'fresh-live-music-data'},
+    {name: "API Documentation", page_id: "api-documentation"},
+    {name: "How To Use Live Music Locator", page_id: "how-to-use-livemusiclocator"}
 
   ].freeze
 
@@ -26,7 +33,7 @@ module Web::ApplicationHelper
     if is_active
       "#{base_styles} font-semibold"
     else
-      "#{base_styles} font-normal transition duration-200 text-slate-300"
+      "#{base_styles} font-normal transition duration-200 hover:text-slate-300"
     end
   end
   def team_members

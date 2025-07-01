@@ -1,17 +1,21 @@
 <% content_for :main do %>
 
-    <div class="min-w-s mx-auto px-2 sm:px-6 lg:px-8">
+    <div class="min-w-s mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex gap-8 py-8 flex-wrap">
         <%= render "web/shared/about_page_nav" %>
 
 
         <main>
-        <div class="p-8">
+        <div class="p-8 prose">
           <%= yield %>
         </div>
       </main>
-
-        </div>
+      <footer>
+        <p>Acknowledgement of Country
+          <br/>We respect and honour Aboriginal and Torres Strait Islander Elders past, present and future.
+          <br/>We acknowledge the stories, traditions and living cultures of Aboriginal and Torres Strait Islander peoples on this land.</p>
+      </footer>
+      </div>
         </div>
 
 <%  end %>

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get "/events", to: "explorer#index"
     get "/about", to: '/high_voltage/pages#show', id: "about", as: :about_page
     get '/about/*id', to: '/high_voltage/pages#show', as: :about_section_page
+    get "/about/contact", to: '/high_voltage/pages#show', id: "contact", as: :about_contact_page
 
   end
   devise_for :admin_users, ActiveAdmin::Devise.config
