@@ -1,0 +1,19 @@
+<% content_for :main do %>
+
+    <div class="min-w-s mx-auto px-2 sm:px-6 lg:px-8">
+      <div class="flex gap-8 py-8 flex-wrap">
+        <%= render "web/shared/about_page_nav" %>
+
+
+        <main>
+        <div class="p-8">
+          <%= yield %>
+        </div>
+      </main>
+
+        </div>
+        </div>
+
+<%  end %>
+
+<%= render template: "web/layouts/application" %>

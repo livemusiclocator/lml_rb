@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       get ":id", to: "explorer#show"
     end
     get "/events", to: "explorer#index"
-    get "/about", to: "explorer#index"
+    get "/about", to: '/high_voltage/pages#show', id: "about", as: :about_page
+    get '/about/*id', to: '/high_voltage/pages#show', as: :about_section_page
+
   end
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

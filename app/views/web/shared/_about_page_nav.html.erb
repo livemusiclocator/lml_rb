@@ -1,0 +1,17 @@
+      <!-- Left Sidebar Navigation -->
+      <aside class="w-64 flex-shrink-0">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <nav class="space-y-2">
+              <% about_section_static_pages.each do |item| %>
+              <%= link_to item[:path],
+                  class: "block px-3 py-2 rounded-md text-sm font-medium transition-colors #{
+                    params[:id] == item[:id] ?
+                    'bg-blue-50 text-blue-700 border-r-2 border-blue-600' :
+                    'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }" do %>
+                <%= item[:name] %>
+              <% end %>
+            <% end %>
+          </nav>
+        </div>
+      </aside>
