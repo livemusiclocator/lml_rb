@@ -374,12 +374,6 @@ GEM
     ruby2_keywords (0.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     securerandom (0.4.1)
     solargraph (0.55.0)
       backport (~> 1.2)
@@ -491,7 +485,6 @@ DEPENDENCIES
   rspec-rails
   rubocop
   ruby-openai
-  sassc-rails
   solargraph
   sprockets-rails
   stimulus-rails
