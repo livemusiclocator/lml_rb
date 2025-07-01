@@ -9,7 +9,7 @@ gem "net-pop", github: "ruby/net-pop"
 
 gem "activeadmin"
 gem "devise"
-gem "sass-rails"
+gem "sassc-rails"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails"
