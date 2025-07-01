@@ -1,0 +1,17 @@
+{
+  "name": "lml_rb",
+  "version": "1.0.0",
+  "description": "[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/LAffxdG5hFmx6iynRMGH5a/3NquNLfh34PueBmVqPWSwm/tree/main.svg?style=svg&circle-token=f22edd6262f0dad12f7984f1236d7dc43157ae8c)](https://dl.circleci.com/status-badge/redirect/circleci/LAffxdG5hFmx6iynRMGH5a/3NquNLfh34PueBmVqPWSwm/tree/main)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16"
+  }
+}
