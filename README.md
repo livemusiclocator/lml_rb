@@ -41,10 +41,10 @@ Create databases and add seed data
 bin/rails db:reset
 ```
 
-Start rails
+Start dev services (inncluding rails server on port 3000 and some tailwind things)
 
 ```
-bin/rails server
+./bin/dev
 ```
 
 Browse to https://localhost:3000/admin and log in as admin@example.com and password password
