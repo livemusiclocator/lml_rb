@@ -1,1 +1,33 @@
 @import "tailwindcss";
+@theme {
+  --color-lmlpink: rgb(235 0 139);
+  --color-custom-blue: #1da1f2;
+
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --animate-spinner-grow: spinner-grow 1s linear infinite;
+  --animate-delayed-entrance: delayed-entrance 0.5s linear;
+}
+
+/* Ported from bootstrap - we could use one of the built in anims too */
+@keyframes spinner-grow {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* when we dont want to show a thing immediately - like a loading spinner (so hopefully if it loads fast we never see it) */
+@keyframes delayed-entrance {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
