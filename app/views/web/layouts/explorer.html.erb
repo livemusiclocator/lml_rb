@@ -1,4 +1,11 @@
-<% content_for :main do %>
+<% content_for :head do %>
+  <%= spa_preload_tags %>
+  <%= spa_stylesheet_tag %>
+  <script>
+   window.APP_CONFIG = <%= raw json_escape(frontend_app_config) %>
+  </script>
+  <% end %>
+  <% content_for :main do %>
   <div id="root"></div>
   <%= spa_javascript_tag %>
 <%  end %>

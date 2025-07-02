@@ -11,17 +11,9 @@
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
         <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-        <%= spa_preload_tags %>
-        <%= spa_stylesheet_tag %>
+               <%= yield(:head)  %>
         <title><%= page_title %></title>
 
-    <script>
-     window.APP_CONFIG = {
-         root_path: '/web',
-         gigs_endpoint: '/gigs',
-         render_app_layout: false
-     };
-    </script>
   </head>
   <body style="margin: 0">
     <div class="flex flex-col h-dvh relative">

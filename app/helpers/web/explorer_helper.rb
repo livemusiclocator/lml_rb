@@ -1,42 +1,60 @@
 module Web
   module ExplorerHelper
-  def spa_javascript_tag
-    return unless Rails.application.config.spa_assets['spa.js']
+    DEFAULT_APP_CONFIG = {
+      root_path: '/web',
+      gigs_endpoint: '/gigs',
+      render_app_layout: false
+    }
 
-    javascript_include_tag(
-      Rails.application.config.spa_assets['spa.js'],
-      type: 'module',
-      'data-turbo-track': 'reload'
-    )
-  end
+    EDITION_SPECIFIC_CONFIG = {
+      "stkilda" => {
+        root_path: '/web/editions/stkilda',
+        default_location: "stkilda",
+        allow_select_location: false
+      }
+    }
 
-  def spa_stylesheet_tag
-    return unless Rails.application.config.spa_assets['spa.css']
+    def frontend_app_config
+      return DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition]] || {}).to_json
+    end
 
-    stylesheet_link_tag(
-      Rails.application.config.spa_assets['spa.css'],
-      'data-turbo-track': 'reload'
-    )
-  end
+    def spa_javascript_tag
+      return unless Rails.application.config.spa_assets['spa.js']
 
-  def spa_preload_tags
-    tags = []
-
-    if Rails.application.config.spa_assets['spa.js']
-      tags << preload_link_tag(
+      javascript_include_tag(
         Rails.application.config.spa_assets['spa.js'],
-        as: :script
+        type: 'module',
+        'data-turbo-track': 'reload'
       )
     end
 
-    if Rails.application.config.spa_assets['spa.css']
-      tags << preload_link_tag(
+    def spa_stylesheet_tag
+      return unless Rails.application.config.spa_assets['spa.css']
+
+      stylesheet_link_tag(
         Rails.application.config.spa_assets['spa.css'],
-        as: :style
+        'data-turbo-track': 'reload'
       )
     end
 
-    safe_join(tags)
+    def spa_preload_tags
+      tags = []
+
+      if Rails.application.config.spa_assets['spa.js']
+        tags << preload_link_tag(
+          Rails.application.config.spa_assets['spa.js'],
+          as: :script
+        )
+      end
+
+      if Rails.application.config.spa_assets['spa.css']
+        tags << preload_link_tag(
+          Rails.application.config.spa_assets['spa.css'],
+          as: :style
+        )
+      end
+
+      safe_join(tags)
+    end
   end
-end
 end

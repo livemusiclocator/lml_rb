@@ -9,6 +9,18 @@ Rails.application.routes.draw do
     get '/about/*id', to: '/high_voltage/pages#show', as: :about_section_page
     get "/about/contact", to: '/high_voltage/pages#show', id: "contact", as: :about_contact_page
 
+    # Trying to see if the concept of 'editions' works for us here.
+    # an edition will be a standard set of fairly hard coded parameters that we formerly called 'location' on front end
+    # at a minimum they may have slightly different content on the about pages etc.
+    # As we only have stkilda, we'll keep this fairly basic for now
+    scope "editions/stkilda" do
+      root to: "explorer#index", as: :stkilda_root, edition: "stkilda"
+      get "/events", to: "explorer#index", edition: "stkilda"
+      scope "gigs" do
+        get ":id", to: "explorer#show", edition: "stkilda"
+      end
+      get "/about", to: '/high_voltage/pages#show', id: "stkilda_about"
+    end
   end
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
