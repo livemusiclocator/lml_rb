@@ -3,7 +3,9 @@ module Web
     DEFAULT_APP_CONFIG = {
       root_path: '/web',
       gigs_endpoint: '/gigs',
-      render_app_layout: false
+      render_app_layout: false,
+      allow_select_location: true,
+      default_location: "anywhere"
     }
 
     EDITION_SPECIFIC_CONFIG = {
