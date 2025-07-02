@@ -2,7 +2,7 @@
 ---
 production:
   spa.js: https://lml-seo.web.app/rails_spa/lml.js
-  spa.css: https://lml-seo.web.app/rails_spa/assets/styles-Dqpab0Lo.css
+  spa.css: https://lml-seo.web.app/rails_spa/assets/styles-BpJa-Giv.css
 development:
   spa.js: https://lml-seo.web.app/rails_spa/lml.js
-  spa.css: https://lml-seo.web.app/rails_spa/assets/styles-Dqpab0Lo.css
+  spa.css: https://lml-seo.web.app/rails_spa/assets/styles-BpJa-Giv.css
