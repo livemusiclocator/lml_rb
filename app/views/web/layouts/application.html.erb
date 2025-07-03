@@ -12,7 +12,9 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
         <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
                <%= yield(:head)  %>
-        <title><%= page_title %></title>
+
+
+        <%= display_meta_tags site: "Live Music Locator" %>
 
   </head>
   <body style="margin: 0">

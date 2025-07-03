@@ -1,7 +1,4 @@
 module Web::ApplicationHelper
-  def page_title(separator = " – ")
-    [content_for(:title), 'Live Music Locator'].compact.join(separator)
-  end
   STATIC_PAGES = [
     { name: 'About (v2)', page_id: 'about_lml' },
     { name: 'The Team', page_id: 'the-team' },
