@@ -11,10 +11,10 @@
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">
         <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-               <%= yield(:head)  %>
+        <%= yield(:head)  %>
 
 
-        <%= display_meta_tags site: "Live Music Locator" %>
+        <%= display_meta_tags site: "Live Music Locator",reverse: true, separator: " - " %>
 
   </head>
   <body style="margin: 0">
