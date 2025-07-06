@@ -72,6 +72,7 @@ class Web::GigSearch
   end
 
   def extract_genre_name(genre_string)
+    # todo: this should not be needed once the query string format has been changed
     genre_string.to_s.gsub(/^genre:/, '')
   end
 

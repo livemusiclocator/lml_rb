@@ -16,10 +16,7 @@ class Web::ExplorerController < Web::ApplicationController
   end
 
   def search_params
-    # hack until we change the query string params to be genre=[]
-    tags = params[:tags]
-    params.delete :tags
-    params[:genres] = tags
+    params[:genres] = params.delete(:genre)
     params.transform_keys(&:underscore).permit(:location,:date_range,:custom_date,:genres=>[])
   end
 end

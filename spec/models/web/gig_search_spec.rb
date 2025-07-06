@@ -51,7 +51,7 @@ RSpec.describe Web::GigSearch, type: :model do
     end
 
     context 'with single genre' do
-      let(:genres) { ['genre:Rock'] }
+      let(:genres) { ['Rock'] }
       subject { build_search(genres: genres) }
 
       include_examples 'shows live music with location and date', 'Rock gigs'
@@ -61,32 +61,32 @@ RSpec.describe Web::GigSearch, type: :model do
 
     context 'with multiple genres' do
       context 'with 2 genres' do
-        let(:genres) { ['genre:Acoustic', 'genre:Folk'] }
+        let(:genres) { ['Acoustic', 'Folk'] }
         subject { build_search(genres: genres) }
 
         include_examples 'shows live music with location and date', 'Acoustic and Folk gigs'
       end
 
       context 'with 3 genres' do
-        let(:genres) { ['genre:Acoustic', 'genre:Folk', 'genre:Americana'] }
+        let(:genres) { ['Acoustic', 'Folk', 'Americana'] }
         subject { build_search(genres: genres) }
 
         include_examples 'shows live music with location and date', 'Acoustic, Americana and Folk gigs'
       end
 
       it 'sorts genres alphabetically' do
-        search = build_search(genres: ['genre:Rock', 'genre:Acoustic', 'genre:Folk'])
+        search = build_search(genres: ['Rock', 'Acoustic', 'Folk'])
         expect(search.title).to eq('Acoustic, Folk and Rock gigs in Melbourne today')
       end
 
       it 'removes duplicate genres (case-insensitive)' do
-        search = build_search(genres: ['genre:jazz', 'genre:Jazz', 'genre:Rock'])
+        search = build_search(genres: ['jazz', 'Jazz', 'Rock'])
         expect(search.title).to eq('Jazz and Rock gigs in Melbourne today')
       end
     end
 
     context 'with more than 3 genres' do
-      let(:genres) { ['genre:Rock', 'genre:Folk', 'genre:Jazz', 'genre:Blues'] }
+      let(:genres) { ['Rock', 'Folk', 'Jazz', 'Blues'] }
       subject { build_search(genres: genres) }
 
       include_examples 'shows live music with location and date', 'Live Music (multiple genres)'
@@ -95,8 +95,6 @@ RSpec.describe Web::GigSearch, type: :model do
     context 'with custom date' do
       it 'shows custom date when provided' do
         search = build_search(location: "melbourne", date_range: 'customDate', custom_date: '2025-01-15')
-        search.validate!
-        print(search.errors)
         expect(search.title).to eq('Live Music in Melbourne on Wednesday 15th January 2025')
       end
       it 'displays fallback title if the date range is missing' do
@@ -123,12 +121,12 @@ RSpec.describe Web::GigSearch, type: :model do
 
     context 'with invalid genres' do
       it 'filters out invalid genres' do
-        search = build_search(genres: ['genre:Rock', 'genre:InvalidGenre'])
+        search = build_search(genres: ['Rock', 'InvalidGenre'])
         expect(search.title).to eq('Rock gigs in Melbourne today')
       end
 
       it 'shows "Live Music" when all genres are invalid' do
-        search = build_search(genres: ['genre:InvalidGenre1', 'genre:InvalidGenre2'])
+        search = build_search(genres: ['InvalidGenre1', 'InvalidGenre2'])
         expect(search.title).to eq('Live Music in Melbourne today')
       end
     end
