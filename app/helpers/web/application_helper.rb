@@ -2,8 +2,6 @@
 
 module Web
   module ApplicationHelper
-    # TODO: these could probably live in about_page_helper or some such
-    # (or see if we can store frontmatter in high voltage pages ala hugo?)
     STATIC_PAGES = [
       { name: "About (v2)", page_id: "about_lml" },
       { name: "The Team", page_id: "the-team" },
@@ -15,7 +13,7 @@ module Web
       { name: "Fresh Live Music Data", page_id: "fresh-live-music-data" },
       { name: "API Documentation", page_id: "api-documentation" },
       { name: "How To Use Live Music Locator", page_id: "how-to-use-livemusiclocator" },
-
+      { name: "API, Stats, and Data", page_id: "api-stats-and-data" },
     ].freeze
 
     TOP_NAV = {
