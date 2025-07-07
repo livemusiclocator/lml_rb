@@ -1,7 +1,7 @@
 module Web
   module ExplorerHelper
     DEFAULT_APP_CONFIG = {
-      root_path: '/web',
+      root_path: '/',
       gigs_endpoint: '/gigs',
       render_app_layout: false,
       allow_select_location: true,
@@ -10,14 +10,14 @@ module Web
 
     EDITION_SPECIFIC_CONFIG = {
       "stkilda" => {
-        root_path: '/web/editions/stkilda',
+        root_path: '/editions/stkilda',
         default_location: "stkilda",
         allow_select_location: false
       }
     }
 
     def frontend_app_config
-      return DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition]] || {}).to_json
+      return DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {}).to_json
     end
 
     def spa_javascript_tag
