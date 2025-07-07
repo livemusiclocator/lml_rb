@@ -9,7 +9,8 @@ module Web::ApplicationHelper
     {name: "DIY Gig Guide", page_id: 'diy-gig-guide'},
     {name: "Fresh Live Music Data", page_id: 'fresh-live-music-data'},
     {name: "API Documentation", page_id: "api-documentation"},
-    {name: "How To Use Live Music Locator", page_id: "how-to-use-livemusiclocator"}
+    {name: "How To Use Live Music Locator", page_id: "how-to-use-livemusiclocator"},
+    {name: "API, Stats, and Data", page_id: "api-stats-and-data"}
 
   ].freeze
 
