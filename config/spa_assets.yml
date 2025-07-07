@@ -1,8 +1,8 @@
 # Please run rake spa:fetch to update this file
 ---
 production:
-  spa.js: https://lml-seo.web.app/rails_spa/lml.js
+  spa.js: https://lml-seo.web.app/rails_spa/assets/index-CXov-FC6.js
   spa.css: https://lml-seo.web.app/rails_spa/assets/styles-DcoX_9bF.css
 development:
-  spa.js: https://lml-seo.web.app/rails_spa/lml.js
+  spa.js: https://lml-seo.web.app/rails_spa/assets/index-CXov-FC6.js
   spa.css: https://lml-seo.web.app/rails_spa/assets/styles-DcoX_9bF.css
