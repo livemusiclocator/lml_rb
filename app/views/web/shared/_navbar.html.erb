@@ -3,27 +3,17 @@
 
     <div class="flex justify-between items-center flex-wrap max-w-8xl mx-auto py-2 px-5">
 
-  <%= link_to web_root_path, class: "site-logo flex justify-start items-center text-slate-50 font-sans" do %>
+  <%= link_to home_path, class: "site-logo flex justify-start items-center text-slate-50 font-sans" do %>
     <%= image_tag 'web/lml-brandmark.svg', class: "flex-shrink w-10", alt: "Brand Logo", height: 40, width: 40 %>
     <span class="text-xl p-2">Live Music Locator</span>
   <% end %>
       <!-- todo -add back hidden lg:block if we implemennt mobile menu -->
   <ul class="flex flex-row gap-x-4">
-    <li>
-      <%= link_to web_root_path, class: class_names('font-normal transition duration-200 hover:text-slate-300', { "font-semibold": current_page?(web_root_path) }) do %>
-        Home
-      <% end %>
-    </li>
-    <li>
-      <%= link_to web_about_page_path, class: class_names('font-normal transition duration-200 hover:text-slate-300', { "font-semibold": request.fullpath.start_with?(web_about_page_path) })do %>
-      About
-      <% end %>
-    </li>
-    <li>
-      <%= link_to web_events_path, class:  class_names('font-normal transition duration-200 hover:text-slate-300', { "font-semibold": current_page?(web_events_path) } ) do %>
-        Events
-      <% end %>
-    </li>
+    <% nav_menu_items.each do |nav_menu_item| %>
+      <%= link_to nav_menu_item[:path], class: class_names('font-normal transition duration-200 hover:text-slate-300', { "font-semibold": nav_menu_item[:current] }) do %>
+        <%= nav_menu_item[:name] %>
+      <%end%>
+    <%end%>
   </ul>
   </div>
 

@@ -1,4 +1,7 @@
 module Web::ApplicationHelper
+
+  # todo: these could probably live in about_page_helper or some such
+  # (or see if we can store frontmatter in high voltage pages ala hugo?)
   STATIC_PAGES = [
     { name: 'About (v2)', page_id: 'about_lml' },
     { name: 'The Team', page_id: 'the-team' },
@@ -13,9 +16,49 @@ module Web::ApplicationHelper
 
   ].freeze
 
+  TOP_NAV = {
+    home: { name: "Home", path_name: :web_root},
+    menu: [
+      { name: "Home", path_name: :web_root},
+      # todo: better way to match /start/about to /start/about/a and /about/b  but not match /start/ to everything?
+      { name: "About", path_name: :web_about_page, section_page: true},
+      { name: "Events", path_name: :web_events},
+    ]
+  }
+
+  def home_path
+    relative_path(TOP_NAV[:home])
+
+  end
+
+  def nav_menu_items
+    TOP_NAV[:menu].map do |menu_item|
+      path = relative_path(menu_item)
+      current = if menu_item[:section_page] then
+                  request.fullpath.start_with?(path)
+                else
+                  current_page?(path)
+                end
+      menu_item.merge({path: path,current: current})
+    end
+  end
+
+  def relative_path( path_info = {})
+    path = path_info[:path_name]
+    path_params = path_info[:params]
+    extra_context = if params[:edition_id] then [:edition] else [] end
+    extra_params = if params[:edition_id] then {edition_id: params[:edition_id] } else {} end
+
+    polymorphic_path(extra_context+[path], extra_params.merge(path_params || {}))
+
+  end
+
+  def about_page_path(page_id)
+    relative_path({path_name: :web_about_section_page, params: {id: page_id}})
+  end
   def about_section_static_pages
     pages = STATIC_PAGES.map do |page|
-      path = web_about_section_page_path(page[:page_id])
+      path = about_page_path(page[:page_id])
 
       page.merge(path: path)
     end
