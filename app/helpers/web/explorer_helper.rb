@@ -2,7 +2,6 @@ module Web
   module ExplorerHelper
     DEFAULT_APP_CONFIG = {
       root_path: '/',
-      gigs_endpoint: '/gigs',
       render_app_layout: false,
       allow_select_location: true,
       default_location: "anywhere"
@@ -17,7 +16,9 @@ module Web
     }
 
     def frontend_app_config
-      return DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {}).to_json
+      config = DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {})
+
+      config.merge({gigs_endpoint: web_api_root_path}).to_json
     end
 
     def spa_javascript_tag
