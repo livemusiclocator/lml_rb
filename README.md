@@ -41,10 +41,12 @@ Create databases and add seed data
 bin/rails db:reset
 ```
 
+Make sure www.lml.local resolves to localhost ( /etc/hosts entry or find a better way to do it )
+
 Start dev services (inncluding rails server on port 3000 and some tailwind things)
 
 ```
-./bin/dev
+RAILS_DEVELOPMENT_HOSTS=www.lml.local ./bin/dev
 ```
 
 Browse to https://localhost:3000/admin and log in as admin@example.com and password password
@@ -102,3 +104,9 @@ heroku ps:exec --app=live-music-locator
 # tail logs
 heroku logs -t
 ```
+
+
+# More things to go into the readme
+
++ How to run locally with front end code
++ Where everthing deploys to and the subdomain constraints active

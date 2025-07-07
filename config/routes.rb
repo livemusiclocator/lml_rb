@@ -1,27 +1,26 @@
 Rails.application.routes.draw do
-  namespace :web do
-    root to: "explorer#index"
+
+  # provides the gig_guide pages for main www site and the editions , including static pages
+  concern :gig_guide do
+    root to: "explorer#index", as: :web_root
     scope "gigs" do
       get ":id", to: "explorer#show"
     end
-    get "/events", to: "explorer#index"
-    get "/about", to: '/high_voltage/pages#show', id: "about", as: :about_page
-    get '/about/*id', to: '/high_voltage/pages#show', as: :about_section_page
-    get "/about/contact", to: '/high_voltage/pages#show', id: "contact", as: :about_contact_page
+    # todo: this still provided by the react app but should be migrated if we plan to keep it.
+    get "/events", to: "explorer#index", as: :web_events
+    get "/about", to: 'pages#show', id: "about", as: :web_about_page
+    get '/about/*id', to: 'pages#show', as: :web_about_section_page
+  end
 
-    # Trying to see if the concept of 'editions' works for us here.
-    # an edition will be a standard set of fairly hard coded parameters that we formerly called 'location' on front end
-    # at a minimum they may have slightly different content on the about pages etc.
-    # As we only have stkilda, we'll keep this fairly basic for now
-    scope "editions/stkilda" do
-      root to: "explorer#index", as: :stkilda_root, edition: "stkilda"
-      get "/events", to: "explorer#index", edition: "stkilda"
-      scope "gigs" do
-        get ":id", to: "explorer#show", edition: "stkilda"
+  constraints subdomain: /^www|beta$/ do
+    scope module: "web" do
+      concerns :gig_guide
+      scope "editions/:edition_id", as: "edition", constraints: { edition_id: /stkilda/ } do
+        concerns :gig_guide
       end
-      get "/about", to: '/high_voltage/pages#show', id: "stkilda_about"
     end
   end
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
