@@ -2,7 +2,11 @@
 
 require "rails_helper"
 
+
 describe "gigs" do
+  # should match the 'api.*' defined routes with this
+  # (todo: add web request tests which will need www.)
+  before { host! "api.lml.live" }
   describe "index" do
     it "returns links to query endpoints" do
       travel_to(Time.iso8601("2001-06-02T00:00:00Z")) do
@@ -13,30 +17,29 @@ describe "gigs" do
           {
             "links" => {
               "_self" => {
-                "href" => "http://www.example.com/gigs",
+                "href" => "http://api.lml.live/gigs",
               },
               "default" => {
-                "href" => "http://www.example.com/gigs/query",
+                "href" => "http://api.lml.live/gigs/query",
               },
               "next_seven_days" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-02&date_to=2001-06-09&location=castlemaine",
+                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-09&location=castlemaine",
               },
               "next_weekend" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-08&date_to=2001-06-10&location=castlemaine",
+                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-08&date_to=2001-06-10&location=castlemaine",
               },
               "on_date" => {
-                "href" => "http://www.example.com/gigs/query?date_from=date&date_to=date&location=castlemaine",
+                "href" => "http://api.lml.live/gigs/query?date_from=date&date_to=date&location=castlemaine",
                 "templated" => true,
               },
               "this_weekend" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-01&date_to=2001-06-03&location=castlemaine",
+                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-01&date_to=2001-06-03&location=castlemaine",
               },
               "today" => {
-                "href" => "http://www.example.com/gigs/query?date_from=2001-06-02&date_to=2001-06-02&location=castlemaine",
+                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-02&location=castlemaine",
               },
             },
           },
-        ),
       )
     end
   end
