@@ -96,3 +96,5 @@ end
 gem "faraday"
 gem "kramdown"
 gem "ruby-openai"
+
+gem "schema_dot_org", "~> 2.5"

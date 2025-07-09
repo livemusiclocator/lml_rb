@@ -415,6 +415,8 @@ GEM
     ruby2_keywords (0.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
+    schema_dot_org (2.5.0)
+      validated_object (~> 2.3)
     securerandom (0.4.1)
     shellany (0.0.1)
     solargraph (0.55.0)
@@ -436,6 +438,7 @@ GEM
       tilt (~> 2.0)
       yard (~> 0.9, >= 0.9.24)
       yard-solargraph (~> 0.1)
+    sorbet-runtime (0.5.12220)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -470,6 +473,9 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.3)
     useragent (0.16.11)
+    validated_object (2.3.2)
+      activemodel (>= 3.2.21)
+      sorbet-runtime (>= 0.5.5890)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -531,6 +537,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   ruby-openai
+  schema_dot_org (~> 2.5)
   solargraph
   sprockets-rails
   stimulus-rails
