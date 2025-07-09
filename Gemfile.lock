@@ -202,6 +202,7 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     language_server-protocol (3.17.0.5)
+    lefthook (1.12.1)
     lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.24.1)
@@ -479,6 +480,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kramdown
+  lefthook
   meta-tags
   money-rails
   net-pop!

@@ -35,6 +35,13 @@ brew install libpq postgresql
 bundle
 ```
 
+install precommit hooks if you want to:
+
+```
+lefthook install
+
+```
+
 Create databases and add seed data
 
 ```
@@ -43,7 +50,7 @@ bin/rails db:reset
 
 Make sure www.lml.local resolves to localhost ( /etc/hosts entry or find a better way to do it )
 
-Start dev services (inncluding rails server on port 3000 and some tailwind things)
+Start dev services (including rails server on port 3000 and some tailwind things)
 
 ```
 RAILS_DEVELOPMENT_HOSTS=www.lml.local ./bin/dev

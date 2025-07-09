@@ -81,6 +81,8 @@ group :development do
   gem "rubocop"
   gem "solargraph"
   gem "web-console"
+  # Git hooks stuff
+  gem 'lefthook', require: false
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
