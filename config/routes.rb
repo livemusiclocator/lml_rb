@@ -65,9 +65,9 @@ Rails.application.routes.draw do
   # root "posts#index"
   #
   scope "gigs" do
+    get "feed", to: "gigs#feed", defaults: { format: "rss" }
     concerns :the_api
     get "autocomplete", to: "gigs#autocomplete", defaults: { format: "json" }
-    get "feed", to: "gigs#feed", defaults: { format: "rss" }
     get "for/:location/:date", to: "gigs#for", defaults: { format: "json" }
 
   end
