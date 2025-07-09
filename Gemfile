@@ -73,6 +73,7 @@ group :development, :test do
   gem "debug", platforms: %i[mri windows]
   gem "rspec-rails"
   gem "webmock"
+  gem "rspec-json_expectations"
 end
 
 group :development do

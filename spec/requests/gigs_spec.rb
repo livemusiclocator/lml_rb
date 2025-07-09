@@ -9,8 +9,7 @@ describe "gigs" do
         get "/gigs"
       end
 
-      expect(JSON.parse(response.body)).to(
-        eq(
+      expect(response.body).to include_json(
           {
             "links" => {
               "_self" => {
@@ -102,8 +101,7 @@ describe "gigs" do
 
     it "returns gig" do
       get "/gigs/#{@gig.id}"
-      expect(JSON.parse(response.body)).to(
-        eq(
+      expect(response.body).to include_json(
           {
             "date" => "2001-06-08",
             "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
@@ -179,8 +177,7 @@ describe "gigs" do
               "location_url" => nil,
             },
           },
-        ),
-      )
+        )
     end
   end
 
