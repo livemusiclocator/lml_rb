@@ -5,22 +5,22 @@ class GigsController < ApplicationController
     @links = [
       {
         id: "_self",
-        href: url_for(
-          action: :index,
+        href: polymorphic_url(
+          [:root],
           format: request.params[:format],
         ),
       },
       {
         id: "default",
-        href: url_for(
-          action: :query,
+        href: polymorphic_url(
+          [:query],
           format: request.params[:format],
         ),
       },
       {
         id: "today",
-        href: url_for(
-          action: :query,
+        href: polymorphic_url(
+          [:query],
           format: request.params[:format],
           location: "castlemaine",
           date_from: Date.today,
@@ -29,8 +29,8 @@ class GigsController < ApplicationController
       },
       {
         id: "next_seven_days",
-        href: url_for(
-          action: :query,
+        href: polymorphic_url(
+          [:query],
           format: request.params[:format],
           location: "castlemaine",
           date_from: Date.today,
@@ -39,8 +39,8 @@ class GigsController < ApplicationController
       },
       {
         id: "this_weekend",
-        href: url_for(
-          action: :query,
+        href: polymorphic_url(
+          [:query],
           format: request.params[:format],
           location: "castlemaine",
           date_from: Date.today.end_of_week.advance(days: -2),
@@ -49,8 +49,8 @@ class GigsController < ApplicationController
       },
       {
         id: "next_weekend",
-        href: url_for(
-          action: :query,
+        href: polymorphic_url(
+          [:query],
           format: request.params[:format],
           location: "castlemaine",
           date_from: Date.today.next_week.end_of_week.advance(days: -2),
@@ -61,8 +61,8 @@ class GigsController < ApplicationController
       {
         id: "on_date",
         templated: true,
-        href: url_for(
-          action: :query,
+        href: polymorphic_url(
+          [:query],
           format: request.params[:format],
           location: "castlemaine",
           date_from: "date",
