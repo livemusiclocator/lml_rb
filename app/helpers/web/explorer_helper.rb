@@ -1,7 +1,6 @@
 module Web
   module ExplorerHelper
     DEFAULT_APP_CONFIG = {
-      root_path: '/',
       render_app_layout: false,
       allow_select_location: true,
       default_location: "anywhere"
@@ -9,7 +8,6 @@ module Web
 
     EDITION_SPECIFIC_CONFIG = {
       "stkilda" => {
-        root_path: '/editions/stkilda',
         default_location: "stkilda",
         allow_select_location: false
       }
@@ -18,7 +16,9 @@ module Web
     def frontend_app_config
       config = DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {})
 
-      config.merge({gigs_endpoint: web_api_root_path}).to_json
+      # todo: restore this when working ok on subdomain or figure a better way to do this
+      config.merge({gigs_endpoint: temp_web_web_api_root_path},
+                   root_path: relative_path({path_name: :web_root})).to_json
     end
 
     def spa_javascript_tag

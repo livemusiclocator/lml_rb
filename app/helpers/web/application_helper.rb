@@ -49,7 +49,7 @@ module Web::ApplicationHelper
     extra_context = if params[:edition_id] then [:edition] else [] end
     extra_params = if params[:edition_id] then {edition_id: params[:edition_id] } else {} end
 
-    polymorphic_path(extra_context+[path], extra_params.merge(path_params || {}))
+    polymorphic_path( [params[:home_path]] +extra_context+[path], extra_params.merge(path_params || {}))
 
   end
 

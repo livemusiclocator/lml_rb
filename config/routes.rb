@@ -31,6 +31,25 @@ Rails.application.routes.draw do
     end
   end
 
+
+  # web front end part two - a copy of the above mapped to /web on whatever domain. This is until we get www.livemusiclocator.com.au domain mapped to heroku
+
+   # Web front end - mapped to www and beta (for testing) subdomains - includes an api endpoint
+  scope "web", as: "temp_web" do
+    defaults home_path: :temp_web do
+      scope "api/gigs", as: "web_api" do
+        concerns :the_api
+      end
+      scope module: "web" do
+        concerns :gig_guide
+        scope "editions/:edition_id", as: "edition", constraints: { edition_id: /stkilda/ } do
+          concerns :gig_guide
+        end
+      end
+    end
+  end
+
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
