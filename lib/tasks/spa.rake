@@ -27,7 +27,7 @@ namespace :spa do
 
     File.open('config/spa_assets.yml', 'w') do |config_file|
       config_file.write("# Please run rake spa:fetch to update this file\n")
-      config_file.write({ production: spa_config, development: spa_config }.deep_stringify_keys.to_yaml)
+      config_file.write({ production: spa_config, development: spa_config, test: spa_config }.deep_stringify_keys.to_yaml)
     end
   end
 end
