@@ -28,7 +28,7 @@ class Web::GigSearch
 
   attribute :location, :string
   attribute :date_range, :string
-  attribute :genres, array: true, default: []
+  attribute :genre, array: true, default: []
   attribute :venue_ids, array: true, default: []
   attribute :custom_date
 
@@ -61,10 +61,10 @@ class Web::GigSearch
   private
 
   def extract_valid_genres
-    return [] if genres.blank?
+    return [] if genre.blank?
 
     # Extract and validate genres
-    genre_names = genres.map { |g| extract_genre_name(g) }
+    genre_names = genre.map { |g| extract_genre_name(g) }
     valid_genres = find_valid_genres(genre_names)
 
     # Remove duplicates and sort

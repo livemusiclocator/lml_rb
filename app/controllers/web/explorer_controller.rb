@@ -16,7 +16,6 @@ class Web::ExplorerController < Web::ApplicationController
   end
 
   def search_params
-    params[:genres] = params.delete(:genre)
     params.transform_keys(&:underscore).permit(:location, :date_range, :custom_date, :genres => [])
   end
 end

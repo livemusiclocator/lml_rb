@@ -17,7 +17,7 @@ RSpec.describe Web::GigSearch, type: :model do
     shared_examples 'handles different locations' do |genre_text|
       %w[melbourne stkilda goldfields anywhere].each do |location|
         it "works with #{location} location" do
-          search = build_search(genres: genres, location: location)
+          search = build_search(genre: genres, location: location)
           location_name = location == 'stkilda' ? 'St Kilda' : location.capitalize
           location_name = location if location == 'anywhere'
 
@@ -35,7 +35,7 @@ RSpec.describe Web::GigSearch, type: :model do
         'nextWeek' => 'next week'
       }.each do |date_range, expected_text|
         it "works with #{date_range}" do
-          search = build_search(genres: genres, date_range: date_range)
+          search = build_search(genre: genres, date_range: date_range)
           expect(search.title).to eq("#{genre_text} in Melbourne #{expected_text}")
         end
       end
@@ -43,7 +43,7 @@ RSpec.describe Web::GigSearch, type: :model do
 
     context 'with no genres' do
       let(:genres) { [] }
-      subject { build_search(genres: genres) }
+      subject { build_search(genre: genres) }
 
       include_examples 'shows live music with location and date'
       include_examples 'handles different locations', 'Live Music'
@@ -52,7 +52,7 @@ RSpec.describe Web::GigSearch, type: :model do
 
     context 'with single genre' do
       let(:genres) { ['Rock'] }
-      subject { build_search(genres: genres) }
+      subject { build_search(genre: genres) }
 
       include_examples 'shows live music with location and date', 'Rock gigs'
       include_examples 'handles different locations', 'Rock gigs'
@@ -62,32 +62,32 @@ RSpec.describe Web::GigSearch, type: :model do
     context 'with multiple genres' do
       context 'with 2 genres' do
         let(:genres) { ['Acoustic', 'Folk'] }
-        subject { build_search(genres: genres) }
+        subject { build_search(genre: genres) }
 
         include_examples 'shows live music with location and date', 'Acoustic and Folk gigs'
       end
 
       context 'with 3 genres' do
         let(:genres) { ['Acoustic', 'Folk', 'Americana'] }
-        subject { build_search(genres: genres) }
+        subject { build_search(genre: genres) }
 
         include_examples 'shows live music with location and date', 'Acoustic, Americana and Folk gigs'
       end
 
       it 'sorts genres alphabetically' do
-        search = build_search(genres: ['Rock', 'Acoustic', 'Folk'])
+        search = build_search(genre: ['Rock', 'Acoustic', 'Folk'])
         expect(search.title).to eq('Acoustic, Folk and Rock gigs in Melbourne today')
       end
 
       it 'removes duplicate genres (case-insensitive)' do
-        search = build_search(genres: ['jazz', 'Jazz', 'Rock'])
+        search = build_search(genre: ['jazz', 'Jazz', 'Rock'])
         expect(search.title).to eq('Jazz and Rock gigs in Melbourne today')
       end
     end
 
     context 'with more than 3 genres' do
       let(:genres) { ['Rock', 'Folk', 'Jazz', 'Blues'] }
-      subject { build_search(genres: genres) }
+      subject { build_search(genre: genres) }
 
       include_examples 'shows live music with location and date', 'Live Music (multiple genres)'
     end
@@ -121,12 +121,12 @@ RSpec.describe Web::GigSearch, type: :model do
 
     context 'with invalid genres' do
       it 'filters out invalid genres' do
-        search = build_search(genres: ['Rock', 'InvalidGenre'])
+        search = build_search(genre: ['Rock', 'InvalidGenre'])
         expect(search.title).to eq('Rock gigs in Melbourne today')
       end
 
       it 'shows "Live Music" when all genres are invalid' do
-        search = build_search(genres: ['InvalidGenre1', 'InvalidGenre2'])
+        search = build_search(genre: ['InvalidGenre1', 'InvalidGenre2'])
         expect(search.title).to eq('Live Music in Melbourne today')
       end
     end
