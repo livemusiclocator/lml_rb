@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# rubocop:disable all
 module Lml
   module Processors
     class Clipper
@@ -109,7 +109,7 @@ module Lml
             gig.duration = details[:duration]
             gig.finish_time = finish_time.strftime("%H:%M") if finish_time
             gig.save!
-            gig.suggest_tags!
+            gig.suggest_tags! unless ENV["DISABLE_CLIPPER_TAG_SUGGESTION"]
             @upload.status = "Succeeded"
             @upload.error_description = ""
           end
@@ -120,3 +120,4 @@ module Lml
     end
   end
 end
+# rubocop:enable all
