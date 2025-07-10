@@ -8,10 +8,10 @@ module Web
       { name: "The Team", page_id: "the-team" },
       { name: "Volunteering", page_id: "volunteering" },
       { name: "How To Use", page_id: "how-to-use-livemusiclocator" },
-      { name: "Tech", page_id: "tech" },
       { name: "API, Stats, and Data", page_id: "api-stats-and-data" },
       { name: "Contact", page_id: "contact" },
       { name: "Privacy Policy", page_id: "privacy-policy" },
+
     ].freeze
 
     TOP_NAV = {
