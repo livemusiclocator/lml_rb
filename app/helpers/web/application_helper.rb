@@ -1,16 +1,14 @@
 module Web::ApplicationHelper
   STATIC_PAGES = [
-    { name: 'About (v2)', page_id: 'about_lml' },
-    { name: 'The Team', page_id: 'the-team' },
-    { name: 'Contact', page_id: 'contact' },
-    {name: "Privacy Policy", page_id:"privacy-policy"},
-    {name: "Tech", page_id:"tech"},
+    {name: 'About', page_id: 'about' },
+    {name: 'St Kilda Collab', page_id: 'st-kilda-live-music' },
+    {name: 'The Team', page_id: 'the-team' },
     {name: "Volunteering", page_id: 'volunteering'},
-    {name: "DIY Gig Guide", page_id: 'diy-gig-guide'},
-    {name: "Fresh Live Music Data", page_id: 'fresh-live-music-data'},
-    {name: "API Documentation", page_id: "api-documentation"},
-    {name: "How To Use Live Music Locator", page_id: "how-to-use-livemusiclocator"},
-    {name: "API, Stats, and Data", page_id: "api-stats-and-data"}
+    {name: "How To Use", page_id: "how-to-use-livemusiclocator"},
+    {name: "Tech", page_id:"tech"},
+    {name: "API, Stats, and Data", page_id: "api-stats-and-data"},    
+    {name: 'Contact', page_id: 'contact' },
+    {name: "Privacy Policy", page_id:"privacy-policy"}
 
   ].freeze
 
