@@ -43,20 +43,9 @@ module Web
     end
 
     def spa_preload_tags
-      tags = []
-
-      if Rails.application.config.spa_assets["spa.js"]
-        tags << preload_link_tag(
-          Rails.application.config.spa_assets["spa.js"],
-          as: :script,
-        )
-      end
-
-      if Rails.application.config.spa_assets["spa.css"]
-        tags << preload_link_tag(
-          Rails.application.config.spa_assets["spa.css"],
-          as: :style,
-        )
+      tags = Rails.application.config.spa_assets.map do |asset_name, asset_path|
+        link_type = asset_name.end_with?("js") ? :script : :style
+        preload_link_tag(asset_path, as: link_type)
       end
 
       safe_join(tags)
