@@ -1,4 +1,3 @@
-
 class Web::ApplicationController < ApplicationController
   layout 'web/layouts/application'
   rescue_from ActiveRecord::RecordNotFound, with: :render_custom_not_found

@@ -17,8 +17,8 @@ module Web
       config = DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {})
 
       # todo: restore this when working ok on subdomain or figure a better way to do this
-      config.merge({gigs_endpoint: temp_web_web_api_root_path},
-                   root_path: relative_path({path_name: :web_root})).to_json
+      config.merge({ gigs_endpoint: temp_web_web_api_root_path },
+                   root_path: relative_path({ path_name: :web_root })).to_json
     end
 
     def spa_javascript_tag

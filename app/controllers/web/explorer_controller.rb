@@ -1,12 +1,12 @@
 class Web::ExplorerController < Web::ApplicationController
   layout 'web/layouts/explorer'
   def index
-     search = Web::GigSearch.new(search_params)
-     if search.valid?
-       set_meta_tags search
-     else
-       set_meta_tags Web::GigSearch.new
-     end
+    search = Web::GigSearch.new(search_params)
+    if search.valid?
+      set_meta_tags search
+    else
+      set_meta_tags Web::GigSearch.new
+    end
     render
   end
 
@@ -17,6 +17,6 @@ class Web::ExplorerController < Web::ApplicationController
 
   def search_params
     params[:genres] = params.delete(:genre)
-    params.transform_keys(&:underscore).permit(:location,:date_range,:custom_date,:genres=>[])
+    params.transform_keys(&:underscore).permit(:location, :date_range, :custom_date, :genres => [])
   end
 end
