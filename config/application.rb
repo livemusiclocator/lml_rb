@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails"
@@ -26,7 +28,7 @@ module Lml
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -38,5 +40,9 @@ module Lml
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # This is the default, but we need to ensure it stays at 1 or sudomain
+    # routes fail - see config/routes.rb  for more
+    config.action_dispatch.tld_length = 1
   end
 end
