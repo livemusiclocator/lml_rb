@@ -157,5 +157,9 @@ module Lml
     def rss_description
       [name, venue_label, date&.to_formatted_s].compact.join(" - ")
     end
+
+    def to_meta_tags
+      return {}
+    end
   end
 end
