@@ -3,8 +3,13 @@ class Web::GigSearch
   include ActiveModel::Attributes
 
   LOCATIONS = %w[anywhere melbourne stkilda goldfields].freeze
-  GENRES = %w[Rock Pop Hip-Hop R&B Soul Jazz Classical Electronic Country Metal Folk Blues Reggae Latin World Gospel
-              Dance Punk Alternative Experimental Indie Ambient Hardcore Industrial Garage Trance House Techno Drum and Bass Dubstep Funk Chill Disco Opera Swing Acoustic New Wave DJ Covers Tribute Americana].freeze
+  GENRES = <<~EOS
+    Americana, Rock, Pop, Hip-Hop, R&B, Soul, Jazz, Classical, Electronic, Country, Metal, Folk, Blues, Reggae,
+    Latin, World, Gospel, Dance, Punk, Alternative, Experimental, Indie, Ambient, Hardcore, Industrial,
+    Garage, Trance, House, Techno, Drum and Bass, Dubstep, Funk, Chill, Disco, Opera, Swing, Acoustic,
+    New Wave, DJ, Covers, Tribute
+  EOS
+           .split(/,\s*/).freeze
   DATE_RANGES = %w[today tomorrow thisWeek nextWeek customDate].freeze
 
   # Configuration for display formatting
