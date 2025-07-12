@@ -12,7 +12,7 @@ namespace :spa do
   end
   desc "Fetch SPA build from Firebase and generate manifest helper and update the checked in configuration file"
   task :fetch do
-    base_url = ENV['SPA_BASE_URL'] || 'https://lml-seo.web.app/rails_spa'
+    base_url = ENV['SPA_BASE_URL'] || 'https://assets.livemusiclocator.com.au/rails_spa'
     manifest_url = "#{base_url}/manifest.json"
     manifest_response = fetch_url(manifest_url)
     manifest = JSON.parse(manifest_response.body)
