@@ -1,11 +1,11 @@
 # Please run rake spa:fetch to update this file
 ---
 production:
-  spa.js: https://assets.livemusiclocator.com.au/rails_spa/assets/index-BNZy-9K4.js
-  spa.css: https://assets.livemusiclocator.com.au/rails_spa/assets/styles-DcoX_9bF.css
-development:
-  spa.js: https://assets.livemusiclocator.com.au/rails_spa/assets/index-BNZy-9K4.js
-  spa.css: https://assets.livemusiclocator.com.au/rails_spa/assets/styles-DcoX_9bF.css
+  spa.js: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
+  spa.css: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
 test:
-  spa.js: https://assets.livemusiclocator.com.au/rails_spa/assets/index-BNZy-9K4.js
-  spa.css: https://assets.livemusiclocator.com.au/rails_spa/assets/styles-DcoX_9bF.css
+  spa.js: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
+  spa.css: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
+development:
+  spa.js: https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.js
+  spa.css: https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.css
