@@ -1,10 +1,10 @@
       <!-- Left Sidebar Navigation -->
-      <aside>
-          <nav class="space-y-2">
-              <ul>
+      <aside class='shrink p-4'>
+          <nav>
+              <ul class="space-y-4">
               <% about_section_static_pages.each do |item| %>
-                  <li>
-              <%= link_to item[:path] do %>
+                <li>
+              <%= link_to item[:path], class: class_names('font-normal', { "font-semibold": current_page?(item[:path]) })  do %>
                 <%= item[:name] %>
                   </li>
               <% end %>

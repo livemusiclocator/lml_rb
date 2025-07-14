@@ -1,24 +1,27 @@
 <% content_for :main do %>
 
-    <div class="min-w-s mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex gap-8 py-8 flex-wrap">
+
+      <div class="flex gap-8 py-8  flex-wrap justify-center mx-auto max-w-5xl">
         <%= render "web/shared/about_page_nav" %>
 
 
-        <main>
+        <main class="grow shrink basis-sm px-8">
 
-          <div class="p-8 prose">
-            <h1><%= title  %></h1>
-            <%= yield %>
-        </div>
+            <h1 class="font-bold text-4xl pb-8"><%= page_heading  %></h1>
+            <%= yield (:extra_page_heading) %>
+            <section class="prose ">
+
+              <%= yield %>
+            </section>
       </main>
-      <footer>
-        <p>Acknowledgement of Country
-          <br/>We respect and honour Aboriginal and Torres Strait Islander Elders past, present and future.
-          <br/>We acknowledge the stories, traditions and living cultures of Aboriginal and Torres Strait Islander peoples on this land.</p>
+      <footer
+  class=" p-4 flex-grow">
+
+          <h4 class='font-semibold'>Acknowledgement of Country</h4>
+          <p class='text-sm'>We respect and honour Aboriginal and Torres Strait Islander Elders past, present and future.</p>
+          <p class='text-sm'>We acknowledge the stories, traditions and living cultures of Aboriginal and Torres Strait Islander peoples on this land.</p>
       </footer>
       </div>
-        </div>
 
 <%  end %>
 

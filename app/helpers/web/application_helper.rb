@@ -3,7 +3,6 @@
 module Web
   module ApplicationHelper
     STATIC_PAGES = [
-      { name: "About", page_id: "about" },
       { name: "St Kilda Collab", page_id: "st-kilda-live-music" },
       { name: "The Team", page_id: "the-team" },
       { name: "Volunteering", page_id: "volunteering" },
@@ -76,6 +75,15 @@ module Web
 
     def team_members
       @team_members ||= YAML.load_file(Rails.root.join("config", "content", "team_members.yml"), symbolize_names: true)
+    end
+
+    # sets the heading text to be different from the title
+    def override_page_heading(heading_text)
+      @override_page_heading ||= heading_text
+    end
+
+    def page_heading
+      @heading_text || title
     end
   end
 end
