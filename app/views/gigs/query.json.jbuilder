@@ -35,7 +35,7 @@ json.array! @gigs do |gig|
     end
   end
 
-  json.sets gig.sets.order(:start_offset) do |set|
+  json.sets gig.sets.sort_by{ |set| set.start_offset || 0} do |set|
     json.start_time set.start_time
     json.start_timestamp set.start_timestamp
     json.duration set.duration
