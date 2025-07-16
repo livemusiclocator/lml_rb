@@ -27,7 +27,7 @@ module Lml
     scope :in_location, lambda { |location|
       postcodes = POSTCODES[location]
 
-      postcodes ? where(postcode: postcodes) : where("lower(location) = ?", location)
+      postcodes ? where(postcode: postcodes) : where(Venue.arel_table[:location].matches(location))
     }
 
     def label

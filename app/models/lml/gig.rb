@@ -41,9 +41,11 @@ module Lml
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all
 
-    scope :eager, -> { order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices) }
+    scope :eager, lambda {
+      order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices).annotate("eager loading gig data")
+    }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
-
+    scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
     def suggest_tags!(force: false)
       return if internal_description.blank?
       return if !force && (proposed_genre_tags || []).present?
