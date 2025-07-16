@@ -25,6 +25,8 @@ module Lml
     has_many :uploads, dependent: :delete_all
 
     scope :in_location, lambda { |location|
+      return if location == "anywhere"
+
       postcodes = POSTCODES[location]
 
       postcodes ? where(postcode: postcodes) : where(Venue.arel_table[:location].matches(location))

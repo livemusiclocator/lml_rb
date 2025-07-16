@@ -298,6 +298,11 @@ describe "gigs" do
         expect(JSON.parse(response.body)).to eq([])
       end
 
+      it "returns all gigs when location = anywhere" do
+        get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-08-08"
+        expect(JSON.parse(response.body)).to include(include("name" => "The One Gig You Should Not Miss Out On"))
+      end
+
       it "returns matching gigs when location and dates are specified" do
         get "/gigs/for/melbourne/2001-06-08"
         expect(JSON.parse(response.body)).to(
