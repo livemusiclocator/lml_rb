@@ -19,7 +19,7 @@ module Web
       config = DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {})
 
       # TODO: restore this when working ok on subdomain or figure a better way to do this
-      config.merge({ gigs_endpoint: web_api_root_path },
+      config.merge({ gigs_endpoint: web_api_root_url },
                    root_path: relative_path({ path_name: :web_root }),).to_json
     end
 
