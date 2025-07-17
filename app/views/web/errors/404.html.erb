@@ -1,0 +1,15 @@
+<% content_for :main do %>
+
+    <section class="bg-white dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <div class="mx-auto max-w-screen-sm text-center">
+            <h1 class="mb-4 text-9xl tracking-tight font-extrabold text-lmlpink"><%= @error_message_heading || "404" %></h1>
+            <h2 class="mb-4 text-3xl font-extrabold  text-gray-800 "><%= @error_message_sub_heading || "Page not found" %></h2>
+            <div class='mb-4 text-lg font-light text-gray-500 dark:text-gray-400 space-y-2'
+            <p ><%= @error_message_text || "We don't seem to have what you are looking for" %></p>
+            <p>Why not check out <%=link_to "upcoming gigs", home_path, class: "font-bold underline"%> or <%=link_to "contact us" , about_page_path(:contact), class: "font-bold underline"  %>.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<% end %>

@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       scope "editions/:edition_id", as: "edition", constraints: { edition_id: /stkilda/ } do
         concerns :gig_guide
       end
+      match "*path", to: "errors#not_found", via: :all
     end
   end
 

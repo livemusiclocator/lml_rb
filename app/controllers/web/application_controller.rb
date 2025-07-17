@@ -14,8 +14,12 @@ module Web
 
     private
 
+    # TODO: should this go in the error controller instead? Not sure how.
     def render_custom_not_found
-      render "web/shared/404", status: :not_found, layout: false
+      @error_message_heading = "404"
+      @error_message_sub_heading = "Gig not found"
+      @error_message_text = "We don't seem to have details about the gig you are looking for."
+      render "web/errors/404", status: :not_found
     end
   end
 end
