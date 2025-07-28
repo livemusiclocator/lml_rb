@@ -4,14 +4,20 @@ production:
   entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
   css_files:
   - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
-  external_dependencies: []
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/leaflet.css
+  external_dependencies:
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/leaflet.js
 test:
   entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
   css_files:
   - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
-  external_dependencies: []
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/leaflet.css
+  external_dependencies:
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/leaflet.js
 development:
   entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.js
   css_files:
   - https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.css
-  external_dependencies: []
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/leaflet.css
+  external_dependencies:
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/leaflet.js
