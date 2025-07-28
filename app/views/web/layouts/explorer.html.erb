@@ -1,6 +1,7 @@
 <% content_for :head do %>
   <%= spa_preload_tags %>
-  <%= spa_stylesheet_tag %>
+  <%= spa_external_dependency_tags %>
+  <%= spa_stylesheet_tags %>
   <script>
    window.APP_CONFIG = <%= raw json_escape(frontend_app_config) %>
   </script>
@@ -10,7 +11,7 @@
     <%= yield(:html_fallback) %>
   </div>
   <% if !params[:nojs]  %>
-    <%= spa_javascript_tag %>
+    <%= spa_entrypoint_javascript_tag %>
     <%  end %>
 <%  end %>
 

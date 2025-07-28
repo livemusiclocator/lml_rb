@@ -20,11 +20,14 @@ namespace :spa do
         # Just register the URLs - don't download anything
 
         entry = manifest['index.html']
-
+        # grab entrypoints that are js from manifest
+        external_dependencies = manifest.values.filter{|item| item['isEntry'] && item["file"].end_with?("js") && item["src"]!="index.html" }.map { |item| item["file"] }
         {
-          'spa.js' => "#{base_url}/#{entry['file']}",
-          'spa.css' => entry['css']&.first ? "#{base_url}/#{entry['css'].first}" : nil
+          'entrypoint_script' => "#{base_url}/#{entry['file']}",
+          'css_files' => entry['css'].map { |file| "#{base_url}/#{file}"},
+          'external_dependencies' => external_dependencies.map { |file| "#{base_url}/#{file}"},
         }.compact
+
     end
 
     all_configs = {

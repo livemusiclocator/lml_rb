@@ -1,11 +1,17 @@
 # Please run rake spa:fetch to update this file
 ---
 production:
-  spa.js: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
-  spa.css: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
+  entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
+  css_files:
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
+  external_dependencies: []
 test:
-  spa.js: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
-  spa.css: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
+  entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
+  css_files:
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
+  external_dependencies: []
 development:
-  spa.js: https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.js
-  spa.css: https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.css
+  entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.js
+  css_files:
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_dev/lml_gig_explorer.css
+  external_dependencies: []
