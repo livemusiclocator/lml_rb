@@ -4,6 +4,8 @@ module Web
   class ExplorerController < Web::ApplicationController
     layout "web/layouts/explorer"
     def index
+      expires_in 10.minutes, public: true
+
       search = Web::GigSearch.new(search_params)
       if search.valid?
         metadata_source search
@@ -14,6 +16,7 @@ module Web
     end
 
     def show
+      expires_in 10.minutes, public: true
       @gig = Lml::Gig.find(params[:id])
       metadata_source @gig
       render
