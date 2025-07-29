@@ -44,5 +44,7 @@ module Lml
     # This is the default, but we need to ensure it stays at 1 or sudomain
     # routes fail - see config/routes.rb  for more
     config.action_dispatch.tld_length = 1
+
+    config.middleware.use Rack::Deflater
   end
 end
