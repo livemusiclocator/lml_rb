@@ -2,7 +2,7 @@
 
 module Web
   module ApplicationHelper
-    STATIC_PAGES = [
+    STATIC_PAGES = { about: [
       { name: "St Kilda Collab", page_id: "st-kilda-live-music" },
       { name: "The Team", page_id: "the-team" },
       { name: "Volunteering", page_id: "volunteering" },
@@ -10,8 +10,7 @@ module Web
       { name: "API, Stats, and Data", page_id: "api-stats-and-data" },
       { name: "Contact", page_id: "contact" },
       { name: "Privacy Policy", page_id: "privacy-policy" },
-
-    ].freeze
+    ] }.freeze
 
     TOP_NAV = {
       home: { name: "Home", path_name: :web_root },
@@ -19,7 +18,7 @@ module Web
         { name: "Home", path_name: :web_root },
         # TODO: better way to match /start/about to /start/about/a and /about/b  but not match /start/ to everything?
         { name: "About", path_name: :web_about_page, section_page: true },
-        { name: "Events", path_name: :web_events },
+        { name: "Events", path_name: :web_events_page },
       ],
     }.freeze
 
@@ -53,7 +52,7 @@ module Web
     end
 
     def about_section_static_pages
-      pages = STATIC_PAGES.map do |page|
+      pages = STATIC_PAGES[:about].map do |page|
         path = about_page_path(page[:page_id])
 
         page.merge(path: path)

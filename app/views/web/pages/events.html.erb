@@ -1,0 +1,21 @@
+<%= content_for(:extra_page_heading) do%>
+    <%= image_tag 'web/lbmf2024logo.png', alt: "Leaps and Bounds Music Festival 2024 logo", class: "w-48 h-48 md:w-72 md:h-72 mb-10 object-contain", height: 72, width: 72 %>
+
+<%end %>
+<% title "Events" %>
+<section>
+    <p>The <a href="https://www.lbmf.com.au/" className="text-customBlue underline hover:text-blue-700" target="_blank" rel="noopener noreferrer">Leaps and Bounds Festival</a>, a celebration of local music in the City of Yarra, runs Thursday 25 July to Sunday 28 July across the City.</p>
+    <p>What originally began as a vibrant push to support local venues, musicians, and businesses through the quiet of winter, Leaps and Bounds Music Festival has grown into a cornerstone of the City of Yarra’s cultural landscape.</p>
+    <p>Celebrated annually, this festival continues to nurture our thriving music community by showcasing a diverse range of homegrown talent—from emerging local artists to internationally acclaimed stars.</p>
+    <p><%= link_to home_path, class:"text-customBlue underline hover:text-blue-700" do %>Live Music Locator<% end  %> is proud to chaperone you around Leaps and Bounds. Click the “get directions” link for any event to see travel times and directions whether you are walking, cycling, public transport or driving.</p>
+
+    <p>This information will always be verified and free, importantly supporting musicians, our small to medium live music venues, and you the punters.</p>
+
+        <p>We carry the most comprehensive information you will find on gigs in the geographical areas we are covering. Right now that is Fitzroy, Collingwood, St Kilda and Richmond in Melbourne. This year we will be expanding to cover all of Victoria.</p>
+
+        <p>Live Music Locator is listed on the Register of Cultural Organisations and has full Charity Tax Concession status.<br>
+        All donations are 100% tax deductable.<br>
+        ABN 69 680 443 832</p>
+
+        <p>To find out more or provide any feedback <%= link_to about_page_path(:contact) do %>contact us <% end %>.</p>
+    </section>
