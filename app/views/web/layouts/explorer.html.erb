@@ -5,9 +5,17 @@
   <script>
    window.APP_CONFIG = <%= raw json_escape(frontend_app_config) %>
   </script>
+  <style type="text/css">
+   /* temporary fix while moving over to new layout in spa */
+   #root > div{
+
+     flex-grow:1;
+
+   }
+  </style>
   <% end %>
   <% content_for :main do %>
-  <div id="root">
+  <div id="root" class="flex flex-1">
     <%= yield(:html_fallback) %>
   </div>
   <% if !params[:nojs]  %>
