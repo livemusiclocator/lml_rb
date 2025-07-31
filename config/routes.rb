@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       get ":id", to: "explorer#show"
     end
     # TODO: this still provided by the react app but should be migrated if we plan to keep it.
-    get "/events", to: "explorer#index", as: :web_events
+    get "/events", to: "explorer#index", as: :web_events_page
     get "/about", to: "pages#show", id: "about", as: :web_about_page
     get "/about/*id", to: "pages#show", as: :web_about_section_page
   end
