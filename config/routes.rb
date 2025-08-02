@@ -21,23 +21,24 @@ Rails.application.routes.draw do
     get "/about/*id", to: "pages#show", section: "about", as: :web_about_section_page
   end
 
+  # Debug route for development - shows how Rails parses domains/subdomains
+  if Rails.env.development?
+    get "debug_domain", to: lambda { |env|
+      request = ActionDispatch::Request.new(env)
+      [200, { "Content-Type" => "text/plain" }, [
+        "Host: #{request.host}\n" \
+        "Domain: #{request.domain.inspect}\n" \
+        "Subdomain: #{request.subdomain.inspect}\n" \
+        "Subdomains: #{request.subdomains.inspect}\n" \
+        "Port: #{request.port}\n" \
+        "Full URL: #{request.url}\n",
+      ],]
+    }
+  end
   # shared routes - no subdomain constraints
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Redirect livemusiclocator.com.au to www.livemusiclocator.com.au
-  # With tld_length=1, livemusiclocator.com.au gets parsed as:
-  # - domain: "com.au"
-  # - subdomain: "livemusiclocator"
-  # So we need to match when subdomain is exactly "livemusiclocator"
-  constraints subdomain: /^livemusiclocator$/ do
-    get "*path?", to: redirect(status: 301) { |_params, request|
-      URI.parse(request.url).tap do |uri|
-        uri.host.prepend("www.")
-      end.to_s
-    }
-  end
 
   # www.livemusiclocator.com.au and beta.livemusiclocator.com.au
   # (also probably www.lml.live and beta.lml.live if we set these up)
@@ -89,6 +90,48 @@ Rails.application.routes.draw do
     scope "docs" do
       get "/", to: "docs#index"
     end
+  end
+
+  # All the redirects
+
+  # locally use lml.test for lml.live and livemusiclocator.com.test for livemusiclocator.com.au
+  # bypassing many awkward tld_length issues hopefully
+
+  # (if we need to do more complicated stuff like db lookups, maybe could call a controller and set params)
+
+  short_domain = Rails.env.development? ? "lml.test" : "lml.live"
+  target_domain = Rails.env.development? ? "livemusiclocator.com.test" : "livemusiclocator.com.au"
+
+  # lml.live => www.livemusiclocator.com.au
+  constraints domain: short_domain, subdomain: "" do
+    get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www"), via: :all
+  end
+
+  # Subdomain redirects to main gig guide, setting location search parameter
+  %w[brisbane melbourne castlemaine goldfields].each do |standard_location|
+    constraints domain: short_domain, subdomain: standard_location do
+      get "/", to: redirect(status: 301,
+                            domain: target_domain,
+                            subdomain: "www",
+                            params: { location: standard_location },),
+               via: :all
+    end
+  end
+  # Subdomain redirects to location-specific 'edition' of the gig guide
+  %w[stkilda geelong].each do |edition_location|
+    constraints domain: short_domain, subdomain: edition_location do
+      get "/",
+          to: redirect(status: 301,
+                       domain: target_domain,
+                       subdomain: "www",
+                       path: "/editions/#{edition_location}",), via: :all
+    end
+  end
+  # livemusiclocator.com.au => www.livemusiclocator.com.au
+  constraints host: target_domain do
+    get "/", to: redirect(status: 301,
+                          domain: target_domain,
+                          subdomain: "www",), via: :all
   end
 end
 # rubocop:enable Metrics/BlockLength
