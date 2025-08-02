@@ -16,10 +16,9 @@ Rails.application.routes.draw do
     scope "gigs" do
       get ":id", to: "explorer#show"
     end
-    # TODO: this still provided by the react app but should be migrated if we plan to keep it.
-    get "/events", to: "explorer#index", as: :web_events_page
-    get "/about", to: "pages#show", id: "about", as: :web_about_page
-    get "/about/*id", to: "pages#show", as: :web_about_section_page
+    get "/events", to: "pages#show", id: "events", section: "events", as: :web_events_page
+    get "/about", to: "pages#show", id: "about", section: "about", as: :web_about_page
+    get "/about/*id", to: "pages#show", section: "about", as: :web_about_section_page
   end
 
   # shared routes - no subdomain constraints

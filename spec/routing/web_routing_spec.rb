@@ -30,15 +30,18 @@ shared_examples "Web endpoints" do |root_url, **additional_params|
       expect(get("#{root_url}/gigs/ABCDEF")).to route_to(controller: "web/explorer", action: "show", id: "ABCDEF",
                                                          **additional_params,)
     end
-    it "routes #{root_url}/events to explorer#index" do
-      expect(get("#{root_url}/events")).to route_to(controller: "web/explorer", action: "index", **additional_params)
+    it "routes #{root_url}/events to pages#show for about page" do
+      expect(get("#{root_url}/events")).to route_to(controller: "web/pages", action: "show", section: "events",
+                                                    id: "events", **additional_params,)
     end
     it "routes #{root_url}/about to pages#show for about page" do
-      expect(get("#{root_url}/about")).to route_to(controller: "web/pages", action: "show", id: "about",
+      expect(get("#{root_url}/about")).to route_to(controller: "web/pages", action: "show",
+                                                   id: "about", section: "about",
                                                    **additional_params,)
     end
     it "routes #{root_url}/about/ABCDE to pages#show for ABCDE page" do
-      expect(get("#{root_url}/about/ABCDE")).to route_to(controller: "web/pages", action: "show", id: "ABCDE",
+      expect(get("#{root_url}/about/ABCDE")).to route_to(controller: "web/pages", action: "show",
+                                                         id: "ABCDE", section: "about",
                                                          **additional_params,)
     end
   end
