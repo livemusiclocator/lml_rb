@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 require "rails_helper"
+shared_examples "www redirects" do |root_url, www_url|
+  describe "www redirects at #{root_url} to #{www_url}" do
+    it "routes #{root_url} to www url #{www_url}" do
+      pending("configuration to test www redirects")
+      # TODO: redirect_to is not the right matcher here, but what is ?
+      expect(get(root_url.to_s)).to route_to(www_url.to_s)
+    end
+    it "routes #{root_url}/subpath to www url #{www_url}/subpath" do
+      pending("configuration to test www redirects")
+      expect(get(root_url.to_s)).to route_to("#{www_url}/subpath")
+    end
+  end
+end
 shared_examples "shared endpoints" do |root_url|
   it "routes #{root_url}/up to healthcheck" do
     expect(get("#{root_url}/up")).to route_to(controller: "rails/health", action: "show")
@@ -78,6 +92,7 @@ describe "routes" do
     include_examples "shared endpoints", "https://www.lml.local"
     include_examples "API endpoints", "https://api.lml.local"
     include_examples "Web endpoints", "https://www.lml.local"
+    include_examples "www redirects", "https://www.livemusiclocator.com.au/", "https://www.livemusiclocator.com.au/"
   end
   describe "beta.livemusiclocator.com.au routes" do
     include_examples "shared endpoints", "https://beta.livemusiclocator.com.au"
@@ -102,3 +117,4 @@ describe "routes" do
     include_examples "No web endpoints", "https://api.lml.live/"
   end
 end
+# rubocop:enable Metrics/BlockLength
