@@ -26,6 +26,19 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Redirect livemusiclocator.com.au to www.livemusiclocator.com.au
+  # With tld_length=1, livemusiclocator.com.au gets parsed as:
+  # - domain: "com.au"
+  # - subdomain: "livemusiclocator"
+  # So we need to match when subdomain is exactly "livemusiclocator"
+  constraints subdomain: /^livemusiclocator$/ do
+    get "*path?", to: redirect(status: 301) { |_params, request|
+      URI.parse(request.url).tap do |uri|
+        uri.host.prepend("www.")
+      end.to_s
+    }
+  end
+
   # www.livemusiclocator.com.au and beta.livemusiclocator.com.au
   # (also probably www.lml.live and beta.lml.live if we set these up)
   # Match only routes to the subdomain 'beta' and 'www'
