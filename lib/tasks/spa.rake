@@ -32,7 +32,7 @@ namespace :spa do
 
     all_configs = {
       # switch to www install when we go live (because cors headers are different - there was probably a better way!)
-      production: per_install_fetch("beta"),
+      production: per_install_fetch("live"),
       test: per_install_fetch("beta"),
       development: per_install_fetch("dev",true)
     }

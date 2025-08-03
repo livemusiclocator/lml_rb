@@ -1,9 +1,9 @@
 # Please run rake spa:fetch to update this file
 ---
 production:
-  entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
+  entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_live/lml_gig_explorer.js
   css_files:
-  - https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.css
+  - https://assets.livemusiclocator.com.au/lml_gig_explorer_live/lml_gig_explorer.css
   external_dependencies: []
 test:
   entrypoint_script: https://assets.livemusiclocator.com.au/lml_gig_explorer_beta/lml_gig_explorer.js
