@@ -3,9 +3,10 @@
 
     <div class="flex justify-between items-center flex-wrap max-w-8xl mx-auto py-2 px-5">
 
-  <%= link_to home_path, class: "site-logo flex justify-start items-center text-slate-50 font-sans" do %>
+  <%= link_to home_path, class: "site-logo flex justify-start items-center text-slate-50 font-sans text-xl" do %>
     <%= image_tag 'web/lml-brandmark.svg', class: "flex-shrink w-10", alt: "Brand Logo", height: 40, width: 40 %>
-    <span class="text-xl p-2">Live Music Locator</span>
+    <span class="px-2">Live Music Locator</span>
+    <span class='font-semibold transform-uppercase'><%= edition_title%></span>
   <% end %>
       <!-- todo -add back hidden lg:block if we implemennt mobile menu -->
   <ul class="flex flex-row gap-x-4">

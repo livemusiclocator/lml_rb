@@ -84,5 +84,31 @@ module Web
     def page_heading
       @heading_text || title
     end
+
+    # todo: merge with all the other millions of places we have editon config etc.
+     EDITION_PARAMS = {
+      "stkilda" => {
+        edition_title: "St Kilda"
+      },
+      "geelong" => {
+        edition_title: "Geelong"
+      },
+    }.freeze
+
+
+    def site_title
+      edition_params = EDITION_PARAMS[params[:edition_id]]
+
+      if edition_params
+        "Live Music Locator - #{edition_params[:edition_title]}"
+      else
+        "Live Music Locator"
+      end
+    end
+    def edition_title
+      edition_params = EDITION_PARAMS[params[:edition_id]]
+
+      if edition_params then edition_params[:edition_title] else "" end
+    end
   end
 end
