@@ -13,6 +13,10 @@ module Web
         default_location: "stkilda",
         allow_select_location: false,
       },
+      "geelong" => {
+        default_location: "geelong",
+        allow_select_location: false,
+      },
     }.freeze
 
     def frontend_app_config

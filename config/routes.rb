@@ -53,7 +53,7 @@ Rails.application.routes.draw do
       # the default, universal version of the gig guide
       concerns :gig_guide
       # edition based versions of the gig guide.
-      scope "editions/:edition_id", as: "edition", constraints: { edition_id: /stkilda/ } do
+      scope "editions/:edition_id", as: "edition", constraints: { edition_id: /stkilda|geelong/ } do
         concerns :gig_guide
       end
       match "*path", to: "errors#not_found", via: :all
