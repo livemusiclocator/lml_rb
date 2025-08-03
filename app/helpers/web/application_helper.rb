@@ -18,7 +18,6 @@ module Web
         { name: "Home", path_name: :web_root },
         # TODO: better way to match /start/about to /start/about/a and /about/b  but not match /start/ to everything?
         { name: "About", path_name: :web_about_page, section_page: true },
-        { name: "Events", path_name: :web_events_page },
       ],
     }.freeze
 
