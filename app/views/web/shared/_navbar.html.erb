@@ -9,13 +9,27 @@
     <span class='font-semibold transform-uppercase'><%= edition_title%></span>
   <% end %>
       <!-- todo -add back hidden lg:block if we implemennt mobile menu -->
-  <ul class="flex flex-row gap-x-4">
+  <div class="flex flex-row gap-x-4">
     <% nav_menu_items.each do |nav_menu_item| %>
       <%= link_to nav_menu_item[:path], class: class_names('font-normal transition duration-200 hover:text-slate-300', { "font-semibold": nav_menu_item[:current] }) do %>
         <%= nav_menu_item[:name] %>
       <%end%>
     <%end%>
-  </ul>
+    <button
+      onclick="window.announcements?.isVisible() ? window.announcements?.hide(): window.announcements?.show()"
+      class="text-xs text-lmlpink  cursor-pointer hover:text-white px-1 transition-colors duration-150"
+
+
+
+
+
+      aria-label="Show announcement again"
+      title="Show announcement"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-5" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-warning-icon lucide-message-circle-warning"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+
+    </button>
+  </div>
   </div>
 
 </header>
