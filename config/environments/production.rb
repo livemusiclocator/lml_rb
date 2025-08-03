@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -89,9 +91,10 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
-    #   "example.com",     # Allow requests from example.com
     /.*\.livemusiclocator\.com\.au/,
-    /.*\.lml\.live/
+    /.*\.lml\.live/,
+    /livemusiclocator\.com\.au/,
+    /lml.live/,
   ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # and temporarily for api and admin while we check it works
