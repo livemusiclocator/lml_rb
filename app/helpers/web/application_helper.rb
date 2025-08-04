@@ -1,22 +1,36 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ModuleLength
 module Web
   module ApplicationHelper
-    STATIC_PAGES = { about: [
-      { name: "St Kilda Collab", page_id: "st-kilda-live-music" },
-      { name: "The Team", page_id: "the-team" },
-      { name: "Volunteering", page_id: "volunteering" },
-      { name: "How To Use", page_id: "how-to-use-livemusiclocator" },
-      { name: "API, Stats, and Data", page_id: "api-stats-and-data" },
-      { name: "Contact", page_id: "contact" },
-      { name: "Privacy Policy", page_id: "privacy-policy" },
-    ] }.freeze
+    STATIC_PAGES = { base: { about: {
+      pages: [
+        { name: "About", page_id: "about", content_page_id: "about", section_root_page: true },
+        { name: "St Kilda Collab", page_id: "st-kilda-live-music", content_page_id: "st-kilda-live-music" },
+        { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
+        { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
+        { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
+        { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
+        { name: "Contact", page_id: "contact", content_page_id: "contact" },
+        { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
+      ],
+    } }, stkilda: { about: {
+      pages: [
+        { name: "About", page_id: "about", content_page_id: "st-kilda-live-music", section_root_page: true },
+        { name: "Live Music Locator", page_id: "about-lml", content_page_id: "about" },
+        { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
+        { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
+        { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
+        { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
+        { name: "Contact", page_id: "contact", content_page_id: "contact" },
+        { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
+      ],
+    } }, }.freeze
 
     TOP_NAV = {
       home: { name: "Home", path_name: :web_root },
       menu: [
         { name: "Home", path_name: :web_root },
-        # TODO: better way to match /start/about to /start/about/a and /about/b  but not match /start/ to everything?
         { name: "About", path_name: :web_about_page, section_page: true },
       ],
     }.freeze
@@ -50,16 +64,23 @@ module Web
       relative_path({ path_name: :web_about_section_page, params: { id: page_id } })
     end
 
-    def about_section_static_pages
-      pages = STATIC_PAGES[:about].map do |page|
-        path = about_page_path(page[:page_id])
-
+    def about_section_nav
+      key = params[:edition_id]&.to_sym || :base
+      about_section = STATIC_PAGES.dig(key, :about) || {}
+      (about_section[:pages] || []).map do |page|
+        path = if page[:section_root_page]
+                 relative_path({ path_name: :web_about_page })
+               else
+                 about_page_path(page[:page_id])
+               end
         page.merge(path: path)
       end
+    end
 
-      pages.unshift({ name: "About", path: web_about_page_path })
-
-      pages
+    def about_section_static_page(edition, page_id)
+      edition_key = edition&.to_sym || :base
+      pages = STATIC_PAGES.dig(edition_key, :about, :pages) || []
+      pages.detect { |page| page[:page_id] == page_id }
     end
 
     def nav_item_classes(is_active)
@@ -84,16 +105,15 @@ module Web
       @heading_text || title
     end
 
-    # todo: merge with all the other millions of places we have editon config etc.
-     EDITION_PARAMS = {
+    # TODO: merge with all the other millions of places we have editon config etc.
+    EDITION_PARAMS = {
       "stkilda" => {
-        edition_title: "St Kilda"
+        edition_title: "St Kilda",
       },
       "geelong" => {
-        edition_title: "Geelong"
+        edition_title: "Geelong",
       },
     }.freeze
-
 
     def site_title
       edition_params = EDITION_PARAMS[params[:edition_id]]
@@ -104,10 +124,12 @@ module Web
         "Live Music Locator"
       end
     end
+
     def edition_title
       edition_params = EDITION_PARAMS[params[:edition_id]]
 
-      if edition_params then edition_params[:edition_title] else "" end
+      edition_params ? edition_params[:edition_title] : ""
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength
