@@ -25,7 +25,8 @@ module Lml
     has_many :uploads, dependent: :delete_all
 
     scope :in_location, lambda { |location|
-      return if location == "anywhere"
+      # todo: unreleased locations !
+      return where.not(location: ["Geelong", "geelong", "castlemaine","goldfields", "Goldfields", "Castlemaine"]) if location == "anywhere"
 
       postcodes = POSTCODES[location]
 
