@@ -6,7 +6,6 @@ module Web
     STATIC_PAGES = { base: { about: {
       pages: [
         { name: "About", page_id: "about", content_page_id: "about", section_root_page: true },
-        { name: "St Kilda Collab", page_id: "st-kilda-live-music", content_page_id: "st-kilda-live-music" },
         { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
         { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
         { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
@@ -17,7 +16,15 @@ module Web
     } }, stkilda: { about: {
       pages: [
         { name: "About", page_id: "about", content_page_id: "st-kilda-live-music", section_root_page: true },
-        { name: "Live Music Locator", page_id: "about-lml", content_page_id: "about" },
+        { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
+        { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
+        { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
+        { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
+        { name: "Contact", page_id: "contact", content_page_id: "contact" },
+        { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
+      ],}},geelong: { about: {
+      pages: [
+        { name: "About", page_id: "about", content_page_id: "about-geelong", section_root_page: true },
         { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
         { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
         { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
