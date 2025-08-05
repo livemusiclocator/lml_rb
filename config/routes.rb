@@ -49,10 +49,7 @@ Rails.application.routes.draw do
     scope "api/gigs", as: "web_api" do
       concerns :the_api
     end
-    # sitemap
-
     scope module: "web" do
-      get "/sitemap.xml", to: "meta#show", id: "sitemap"
       # the default, universal version of the gig guide
       concerns :gig_guide
       # edition based versions of the gig guide.
