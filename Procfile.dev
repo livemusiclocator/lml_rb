@@ -1,2 +1,2 @@
-web: RAILS_DEVELOPMENT_HOSTS="lml.test,www.livemusiclocator.com.test,beta.livemusiclocator.com.test,api.lml.test,livemusiclocator.com.test,brisbane.lml.test,stkilda.lml.test,goldfields.lml.test,castlemaine.lml.test,geelong.lml.test" bin/rails server
+web: RAILS_DEVELOPMENT_HOSTS="www.lml.test,lml.test,www.livemusiclocator.com.test,beta.livemusiclocator.com.test,api.lml.test,livemusiclocator.com.test,brisbane.lml.test,stkilda.lml.test,goldfields.lml.test,castlemaine.lml.test,geelong.lml.test" bin/rails server
 css: bin/rails tailwindcss:watch

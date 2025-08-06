@@ -102,9 +102,9 @@ Rails.application.routes.draw do
   short_domain = Rails.env.development? ? "lml.test" : "lml.live"
   target_domain = Rails.env.development? ? "livemusiclocator.com.test" : "livemusiclocator.com.au"
 
-  # lml.live => www.livemusiclocator.com.au
+  # lml.live => www.livemusiclocator.com.au/?location=melbourne
   constraints domain: short_domain, subdomain: "" do
-    get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www"), via: :all
+    get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }), via: :all
   end
 
   # Subdomain redirects to main gig guide, setting location search parameter
