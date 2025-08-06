@@ -1,0 +1,2479 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://www.livemusiclocator.com.au/</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek</loc>
+    
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=rock</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=rock</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=rock</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=rock</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=rock</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=pop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=pop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=pop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=pop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=pop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=hip-hop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=hip-hop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=hip-hop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=hip-hop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=hip-hop</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=r&amp;b</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=r&amp;b</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=r&amp;b</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=r&amp;b</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=r&amp;b</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=soul</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=soul</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=soul</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=soul</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=soul</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=jazz</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=jazz</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=jazz</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=jazz</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=jazz</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=classical</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=classical</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=classical</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=classical</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=classical</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=electronic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=electronic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=electronic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=electronic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=electronic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=country</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=country</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=country</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=country</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=country</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=metal</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=metal</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=metal</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=metal</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=metal</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=folk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=folk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=folk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=folk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=folk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=blues</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=blues</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=blues</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=blues</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=blues</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=reggae</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=reggae</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=reggae</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=reggae</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=reggae</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=latin</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=latin</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=latin</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=latin</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=latin</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=world</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=world</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=world</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=world</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=world</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=gospel</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=gospel</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=gospel</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=gospel</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=gospel</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=punk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=punk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=punk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=punk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=punk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=alternative</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=alternative</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=alternative</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=alternative</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=alternative</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=experimental</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=experimental</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=experimental</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=experimental</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=experimental</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=indie</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=indie</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=indie</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=indie</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=indie</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=ambient</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=ambient</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=ambient</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=ambient</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=ambient</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=hardcore</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=hardcore</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=hardcore</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=hardcore</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=hardcore</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=industrial</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=industrial</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=industrial</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=industrial</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=industrial</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=garage</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=garage</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=garage</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=garage</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=garage</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=trance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=trance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=trance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=trance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=trance</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=house</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=house</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=house</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=house</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=house</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=techno</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=techno</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=techno</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=techno</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=techno</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=drum+and+bass</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=drum+and+bass</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=drum+and+bass</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=drum+and+bass</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=drum+and+bass</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dubstep</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dubstep</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dubstep</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dubstep</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dubstep</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=funk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=funk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=funk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=funk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=funk</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=chill</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=chill</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=chill</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=chill</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=chill</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=disco</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=disco</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=disco</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=disco</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=disco</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=opera</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=opera</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=opera</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=opera</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=opera</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=swing</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=swing</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=swing</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=swing</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=swing</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=acoustic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=acoustic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=acoustic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=acoustic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=acoustic</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=new+wave</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=new+wave</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=new+wave</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=new+wave</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=new+wave</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dj</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dj</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dj</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dj</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dj</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=covers</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=covers</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=covers</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=covers</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=covers</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=tribute</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=tribute</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=tribute</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=tribute</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=tribute</loc>
+
+    </url>
+
+
+
+
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;location=stkilda</loc>
+    
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=rock&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=rock&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=rock&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=rock&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=rock&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=pop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=pop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=pop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=pop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=pop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=hip-hop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=hip-hop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=hip-hop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=hip-hop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=hip-hop&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=r&amp;b&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=r&amp;b&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=r&amp;b&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=r&amp;b&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=r&amp;b&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=soul&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=soul&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=soul&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=soul&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=soul&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=jazz&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=jazz&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=jazz&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=jazz&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=jazz&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=classical&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=classical&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=classical&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=classical&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=classical&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=electronic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=electronic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=electronic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=electronic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=electronic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=country&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=country&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=country&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=country&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=country&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=metal&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=metal&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=metal&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=metal&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=metal&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=folk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=folk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=folk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=folk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=folk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=blues&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=blues&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=blues&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=blues&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=blues&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=reggae&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=reggae&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=reggae&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=reggae&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=reggae&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=latin&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=latin&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=latin&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=latin&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=latin&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=world&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=world&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=world&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=world&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=world&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=gospel&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=gospel&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=gospel&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=gospel&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=gospel&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=punk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=punk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=punk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=punk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=punk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=alternative&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=alternative&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=alternative&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=alternative&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=alternative&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=experimental&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=experimental&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=experimental&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=experimental&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=experimental&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=indie&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=indie&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=indie&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=indie&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=indie&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=ambient&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=ambient&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=ambient&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=ambient&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=ambient&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=hardcore&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=hardcore&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=hardcore&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=hardcore&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=hardcore&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=industrial&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=industrial&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=industrial&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=industrial&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=industrial&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=garage&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=garage&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=garage&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=garage&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=garage&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=trance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=trance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=trance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=trance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=trance&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=house&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=house&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=house&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=house&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=house&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=techno&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=techno&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=techno&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=techno&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=techno&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=drum+and+bass&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=drum+and+bass&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=drum+and+bass&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=drum+and+bass&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=drum+and+bass&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dubstep&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dubstep&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dubstep&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dubstep&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dubstep&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=funk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=funk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=funk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=funk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=funk&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=chill&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=chill&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=chill&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=chill&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=chill&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=disco&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=disco&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=disco&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=disco&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=disco&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=opera&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=opera&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=opera&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=opera&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=opera&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=swing&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=swing&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=swing&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=swing&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=swing&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=acoustic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=acoustic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=acoustic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=acoustic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=acoustic&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=new+wave&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=new+wave&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=new+wave&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=new+wave&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=new+wave&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dj&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dj&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dj&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dj&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dj&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=covers&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=covers&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=covers&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=covers&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=covers&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=tribute&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=tribute&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=tribute&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=tribute&amp;location=stkilda</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=tribute&amp;location=stkilda</loc>
+
+    </url>
+
+
+
+
+
+
+
+
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;location=melbourne</loc>
+    
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=rock&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=rock&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=rock&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=rock&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=rock&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=pop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=pop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=pop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=pop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=pop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=hip-hop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=hip-hop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=hip-hop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=hip-hop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=hip-hop&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=r&amp;b&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=r&amp;b&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=r&amp;b&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=r&amp;b&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=r&amp;b&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=soul&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=soul&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=soul&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=soul&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=soul&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=jazz&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=jazz&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=jazz&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=jazz&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=jazz&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=classical&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=classical&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=classical&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=classical&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=classical&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=electronic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=electronic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=electronic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=electronic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=electronic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=country&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=country&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=country&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=country&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=country&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=metal&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=metal&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=metal&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=metal&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=metal&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=folk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=folk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=folk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=folk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=folk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=blues&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=blues&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=blues&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=blues&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=blues&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=reggae&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=reggae&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=reggae&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=reggae&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=reggae&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=latin&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=latin&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=latin&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=latin&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=latin&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=world&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=world&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=world&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=world&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=world&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=gospel&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=gospel&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=gospel&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=gospel&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=gospel&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=punk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=punk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=punk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=punk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=punk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=alternative&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=alternative&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=alternative&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=alternative&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=alternative&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=experimental&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=experimental&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=experimental&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=experimental&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=experimental&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=indie&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=indie&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=indie&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=indie&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=indie&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=ambient&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=ambient&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=ambient&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=ambient&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=ambient&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=hardcore&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=hardcore&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=hardcore&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=hardcore&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=hardcore&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=industrial&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=industrial&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=industrial&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=industrial&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=industrial&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=garage&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=garage&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=garage&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=garage&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=garage&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=trance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=trance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=trance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=trance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=trance&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=house&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=house&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=house&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=house&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=house&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=techno&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=techno&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=techno&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=techno&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=techno&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=drum+and+bass&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=drum+and+bass&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=drum+and+bass&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=drum+and+bass&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=drum+and+bass&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dubstep&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dubstep&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dubstep&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dubstep&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dubstep&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=funk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=funk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=funk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=funk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=funk&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=chill&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=chill&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=chill&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=chill&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=chill&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=disco&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=disco&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=disco&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=disco&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=disco&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=opera&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=opera&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=opera&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=opera&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=opera&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=swing&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=swing&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=swing&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=swing&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=swing&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=acoustic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=acoustic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=acoustic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=acoustic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=acoustic&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=new+wave&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=new+wave&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=new+wave&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=new+wave&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=new+wave&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=dj&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=dj&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=dj&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=dj&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=dj&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=covers&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=covers&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=covers&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=covers&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=covers&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=today&amp;genre[]=tribute&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=tomorrow&amp;genre[]=tribute&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=weekend&amp;genre[]=tribute&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=thisWeek&amp;genre[]=tribute&amp;location=melbourne</loc>
+
+    </url>
+    <url>
+        <loc>https://www.livemusiclocator.com.au/?dateRange=nextWeek&amp;genre[]=tribute&amp;location=melbourne</loc>
+
+    </url>
+
+</urlset>
