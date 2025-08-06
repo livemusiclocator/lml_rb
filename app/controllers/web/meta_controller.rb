@@ -8,7 +8,7 @@ module Web
       expires_in 1.days, public: true
       file_path = Rails.root.join("app/views/web/sitemap.xml")
 
-      render file: file_path, layout: false
+      render file: file_path, layout: false, content_type: "application/xml"
     end
   end
 end
