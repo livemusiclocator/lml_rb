@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Lml
   # special handling for locations we may wish to move to database
   POSTCODES = {
     "stkilda" => [3182, 3183, 3185],
-  }
+  }.freeze
 
   class Venue < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
@@ -25,12 +27,18 @@ module Lml
     has_many :uploads, dependent: :delete_all
 
     scope :in_location, lambda { |location|
-      # todo: unreleased locations !
-      return where.not(location: ["Geelong", "geelong", "castlemaine","goldfields", "Goldfields", "Castlemaine"]) if location == "anywhere"
+      # TODO: unreleased locations !
+      if location == "anywhere"
+        return where.not(location: %w[Geelong geelong castlemaine goldfields Goldfields Castlemaine])
+      end
 
       postcodes = POSTCODES[location]
+      in_location_filter = where(Venue.arel_table[:location].matches(location))
 
-      postcodes ? where(postcode: postcodes) : where(Venue.arel_table[:location].matches(location))
+      # will remove postcode stuff shortly, once all the things are inside
+      return in_location_filter.or(where(postcode: postcodes)) if postcodes
+
+      in_location_filter
     }
 
     def label

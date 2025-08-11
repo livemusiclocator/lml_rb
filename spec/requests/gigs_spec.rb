@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/LineLength
 require "rails_helper"
-
 
 describe "gigs" do
   # should match the 'api.*' defined routes with this
@@ -14,32 +15,32 @@ describe "gigs" do
       end
 
       expect(response.body).to include_json(
-          {
-            "links" => {
-              "_self" => {
-                "href" => "http://api.lml.live/gigs",
-              },
-              "default" => {
-                "href" => "http://api.lml.live/gigs/query",
-              },
-              "next_seven_days" => {
-                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-09&location=castlemaine",
-              },
-              "next_weekend" => {
-                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-08&date_to=2001-06-10&location=castlemaine",
-              },
-              "on_date" => {
-                "href" => "http://api.lml.live/gigs/query?date_from=date&date_to=date&location=castlemaine",
-                "templated" => true,
-              },
-              "this_weekend" => {
-                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-01&date_to=2001-06-03&location=castlemaine",
-              },
-              "today" => {
-                "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-02&location=castlemaine",
-              },
+        {
+          "links" => {
+            "_self" => {
+              "href" => "http://api.lml.live/gigs",
+            },
+            "default" => {
+              "href" => "http://api.lml.live/gigs/query",
+            },
+            "next_seven_days" => {
+              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-09&location=castlemaine",
+            },
+            "next_weekend" => {
+              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-08&date_to=2001-06-10&location=castlemaine",
+            },
+            "on_date" => {
+              "href" => "http://api.lml.live/gigs/query?date_from=date&date_to=date&location=castlemaine",
+              "templated" => true,
+            },
+            "this_weekend" => {
+              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-01&date_to=2001-06-03&location=castlemaine",
+            },
+            "today" => {
+              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-02&location=castlemaine",
             },
           },
+        },
       )
     end
   end
@@ -105,82 +106,82 @@ describe "gigs" do
     it "returns gig" do
       get "/gigs/#{@gig.id}"
       expect(response.body).to include_json(
-          {
-            "date" => "2001-06-08",
-            "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
-            "duration" => nil,
-            "id" => @gig.id,
-            "name" => "The One Gig You Should Not Miss Out On",
-            "series" => "ohm",
-            "category" => "music",
-            "prices" => [
-              {
-                "amount" => "$75.00",
-                "description" => "GA",
-              },
-            ],
-            "sets" => [
-              {
-                "act" => {
-                  "genres" => nil,
-                  "id" => @first_support.id,
-                  "name" => "first support",
-                },
-                "start_time" => "18:00",
-                "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
-                "duration" => 30,
-                "finish_time" => "18:30",
-                "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
-              },
-              {
-                "act" => {
-                  "genres" => nil,
-                  "id" => @second_support.id,
-                  "name" => "second support",
-                },
-                "start_time" => "19:00",
-                "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
-                "duration" => 30,
-                "finish_time" => "19:30",
-                "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
-              },
-              {
-                "act" => {
-                  "genres" => %w[good loud people],
-                  "id" => @main_act.id,
-                  "name" => "The Really Quite Good Music People",
-                },
-                "start_time" => "20:00",
-                "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
-                "duration" => 60,
-                "finish_time" => "21:00",
-                "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
-              },
-            ],
-            "start_time" => nil,
-            "start_timestamp" => nil,
-            "finish_time" => nil,
-            "finish_timestamp" => nil,
-            "status" => "confirmed",
-            "ticket_status" => "sold_out",
-            "genre_tags" => %w[post-punk dream-pop],
-            "information_tags" => %w[all-ages free],
-            "ticketing_url" => "the ticketing url",
-            "venue" => {
-              "address" => "the address",
-              "postcode" => "1234",
-              "capacity" => 500,
-              "id" => @venue.id,
-              "latitude" => nil,
-              "longitude" => nil,
-              "name" => "The Gig Place",
-              "website" => "https://gigplace.com.au",
-              "tags" => [],
-              "vibe" => nil,
-              "location_url" => nil,
+        {
+          "date" => "2001-06-08",
+          "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
+          "duration" => nil,
+          "id" => @gig.id,
+          "name" => "The One Gig You Should Not Miss Out On",
+          "series" => "ohm",
+          "category" => "music",
+          "prices" => [
+            {
+              "amount" => "$75.00",
+              "description" => "GA",
             },
+          ],
+          "sets" => [
+            {
+              "act" => {
+                "genres" => nil,
+                "id" => @first_support.id,
+                "name" => "first support",
+              },
+              "start_time" => "18:00",
+              "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
+              "duration" => 30,
+              "finish_time" => "18:30",
+              "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
+            },
+            {
+              "act" => {
+                "genres" => nil,
+                "id" => @second_support.id,
+                "name" => "second support",
+              },
+              "start_time" => "19:00",
+              "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
+              "duration" => 30,
+              "finish_time" => "19:30",
+              "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
+            },
+            {
+              "act" => {
+                "genres" => %w[good loud people],
+                "id" => @main_act.id,
+                "name" => "The Really Quite Good Music People",
+              },
+              "start_time" => "20:00",
+              "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
+              "duration" => 60,
+              "finish_time" => "21:00",
+              "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
+            },
+          ],
+          "start_time" => nil,
+          "start_timestamp" => nil,
+          "finish_time" => nil,
+          "finish_timestamp" => nil,
+          "status" => "confirmed",
+          "ticket_status" => "sold_out",
+          "genre_tags" => %w[post-punk dream-pop],
+          "information_tags" => %w[all-ages free],
+          "ticketing_url" => "the ticketing url",
+          "venue" => {
+            "address" => "the address",
+            "postcode" => "1234",
+            "capacity" => 500,
+            "id" => @venue.id,
+            "latitude" => nil,
+            "longitude" => nil,
+            "name" => "The Gig Place",
+            "website" => "https://gigplace.com.au",
+            "tags" => [],
+            "vibe" => nil,
+            "location_url" => nil,
           },
-        )
+        },
+      )
     end
   end
 
@@ -215,7 +216,7 @@ describe "gigs" do
           capacity: 500,
           website: "https://gigplace.com.au",
         )
-        @stKildaVenue = Lml::Venue.create!(
+        @stkilda_venue = Lml::Venue.create!(
           name: "The Escry",
           location: "melbourne",
           address: "the address",
@@ -223,6 +224,15 @@ describe "gigs" do
           time_zone: "Australia/Melbourne",
           capacity: 100,
           website: "https://definitelyTheEscryNotATypo.com.au",
+        )
+        @stkilda_venue_with_location_assigned = Lml::Venue.create!(
+          name: "The Mildred Hotel",
+          location: "stkilda",
+          address: "the address",
+          postcode: 9999, # NOT St Kilda Postcode
+          time_zone: "Australia/Melbourne",
+          capacity: 100,
+          website: "https://mildrediscoolyeah.com.au",
         )
 
         @gig = Lml::Gig.create!(
@@ -274,16 +284,21 @@ describe "gigs" do
           venue: @venue,
           date: "2001-08-08",
         )
-        @gigInStKilda = Lml::Gig.create!(
+        @gig_in_stkilda = Lml::Gig.create!(
           name: "A gig in st kilda",
-          venue: @stKildaVenue,
+          venue: @stkilda_venue,
+          date: "2001-06-08",
+        )
+        @another_gig_in_stkilda = Lml::Gig.create!(
+          name: "Another gig in st kilda",
+          venue: @stkilda_venue_with_location_assigned,
           date: "2001-06-08",
         )
       end
 
       it "removes hidden gigs" do
         @gig.update!(hidden: true)
-        @gigInStKilda.update!(hidden: true)
+        @gig_in_stkilda.update!(hidden: true)
         get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to eq([])
       end
@@ -390,7 +405,7 @@ describe "gigs" do
                 "finish_time" => nil,
                 "finish_timestamp" => nil,
                 "genre_tags" => [],
-                "id" => @gigInStKilda.id,
+                "id" => @gig_in_stkilda.id,
                 "information_tags" => [],
                 "name" => "A gig in st kilda",
                 "prices" => [],
@@ -404,7 +419,7 @@ describe "gigs" do
                 "venue" =>
           { "address" => "the address",
             "capacity" => 100,
-            "id" => @stKildaVenue.id,
+            "id" => @stkilda_venue.id,
             "latitude" => nil,
             "location_url" => nil,
             "longitude" => nil,
@@ -412,45 +427,22 @@ describe "gigs" do
             "postcode" => "3182",
             "tags" => [],
             "vibe" => nil,
-            "website" => "https://definitelyTheEscryNotATypo.com.au" } }
-            ]
+            "website" => "https://definitelyTheEscryNotATypo.com.au", }, },
+            ],
           ),
         )
       end
 
       describe "matching sub-geographies of Melbourne" do
-        it "returns St Kilda postcodes when location=stkilda" do
+        # shortly deprecating the stkilda postcode stuff now
+        it "returns venues with location=stkilda when location=stkilda or postcode is stkilda postcode" do
           get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
-          expect(JSON.parse(response.body)).to(eq([{ "category" => nil,
-                                                     "date" => "2001-06-08",
-                                                     "description" => nil,
-                                                     "duration" => nil,
-                                                     "finish_time" => nil,
-                                                     "finish_timestamp" => nil,
-                                                     "genre_tags" => [],
-                                                     "id" => @gigInStKilda.id,
-                                                     "information_tags" => [],
-                                                     "name" => "A gig in st kilda",
-                                                     "prices" => [],
-                                                     "series" => nil,
-                                                     "sets" => [],
-                                                     "start_time" => nil,
-                                                     "start_timestamp" => nil,
-                                                     "status" => "confirmed",
-                                                     "ticket_status" => nil,
-                                                     "ticketing_url" => nil,
-                                                     "venue" =>
-          { "address" => "the address",
-            "capacity" => 100,
-            "id" => @stKildaVenue.id,
-            "latitude" => nil,
-            "location_url" => nil,
-            "longitude" => nil,
-            "name" => "The Escry",
-            "postcode" => "3182",
-            "tags" => [],
-            "vibe" => nil,
-            "website" => "https://definitelyTheEscryNotATypo.com.au" } }]))
+          expect(JSON.parse(response.body)).to match_unordered_json([
+                                                              { name: "A gig in st kilda",
+                                                                venue: { name: "The Escry" }, },
+                                                              { name: "Another gig in st kilda",
+                                                                venue: { name: "The Mildred Hotel" }, },
+                                                            ])
         end
       end
 
@@ -541,7 +533,7 @@ describe "gigs" do
                 "finish_time" => nil,
                 "finish_timestamp" => nil,
                 "genre_tags" => [],
-                "id" => @gigInStKilda.id,
+                "id" => @gig_in_stkilda.id,
                 "information_tags" => [],
                 "name" => "A gig in st kilda",
                 "prices" => [],
@@ -555,7 +547,7 @@ describe "gigs" do
                 "venue" =>
          { "address" => "the address",
            "capacity" => 100,
-           "id" => @stKildaVenue.id,
+           "id" => @stkilda_venue.id,
            "latitude" => nil,
            "location_url" => nil,
            "longitude" => nil,
@@ -563,8 +555,8 @@ describe "gigs" do
            "postcode" => "3182",
            "tags" => [],
            "vibe" => nil,
-           "website" => "https://definitelyTheEscryNotATypo.com.au" } }
-            ]
+           "website" => "https://definitelyTheEscryNotATypo.com.au", }, },
+            ],
           ),
         )
       end
@@ -655,7 +647,7 @@ describe "gigs" do
     end
 
     it "only shows next seven days worth of gigs" do
-      expect(@doc.xpath("//item/title").map { |t| t.text }).not_to include("A gig more than seven days away")
+      expect(@doc.xpath("//item/title").map(&:text)).not_to include("A gig more than seven days away")
     end
 
     it "has the correct gig information" do
@@ -668,3 +660,5 @@ describe "gigs" do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
+# rubocop:enable Metrics/LineLength
