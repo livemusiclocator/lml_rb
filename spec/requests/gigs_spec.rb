@@ -299,6 +299,7 @@ describe "gigs" do
       it "removes hidden gigs" do
         @gig.update!(hidden: true)
         @gig_in_stkilda.update!(hidden: true)
+        @another_gig_in_stkilda.update!(hidden: true)
         get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
         expect(JSON.parse(response.body)).to eq([])
       end
@@ -318,95 +319,21 @@ describe "gigs" do
         expect(JSON.parse(response.body)).to include(include("name" => "The One Gig You Should Not Miss Out On"))
       end
 
-      it "returns matching gigs when location and dates are specified" do
-        get "/gigs/for/melbourne/2001-06-08"
-        expect(JSON.parse(response.body)).to(
-          eq(
-            [
-              {
-                "date" => "2001-06-08",
-                "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
-                "duration" => nil,
-                "id" => @gig.id,
-                "name" => "The One Gig You Should Not Miss Out On",
-                "series" => "ohm",
-                "category" => "music",
-                "prices" => [
-                  {
-                    "amount" => "$75.00",
-                    "description" => "GA",
-                  },
-                ],
-                "sets" => [
-                  {
-                    "act" => {
-                      "genres" => nil,
-                      "id" => @first_support.id,
-                      "name" => "first support",
-                    },
-                    "start_time" => "18:00",
-                    "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
-                    "duration" => 30,
-                    "finish_time" => "18:30",
-                    "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
-                  },
-                  {
-                    "act" => {
-                      "genres" => nil,
-                      "id" => @second_support.id,
-                      "name" => "second support",
-                    },
-                    "start_time" => "19:00",
-                    "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
-                    "duration" => 30,
-                    "finish_time" => "19:30",
-                    "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
-                  },
-                  {
-                    "act" => {
-                      "genres" => %w[good loud people],
-                      "id" => @main_act.id,
-                      "name" => "The Really Quite Good Music People",
-                    },
-                    "start_time" => "20:00",
-                    "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
-                    "duration" => 60,
-                    "finish_time" => "21:00",
-                    "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
-                  },
-                ],
-                "start_time" => nil,
-                "start_timestamp" => nil,
-                "finish_time" => nil,
-                "finish_timestamp" => nil,
-                "status" => "confirmed",
-                "ticket_status" => nil,
-                "genre_tags" => %w[post-punk dream-pop],
-                "information_tags" => %w[all-ages free],
-                "ticketing_url" => "the ticketing url",
-                "venue" => {
-                  "address" => "the address",
-                  "postcode" => "1234",
-                  "capacity" => 500,
-                  "id" => @venue.id,
-                  "latitude" => nil,
-                  "longitude" => nil,
-                  "name" => "The Gig Place",
-                  "website" => "https://gigplace.com.au",
-                  "tags" => [],
-                  "vibe" => nil,
-                  "location_url" => nil,
-                },
-              },
-
-            ],
-          ),
-        )
-      end
 
       describe "matching sub-geographies of Melbourne" do
-        # shortly deprecating the stkilda postcode stuff now
-        it "returns venues with location=stkilda when location=stkilda or postcode is stkilda postcode" do
+        it "returns venues with location=stkilda and location=melbourne when location=melbourne" do
+          get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
+          expect(JSON.parse(response.body)).to match_unordered_json([
+                                                                      { name: "A gig in st kilda",
+                                                                        venue: { name: "The Escry" }, },
+                                                                      { name: "Another gig in st kilda",
+                                                                        venue: { name: "The Mildred Hotel" }, },
+                                                                      {name: "The One Gig You Should Not Miss Out On",
+                                                                        venue: { name: "The Gig Place" }
+                                                                      }
+                                                                    ])
+        end
+        it "returns venues with location=stkilda when location=stkilda" do
           get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
           expect(JSON.parse(response.body)).to match_unordered_json([
                                                                       { name: "A gig in st kilda",
@@ -417,90 +344,6 @@ describe "gigs" do
         end
       end
 
-      it "returns matching gigs when location and dates are specified" do
-        get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
-        expect(JSON.parse(response.body)).to(
-          eq(
-            [
-              {
-                "date" => "2001-06-08",
-                "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
-                "duration" => nil,
-                "id" => @gig.id,
-                "name" => "The One Gig You Should Not Miss Out On",
-                "series" => "ohm",
-                "category" => "music",
-                "prices" => [
-                  {
-                    "amount" => "$75.00",
-                    "description" => "GA",
-                  },
-                ],
-                "sets" => [
-                  {
-                    "act" => {
-                      "genres" => nil,
-                      "id" => @first_support.id,
-                      "name" => "first support",
-                    },
-                    "start_time" => "18:00",
-                    "start_timestamp" => "2001-06-08T18:00:00.000+10:00",
-                    "duration" => 30,
-                    "finish_time" => "18:30",
-                    "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
-                  },
-                  {
-                    "act" => {
-                      "genres" => nil,
-                      "id" => @second_support.id,
-                      "name" => "second support",
-                    },
-                    "start_time" => "19:00",
-                    "start_timestamp" => "2001-06-08T19:00:00.000+10:00",
-                    "duration" => 30,
-                    "finish_time" => "19:30",
-                    "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
-                  },
-                  {
-                    "act" => {
-                      "genres" => %w[good loud people],
-                      "id" => @main_act.id,
-                      "name" => "The Really Quite Good Music People",
-                    },
-                    "start_time" => "20:00",
-                    "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
-                    "duration" => 60,
-                    "finish_time" => "21:00",
-                    "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
-                  },
-                ],
-                "start_time" => nil,
-                "start_timestamp" => nil,
-                "finish_time" => nil,
-                "finish_timestamp" => nil,
-                "status" => "confirmed",
-                "ticket_status" => nil,
-                "genre_tags" => %w[post-punk dream-pop],
-                "information_tags" => %w[all-ages free],
-                "ticketing_url" => "the ticketing url",
-                "venue" => {
-                  "address" => "the address",
-                  "postcode" => "1234",
-                  "capacity" => 500,
-                  "id" => @venue.id,
-                  "latitude" => nil,
-                  "longitude" => nil,
-                  "name" => "The Gig Place",
-                  "website" => "https://gigplace.com.au",
-                  "tags" => [],
-                  "vibe" => nil,
-                  "location_url" => nil,
-                },
-              },
-            ],
-          ),
-        )
-      end
     end
   end
 
