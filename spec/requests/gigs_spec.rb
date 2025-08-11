@@ -218,14 +218,14 @@ describe "gigs" do
         )
         @stkilda_venue = Lml::Venue.create!(
           name: "The Escry",
-          location: "melbourne",
+          location: "stkilda",
           address: "the address",
           postcode: 3182, # St Kilda Postcode
           time_zone: "Australia/Melbourne",
           capacity: 100,
           website: "https://definitelyTheEscryNotATypo.com.au",
         )
-        @stkilda_venue_with_location_assigned = Lml::Venue.create!(
+        @stkilda_venue_two = Lml::Venue.create!(
           name: "The Mildred Hotel",
           location: "stkilda",
           address: "the address",
@@ -291,7 +291,7 @@ describe "gigs" do
         )
         @another_gig_in_stkilda = Lml::Gig.create!(
           name: "Another gig in st kilda",
-          venue: @stkilda_venue_with_location_assigned,
+          venue: @stkilda_venue_two,
           date: "2001-06-08",
         )
       end
@@ -398,36 +398,7 @@ describe "gigs" do
                   "location_url" => nil,
                 },
               },
-              { "category" => nil,
-                "date" => "2001-06-08",
-                "description" => nil,
-                "duration" => nil,
-                "finish_time" => nil,
-                "finish_timestamp" => nil,
-                "genre_tags" => [],
-                "id" => @gig_in_stkilda.id,
-                "information_tags" => [],
-                "name" => "A gig in st kilda",
-                "prices" => [],
-                "series" => nil,
-                "sets" => [],
-                "start_time" => nil,
-                "start_timestamp" => nil,
-                "status" => "confirmed",
-                "ticket_status" => nil,
-                "ticketing_url" => nil,
-                "venue" =>
-          { "address" => "the address",
-            "capacity" => 100,
-            "id" => @stkilda_venue.id,
-            "latitude" => nil,
-            "location_url" => nil,
-            "longitude" => nil,
-            "name" => "The Escry",
-            "postcode" => "3182",
-            "tags" => [],
-            "vibe" => nil,
-            "website" => "https://definitelyTheEscryNotATypo.com.au", }, },
+
             ],
           ),
         )
@@ -438,11 +409,11 @@ describe "gigs" do
         it "returns venues with location=stkilda when location=stkilda or postcode is stkilda postcode" do
           get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
           expect(JSON.parse(response.body)).to match_unordered_json([
-                                                              { name: "A gig in st kilda",
-                                                                venue: { name: "The Escry" }, },
-                                                              { name: "Another gig in st kilda",
-                                                                venue: { name: "The Mildred Hotel" }, },
-                                                            ])
+                                                                      { name: "A gig in st kilda",
+                                                                        venue: { name: "The Escry" }, },
+                                                                      { name: "Another gig in st kilda",
+                                                                        venue: { name: "The Mildred Hotel" }, },
+                                                                    ])
         end
       end
 
@@ -526,36 +497,6 @@ describe "gigs" do
                   "location_url" => nil,
                 },
               },
-              { "category" => nil,
-                "date" => "2001-06-08",
-                "description" => nil,
-                "duration" => nil,
-                "finish_time" => nil,
-                "finish_timestamp" => nil,
-                "genre_tags" => [],
-                "id" => @gig_in_stkilda.id,
-                "information_tags" => [],
-                "name" => "A gig in st kilda",
-                "prices" => [],
-                "series" => nil,
-                "sets" => [],
-                "start_time" => nil,
-                "start_timestamp" => nil,
-                "status" => "confirmed",
-                "ticket_status" => nil,
-                "ticketing_url" => nil,
-                "venue" =>
-         { "address" => "the address",
-           "capacity" => 100,
-           "id" => @stkilda_venue.id,
-           "latitude" => nil,
-           "location_url" => nil,
-           "longitude" => nil,
-           "name" => "The Escry",
-           "postcode" => "3182",
-           "tags" => [],
-           "vibe" => nil,
-           "website" => "https://definitelyTheEscryNotATypo.com.au", }, },
             ],
           ),
         )
