@@ -319,7 +319,6 @@ describe "gigs" do
         expect(JSON.parse(response.body)).to include(include("name" => "The One Gig You Should Not Miss Out On"))
       end
 
-
       describe "matching sub-geographies of Melbourne" do
         it "returns venues with location=stkilda and location=melbourne when location=melbourne" do
           get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
@@ -328,9 +327,8 @@ describe "gigs" do
                                                                         venue: { name: "The Escry" }, },
                                                                       { name: "Another gig in st kilda",
                                                                         venue: { name: "The Mildred Hotel" }, },
-                                                                      {name: "The One Gig You Should Not Miss Out On",
-                                                                        venue: { name: "The Gig Place" }
-                                                                      }
+                                                                      { name: "The One Gig You Should Not Miss Out On",
+                                                                        venue: { name: "The Gig Place" },  },
                                                                     ])
         end
         it "returns venues with location=stkilda when location=stkilda" do
@@ -343,7 +341,6 @@ describe "gigs" do
                                                                     ])
         end
       end
-
     end
   end
 

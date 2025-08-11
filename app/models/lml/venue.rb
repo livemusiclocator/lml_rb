@@ -28,9 +28,8 @@ module Lml
       end
       # Until we sort out locations properly, asking for 'location=melbourne' will show you everything
       # in stkilda location and melbourne (and "Melbourne"! )
-      if location == "melbourne"
-        return where(location: %w[Melbourne melbourne stkilda])
-      end
+      return where(location: %w[Melbourne melbourne stkilda]) if location == "melbourne"
+
       where(Venue.arel_table[:location].matches(location))
     }
 
