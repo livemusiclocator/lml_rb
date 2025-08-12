@@ -3,15 +3,14 @@
 module Web
   module ExplorerHelper
     DEFAULT_APP_CONFIG = {
-      render_app_layout: false,
-      allow_select_location: true,
-      default_location: "anywhere",
+      allowSelectLocation: true,
+      defaultLocation: "anywhere",
     }.freeze
 
     EDITION_SPECIFIC_CONFIG = {
       "stkilda" => {
-        default_location: "stkilda",
-        allow_select_location: false,
+        defaultLocation: "stkilda",
+        allowSelectLocation: false,
         # use this durig dev to randomly assign series to gigs if needed
         # only works with dev build of frontend
         # shuffleSeriesAssignments: ["stkildafestival2025", "nope", "nope", "nope"],
@@ -26,8 +25,8 @@ module Web
         },
       },
       "geelong" => {
-        default_location: "geelong",
-        allow_select_location: false,
+        defaultLocation: "geelong",
+        allowSelectLocation: false,
       },
     }.freeze
 
