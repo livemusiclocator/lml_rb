@@ -92,6 +92,8 @@ group :development do
   # gem "spring"
   #
   gem 'guard-rspec', require: false
+
+  gem 'faker'
 end
 
 gem "faraday"
