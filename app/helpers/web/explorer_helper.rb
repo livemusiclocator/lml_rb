@@ -12,6 +12,18 @@ module Web
       "stkilda" => {
         default_location: "stkilda",
         allow_select_location: false,
+        # use this durig dev to randomly assign series to gigs if needed
+        # only works with dev build of frontend
+        # shuffleSeriesAssignments: ["stkildafestival2025", "nope", "nope", "nope"],
+        themes: {
+          series: {
+            stkildafestival2025: {
+              searchResult: "gigSeriesCustom/skf_blacklogo.svg",
+              savedMapPin: "mapPins/festival-pin-saved.png",
+              defaultMapPin: "mapPins/festival-pin.png",
+            },
+          },
+        },
       },
       "geelong" => {
         default_location: "geelong",
