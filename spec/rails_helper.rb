@@ -7,6 +7,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'webmock/rspec'
 require "rspec/json_expectations"
+require "shoulda-matchers"
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -68,4 +69,12 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   #
   config.include FactoryBot::Syntax::Methods
+end
+
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

@@ -426,6 +426,8 @@ GEM
       validated_object (~> 2.3)
     securerandom (0.4.1)
     shellany (0.0.1)
+    shoulda-matchers (6.5.0)
+      activesupport (>= 5.2.0)
     solargraph (0.55.0)
       backport (~> 1.2)
       benchmark (~> 0.4)
@@ -547,6 +549,7 @@ DEPENDENCIES
   rubocop
   ruby-openai
   schema_dot_org (~> 2.5)
+  shoulda-matchers (~> 6.0)
   solargraph
   sprockets-rails
   stimulus-rails

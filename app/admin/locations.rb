@@ -1,7 +1,10 @@
 ActiveAdmin.register Lml::Location, as: "Location" do
-  # Permitted parameters
-  permit_params :internal_identifier, :name, :latitude, :longitude
 
+  # Permitted parameters - add the new fields
+  permit_params :internal_identifier, :name, :latitude, :longitude, 
+                :seo_title_format_string, :map_zoom_level, 
+                visible_in_editions: []
+  
   # Index page configuration
   index do
     selectable_column
@@ -10,10 +13,14 @@ ActiveAdmin.register Lml::Location, as: "Location" do
     column :name
     column :latitude
     column :longitude
+    column :map_zoom_level
+    column "Editions" do |location|
+      location.visible_in_editions&.join(", ") if location.visible_in_editions.present?
+    end
     column :created_at
     actions
   end
-
+  
   # Show page configuration
   show do
     attributes_table do
@@ -22,27 +29,47 @@ ActiveAdmin.register Lml::Location, as: "Location" do
       row :name
       row :latitude
       row :longitude
+      row :map_zoom_level
+      row :seo_title_format_string
+      row "Visible in Editions" do |location|
+        location.visible_in_editions&.join(", ") if location.visible_in_editions.present?
+      end
       row :created_at
       row :updated_at
     end
   end
-
+  
   # Form configuration
   form do |f|
-    f.inputs do
+    f.inputs "Basic Information" do
       f.input :internal_identifier
       f.input :name
       f.input :latitude, step: :any
       f.input :longitude, step: :any
     end
+    
+    f.inputs "Display Settings" do
+      f.input :visible_in_editions, 
+              as: :check_boxes, 
+              collection: Lml::Location::AVAILABLE_EDITIONS,
+              hint: "Select which editions this location should be visible in",
+              include_hidden: false, include_blank: false
+      f.input :map_zoom_level, 
+              hint: "Zoom level for maps (1-20, default: 15)"
+      f.input :seo_title_format_string,
+              hint: "Optional format string for SEO page titles"
+    end
+    
     f.actions
   end
-
+  
   # Filters
   filter :internal_identifier
   filter :name
   filter :latitude
   filter :longitude
+  filter :map_zoom_level
+  filter :seo_title_format_string
   filter :created_at
   filter :updated_at
 end
