@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
     :address,
@@ -29,6 +31,13 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
     column :time_zone
     column :location
+    column "Validated location" do |venue|
+      if venue.location_record
+        link_to venue.location_record.name, admin_location_path(venue.location_record)
+      else
+        span "No match", class: "status_tag orange"
+      end
+    end
     column :created_at do |resource|
       admin_time(resource.created_at)
     end
@@ -85,6 +94,13 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :notes do |resource|
         pre { resource.notes }
       end
+      row "Matched Location Record" do |venue|
+        if venue.location_record
+          link_to venue.location_record.name, admin_location_path(venue.location_record)
+        else
+          "No matching location found"
+        end
+      end
       row :created_at do |resource|
         admin_time(resource.updated_at)
       end
@@ -139,7 +155,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         as: :select,
         collection: Lml::Timezone::CANONICAL_TIMEZONES,
       )
-      f.input :location
+      f.input :location, hint: "Should ideally match a Location's internal_identifier (case insensitive)"
       f.input :email, input_html: { type: "email" }
       f.input :phone
       f.input :address

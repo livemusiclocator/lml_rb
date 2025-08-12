@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_08_014227) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_12_204933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -66,6 +66,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_08_014227) do
     t.string "url"
     t.enum "ticket_status", enum_type: "ticket_status"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
+  end
+
+  create_table "locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "internal_identifier", null: false
+    t.string "name", null: false
+    t.float "latitude", null: false
+    t.float "longitude", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "seo_title_format_string"
+    t.integer "map_zoom_level", default: 15, null: false
+    t.json "visible_in_editions", default: []
   end
 
   create_table "prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

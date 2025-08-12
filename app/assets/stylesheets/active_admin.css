@@ -13994,6 +13994,11 @@ textarea {
   background-color: #dc4747;
 }
 
+.status_tag.warning, .status_tag.orange, .status_tag.warn {
+  background-color: #e29b20;
+}
+
+
 /* line 1, ../../../.asdf/installs/ruby/3.4.4/lib/ruby/gems/3.4.0/gems/arctic_admin-4.3.3/app/assets/stylesheets/arctic_admin/components/_tables.scss */
 table {
   width: 100%;
