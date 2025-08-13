@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
     :address,

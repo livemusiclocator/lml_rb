@@ -1,10 +1,11 @@
-ActiveAdmin.register Lml::Location, as: "Location" do
+# frozen_string_literal: true
 
+ActiveAdmin.register Lml::Location, as: "Location" do
   # Permitted parameters - add the new fields
-  permit_params :internal_identifier, :name, :latitude, :longitude, 
-                :seo_title_format_string, :map_zoom_level, 
+  permit_params :internal_identifier, :name, :latitude, :longitude,
+                :seo_title_format_string, :map_zoom_level,
                 visible_in_editions: []
-  
+
   # Index page configuration
   index do
     selectable_column
@@ -40,9 +41,9 @@ ActiveAdmin.register Lml::Location, as: "Location" do
       row :created_at
       row :updated_at
     end
-        panel "Associated Venues" do
+    panel "Associated Venues" do
       if resource.venues.any?
-        table_for resource.venues do | table|
+        table_for resource.venues do |_table|
           column :link do |venue|
             link_to venue.name, admin_venue_path(venue)
           end
@@ -56,8 +57,8 @@ ActiveAdmin.register Lml::Location, as: "Location" do
         div "No venues found for this location"
       end
     end
-     end
-  
+  end
+
   # Form configuration
   form do |f|
     f.inputs "Basic Information" do
@@ -66,22 +67,22 @@ ActiveAdmin.register Lml::Location, as: "Location" do
       f.input :latitude, step: :any
       f.input :longitude, step: :any
     end
-    
+
     f.inputs "Display Settings" do
-      f.input :visible_in_editions, 
-              as: :check_boxes, 
+      f.input :visible_in_editions,
+              as: :check_boxes,
               collection: Lml::Location::AVAILABLE_EDITIONS,
               hint: "Select which editions this location should be visible in",
               include_hidden: false, include_blank: false
-      f.input :map_zoom_level, 
+      f.input :map_zoom_level,
               hint: "Zoom level for maps (1-20, default: 15)"
       f.input :seo_title_format_string,
               hint: "Optional format string for SEO page titles"
     end
-    
+
     f.actions
   end
-  
+
   # Filters
   filter :internal_identifier
   filter :name
