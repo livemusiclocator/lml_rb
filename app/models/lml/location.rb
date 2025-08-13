@@ -4,7 +4,11 @@ class Lml::Location < ApplicationRecord
   
   # Constants for editions
   AVAILABLE_EDITIONS = ["all", "geelong", "stKilda"].freeze
-  
+
+  def venues
+    Lml::Venue.where("LOWER(location) = LOWER(?)", internal_identifier)
+  end
+
   validates :internal_identifier, presence: true, uniqueness: true
   validates :name, presence: true
   validates :latitude, presence: true, 
@@ -19,11 +23,13 @@ class Lml::Location < ApplicationRecord
   
   # Ensure visible_in_editions is always an array
   before_validation :ensure_visible_in_editions_is_array
-  
+
+
   private
-  
+
   def ensure_visible_in_editions_is_array
     self.visible_in_editions = [] if visible_in_editions.nil?
+    self.visible_in_editions = visible_in_editions.reject(&:blank?) if visible_in_editions.is_a?(Array)
   end
   
   def validate_visible_in_editions
@@ -36,8 +42,6 @@ class Lml::Location < ApplicationRecord
     end
     
     invalid_editions = visible_in_editions - AVAILABLE_EDITIONS
-    puts (invalid_editions.inspect)
-    puts "INVALD"
     if invalid_editions.any?
       errors.add(:visible_in_editions, "contains invalid editions: #{invalid_editions.join(', ')}")
     end
@@ -46,12 +50,4 @@ class Lml::Location < ApplicationRecord
     ["created_at", "id", "id_value", "internal_identifier", "latitude", "longitude", "map_zoom_level", "name", "seo_title_format_string", "updated_at", "visible_in_editions"]
   end
 
-  before_validation :ensure_visible_in_editions_is_array
-
-  private
-
-  def ensure_visible_in_editions_is_array
-    self.visible_in_editions = [] if visible_in_editions.nil?
-    self.visible_in_editions = visible_in_editions.reject(&:blank?) if visible_in_editions.is_a?(Array)
-  end
 end

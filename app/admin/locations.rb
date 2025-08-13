@@ -14,13 +14,16 @@ ActiveAdmin.register Lml::Location, as: "Location" do
     column :latitude
     column :longitude
     column :map_zoom_level
+    column "Venues Count" do |location|
+      location.venues.count
+    end
     column "Editions" do |location|
       location.visible_in_editions&.join(", ") if location.visible_in_editions.present?
     end
     column :created_at
     actions
   end
-  
+
   # Show page configuration
   show do
     attributes_table do
@@ -37,7 +40,23 @@ ActiveAdmin.register Lml::Location, as: "Location" do
       row :created_at
       row :updated_at
     end
-  end
+        panel "Associated Venues" do
+      if resource.venues.any?
+        table_for resource.venues do | table|
+          column :link do |venue|
+            link_to venue.name, admin_venue_path(venue)
+          end
+          column :gig_count do |venue|
+            venue.gigs.length
+          end
+          # Add other venue columns as needed
+          column :created_at
+        end
+      else
+        div "No venues found for this location"
+      end
+    end
+     end
   
   # Form configuration
   form do |f|

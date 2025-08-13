@@ -47,4 +47,15 @@ RSpec.describe Lml::Location, type: :model do
       expect(location).to be_valid
     end
   end
+  describe 'associations' do
+  let(:location) { create(:lml_location, internal_identifier: 'TEST001') }
+  let!(:venue1) { create(:lml_venue, location: 'TEST001') }
+  let!(:venue2) { create(:lml_venue, location: 'test001') } # case insensitive
+  let!(:venue3) { create(:lml_venue, location: 'OTHER') }
+
+  it 'finds venues with matching location (case insensitive)' do
+    expect(location.venues).to include(venue1, venue2)
+    expect(location.venues).not_to include(venue3)
+  end
+end
 end

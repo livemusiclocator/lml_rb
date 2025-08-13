@@ -20,7 +20,10 @@ module Lml
 
     has_many :gigs, dependent: :delete_all
     has_many :uploads, dependent: :delete_all
-
+    # custom join to LML::Location - if available
+    def location_record
+      Lml::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first
+    end
     scope :in_location, lambda { |location|
       # TODO: unreleased locations !
       if location == "anywhere"
