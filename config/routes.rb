@@ -56,7 +56,7 @@ Rails.application.routes.draw do
       # the default, universal version of the gig guide
       concerns :gig_guide
       # edition based versions of the gig guide.
-      scope "editions/:edition_id", as: "edition", constraints: { edition_id: /stkilda|geelong/ } do
+      scope "editions/:edition_id", as: "edition" do
         concerns :gig_guide
       end
       match "*path", to: "errors#not_found", via: :all
@@ -107,7 +107,8 @@ Rails.application.routes.draw do
 
   # lml.live => www.livemusiclocator.com.au/?location=melbourne
   constraints domain: short_domain, subdomain: "" do
-    get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }), via: :all
+    get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
+             via: :all
   end
 
   # Subdomain redirects to main gig guide, setting location search parameter

@@ -15546,3 +15546,24 @@ a {
 #sidebar .sidebar_section .check_boxes .choices label {
   display: inline-flex;
 }
+
+
+.config-warning {
+  margin-bottom: 20px !important;
+  border-left: 4px solid #ff9800;
+  background-color: #fff3cd;
+  border-color: #ffeaa7;
+
+  h3 {
+    color: #856404;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  p {
+    color: #856404;
+    margin: 0;
+    line-height: 1.4;
+  }
+}

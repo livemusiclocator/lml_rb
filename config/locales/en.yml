@@ -29,3 +29,7 @@
 
 en:
   hello: "Hello world"
+  active_admin:
+    resources:
+      explorer_config:
+        delete_confirmation: "Are you sure you want to delete this? It's totally gonna break the live site unless you know what you are doing !"

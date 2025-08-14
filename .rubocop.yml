@@ -2,7 +2,7 @@ AllCops:
   TargetRubyVersion: 3.0
   NewCops: enable
   Exclude:
-    - "db/schema.rb"
+    - "db/**/*"
 Style/TrailingCommaInArguments:
   Enabled: true
   EnforcedStyleForMultiline: consistent_comma

@@ -1,4 +1,4 @@
-# Thisgiut  file is auto-generated from the current state of the database. Instead
+# This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_14_052028) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_18_013551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
 
   # Custom types defined in this database.
@@ -41,6 +40,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_052028) do
     t.string "time_zone"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "explorer_configs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "edition_id"
+    t.boolean "allow_all_locations"
+    t.text "selectable_locations"
+    t.string "default_location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "gigs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -87,6 +95,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_052028) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "series_themes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "explorer_config_id", null: false
+    t.string "series_name"
+    t.string "search_result"
+    t.string "saved_map_pin"
+    t.string "default_map_pin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["explorer_config_id"], name: "index_series_themes_on_explorer_config_id"
   end
 
   create_table "sets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -136,6 +155,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_052028) do
   end
 
   add_foreign_key "gigs", "venues"
+  add_foreign_key "series_themes", "explorer_configs"
   add_foreign_key "sets", "acts"
   add_foreign_key "sets", "gigs"
 end
