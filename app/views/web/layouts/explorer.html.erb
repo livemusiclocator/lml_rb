@@ -3,7 +3,8 @@
   <%= spa_external_dependency_tags %>
   <%= spa_stylesheet_tags %>
   <script>
-   window.APP_CONFIG = <%= raw json_escape(frontend_app_config) %>
+   window.APP_CONFIG = <%= render(template: 'web/explorer/explorer_config',formats: [:json], locals: { explorer_config: @explorer_config }).html_safe %>;
+
   </script>
   <style type="text/css">
    /* temporary fix while moving over to new layout in spa */

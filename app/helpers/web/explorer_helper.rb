@@ -2,42 +2,6 @@
 
 module Web
   module ExplorerHelper
-    DEFAULT_APP_CONFIG = {
-      allowSelectLocation: true,
-      defaultLocation: "anywhere",
-    }.freeze
-
-    EDITION_SPECIFIC_CONFIG = {
-      "stkilda" => {
-        defaultLocation: "stkilda",
-        allowSelectLocation: false,
-        # use this durig dev to randomly assign series to gigs if needed
-        # only works with dev build of frontend
-        # shuffleSeriesAssignments: ["stkildafestival2025", "nope", "nope", "nope"],
-        themes: {
-          series: {
-            stkildafestival2025: {
-              searchResult: "gigSeriesCustom/skf_blacklogo.svg",
-              savedMapPin: "mapPins/festival-pin-saved.png",
-              defaultMapPin: "mapPins/festival-pin.png",
-            },
-          },
-        },
-      },
-      "geelong" => {
-        defaultLocation: "geelong",
-        allowSelectLocation: false,
-      },
-    }.freeze
-
-    def frontend_app_config
-      config = DEFAULT_APP_CONFIG.merge(EDITION_SPECIFIC_CONFIG[params[:edition_id]] || {})
-
-      # TODO: restore this when working ok on subdomain or figure a better way to do this
-      config.merge({ gigs_endpoint: web_api_root_url },
-                   root_path: relative_path({ path_name: :web_root }),).to_json
-    end
-
     def spa_entrypoint_javascript_tag
       return unless Rails.application.config.spa_assets["entrypoint_script"]
 
