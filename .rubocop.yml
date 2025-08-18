@@ -26,3 +26,5 @@ Layout/LineLength:
 
 Style/Documentation:
   Enabled: false
+
+plugins: rubocop-rspec

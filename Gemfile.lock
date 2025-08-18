@@ -414,6 +414,9 @@ GEM
     rubocop-ast (1.44.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
+    rubocop-rspec (3.6.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     ruby-openai (8.1.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
@@ -547,6 +550,7 @@ DEPENDENCIES
   rspec-json_expectations
   rspec-rails
   rubocop
+  rubocop-rspec
   ruby-openai
   schema_dot_org (~> 2.5)
   shoulda-matchers (~> 6.0)
