@@ -2,9 +2,22 @@
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/circleci/LAffxdG5hFmx6iynRMGH5a/3NquNLfh34PueBmVqPWSwm/tree/main.svg?style=svg&circle-token=f22edd6262f0dad12f7984f1236d7dc43157ae8c)](https://dl.circleci.com/status-badge/redirect/circleci/LAffxdG5hFmx6iynRMGH5a/3NquNLfh34PueBmVqPWSwm/tree/main)
 
-To get this running:
+## Getting started
 
-Run postgres on the default 5432 port.
+Clone and symlink the shared lml repo
+
+```
+git clone git@github.com:livemusiclocator/lml.git ..
+ln -s ../lml lml
+```
+
+Install prerequisites
+
+```
+make install
+```
+
+Run postgres in docker container on the default 5432 port.
 
 ```
 docker run \
@@ -18,20 +31,21 @@ docker run \
     postgres
 ```
 
-Install ruby version using asdf
+Launch tmux session
 
 ```
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
-. "$HOME/.asdf/asdf.sh"
-asdf plugin add ruby
-asdf install
+tmux -L lml_rb
 ```
 
-Install dependencies
+Start caddy (in one tmux window)
 
 ```
-brew install libpq postgresql
-# may need to add libpq to PATH
+make caddy
+```
+
+Install gems
+
+```
 bundle
 ```
 
@@ -48,15 +62,13 @@ Create databases and add seed data
 bin/rails db:reset
 ```
 
-Make sure www.lml.local resolves to localhost ( /etc/hosts entry or find a better way to do it )
-
-Start dev services (including rails server on port 3000 and some tailwind things)
+Start rails (in another tmux window - ctrl-b c)
 
 ```
-RAILS_DEVELOPMENT_HOSTS=www.lml.local ./bin/dev
+bin/dev
 ```
 
-Browse to https://localhost:3000/admin and log in as admin@example.com and password password
+Browse to https://api.lml.test/admin and log in as admin@example.com and password password
 
 
 ## Active admin styles
@@ -111,7 +123,6 @@ heroku ps:exec --app=live-music-locator
 # tail logs
 heroku logs -t
 ```
-
 
 # More things to go into the readme
 

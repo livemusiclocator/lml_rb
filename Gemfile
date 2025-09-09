@@ -2,8 +2,6 @@
 
 source "https://rubygems.org"
 
-ruby "3.4.4"
-
 # a hopefully temporary fix for an issue with ruby 3.3.3 and net-pop
 gem "net-pop", github: "ruby/net-pop"
 
@@ -60,7 +58,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 # Used to handle static content
-gem 'high_voltage'
+gem "high_voltage"
 
 # front end css
 gem "tailwindcss-rails"
@@ -75,8 +73,8 @@ group :development, :test do
   gem "webmock"
   gem "rspec-json_expectations"
   gem "factory_bot_rails"
-  gem 'faker'
-  gem 'shoulda-matchers', '~> 6.0'
+  gem "faker"
+  gem "shoulda-matchers"
 end
 
 group :development do
@@ -86,7 +84,7 @@ group :development do
   gem "solargraph"
   gem "web-console"
   # Git hooks stuff
-  gem 'lefthook', require: false
+  gem "lefthook", require: false
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
@@ -94,7 +92,7 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   #
-  gem 'guard-rspec', require: false
+  gem "guard-rspec", require: false
 end
 
 gem "faraday"

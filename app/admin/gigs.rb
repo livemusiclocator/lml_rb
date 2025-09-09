@@ -23,6 +23,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     :venue_id,
   )
 
+  config.per_page = [50, 100, 200]
   config.sort_order = "created_at_desc"
 
   filter :name_cont, label: "Name"
