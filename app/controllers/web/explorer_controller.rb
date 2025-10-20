@@ -8,12 +8,13 @@ module Web
     def index
       expires_in 10.minutes, public: true
 
-      search = Web::GigSearch.new(search_params)
-      if search.valid?
+      begin
+        search = Web::GigSearch.new(search_params, @explorer_config)
         metadata_source search
-      else
-        metadata_source Web::GigSearch.new
+      rescue StandardError => e
+        Rails.logger.error("Error setting the gig search metadata: #{e} ")
       end
+
       render
     end
 
@@ -35,7 +36,7 @@ module Web
     private
 
     def init_explorer_config
-      @explorer_config = Web::ExplorerConfig.find_by_edition_id(params[:edition_id]) ||  Web::ExplorerConfig.find_by_edition_id("main")
+      @explorer_config = Web::ExplorerConfig.find_by_edition_id(params[:edition_id]) || Web::ExplorerConfig.find_by_edition_id("main")
     end
   end
 end

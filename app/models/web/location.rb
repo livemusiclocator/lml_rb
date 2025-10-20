@@ -23,6 +23,14 @@ module Web
     # query by edition
 
     scope :by_internal_identifier, ->(internal_identifier) { where(internal_identifier: internal_identifier) }
+
+    def in_location_text
+      # TODO: set this via the model perhaps to avoid it coming out weird in future
+      return "anywhere" if internal_identifier == "anywhere"
+
+      "in #{name}"
+    end
+
     private
 
     def ensure_visible_in_editions_is_array

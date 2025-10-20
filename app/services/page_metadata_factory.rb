@@ -64,6 +64,7 @@ class PageMetadataFactory
       { title: @object.name }
     end
   end
+  # TODO: avoid using type names here as they play havoc with testing
   GENERATORS = {
     "Lml::Gig" => GigGenerator,
     "Lml::Venue" => VenueGenerator,

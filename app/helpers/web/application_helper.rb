@@ -22,12 +22,14 @@ module Web
         { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
         { name: "Contact", page_id: "contact", content_page_id: "contact" },
         { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
-      ],}},geelong: { about: {
+      ],
+    } }, geelong: { about: {
       pages: [
         { name: "About", page_id: "about", content_page_id: "about-geelong", section_root_page: true },
         { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
         { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
-        { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
+        { name: "How To Use", page_id: "how-to-use-livemusiclocator",
+          content_page_id: "how-to-use-livemusiclocator", },
         { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
         { name: "Contact", page_id: "contact", content_page_id: "contact" },
         { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
@@ -123,13 +125,7 @@ module Web
     }.freeze
 
     def site_title
-      edition_params = EDITION_PARAMS[params[:edition_id]]
-
-      if edition_params
-        "Live Music Locator - #{edition_params[:edition_title]}"
-      else
-        "Live Music Locator"
-      end
+      "Live Music Locator"
     end
 
     def edition_title

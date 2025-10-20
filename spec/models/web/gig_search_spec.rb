@@ -1,133 +1,141 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe Web::GigSearch, type: :model do
-  describe '#title' do
-    let(:base_params) { { location: 'melbourne', date_range: 'today' } }
+require "rails_helper"
 
-    def build_search(**params)
-      described_class.new(base_params.merge(params))
-    end
+RSpec.describe Web::GigSearch do
+  let(:default_location_object) do
+    build(:lml_location, { internal_identifier: "melbourne", name: "Melbourne" })
+  end
 
-    shared_examples 'shows live music with location and date' do |expected_prefix = 'Live Music'|
-      it "shows '#{expected_prefix}' with location and date" do
-        expect(subject.title).to eq("#{expected_prefix} in Melbourne today")
+  let(:bendigo_location_object) do
+    build(:lml_location, { internal_identifier: "bendigo", name: "Bendigo" })
+  end
+
+  let(:explorer_config) do
+    instance_double(Web::ExplorerConfig,
+                    locations: [default_location_object, bendigo_location_object],
+                    default_location_object: default_location_object,)
+  end
+
+  describe "#title" do
+    context "with no params (defaults)" do
+      it "returns default title with default location" do
+        search = described_class.new({}, explorer_config)
+        expect(search.title).to eq("Live Music in Melbourne this week")
       end
     end
 
-    shared_examples 'handles different locations' do |genre_text|
-      %w[melbourne stkilda goldfields anywhere].each do |location|
-        it "works with #{location} location" do
-          search = build_search(genre: genres, location: location)
-          location_name = location == 'stkilda' ? 'St Kilda' : location.capitalize
-          location_name = location if location == 'anywhere'
+    context "with location param" do
+      it "uses the specified location" do
+        search = described_class.new({ location: "bendigo" }, explorer_config)
+        expect(search.title).to eq("Live Music in Bendigo this week")
+      end
 
-          expected = "#{genre_text} #{location == 'anywhere' ? location : "in #{location_name}"} today"
-          expect(search.title).to eq(expected)
+      it "falls back to default location for unknown location" do
+        search = described_class.new({ location: "unknown" }, explorer_config)
+        expect(search.title).to eq("Live Music in Melbourne this week")
+      end
+
+      it "handles case-insensitive location matching" do
+        search = described_class.new({ location: "BENDIGO" }, explorer_config)
+        expect(search.title).to eq("Live Music in Bendigo this week")
+      end
+    end
+
+    context "with date_range param" do
+      [
+        { date_range: "today", expected: "Live Music in Melbourne today" },
+        { date_range: "tomorrow", expected: "Live Music in Melbourne tomorrow" },
+        { date_range: "thisWeek", expected: "Live Music in Melbourne this week" },
+        { date_range: "nextWeek", expected: "Live Music in Melbourne next week" },
+        { date_range: "someday", expected: "Live Music in Melbourne" }, # unknown date_range
+      ].each do |test_case|
+        it "formats '#{test_case[:date_range]}' correctly" do
+          search = described_class.new({ date_range: test_case[:date_range] }, explorer_config)
+          expect(search.title).to eq(test_case[:expected])
         end
       end
     end
 
-    shared_examples 'handles different date ranges' do |genre_text|
-      {
-        'today' => 'today',
-        'tomorrow' => 'tomorrow',
-        'thisWeek' => 'this week',
-        'nextWeek' => 'next week'
-      }.each do |date_range, expected_text|
-        it "works with #{date_range}" do
-          search = build_search(genre: genres, date_range: date_range)
-          expect(search.title).to eq("#{genre_text} in Melbourne #{expected_text}")
-        end
+    context "with custom_date" do
+      it "formats valid custom date" do
+        search = described_class.new({
+                                       date_range: "customDate",
+                                       custom_date: "2025-10-24",
+                                     }, explorer_config,)
+
+        expect(search.title).to eq("Live Music in Melbourne on Friday 24th October 2025")
+      end
+
+      it "handles invalid custom date gracefully" do
+        search = described_class.new({
+                                       date_range: "customDate",
+                                       custom_date: "not-a-date",
+                                     }, explorer_config,)
+
+        expect(search.title).to eq("Live Music in Melbourne")
+      end
+
+      it "ignores custom_date when date_range is not customDate" do
+        search = described_class.new({
+                                       date_range: "today",
+                                       custom_date: "2024-12-25",
+                                     }, explorer_config,)
+
+        expect(search.title).to eq("Live Music in Melbourne today")
       end
     end
 
-    context 'with no genres' do
-      let(:genres) { [] }
-      subject { build_search(genre: genres) }
-
-      include_examples 'shows live music with location and date'
-      include_examples 'handles different locations', 'Live Music'
-      include_examples 'handles different date ranges', 'Live Music'
-    end
-
-    context 'with single genre' do
-      let(:genres) { ['Rock'] }
-      subject { build_search(genre: genres) }
-
-      include_examples 'shows live music with location and date', 'Rock gigs'
-      include_examples 'handles different locations', 'Rock gigs'
-      include_examples 'handles different date ranges', 'Rock gigs'
-    end
-
-    context 'with multiple genres' do
-      context 'with 2 genres' do
-        let(:genres) { ['Acoustic', 'Folk'] }
-        subject { build_search(genre: genres) }
-
-        include_examples 'shows live music with location and date', 'Acoustic and Folk gigs'
+    context "with genre param" do
+      it "formats single genre correctly" do
+        search = described_class.new({ genre: ["Rock"] }, explorer_config)
+        expect(search.title).to eq("Rock gigs in Melbourne this week")
       end
 
-      context 'with 3 genres' do
-        let(:genres) { ['Acoustic', 'Folk', 'Americana'] }
-        subject { build_search(genre: genres) }
-
-        include_examples 'shows live music with location and date', 'Acoustic, Americana and Folk gigs'
+      it "formats two genres correctly" do
+        search = described_class.new({ genre: %w[Rock Jazz] }, explorer_config)
+        expect(search.title).to eq("Jazz and Rock gigs in Melbourne this week")
       end
 
-      it 'sorts genres alphabetically' do
-        search = build_search(genre: ['Rock', 'Acoustic', 'Folk'])
-        expect(search.title).to eq('Acoustic, Folk and Rock gigs in Melbourne today')
+      it "formats three genres correctly" do
+        search = described_class.new({ genre: %w[Rock Jazz Blues] }, explorer_config)
+        expect(search.title).to eq("Blues, Jazz and Rock gigs in Melbourne this week")
       end
 
-      it 'removes duplicate genres (case-insensitive)' do
-        search = build_search(genre: ['jazz', 'Jazz', 'Rock'])
-        expect(search.title).to eq('Jazz and Rock gigs in Melbourne today')
+      it "shows multiple genres text for more than 3 genres" do
+        search = described_class.new({
+                                       genre: %w[Rock Jazz Blues Pop Metal],
+                                     }, explorer_config,)
+        expect(search.title).to eq("Live Music (multiple genres) in Melbourne this week")
       end
-    end
 
-    context 'with more than 3 genres' do
-      let(:genres) { ['Rock', 'Folk', 'Jazz', 'Blues'] }
-      subject { build_search(genre: genres) }
-
-      include_examples 'shows live music with location and date', 'Live Music (multiple genres)'
-    end
-
-    context 'with custom date' do
-      it 'shows custom date when provided' do
-        search = build_search(location: "melbourne", date_range: 'customDate', custom_date: '2025-01-15')
-        expect(search.title).to eq('Live Music in Melbourne on Wednesday 15th January 2025')
+      it "validates genres against GENRES constant (case-insensitive)" do
+        search = described_class.new({ genre: %w[rock JAZZ InvalidGenre] }, explorer_config)
+        expect(search.title).to eq("Jazz and Rock gigs in Melbourne this week")
       end
-      it 'displays fallback title if the date range is missing' do
-        search = build_search(location: "melbourne", date_range: 'customDate')
-        expect(search).to_not be_valid
-        expect(search.title).to eq('Live Music Listings')
+
+      it "removes duplicate genres (case-insensitive)" do
+        search = described_class.new({ genre: %w[Rock rock ROCK] }, explorer_config)
+        expect(search.title).to eq("Rock gigs in Melbourne this week")
       end
-      it 'displays fallback title if the date range is not a valid iso date' do
-        search = build_search(location: "melbourne", date_range: 'customDate', custom_date: "This is not a date")
-        expect(search).to_not be_valid
-        expect(search.title).to eq('Live Music Listings')
+
+      it "sorts genres alphabetically (case-insensitive)" do
+        search = described_class.new({ genre: %w[Rock Blues Jazz] }, explorer_config)
+        expect(search.title).to eq("Blues, Jazz and Rock gigs in Melbourne this week")
+      end
+
+      it "handles empty genre array" do
+        search = described_class.new({ genre: [] }, explorer_config)
+        expect(search.title).to eq("Live Music in Melbourne this week")
       end
     end
 
-    context 'with invalid parameters' do
-      let(:invalid_search) { build_search(location: 'invalid') }
+    context "with all params combined" do
+      it "formats complete title correctly" do
+        all_params = { location: "bendigo", date_range: "tomorrow", genre: %w[Rock Jazz] }
+        search = described_class.new(all_params, explorer_config)
 
-      before { allow(invalid_search).to receive(:valid?).and_return(false) }
-
-      it 'returns fallback text when model is invalid' do
-        expect(invalid_search.title).to eq('Live Music Listings')
-      end
-    end
-
-    context 'with invalid genres' do
-      it 'filters out invalid genres' do
-        search = build_search(genre: ['Rock', 'InvalidGenre'])
-        expect(search.title).to eq('Rock gigs in Melbourne today')
-      end
-
-      it 'shows "Live Music" when all genres are invalid' do
-        search = build_search(genre: ['InvalidGenre1', 'InvalidGenre2'])
-        expect(search.title).to eq('Live Music in Melbourne today')
+        expect(search.title).to eq("Jazz and Rock gigs in Bendigo tomorrow")
       end
     end
   end
