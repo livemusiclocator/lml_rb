@@ -293,5 +293,15 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
       resource.update!(finish_time: finish_time) if resource.valid? && !finish_time.blank?
     end
+
+    def index
+      super do |format|
+        format.json do
+          render json: collection.as_json(
+            include: :prices,
+          )
+        end
+      end
+    end
   end
 end
