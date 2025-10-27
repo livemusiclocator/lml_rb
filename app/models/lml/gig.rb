@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/ClassLength
 module Lml
   class Gig < ApplicationRecord
+    # rubocop:disable Metrics/MethodLength
     def self.ransackable_attributes(_auth_object = nil)
       %w[
         category
@@ -16,6 +20,7 @@ module Lml
         venue_id
       ]
     end
+    # rubocop:enable Metrics/MethodLength
 
     def self.ransackable_associations(_auth_object = nil)
       %w[venue]
@@ -42,7 +47,11 @@ module Lml
     has_many :prices, dependent: :delete_all
 
     scope :eager, lambda {
-      order(:date, :start_offset).includes(sets: :act).includes(:venue).includes(:prices).annotate("eager loading gig data")
+      order(:date, :start_offset)
+        .includes(sets: :act)
+        .includes(:venue)
+        .includes(:prices)
+        .annotate("eager loading gig data")
     }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
@@ -51,6 +60,12 @@ module Lml
       return if !force && (proposed_genre_tags || []).present?
 
       update!(proposed_genre_tags: Lml::StochasticParrot.new.gist(internal_description))
+    end
+
+    def published_genre_tags
+      return genre_tags if genre_tags.present?
+
+      proposed_genre_tags
     end
 
     def label
@@ -159,7 +174,9 @@ module Lml
     end
 
     def to_meta_tags
-      return {}
+      {}
     end
   end
 end
+
+# rubocop:enable Metrics/ClassLength

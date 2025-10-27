@@ -16,7 +16,7 @@ json.array! @gigs do |gig|
   json.series gig.series
   json.category gig.category
   json.information_tags gig.information_tags || []
-  json.genre_tags gig.genre_tags || []
+  json.genre_tags gig.published_genre_tags || []
 
   venue = gig.venue
   if venue
