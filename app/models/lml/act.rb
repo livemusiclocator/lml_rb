@@ -32,6 +32,26 @@ module Lml
       [name, match[1], match[2]]
     end
 
+    def bandcamp=(value)
+      super(value.sub("https://", "").split(".").first)
+    end
+
+    def instagram=(value)
+      super(value.split("/").last)
+    end
+
+    def facebook=(value)
+      super(value.split("/").last)
+    end
+
+    def musicbrainz=(value)
+      super(value.split("/").last)
+    end
+
+    def rym=(value)
+      super(value.split("/").last)
+    end
+
     def genre_list
       (genres || []).join(", ")
     end
