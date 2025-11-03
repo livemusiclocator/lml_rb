@@ -1,0 +1,5 @@
+class AddYoutubeToActs < ActiveRecord::Migration[8.0]
+  def change
+    add_column :acts, :youtube, :string
+  end
+end

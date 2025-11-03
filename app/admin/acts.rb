@@ -5,10 +5,14 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     :facebook,
     :genre_list,
     :instagram,
+    :linktree,
     :location,
     :musicbrainz,
     :name,
     :rym,
+    :website,
+    :wikipedia,
+    :youtube,
   )
 
   filter :name_cont, label: "Name"
@@ -37,11 +41,18 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       row :name
       row :country
       row :location
+
+      row :website do
+        link_to(resource.website, resource.website) if resource.website.present?
+      end
       row :instagram do
         link_to("@#{resource.instagram}", "https://instagram.com/#{resource.instagram}") if resource.instagram.present?
       end
       row :facebook do
         link_to("@#{resource.facebook}", "https://facebook.com/#{resource.facebook}") if resource.facebook.present?
+      end
+      row :linktree do
+        link_to("@#{resource.linktree}", "https://linktr.ee/#{resource.linktree}") if resource.linktree.present?
       end
       row :bandcamp do
         link_to("@#{resource.bandcamp}", "https://#{resource.bandcamp}.bandcamp.com") if resource.bandcamp.present?
@@ -53,6 +64,14 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       end
       row :rym do
         link_to("@#{resource.rym}", "https://rateyourmusic.com/artist/#{resource.rym}") if resource.rym.present?
+      end
+      row :wikipedia do
+        if resource.wikipedia.present?
+          link_to("@#{resource.wikipedia}", "https://wikipedia.org/wiki/#{resource.wikipedia}")
+        end
+      end
+      row :youtube do
+        link_to("@#{resource.youtube}", "https://youtube.com/#{resource.youtube}") if resource.youtube.present?
       end
 
       row :genre_list
@@ -75,11 +94,15 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     f.inputs do
       f.input :name
       f.input :country, as: "string"
+      f.input :website
       f.input :instagram
       f.input :facebook
+      f.input :linktree
       f.input :bandcamp
       f.input :musicbrainz
       f.input :rym
+      f.input :wikipedia
+      f.input :youtube
       f.input :location
       f.input :genre_list
     end
