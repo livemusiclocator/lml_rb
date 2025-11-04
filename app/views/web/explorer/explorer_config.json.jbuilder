@@ -1,7 +1,6 @@
 # app/views/web/explorer_configs/show.json.jbuilder
 json.defaultLocation @explorer_config.default_location
-#json.gigsEndpoint web_api_root_url
-json.gigsEndpoint "https://api.lml.live/gigs"
+json.gigsEndpoint Rails.env.development? ? "https://api.lml.test/gigs" : "https://api.lml.live/gigs"
 json.rootPath relative_path({ path_name: :web_root})
 json.shuffleSeriesAssignments ["stkildaFestival2025", "nope", "nope", "nope"]
 json.allowSelectLocation @explorer_config.locations.length>1
