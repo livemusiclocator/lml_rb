@@ -27,4 +27,21 @@ Layout/LineLength:
 Style/Documentation:
   Enabled: false
 
+Metrics/BlockLength:
+  Max: 25
+  AllowedMethods:
+    # active admin methods that are kind of allowed to break the rule
+    - "index"
+    - "show"
+    - "controller"
+    - "register"
+    - "register_page"
+    - "content"
+    - "panel"
+    - "form"
+    - "table_for"
+    - "div"
+  Exclude:
+    - "config/routes.rb"
+
 plugins: rubocop-rspec
