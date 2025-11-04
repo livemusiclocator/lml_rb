@@ -37,6 +37,29 @@ module Lml
       gig
     end
 
+    def self.potential_duplicated_gigs(date_range)
+      duplicate_groups = find_duplicate_groups(date_range)
+      return Lml::Gig.none if duplicate_groups.empty?
+
+      where_duplicate_groups(duplicate_groups)
+        .includes(:venue)
+        .order({ venue: { name: :asc }, date: :asc, start_offset: :asc })
+    end
+
+    def self.find_duplicate_groups(date_range)
+      visible
+        .where(date: date_range)
+        .group(:venue_id, :date, :start_offset)
+        .having("count(id) > 1")
+        .pluck(:venue_id, :date, :start_offset)
+    end
+
+    def self.where_duplicate_groups(groups)
+      groups.inject(visible.none) do |query, (venue_id, date, start_offset)|
+        query.or(visible.where(venue_id: venue_id, date: date, start_offset: start_offset))
+      end
+    end
+
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
     enum :ticket_status, { selling_fast: "selling_fast", sold_out: "sold_out" }, prefix: true
 

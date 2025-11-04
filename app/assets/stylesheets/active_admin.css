@@ -15567,3 +15567,33 @@ a {
     line-height: 1.4;
   }
 }
+
+.duplicate-gig-report {
+  > p {
+    font-size: 12px; /* small size  */
+  }
+  table {
+    margin-bottom: 1em;
+  }
+  h4 {
+    color: #5e6469;
+    margin-bottom: 0.25em;
+    margin-left: 0.25em;
+    font-size: 1.1em;
+  }
+
+  .no-time {
+    color: #999;
+    font-style: italic;
+  }
+
+  tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  .col-time {
+    width: 4rem;
+  }
+  .col-actions {
+    width: 2rem;
+  }
+}
