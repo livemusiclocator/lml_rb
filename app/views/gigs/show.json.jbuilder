@@ -50,6 +50,16 @@ json.sets gig.sets.order(:start_offset) do |set|
     json.genres act.genres
     json.location act.location if act.location
     json.country act.country if act.country
+
+    json.website act.website if act.website
+    json.instagram_url act.instagram_url if act.instagram_url
+    json.facebook_url act.facebook_url if act.facebook_url
+    json.linktree_url act.linktree_url if act.linktree_url
+    json.bandcamp_url act.bandcamp_url if act.bandcamp_url
+    json.musicbrainz_url act.musicbrainz_url if act.musicbrainz_url
+    json.rym_url act.rym_url if act.rym_url
+    json.wikipedia_url act.wikipedia_url if act.wikipedia_url
+    json.youtube_url act.youtube_url if act.youtube_url
   end
 end
 

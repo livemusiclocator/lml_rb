@@ -32,24 +32,68 @@ module Lml
       [name, match[1], match[2]]
     end
 
+    def linktree=(value)
+      super(value.split("/").last)
+    end
+
+    def linktree_url
+      "https://linktr.ee/#{linktree}" if linktree.present?
+    end
+
     def bandcamp=(value)
       super(value.sub("https://", "").split(".").first)
+    end
+
+    def bandcamp_url
+      "https://#{bandcamp}.bandcamp.com" if bandcamp.present?
     end
 
     def instagram=(value)
       super(value.split("/").last)
     end
 
+    def instagram_url
+      "https://www.instagram.com/#{instagram}" if instagram.present?
+    end
+
     def facebook=(value)
       super(value.split("/").last)
+    end
+
+    def facebook_url
+      "https://www.facebook.com/#{facebook}" if facebook.present?
     end
 
     def musicbrainz=(value)
       super(value.split("/").last)
     end
 
+    def musicbrainz_url
+      "https://musicbrainz.org/artist/#{musicbrainz}" if musicbrainz.present?
+    end
+
     def rym=(value)
       super(value.split("/").last)
+    end
+
+    def rym_url
+      "https://rateyourmusic.com/artist/#{rym}" if rym.present?
+    end
+
+    def wikipedia=(value)
+      super(value.split("/").last)
+    end
+
+    def wikipedia_url
+      "https://en.wikipedia.org/wiki/#{wikipedia}" if wikipedia.present?
+    end
+
+    def youtube=(value)
+      super(value.split("/").last)
+    end
+
+    def youtube_url
+      "https://youtube.com/#{youtube}" if youtube.present?
     end
 
     def genre_list

@@ -46,32 +46,28 @@ ActiveAdmin.register Lml::Act, as: "Act" do
         link_to(resource.website, resource.website) if resource.website.present?
       end
       row :instagram do
-        link_to("@#{resource.instagram}", "https://instagram.com/#{resource.instagram}") if resource.instagram.present?
+        link_to(resource.instagram_url, resource.instagram_url) if resource.instagram.present?
       end
       row :facebook do
-        link_to("@#{resource.facebook}", "https://facebook.com/#{resource.facebook}") if resource.facebook.present?
+        link_to(resource.facebook_url, resource.facebook_url) if resource.facebook.present?
       end
       row :linktree do
-        link_to("@#{resource.linktree}", "https://linktr.ee/#{resource.linktree}") if resource.linktree.present?
+        link_to(resource.linktree_url, resource.linktree_url) if resource.linktree.present?
       end
       row :bandcamp do
-        link_to("@#{resource.bandcamp}", "https://#{resource.bandcamp}.bandcamp.com") if resource.bandcamp.present?
+        link_to(resource.bandcamp_url, resource.bandcamp_url) if resource.bandcamp.present?
       end
       row :musicbrainz do
-        if resource.musicbrainz.present?
-          link_to("@#{resource.musicbrainz}", "https://musicbrainz.org/artist/#{resource.musicbrainz}")
-        end
+        link_to(resource.musicbrainz_url, resource.musicbrainz_url) if resource.musicbrainz.present?
       end
       row :rym do
-        link_to("@#{resource.rym}", "https://rateyourmusic.com/artist/#{resource.rym}") if resource.rym.present?
+        link_to(resource.rym_url, resource.rym_url) if resource.rym.present?
       end
       row :wikipedia do
-        if resource.wikipedia.present?
-          link_to("@#{resource.wikipedia}", "https://wikipedia.org/wiki/#{resource.wikipedia}")
-        end
+        link_to(resource.wikipedia_url, resource.wikipedia_url) if resource.wikipedia.present?
       end
       row :youtube do
-        link_to("@#{resource.youtube}", "https://youtube.com/#{resource.youtube}") if resource.youtube.present?
+        link_to(resource.youtube_url, resource.youtube_url) if resource.youtube.present?
       end
 
       row :genre_list
@@ -94,6 +90,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     f.inputs do
       f.input :name
       f.input :country, as: "string"
+      f.input :location
       f.input :website
       f.input :instagram
       f.input :facebook
@@ -103,7 +100,6 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       f.input :rym
       f.input :wikipedia
       f.input :youtube
-      f.input :location
       f.input :genre_list
     end
     f.actions
