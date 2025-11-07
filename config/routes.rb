@@ -44,7 +44,7 @@ Rails.application.routes.draw do
   # (also probably www.lml.live and beta.lml.live if we set these up)
   # Match only routes to the subdomain 'beta' and 'www'
   # (lax matching due to tld_length issues described in introducing commit notes)
-  constraints subdomain: /^(beta|www)(\.\w+)?/ do
+  constraints subdomain: /^(beta|www).livemusiclocator/ do
     # mount the lml api handlers here
     scope "api/gigs", as: "web_api" do
       concerns :the_api
@@ -110,7 +110,11 @@ Rails.application.routes.draw do
     get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
              via: :all
   end
-
+  # www.lml.live => www.livemusiclocator.com.au/?location=melbourne (copy pasted from "" subdomain handling above)
+  constraints domain: short_domain, subdomain: "www" do
+    get "/", to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
+             via: :all
+  end
   # Subdomain redirects to main gig guide, setting location search parameter
   %w[brisbane melbourne castlemaine goldfields].each do |standard_location|
     constraints domain: short_domain, subdomain: standard_location do
