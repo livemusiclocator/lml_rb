@@ -4,15 +4,24 @@ module Lml
   module Processors
     module ClipperParser
       def self.extract_entries(lines)
+        # TODO: maybe look at these rubocop issues and fix them?
+        # rubocop:disable Style/MultilineBlockChain
         extract_line_groups(lines).map do |group|
           extract_entry(group)
-        end.filter { |details| details.keys.count.positive? }
+        end.filter { |details| details.keys.any? }
+        # rubocop:enable Style/MultilineBlockChain
       end
 
       def self.extract_line_groups(lines)
         lines.slice_before(/^---/).to_a
       end
 
+      # TODO: maybe look at these rubocop issues and fix them?
+      # rubocop:disable Metrics/BlockLength
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/PerceivedComplexity
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/CyclomaticComplexity
       def self.extract_entry(lines)
         {}.tap do |details|
           lines.each do |line|
@@ -72,6 +81,11 @@ module Lml
           end
         end
       end
+      # rubocop:enable Metrics/BlockLength
+      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/PerceivedComplexity
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/CyclomaticComplexity
     end
   end
 end
