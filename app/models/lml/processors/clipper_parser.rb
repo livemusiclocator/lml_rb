@@ -66,6 +66,8 @@ module Lml
               details[:url] = value
             when "weeks"
               details[:weeks] = value.to_i
+            when "ticket_status"
+              details[:ticket_status] = value
             end
           end
         end
