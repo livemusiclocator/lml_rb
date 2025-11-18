@@ -18,6 +18,7 @@ module Lml
         updated_at
         upload_id
         venue_id
+        start_offset
       ]
     end
     # rubocop:enable Metrics/MethodLength
@@ -37,29 +38,6 @@ module Lml
       gig
     end
 
-    def self.potential_duplicated_gigs(date_range)
-      duplicate_groups = find_duplicate_groups(date_range)
-      return Lml::Gig.none if duplicate_groups.empty?
-
-      where_duplicate_groups(duplicate_groups)
-        .includes(:venue)
-        .order({ venue: { name: :asc }, date: :asc, start_offset: :asc })
-    end
-
-    def self.find_duplicate_groups(date_range)
-      visible
-        .where(date: date_range)
-        .group(:venue_id, :date, :start_offset)
-        .having("count(id) > 1")
-        .pluck(:venue_id, :date, :start_offset)
-    end
-
-    def self.where_duplicate_groups(groups)
-      groups.inject(visible.none) do |query, (venue_id, date, start_offset)|
-        query.or(visible.where(venue_id: venue_id, date: date, start_offset: start_offset))
-      end
-    end
-
     enum :status, { draft: "draft", confirmed: "confirmed", cancelled: "cancelled" }, prefix: true
     enum :ticket_status, { selling_fast: "selling_fast", sold_out: "sold_out" }, prefix: true
 
@@ -76,8 +54,26 @@ module Lml
         .includes(:prices)
         .annotate("eager loading gig data")
     }
+    scope :this_week, lambda {
+      where(date: Date.current.all_week)
+    }
+    scope :next_week, lambda {
+      where(date: Date.current.all_week)
+    }
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
+    scope :potential_duplicates, lambda {
+      # Self-join to find gigs sharing venue_id + date with other gigs
+      duplicate_combinations = where.not(date: nil)
+                                    .group(:venue_id, :date)
+                                    .having("COUNT(*) > 1")
+                                    .select(:venue_id, :date)
+
+      joins("INNER JOIN (#{duplicate_combinations.to_sql}) AS dupes
+           ON gigs.venue_id = dupes.venue_id
+           AND gigs.date = dupes.date").joins(:venue)
+    }
+
     def suggest_tags!(force: false)
       return if internal_description.blank?
       return if !force && (proposed_genre_tags || []).present?

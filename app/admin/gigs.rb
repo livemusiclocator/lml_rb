@@ -44,16 +44,40 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   config.per_page = [50, 100, 200]
   config.sort_order = "created_at_desc"
 
-  filter :name_cont, label: "Name"
-  filter :venue_location_cont, label: "Location"
+  filter :name_cont, label: "Name", if: proc { params[:scope] != "potential_duplicates" }
+  filter :venue_location_cont, as: :select, label: "Location", collection: -> { Web::Location.order(:name).pluck(:name, :internal_identifier) }
+
   filter :venue, as: :select, collection: -> { Lml::Venue.order(:name).pluck(:name, :id) }
   filter :date
-  filter :series_cont, label: "Series"
-  filter :category_cont, label: "Category"
-  filter :source_cont, label: "Source"
-  filter :status, as: :select, collection: Lml::Gig.statuses.keys
-  filter :checked
-  filter :hidden
+  filter :start_time_offset, if: proc { params[:scope] != "potential_duplicates" }
+  filter :start_time_offset_null, if: proc { params[:scope] != "potential_duplicates" }
+  filter :series_cont, label: "Series", if: proc { params[:scope] != "potential_duplicates" }
+  filter :category_cont, label: "Category", if: proc { params[:scope] != "potential_duplicates" }
+  filter :source_cont, label: "Source", if: proc { params[:scope] != "potential_duplicates" }
+  filter :status, as: :select, collection: Lml::Gig.statuses.keys, if: proc { params[:scope] != "potential_duplicates" }
+  filter :checked, if: proc { params[:scope] != "potential_duplicates" }
+  filter :hidden, if: proc { params[:scope] != "potential_duplicates" }
+
+  scope "All gigs", :eager, default: true, show_count: false
+
+  scope "Potential duplicates", :potential_duplicates, show_count: false, group: :reports do
+    params[:as] = "Gig Schedule" if params[:as].nil?
+    search = Lml::Gig.visible.potential_duplicates.ransack(params[:q])
+    search.sorts = %w[venue_name date start_offset] if search.sorts.empty?
+    search.result.includes(:venue)
+  end
+  scope :this_week
+
+  before_action only: :index do
+    if params[:as].blank?
+      params[:as] = case params[:scope]
+                    when "potential_duplicates", "this_week"
+                      "Gig Schedule"
+                    else
+                      "table"
+                    end
+    end
+  end
 
   index do
     selectable_column
@@ -294,10 +318,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
   # rubocop:enable Metrics/BlockLength
   controller do
-    def scoped_collection
-      super.eager
-    end
-
     def create
       # finish time needs to be assigned after start time
       finish_time = params[:lml_gig].delete(:finish_time)
