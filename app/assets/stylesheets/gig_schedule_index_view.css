@@ -1,0 +1,118 @@
+/* Gig Schedule Grid Styles */
+
+.gig-schedule-nope {
+  border: 1px green solid;
+  .week-grid {
+    border: 1px blue solid;
+    .day-col {
+      border: 5px red solid;
+      .time-slot {
+        border: 2px purple solid;
+        time {
+          border: 3px peachpuff dotted;
+        }
+        .gig-name {
+          border: 4px seagreen double;
+        }
+      }
+      .time-slot.duplicate-slot {
+        border: 2px orange solid;
+      }
+    }
+    .day-col:has(.duplicate-slot) {
+      border: 4px #ff5533 dashed;
+    }
+  }
+}
+
+.index_as_gig_schedule {
+  .gig-schedule {
+    .week-grid {
+      margin-bottom: 1.5em;
+      width: max-content;
+      max-width: 100%;
+      margin: 0 auto;
+      display: grid;
+
+      /* weekend columns need a bit more space */
+
+      grid-template-rows: auto auto max-content;
+      grid-template-areas:
+        "week-header . . . . . ."
+        "day-1 day-2 day-3 day-4 day-5 day-6 day-7";
+      grid-template-columns: repeat(7, auto);
+
+      justify-content: flex-start;
+
+      border: 1px solid #ddd;
+
+      .week-header {
+        grid-row: 1;
+
+        grid-column: 1 / -1;
+      }
+      .day-col {
+        grid-row: 3;
+
+        border: 1px solid #ddd;
+        max-width: 20em;
+      }
+      .day-header {
+        color: white;
+        text-align: center;
+        line-height: 2;
+        margin: -1px -1px 0 -1px;
+      }
+
+      .day-header {
+        grid-row: 2;
+
+        color: white;
+        background: #aaa;
+
+        line-height: 2;
+        margin: -1px -1px 0 -1px;
+        padding: 0 0.5em;
+      }
+
+      .day-header:has(+ div) {
+        font-size: 1em;
+        background: #5e6469;
+      }
+      .day-header:has(+ div.duplicate-warning) {
+        background: #e29b20;
+      }
+      .duplicate-warning {
+        color: #e29b20;
+        background: #ffeaa7;
+        background-color: #fff3cd;
+
+        padding: 0.5em;
+        font-size: 0.8em;
+        text-align: center;
+      }
+
+      .time-slot {
+        margin: 1em 0.5em;
+        time {
+          font-weight: bold;
+        }
+        .gig-name {
+          padding: 1em;
+          margin-bottom: 0.5em;
+          background: #f5f5f5;
+          border-left: 9px solid #5e6469;
+          font-size: 0.85em;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+      .time-slot.duplicate-slot {
+        .gig-name {
+          border-left-color: #e29b20;
+        }
+      }
+    }
+  }
+}

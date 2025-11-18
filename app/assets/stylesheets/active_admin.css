@@ -15597,3 +15597,11 @@ a {
     width: 2rem;
   }
 }
+
+
+body.index .indexes .index:active a,
+body.index .indexes .index:focus a,
+body.index .indexes .index.selected a {
+  background-color: #464a4e;
+  border-color: #464a4e;
+  color: #fff;
