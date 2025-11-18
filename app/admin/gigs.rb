@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+module ActiveAdmin
+  module Views
+    class IndexAsGigSchedule < ActiveAdmin::Component
+      def build(page_presenter, collection)
+        puts page_presenter.methods - Object.methods
+        @gig_schedule_presenter = GigSchedulePresenter.new(collection, params)
+
+        render "admin/gigs/gigs_schedule",
+               { gig_schedule_presenter: GigSchedulePresenter.new(collection, params) }
+        # render "admin/gigs/gig_schedule_view"
+      end
+
+      def self.index_name
+        "Shedule"
+      end
+    end
+  end
+end
 ActiveAdmin.register Lml::Gig, as: "Gig" do
   permit_params(
     :category,
@@ -65,6 +83,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     actions
   end
+
+  index as: :gig_schedule
 
   index as: ActiveAdmin::Views::CanvaCustomIndex do
     column :venue

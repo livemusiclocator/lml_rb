@@ -1,0 +1,31 @@
+# Hightlight duplicates on schedule if on duplicates scope
+# current_scope = params[:scope]
+# show_duplicates = current_scope == "duplicates"
+
+gig_schedule_presenter.venue_schedules.each do |venue, schedule_presenter|
+  panel venue.name do
+    div(class: "gig-schedule") do
+      schedule_presenter.week_schedules.each do |week_schedule|
+        div class: "week-grid" do
+          h4 week_schedule.header_text, class: "week-header"
+          week_schedule.day_schedules.each do |day_schedule|
+            div day_schedule.header, class: "day-header", style: "grid-column: day-#{day_schedule.day_number}-start"
+            div class: "day-col", style: "grid-column: day-#{day_schedule.day_number}" do
+              div day_schedule.duplicates_header, class: "duplicate-warning" if day_schedule.duplicates?
+              day_schedule.time_slots.each do |time_slot, gigs_at_time|
+                div class: "time-slot #{"duplicate-slot" if day_schedule.duplicate_slot?(time_slot)}" do
+                  time time_slot
+                  gigs_at_time.each do |gig|
+                    div(class: "gig-name") do
+                      link_to gig.name, admin_gig_path(gig)
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
