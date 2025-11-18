@@ -72,7 +72,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :start_time
     actions
   end
-
+  # rubocop:disable Metrics/BlockLength
   show do
     attributes_table do
       row :id
@@ -239,7 +239,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :genre_tag_list, as: :text, input_html: { rows: 5 }
       para("One tag per line", style: "font-size: small")
       proposed = f.object.proposed_genre_tags || []
-      if proposed.count.positive?
+      if proposed.any?
         para("Proposed genre tags:", style: "font-size: small")
         pre(proposed.join("\n"), style: "font-size: small")
       end
@@ -251,12 +251,14 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
         style: "font-size: small",
       )
     end
+
     f.inputs "Sets" do
       f.input :set_list, as: :text, input_html: { rows: 5 }
-      para(
-        "One set per line, enter act name, start time, finish time and stage separated by pipes (eg. The Beatles | 7:30pm | 8:30pm | main stage)",
-        style: "font-size: small",
-      )
+      help_text = <<-TEXT
+          One set per line, enter act name, start time, finish time and stage separated by pipes
+          (eg. The Beatles | 7:30pm | 8:30pm | main stage)
+      TEXT
+      para(help_text, style: "font-size: small")
     end
     f.inputs "Prices" do
       f.input :price_list, as: :text, input_html: { rows: 5 }
@@ -270,7 +272,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     SCRIPT
     f.actions
   end
-
+  # rubocop:enable Metrics/BlockLength
   controller do
     def scoped_collection
       super.eager

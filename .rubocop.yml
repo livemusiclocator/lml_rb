@@ -43,5 +43,6 @@ Metrics/BlockLength:
     - "div"
   Exclude:
     - "config/routes.rb"
+    - "config/initializers/active_admin.rb" # should we just exclude all the config?
 
 plugins: rubocop-rspec
