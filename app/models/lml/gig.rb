@@ -60,6 +60,13 @@ module Lml
     scope :next_week, lambda {
       where(date: Date.current.all_week)
     }
+    scope :modified_this_week, lambda {
+      where(updated_at: Date.current.all_week)
+    }
+    scope :missing_genre_tags, lambda {
+      where("genre_tags = '{}' or genre_tags is NULL").where("proposed_genre_tags = '{}' or proposed_genre_tags is NULL")
+    }
+
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
     scope :potential_duplicates, lambda {

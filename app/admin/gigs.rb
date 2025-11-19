@@ -57,14 +57,14 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   filter :checked, if: proc { params[:scope] != "potential_duplicates" }
   filter :hidden, if: proc { params[:scope] != "potential_duplicates" }
 
-  scope "All gigs", :eager, default: true, show_count: false
-
-  scope "Potential duplicates", :potential_duplicates, show_count: false, group: :reports do
+  scope "All gigs", :eager, default: true, show_count: true
+  scope "Modified this week", :modified_this_week, default: false, show_count: true
+  scope "Missing genre tags", :missing_genre_tags, default: false, show_count: true, group: :reports
+  scope "Potential duplicates", :potential_duplicates, show_count: true, group: :reports do
     search = Lml::Gig.visible.potential_duplicates.ransack(params[:q])
     search.sorts = %w[venue_name date start_offset] if search.sorts.empty?
     search.result.includes(:venue)
   end
-  scope :this_week
 
   before_action only: :index do
     if params[:commit].blank?
@@ -74,7 +74,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     if params[:as].blank?
       params[:as] = case params[:scope]
-                    when "potential_duplicates", "this_week"
+                    when "potential_duplicates"
                       "schedule"
                     else
                       "table"
