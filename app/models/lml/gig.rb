@@ -64,21 +64,22 @@ module Lml
       where(updated_at: Date.current.all_week)
     }
     scope :missing_genre_tags, lambda {
-      where("genre_tags = '{}' or genre_tags is NULL").where("proposed_genre_tags = '{}' or proposed_genre_tags is NULL")
+      where("genre_tags = '{}' or genre_tags is NULL")
+        .where("proposed_genre_tags = '{}' or proposed_genre_tags is NULL")
     }
 
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
     scope :potential_duplicates, lambda {
       # Self-join to find gigs sharing venue_id + date with other gigs
-      duplicate_combinations = where.not(date: nil)
-                                    .group(:venue_id, :date)
-                                    .having("COUNT(*) > 1")
-                                    .select(:venue_id, :date)
+      duplicate_combinations = where(hidden: [nil, false]).where.not(status: "draft").where.not(date: nil)
+                                                          .group(:venue_id, :date, :start_offset)
+                                                          .having("COUNT(*) > 1")
+                                                          .select(:venue_id, :date, :start_offset)
 
       joins("INNER JOIN (#{duplicate_combinations.to_sql}) AS dupes
            ON gigs.venue_id = dupes.venue_id
-           AND gigs.date = dupes.date").joins(:venue)
+           AND gigs.date = dupes.date AND gigs.start_offset =  dupes.start_offset").joins(:venue)
     }
 
     def suggest_tags!(force: false)

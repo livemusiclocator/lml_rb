@@ -1,0 +1,19 @@
+
+  panel "Duplicates Report (#{gigs.length} results)" do
+
+    table_for gigs do
+      column :location do |gig|
+        gig.venue.location if gig.venue
+      end
+      column :venue
+      column :date
+      column :start_time
+      column :start_offset
+      column :name
+      column "Actions" do |gig|
+            link_to("edit", admin_gig_path(gig),
+                                               class: "member_link")
+
+      end
+    end
+  end
