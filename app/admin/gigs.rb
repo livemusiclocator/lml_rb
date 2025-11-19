@@ -3,7 +3,7 @@
 module ActiveAdmin
   module Views
     class IndexAsGigSchedule < ActiveAdmin::Component
-      def build(page_presenter, collection)
+      def build(_page_presenter, collection)
         @gig_schedule_presenter = GigSchedulePresenter.new(collection, params)
 
         render "admin/gigs/gigs_schedule",
@@ -41,7 +41,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   )
 
   config.per_page = [50, 100, 200]
-  config.sort_order = "created_at_desc"
+  config.sort_order = "date_asc" # defaulting to beginning of the week date filter, this makes sense
 
   filter :name_cont, label: "Name", if: proc { params[:scope] != "potential_duplicates" }
   filter :venue_location_cont, as: :select, label: "Location", collection: -> { Web::Location.order(:name).pluck(:name, :internal_identifier) }
@@ -67,6 +67,11 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   scope :this_week
 
   before_action only: :index do
+    if params[:commit].blank?
+      params[:q] ||= {}
+      # defaulting the gig list to things happening this week and onward
+      params[:q][:date_gteq] = Date.today.beginning_of_week
+    end
     if params[:as].blank?
       params[:as] = case params[:scope]
                     when "potential_duplicates", "this_week"
@@ -74,13 +79,13 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
                     else
                       "table"
                     end
+
     end
     if params[:as] == "schedule"
       # remove the user-defined sort here as it does not really make sense when showing the schedule
       # (maybe if the sort was by week-start or venue perhaps?)
       params["order"] = nil
     end
-
   end
 
   index do
@@ -100,7 +105,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     column :status
     column :source
     column :genre_tag_count do |resource|
-      (resource.genre_tags || []).count
+      (resource.published_genre_tags || []).count
     end
 
     column :created_at do |resource|
