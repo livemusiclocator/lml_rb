@@ -13,7 +13,7 @@ module ActiveAdmin
       end
 
       def self.index_name
-        "Shedule"
+        "schedule"
       end
     end
   end
@@ -61,7 +61,6 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   scope "All gigs", :eager, default: true, show_count: false
 
   scope "Potential duplicates", :potential_duplicates, show_count: false, group: :reports do
-    params[:as] = "Gig Schedule" if params[:as].nil?
     search = Lml::Gig.visible.potential_duplicates.ransack(params[:q])
     search.sorts = %w[venue_name date start_offset] if search.sorts.empty?
     search.result.includes(:venue)
@@ -72,7 +71,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     if params[:as].blank?
       params[:as] = case params[:scope]
                     when "potential_duplicates", "this_week"
-                      "Gig Schedule"
+                      "schedule"
                     else
                       "table"
                     end

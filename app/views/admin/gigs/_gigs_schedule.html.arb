@@ -3,7 +3,7 @@
 # show_duplicates = current_scope == "duplicates"
 
 gig_schedule_presenter.venue_schedules.each do |venue, schedule_presenter|
-  panel venue.name do
+  panel venue&.name || "NO VENUE" do
     div(class: "gig-schedule") do
       schedule_presenter.week_schedules.each do |week_schedule|
         div class: "week-grid" do
