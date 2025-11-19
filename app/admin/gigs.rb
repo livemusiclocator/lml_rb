@@ -4,7 +4,6 @@ module ActiveAdmin
   module Views
     class IndexAsGigSchedule < ActiveAdmin::Component
       def build(page_presenter, collection)
-        puts page_presenter.methods - Object.methods
         @gig_schedule_presenter = GigSchedulePresenter.new(collection, params)
 
         render "admin/gigs/gigs_schedule",
@@ -76,6 +75,12 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
                       "table"
                     end
     end
+    if params[:as] == "schedule"
+      # remove the user-defined sort here as it does not really make sense when showing the schedule
+      # (maybe if the sort was by week-start or venue perhaps?)
+      params["order"] = nil
+    end
+
   end
 
   index do

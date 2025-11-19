@@ -1,37 +1,11 @@
 /* Gig Schedule Grid Styles */
 
-.gig-schedule-nope {
-  border: 1px green solid;
-  .week-grid {
-    border: 1px blue solid;
-    .day-col {
-      border: 5px red solid;
-      .time-slot {
-        border: 2px purple solid;
-        time {
-          border: 3px peachpuff dotted;
-        }
-        .gig-name {
-          border: 4px seagreen double;
-        }
-      }
-      .time-slot.duplicate-slot {
-        border: 2px orange solid;
-      }
-    }
-    .day-col:has(.duplicate-slot) {
-      border: 4px #ff5533 dashed;
-    }
-  }
-}
-
 .index_as_gig_schedule {
   .gig-schedule {
     .week-grid {
-      margin-bottom: 1.5em;
       width: max-content;
       max-width: 100%;
-      margin: 0 auto;
+      margin: 0 auto 1.5em auto;
       display: grid;
 
       /* weekend columns need a bit more space */
@@ -44,12 +18,12 @@
 
       justify-content: flex-start;
 
-      border: 1px solid #ddd;
-
       .week-header {
         grid-row: 1;
-
         grid-column: 1 / -1;
+        line-height: 2;
+        color: #5e6469;
+        margin: 0 0.5em;
       }
       .day-col {
         grid-row: 3;
@@ -57,22 +31,18 @@
         border: 1px solid #ddd;
         max-width: 20em;
       }
-      .day-header {
-        color: white;
-        text-align: center;
-        line-height: 2;
-        margin: -1px -1px 0 -1px;
-      }
 
       .day-header {
         grid-row: 2;
 
         color: white;
         background: #aaa;
+        text-align: center;
 
         line-height: 2;
-        margin: -1px -1px 0 -1px;
+        margin: 0;
         padding: 0 0.5em;
+        border: 1px solid #ddd;
       }
 
       .day-header:has(+ div) {

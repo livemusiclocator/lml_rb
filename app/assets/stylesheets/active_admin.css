@@ -15567,41 +15567,19 @@ a {
     line-height: 1.4;
   }
 }
-
-.duplicate-gig-report {
-  > p {
-    font-size: 12px; /* small size  */
-  }
-  table {
-    margin-bottom: 1em;
-  }
-  h4 {
-    color: #5e6469;
-    margin-bottom: 0.25em;
-    margin-left: 0.25em;
-    font-size: 1.1em;
-  }
-
-  .no-time {
-    color: #999;
-    font-style: italic;
-  }
-
-  tbody tr:hover {
-    background-color: #f9f9f9;
-  }
-  .col-time {
-    width: 4rem;
-  }
-  .col-actions {
-    width: 2rem;
-  }
-}
-
-
+/* styles the index selectors to show which is selected (table, schedule etc)*/
 body.index .indexes .index:active a,
 body.index .indexes .index:focus a,
 body.index .indexes .index.selected a {
   background-color: #464a4e;
   border-color: #464a4e;
   color: #fff;
+}
+
+/* correct some possible css collision/active admin/arctic admin kinda bugs */
+body.index .scopes .scope a.table_tools_button {
+  margin-right: 0;
+}
+body.index .scopes .scope:last-child a.table_tools_button {
+  margin-right: 1em;
+}

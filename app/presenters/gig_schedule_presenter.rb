@@ -102,7 +102,7 @@ class GigSchedulePresenter
 
   def venue_schedules
     @all_gigs
-      .sort_by { |venue, _| venue.name }
+      .sort_by { | gig | gig.date }
       .group_by(&:venue)
       .transform_values { |gigs| GigSchedulePresenter.new(gigs, @params) }
   end
