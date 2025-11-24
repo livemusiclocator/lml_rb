@@ -3,10 +3,13 @@
 module Lml
   class StochasticParrot
     def initialize
-      @client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
+      @client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"), log_errors: true)
+      @logger = Rails.logger
     end
 
+    # rubocop:disable Metrics/MethodLength
     def gist(description)
+      @logger.info("Making OpenAI request with description: #{description&.truncate(100)}")
       response = @client.chat(
         parameters: {
           model: "gpt-4.1",
@@ -45,8 +48,10 @@ module Lml
           ],
         },
       )
+      @logger.info("Received response back from OpenAI: #{response}")
       content = response["choices"].first["message"]["content"]
       JSON.parse(content)["gist_tags"].map(&:downcase)
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
