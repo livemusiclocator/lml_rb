@@ -68,9 +68,8 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
 
   before_action only: :index do
     if params[:commit].blank?
-      params[:q] ||= {}
-      # defaulting the gig list to things happening this week and onward
-      params[:q][:date_gteq] = Date.today.beginning_of_week
+      # defaulting the gig list to things happening this week and onward unless there is already a search defined
+      params[:q] ||= { date_gteq: Date.today.beginning_of_week }
     end
     if params[:as].blank?
       params[:as] = case params[:scope]

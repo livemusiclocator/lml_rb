@@ -48,6 +48,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   end
 
   show do
+    # rubocop:disable Metrics/BlockLength
     attributes_table do
       row :id
       row :name
@@ -108,11 +109,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         admin_time(resource.updated_at)
       end
     end
+    # rubocop:enable Metrics/BlockLength
   end
 
   sidebar "Links", only: :show do
     ul do
-      li link_to "Gigs", admin_gigs_path("q[venue_id_eq]" => resource.id)
+      li link_to "Gigs", admin_gigs_path("q[venue_id_eq]" => resource.id, "order" => "created_at_desc")
       li link_to "Uploads", admin_uploads_path("q[venue_id_eq]" => resource.id)
     end
   end
