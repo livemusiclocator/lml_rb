@@ -12,7 +12,7 @@ module Web
       New Wave, DJ, Covers, Tribute
     GENRES_CSV
              .split(/,\s*/).freeze
-    DATE_RANGES = %w[today tomorrow thisWeek nextWeek customDate].freeze
+    DATE_RANGES = %w[today tomorrow thisWeek nextWeek thisMonth customDate].freeze
 
     # Configuration for display formatting
     CONFIG = {
@@ -22,6 +22,7 @@ module Web
         "weekend" => "this weekend",
         "thisWeek" => "this week",
         "nextWeek" => "next week",
+        "thisMonth" => "thisMonth",
       },
       fallback_title: "Live Music Listings",
       multiple_genres_text: "Live Music (multiple genres)",

@@ -48,6 +48,7 @@ RSpec.describe Web::GigSearch do
         { date_range: "tomorrow", expected: "Live Music in Melbourne tomorrow" },
         { date_range: "thisWeek", expected: "Live Music in Melbourne this week" },
         { date_range: "nextWeek", expected: "Live Music in Melbourne next week" },
+        { date_range: "thisMonth", expected: "Live Music in Melbourne this month" },
         { date_range: "someday", expected: "Live Music in Melbourne" }, # unknown date_range
       ].each do |test_case|
         it "formats '#{test_case[:date_range]}' correctly" do
