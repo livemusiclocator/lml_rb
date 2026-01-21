@@ -286,6 +286,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       f.input :ticket_status, as: :select, collection: Lml::Gig.ticket_statuses.keys
       f.input :hidden
       f.input :internal_description, input_html: { rows: 5 }
+      f.input :series
     end
     f.inputs "Genre Tags" do
       f.input :genre_tag_list, as: :text, input_html: { rows: 5 }
