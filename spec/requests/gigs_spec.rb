@@ -72,6 +72,7 @@ describe "gigs" do
       @main_act = Lml::Act.create!(
         name: "The Really Quite Good Music People",
         genres: %w[good loud people],
+        spotify: "spot123",
       )
       @first_support = Lml::Act.create!(name: "first support")
       @second_support = Lml::Act.create!(name: "second support")
@@ -105,7 +106,7 @@ describe "gigs" do
 
     it "returns gig" do
       get "/gigs/#{@gig.id}"
-      expect(response.body).to include_json(
+      expect(response.parsed_body).to eq(
         {
           "date" => "2001-06-08",
           "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
@@ -150,6 +151,7 @@ describe "gigs" do
                 "genres" => %w[good loud people],
                 "id" => @main_act.id,
                 "name" => "The Really Quite Good Music People",
+                "spotify_url" => "https://open.spotify.com/artist/spot123",
               },
               "start_time" => "20:00",
               "start_timestamp" => "2001-06-08T20:00:00.000+10:00",
@@ -189,19 +191,19 @@ describe "gigs" do
     context "when there are no provided params" do
       it "returns empty result" do
         get "/gigs/query"
-        expect(JSON.parse(response.body)).to eq([])
+        expect(response.parsed_body).to eq([])
       end
     end
 
     context "when there are no gigs" do
       it "returns empty result" do
         get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
-        expect(JSON.parse(response.body)).to eq([])
+        expect(response.parsed_body).to eq([])
       end
 
       it "returns empty result" do
         get "/gigs/for/melbourne/2001-06-08"
-        expect(JSON.parse(response.body)).to eq([])
+        expect(response.parsed_body).to eq([])
       end
     end
 
@@ -250,6 +252,7 @@ describe "gigs" do
         @main_act = Lml::Act.create!(
           name: "The Really Quite Good Music People",
           genres: %w[good loud people],
+          spotify: "spot123",
         )
         @first_support = Lml::Act.create!(name: "first support")
         @second_support = Lml::Act.create!(name: "second support")
@@ -301,28 +304,28 @@ describe "gigs" do
         @gig_in_stkilda.update!(hidden: true)
         @another_gig_in_stkilda.update!(hidden: true)
         get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-06-08"
-        expect(JSON.parse(response.body)).to eq([])
+        expect(response.parsed_body).to eq([])
       end
 
       it "returns no gigs when location has no gigs" do
         get "/gigs/query?location=brisbane&date_from=2001-06-08&date_to=2001-06-08"
-        expect(JSON.parse(response.body)).to eq([])
+        expect(response.parsed_body).to eq([])
       end
 
       it "returns no gigs when there are no gigs for the specified dates" do
         get "/gigs/query?location=melbourne&date_from=2011-06-08&date_to=2011-06-08"
-        expect(JSON.parse(response.body)).to eq([])
+        expect(response.parsed_body).to eq([])
       end
 
       it "returns all gigs when location = anywhere" do
         get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-08-08"
-        expect(JSON.parse(response.body)).to include(include("name" => "The One Gig You Should Not Miss Out On"))
+        expect(response.parsed_body).to include(include("name" => "The One Gig You Should Not Miss Out On"))
       end
 
       describe "matching sub-geographies of Melbourne" do
         it "returns venues with location=stkilda and location=melbourne when location=melbourne" do
           get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
-          expect(JSON.parse(response.body)).to match_unordered_json([
+          expect(response.parsed_body).to match_unordered_json([
                                                                       { name: "A gig in st kilda",
                                                                         venue: { name: "The Escry" }, },
                                                                       { name: "Another gig in st kilda",
@@ -333,7 +336,7 @@ describe "gigs" do
         end
         it "returns venues with location=stkilda when location=stkilda" do
           get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
-          expect(JSON.parse(response.body)).to match_unordered_json([
+          expect(response.parsed_body).to match_unordered_json([
                                                                       { name: "A gig in st kilda",
                                                                         venue: { name: "The Escry" }, },
                                                                       { name: "Another gig in st kilda",
