@@ -2,6 +2,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
   permit_params(
     :bandcamp,
     :country,
+    :email,
     :facebook,
     :genre_list,
     :instagram,
@@ -10,6 +11,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     :musicbrainz,
     :name,
     :rym,
+    :spotify,
     :website,
     :wikipedia,
     :youtube,
@@ -41,6 +43,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       row :name
       row :country
       row :location
+      row :email
 
       row :website do
         link_to(resource.website, resource.website) if resource.website.present?
@@ -62,6 +65,9 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       end
       row :rym do
         link_to(resource.rym_url, resource.rym_url) if resource.rym.present?
+      end
+      row :spotify do
+        link_to(resource.spotify_url, resource.spotify_url) if resource.spotify.present?
       end
       row :wikipedia do
         link_to(resource.wikipedia_url, resource.wikipedia_url) if resource.wikipedia.present?
@@ -91,6 +97,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       f.input :name
       f.input :country, as: "string"
       f.input :location
+      f.input :email
       f.input :website
       f.input :instagram
       f.input :facebook
@@ -98,6 +105,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       f.input :bandcamp
       f.input :musicbrainz
       f.input :rym
+      f.input :spotify
       f.input :wikipedia
       f.input :youtube
       f.input :genre_list

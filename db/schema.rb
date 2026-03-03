@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_03_084639) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_074207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -24,6 +24,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_03_084639) do
     t.string "bandcamp"
     t.string "country"
     t.datetime "created_at", null: false
+    t.string "email"
     t.string "facebook"
     t.jsonb "genres"
     t.string "instagram"
@@ -32,6 +33,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_03_084639) do
     t.string "musicbrainz"
     t.string "name"
     t.string "rym"
+    t.string "spotify"
     t.datetime "updated_at", null: false
     t.string "website"
     t.string "wikipedia"

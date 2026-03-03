@@ -80,6 +80,14 @@ module Lml
       "https://rateyourmusic.com/artist/#{rym}" if rym.present?
     end
 
+    def spotify=(value)
+      super(value.split("/").last)
+    end
+
+    def spotify_url
+      "https://open.spotify.com/artist/#{spotify}" if spotify.present?
+    end
+
     def wikipedia=(value)
       super(value.split("/").last)
     end
