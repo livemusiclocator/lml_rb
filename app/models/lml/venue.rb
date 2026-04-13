@@ -25,9 +25,9 @@ module Lml
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first
     end
     scope :in_location, lambda { |location|
-      # TODO: unreleased locations !
       if location == "anywhere"
-        return where.not(location: %w[Geelong geelong castlemaine goldfields Goldfields Castlemaine])
+        # TODO: this could just be removed but I am in a bit of rush so this will do
+        return where.not(location: %w[placeholder])
       end
       # Until we sort out locations properly, asking for 'location=melbourne' will show you everything
       # in stkilda location and melbourne (and "Melbourne"! )
