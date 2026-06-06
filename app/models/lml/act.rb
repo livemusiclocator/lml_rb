@@ -1,5 +1,8 @@
 module Lml
   class Act < ApplicationRecord
+    has_many :act_managers, class_name: "Lml::ActManager", foreign_key: :act_id, dependent: :destroy
+    has_many :managers, through: :act_managers, source: :user
+
     def self.ransackable_attributes(_auth_object = nil)
       %w[name country location]
     end

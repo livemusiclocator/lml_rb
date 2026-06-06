@@ -1,0 +1,40 @@
+<div class="flex items-center justify-between mb-8">
+  <div>
+    <h1 class="text-3xl font-bold tracking-tight">My Proposals</h1>
+    <p class="text-gray-500 mt-1">Track the status of everything you've submitted.</p>
+  </div>
+  <%= link_to new_backstage_proposal_path,
+      class: "inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-xl shadow-sm transition-colors text-sm" do %>
+    <span class="text-base leading-none">+</span> New proposal
+  <% end %>
+</div>
+
+<% if @proposals.any? %>
+  <div class="bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-100">
+    <% @proposals.each do |p| %>
+      <div class="px-6 py-4 flex items-start justify-between hover:bg-gray-50 transition-colors">
+        <div class="min-w-0 flex-1">
+          <p class="font-semibold text-gray-900 text-sm"><%= p.target_label %></p>
+          <p class="text-xs text-gray-400 mt-0.5"><%= p.proposed_attributes.keys.join(", ") %></p>
+          <% if p.reviewer_note.present? %>
+            <p class="text-xs text-gray-600 mt-2 italic border-l-2 border-gray-200 pl-2">"<%= p.reviewer_note %>"</p>
+          <% end %>
+        </div>
+        <div class="text-right ml-6 flex-shrink-0 flex flex-col items-end gap-1.5">
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
+            <%= p.pending? ? 'bg-amber-100 text-amber-800' : p.approved? ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' %>">
+            <%= p.status.capitalize %>
+          </span>
+          <p class="text-xs text-gray-400"><%= p.created_at.strftime("%d %b %Y") %></p>
+          <%= link_to "View →", backstage_proposal_path(p), class: "text-xs text-indigo-600 hover:text-indigo-800 font-medium" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="bg-white border border-gray-200 rounded-xl p-12 text-center shadow-sm">
+    <p class="text-gray-400 text-lg mb-1">Nothing here yet</p>
+    <p class="text-gray-400 text-sm mb-6">You haven't submitted any proposals yet.</p>
+    <%= link_to "Submit your first proposal →", new_backstage_proposal_path, class: "text-indigo-600 hover:text-indigo-800 font-medium text-sm" %>
+  </div>
+<% end %>

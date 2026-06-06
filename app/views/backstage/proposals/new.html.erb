@@ -1,0 +1,40 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold tracking-tight">Propose changes</h1>
+  <p class="text-gray-500 mt-1">Only fill in the fields you have information about — leave others blank.</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <a href="<%= new_backstage_proposal_path(target_type: 'Lml::Gig') %>"
+     class="group border-2 rounded-xl p-5 text-center cursor-pointer transition-all
+       <%= params[:target_type] == 'Lml::Gig' ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 bg-white hover:border-indigo-300 hover:shadow-sm' %>">
+    <p class="text-2xl mb-2">🎸</p>
+    <p class="font-semibold text-gray-900">Amend a gig</p>
+    <p class="text-sm text-gray-500 mt-1">Genre tags, set times, descriptions</p>
+  </a>
+  <a href="<%= new_backstage_proposal_path(target_type: 'Lml::Act') %>"
+     class="group border-2 rounded-xl p-5 text-center cursor-pointer transition-all
+       <%= params[:target_type] == 'Lml::Act' ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 bg-white hover:border-indigo-300 hover:shadow-sm' %>">
+    <p class="text-2xl mb-2">🎤</p>
+    <p class="font-semibold text-gray-900">Amend an act</p>
+    <p class="text-sm text-gray-500 mt-1">Genres, social links, location</p>
+  </a>
+  <a href="<%= new_backstage_proposal_path(target_type: 'new_gig') %>"
+     class="group border-2 rounded-xl p-5 text-center cursor-pointer transition-all
+       <%= params[:target_type] == 'new_gig' ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 bg-white hover:border-indigo-300 hover:shadow-sm' %>">
+    <p class="text-2xl mb-2">📅</p>
+    <p class="font-semibold text-gray-900">Propose a new gig</p>
+    <p class="text-sm text-gray-500 mt-1">Tell us about an upcoming show</p>
+  </a>
+</div>
+
+<% if params[:target_type] == 'Lml::Gig' %>
+  <%= render "gig_amendment_form" %>
+<% elsif params[:target_type] == 'Lml::Act' %>
+  <%= render "act_amendment_form" %>
+<% elsif params[:target_type] == 'new_gig' %>
+  <%= render "new_gig_form" %>
+<% else %>
+  <div class="bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
+    <p class="text-gray-400">Select a proposal type above to get started.</p>
+  </div>
+<% end %>

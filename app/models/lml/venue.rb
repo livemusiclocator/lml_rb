@@ -20,6 +20,8 @@ module Lml
 
     has_many :gigs, dependent: :delete_all
     has_many :uploads, dependent: :delete_all
+    has_many :venue_managers, class_name: "Lml::VenueManager", foreign_key: :venue_id, dependent: :destroy
+    has_many :managers, through: :venue_managers, source: :user
     # custom join to Web::Location - if available
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first

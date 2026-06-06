@@ -1,0 +1,3 @@
+[tasks.prettier]
+description = "Prettify"
+run = "echo 'you are pretty enough'"

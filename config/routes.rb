@@ -65,8 +65,29 @@ Rails.application.routes.draw do
 
   # api.lml.live
   constraints subdomain: /^api$/ do
-    devise_for :admin_users, ActiveAdmin::Devise.config
+    devise_for :admin_users, ActiveAdmin::Devise.config.merge(class_name: "Lml::AdminUser")
     ActiveAdmin.routes(self)
+
+    authenticate :admin_user do
+      mount GoodJob::Engine => "/good_job"
+    end
+
+    devise_for :users, path: "backstage",
+                       class_name: "Lml::User",
+                       controllers: {
+                         sessions: "backstage/sessions",
+                         registrations: "backstage/registrations",
+                       },
+                       path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
+    scope "/backstage", module: "backstage", as: "backstage" do
+      root to: "dashboard#index"
+      resources :proposals, only: [:index, :new, :create, :show]
+      namespace :search do
+        resources :gigs, only: :index
+        resources :acts, only: :index
+        resources :venues, only: :index
+      end
+    end
 
     # TODO: we could redirect to web_root if we get the host config working
     get "/", to: redirect("https://www.livemusiclocator.com.au")

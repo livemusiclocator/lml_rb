@@ -1,0 +1,65 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold tracking-tight">Welcome back<% if current_user.display_name.present? %>, <%= current_user.display_name %><% end %> 👋</h1>
+  <p class="text-gray-500 mt-1">Here's what's happening with your proposals.</p>
+</div>
+
+<% if current_user.manager? %>
+  <div class="mb-8 bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+    <h2 class="font-semibold text-indigo-900 mb-2 flex items-center gap-2">
+      <span class="text-indigo-500">&#9679;</span> Your direct access
+    </h2>
+    <% if @managed_venues.any? %>
+      <p class="text-sm text-indigo-800 mb-1"><span class="font-medium">Venues:</span> <%= @managed_venues.map(&:name).join(", ") %></p>
+    <% end %>
+    <% if @managed_acts.any? %>
+      <p class="text-sm text-indigo-800"><span class="font-medium">Acts:</span> <%= @managed_acts.map(&:name).join(", ") %></p>
+    <% end %>
+    <p class="text-xs text-indigo-600 mt-3 border-t border-indigo-100 pt-3">Changes you submit for these will go live immediately — no review needed.</p>
+  </div>
+<% end %>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-semibold text-gray-900">Pending proposals</h2>
+      <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full"><%= @pending.count %></span>
+    </div>
+    <% if @pending.any? %>
+      <ul class="space-y-3">
+        <% @pending.each do |p| %>
+          <li class="text-sm border-l-2 border-amber-300 pl-3">
+            <%= link_to backstage_proposal_path(p), class: "text-indigo-600 hover:text-indigo-800 font-medium" do %>
+              <%= p.target_label %>
+            <% end %>
+            <span class="block text-xs text-gray-400 mt-0.5"><%= p.proposed_attributes.keys.join(", ") %> &middot; <%= time_ago_in_words(p.created_at) %> ago</span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-sm text-gray-400 italic">No pending proposals.</p>
+    <% end %>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+    <h2 class="font-semibold text-gray-900 mb-4">Recently reviewed</h2>
+    <% if @recent.any? %>
+      <ul class="space-y-3">
+        <% @recent.each do |p| %>
+          <li class="text-sm flex items-center gap-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold <%= p.approved? ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' %>">
+              <%= p.status.capitalize %>
+            </span>
+            <%= link_to p.target_label, backstage_proposal_path(p), class: "text-indigo-600 hover:text-indigo-800" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-sm text-gray-400 italic">No reviewed proposals yet.</p>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to new_backstage_proposal_path,
+    class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors" do %>
+  <span class="text-lg leading-none">+</span> Propose something new
+<% end %>

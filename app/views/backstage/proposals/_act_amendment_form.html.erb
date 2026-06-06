@@ -1,0 +1,57 @@
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+  <%= form_with url: backstage_proposals_path, method: :post, html: { class: "space-y-5" } do |f| %>
+    <%= hidden_field_tag :target_type, "Lml::Act" %>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1.5">Which act?</label>
+      <div data-controller="autocomplete"
+           data-autocomplete-url-value="<%= backstage_search_acts_path %>"
+           class="relative">
+        <input type="text"
+               data-autocomplete-target="input"
+               data-action="input->autocomplete#search focus->autocomplete#search blur->autocomplete#clear"
+               placeholder="Type to search acts..."
+               autocomplete="off"
+               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        <input type="hidden" name="target_id" data-autocomplete-target="hidden">
+        <div data-autocomplete-target="results"
+             class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 divide-y divide-gray-100 max-h-60 overflow-y-auto">
+        </div>
+      </div>
+    </div>
+
+    <div class="border border-gray-200 rounded-lg p-5">
+      <p class="text-sm font-semibold text-gray-700 mb-4">Proposed changes <span class="font-normal text-gray-400">(leave blank if no change)</span></p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <% [
+          ["Instagram handle", "instagram", "yourband"],
+          ["Facebook handle", "facebook", "yourband"],
+          ["Bandcamp name", "bandcamp", "yourband"],
+          ["Spotify artist ID", "spotify", ""],
+          ["YouTube channel", "youtube", "@yourband"],
+          ["Linktree handle", "linktree", "yourband"],
+          ["Website", "website", "https://yourband.com"],
+          ["Email", "email", ""],
+        ].each do |label, field, placeholder| %>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1.5"><%= label %></label>
+            <input type="text" name="proposal[proposed_attributes][<%= field %>]"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="<%= placeholder %>">
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1.5">Note for the editors <span class="text-gray-400 font-normal">(optional)</span></label>
+      <textarea name="proposal[note]" rows="2"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="e.g. This is my band"></textarea>
+    </div>
+
+    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors">
+      Submit proposal
+    </button>
+  <% end %>
+</div>

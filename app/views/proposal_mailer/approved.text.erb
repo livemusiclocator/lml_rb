@@ -1,0 +1,15 @@
+Hi <%= @user.display_name.presence || @user.email %>,
+
+Your proposal has been approved and the changes are now live.
+
+Target: <%= @proposal.target_label %>
+Fields updated: <%= @proposal.proposed_attributes.keys.map(&:humanize).join(", ") %>
+<% if @proposal.reviewer_note.present? %>
+
+Editor's note: <%= @proposal.reviewer_note %>
+<% end %>
+
+Thanks for contributing to Live Music Locator!
+
+-- The LML team
+https://lml.live

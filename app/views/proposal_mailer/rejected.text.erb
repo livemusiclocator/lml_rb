@@ -1,0 +1,15 @@
+Hi <%= @user.display_name.presence || @user.email %>,
+
+Thanks for your proposal — unfortunately we weren't able to apply these changes this time.
+
+Target: <%= @proposal.target_label %>
+Fields proposed: <%= @proposal.proposed_attributes.keys.map(&:humanize).join(", ") %>
+<% if @proposal.reviewer_note.present? %>
+
+Editor's note: <%= @proposal.reviewer_note %>
+<% end %>
+
+If you have questions, feel free to reply to this email.
+
+-- The LML team
+https://lml.live
