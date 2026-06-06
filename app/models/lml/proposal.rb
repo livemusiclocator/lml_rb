@@ -50,7 +50,7 @@ module Lml
         reviewed_at: Time.current,
         reviewer_note: note,
       )
-      ProposalMailer.approved(self).deliver_now
+      # ProposalMailer.approved(self).deliver_now
       true
     end
 
@@ -58,7 +58,7 @@ module Lml
       return false unless pending?
 
       update!(status: :rejected, reviewed_by: admin, reviewed_at: Time.current, reviewer_note: note)
-      ProposalMailer.rejected(self).deliver_now
+      # ProposalMailer.rejected(self).deliver_now
       true
     end
 
