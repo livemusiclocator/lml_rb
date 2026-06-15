@@ -74,13 +74,13 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: "api.lml.live", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "livemusiclocator.com.au", protocol: "https" }
   config.action_mailer.smtp_settings = {
-    address: "smtp.mailgun.org",
+    address: ENV.fetch("MAILERTOGO_SMTP_HOST"),
     port: 587,
-    domain: ENV['MAILGUN_DOMAIN'],
-    user_name: ENV['MAILGUN_SMTP_USERNAME'],
-    password: ENV['MAILGUN_SMTP_PASSWORD'],
+    domain: ENV.fetch("MAILERTOGO_DOMAIN"),
+    user_name: ENV.fetch("MAILERTOGO_SMTP_USER"),
+    password: ENV.fetch("MAILERTOGO_SMTP_PASSWORD"),
     authentication: :plain,
     enable_starttls_auto: true,
   }
