@@ -10,7 +10,7 @@ module Lml
       %w[proposals managed_venues managed_acts]
     end
 
-    devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+    devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
 
     has_many :proposals, class_name: "Lml::Proposal", dependent: :destroy
     has_many :venue_managers, class_name: "Lml::VenueManager", dependent: :destroy

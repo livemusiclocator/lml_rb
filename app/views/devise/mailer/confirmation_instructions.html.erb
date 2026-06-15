@@ -1,0 +1,10 @@
+<p>Hi <%= @resource.display_name.presence || @resource.email %>,</p>
+
+<p>Welcome to Live Music Locator! Please confirm your email address by clicking the link below.</p>
+
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+<p>If you didn't sign up, you can ignore this email.</p>
+
+<p>-- The LML team<br>
+<a href="https://livemusiclocator.com.au">https://livemusiclocator.com.au</a></p>
