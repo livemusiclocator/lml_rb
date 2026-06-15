@@ -76,11 +76,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: "livemusiclocator.com.au", protocol: "https" }
   config.action_mailer.smtp_settings = {
-    address: ENV.fetch("MAILERTOGO_SMTP_HOST"),
+    address: ENV.fetch("MAILERTOGO_SMTP_HOST", nil),
     port: 587,
-    domain: ENV.fetch("MAILERTOGO_DOMAIN"),
-    user_name: ENV.fetch("MAILERTOGO_SMTP_USER"),
-    password: ENV.fetch("MAILERTOGO_SMTP_PASSWORD"),
+    domain: ENV.fetch("MAILERTOGO_DOMAIN", nil),
+    user_name: ENV.fetch("MAILERTOGO_SMTP_USER", nil),
+    password: ENV.fetch("MAILERTOGO_SMTP_PASSWORD", nil),
     authentication: :plain,
     enable_starttls_auto: true,
   }
