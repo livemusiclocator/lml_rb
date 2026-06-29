@@ -50,6 +50,8 @@ Rails.application.routes.draw do
                        controllers: {
                          sessions: "backstage/sessions",
                          registrations: "backstage/registrations",
+                         passwords: "backstage/passwords",
+                         confirmations: "backstage/confirmations",
                        },
                        path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
     scope "/backstage", module: "backstage", as: "backstage" do
