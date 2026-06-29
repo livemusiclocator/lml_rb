@@ -110,6 +110,8 @@ GEM
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     builder (3.3.0)
+    childprocess (5.1.0)
+      logger (~> 1.5)
     coderay (1.1.3)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
@@ -243,7 +245,13 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     language_server-protocol (3.17.0.5)
+    launchy (3.1.1)
+      addressable (~> 2.8)
+      childprocess (~> 5.0)
+      logger (~> 1.6)
     lefthook (2.0.2)
+    letter_opener (1.10.0)
+      launchy (>= 2.2, < 4)
     lint_roller (1.1.0)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -570,6 +578,7 @@ DEPENDENCIES
   jbuilder
   kramdown
   lefthook
+  letter_opener
   meta-tags
   money-rails
   net-pop!
@@ -594,4 +603,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.5.21
+   2.6.9
