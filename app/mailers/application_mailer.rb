@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "backstage@lml.live"
+  default from: "backstage@livemusiclocator.com.au"
   layout "mailer"
 end
