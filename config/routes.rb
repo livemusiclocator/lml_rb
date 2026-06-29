@@ -45,6 +45,23 @@ Rails.application.routes.draw do
   # Match only routes to the subdomain 'beta' and 'www'
   # (lax matching due to tld_length issues described in introducing commit notes)
   constraints subdomain: /^(beta|www).livemusiclocator/ do
+    devise_for :users, path: "backstage",
+                       class_name: "Lml::User",
+                       controllers: {
+                         sessions: "backstage/sessions",
+                         registrations: "backstage/registrations",
+                       },
+                       path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
+    scope "/backstage", module: "backstage", as: "backstage" do
+      root to: "dashboard#index"
+      resources :proposals, only: [:index, :new, :create, :show]
+      namespace :search do
+        resources :gigs, only: :index
+        resources :acts, only: :index
+        resources :venues, only: :index
+      end
+    end
+
     # mount the lml api handlers here
     scope "api/gigs", as: "web_api" do
       concerns :the_api
@@ -70,23 +87,6 @@ Rails.application.routes.draw do
 
     authenticate :admin_user do
       mount GoodJob::Engine => "/good_job"
-    end
-
-    devise_for :users, path: "backstage",
-                       class_name: "Lml::User",
-                       controllers: {
-                         sessions: "backstage/sessions",
-                         registrations: "backstage/registrations",
-                       },
-                       path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
-    scope "/backstage", module: "backstage", as: "backstage" do
-      root to: "dashboard#index"
-      resources :proposals, only: [:index, :new, :create, :show]
-      namespace :search do
-        resources :gigs, only: :index
-        resources :acts, only: :index
-        resources :venues, only: :index
-      end
     end
 
     # TODO: we could redirect to web_root if we get the host config working
