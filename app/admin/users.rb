@@ -3,6 +3,8 @@
 ActiveAdmin.register Lml::User, as: "User" do
   menu label: "Backstage Users", priority: 3
 
+  actions :all, except: [:new, :create, :edit, :update]
+
   permit_params :email, :display_name
 
   filter :email
