@@ -46,18 +46,18 @@ ActiveAdmin.register Lml::Proposal, as: "Proposal" do
 
     if resource.pending?
       panel "Review" do
-        form action: approve_admin_proposal_path(resource), method: :post do |f|
-          f.input :_method, type: :hidden, value: :put
-          f.input :authenticity_token, type: :hidden, value: form_authenticity_token
+        form action: approve_admin_proposal_path(resource), method: :post do
+          text_node hidden_field_tag(:_method, :put)
+          text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
           label "Reviewer note (optional)"
           br
           textarea name: :reviewer_note, rows: 2, style: "width:100%;margin-bottom:8px"
           br
           input type: :submit, value: "Approve", style: "margin-right:8px"
         end
-        form action: reject_admin_proposal_path(resource), method: :post do |f|
-          f.input :_method, type: :hidden, value: :put
-          f.input :authenticity_token, type: :hidden, value: form_authenticity_token
+        form action: reject_admin_proposal_path(resource), method: :post do
+          text_node hidden_field_tag(:_method, :put)
+          text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
           label "Reviewer note (optional)"
           br
           textarea name: :reviewer_note, rows: 2, style: "width:100%;margin-bottom:8px"

@@ -80,23 +80,35 @@ ActiveAdmin.register Lml::User, as: "User" do
 
   sidebar "Promote to manager", only: :show do
     h4 "Add venue access"
-    form action: add_venue_manager_admin_user_path(resource), method: :post do |f|
-      f.input :authenticity_token, type: :hidden, value: form_authenticity_token
-      select_tag :venue_id, options_from_collection_for_select(Lml::Venue.order(:name), :id, :label),
-                 include_blank: "Select venue..."
-      br
+    form action: add_venue_manager_admin_user_path(resource), method: :post do
+      text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+      text_node hidden_field_tag("venue_id", nil, id: "grant_venue_id")
+      div style: "position: relative;" do
+        text_node text_field_tag("venue_label", nil, id: "grant_venue_label", placeholder: "Search venues...", autocomplete: "off")
+        div id: "grant_venue_results",
+            style: "display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; " \
+                    "background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"
+      end
       br
       input type: :submit, value: "Grant venue access"
     end
     br
     h4 "Add act access"
-    form action: add_act_manager_admin_user_path(resource), method: :post do |f|
-      f.input :authenticity_token, type: :hidden, value: form_authenticity_token
-      select_tag :act_id, options_from_collection_for_select(Lml::Act.order(:name), :id, :name),
-                 include_blank: "Select act..."
-      br
+    form action: add_act_manager_admin_user_path(resource), method: :post do
+      text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+      text_node hidden_field_tag("act_id", nil, id: "grant_act_id")
+      div style: "position: relative;" do
+        text_node text_field_tag("act_label", nil, id: "grant_act_label", placeholder: "Search acts...", autocomplete: "off")
+        div id: "grant_act_results",
+            style: "display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; " \
+                    "background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"
+      end
       br
       input type: :submit, value: "Grant act access"
     end
+    script <<~SCRIPT.html_safe
+      attachSearchAutocomplete("grant_venue", "/venues/search", "Search venues...");
+      attachSearchAutocomplete("grant_act", "/acts/search", "Search acts...");
+    SCRIPT
   end
 end

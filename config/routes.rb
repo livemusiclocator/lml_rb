@@ -109,9 +109,11 @@ Rails.application.routes.draw do
 
     scope "venues" do
       get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
+      get "search", to: "venues#search", defaults: { format: "json" }
     end
     scope "acts" do
       get "autocomplete", to: "acts#autocomplete", defaults: { format: "json" }
+      get "search", to: "acts#search", defaults: { format: "json" }
     end
     scope "docs" do
       get "/", to: "docs#index"

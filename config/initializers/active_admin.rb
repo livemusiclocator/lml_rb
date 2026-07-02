@@ -438,6 +438,65 @@ margin: 2rem;
           }
         );
       }
+
+      // Debounced, server-searched autocomplete (queries `endpoint?q=...` on each
+      // keystroke instead of preloading the full collection like attachAutocomplete above).
+      function attachSearchAutocomplete(selector, endpoint, placeholder) {
+        const inputEl = document.getElementById(`${selector}_label`);
+        const hiddenEl = document.getElementById(`${selector}_id`);
+        const resultsEl = document.getElementById(`${selector}_results`);
+        if (!inputEl || !hiddenEl || !resultsEl) return;
+
+        inputEl.setAttribute("placeholder", placeholder);
+
+        let debounceTimer;
+
+        const close = () => {
+          resultsEl.innerHTML = "";
+          resultsEl.style.display = "none";
+        };
+
+        const render = (results) => {
+          resultsEl.innerHTML = "";
+          if (!results.length) { close(); return; }
+          results.forEach(({ id, label }) => {
+            const item = document.createElement("div");
+            item.textContent = label;
+            item.style.cssText = "padding: 6px 10px; cursor: pointer;";
+            item.addEventListener("mouseover", () => { item.style.background = "#eef"; });
+            item.addEventListener("mouseout", () => { item.style.background = ""; });
+            item.addEventListener("mousedown", (e) => {
+              e.preventDefault();
+              inputEl.value = label;
+              hiddenEl.value = id;
+              close();
+            });
+            resultsEl.appendChild(item);
+          });
+          resultsEl.style.display = "block";
+        };
+
+        const search = async () => {
+          const q = inputEl.value.trim();
+          if (q.length < 2) { close(); return; }
+          try {
+            const response = await fetch(`${endpoint}?q=${encodeURIComponent(q)}`, { headers: { Accept: "application/json" } });
+            render(await response.json());
+          } catch (e) {
+            close();
+          }
+        };
+
+        inputEl.addEventListener("input", () => {
+          hiddenEl.value = "";
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(search, 250);
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!inputEl.contains(e.target) && !resultsEl.contains(e.target)) close();
+        });
+      }
     </script>
   HEAD
 
