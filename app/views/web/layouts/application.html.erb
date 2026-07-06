@@ -14,7 +14,10 @@
         <%= yield(:head)  %>
 
 
-        <%= display_meta_tags site: site_title,reverse: true, separator: " - " %>
+        <%= display_meta_tags site: site_title, reverse: true, separator: " - ",
+              image: asset_url("web/lml-og-image.png"),
+              og: { image: asset_url("web/lml-og-image.png") },
+              twitter: { card: "summary_large_image", image: asset_url("web/lml-og-image.png") } %>
         <%= @schema_source %>
   </head>
   <body style="margin: 0">
