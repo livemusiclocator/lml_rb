@@ -15,8 +15,15 @@
 
 
         <%= display_meta_tags site: site_title, reverse: true, separator: " - ",
+              description: "Find live music happening near you, right now.",
               image: asset_url("web/lml-og-image.png"),
-              og: { image: asset_url("web/lml-og-image.png") },
+              og: {
+                title: :title,
+                description: :description,
+                url: request.original_url,
+                type: "website",
+                image: asset_url("web/lml-og-image.png"),
+              },
               twitter: { card: "summary_large_image", image: asset_url("web/lml-og-image.png") } %>
         <%= @schema_source %>
   </head>
