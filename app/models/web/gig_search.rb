@@ -22,7 +22,7 @@ module Web
         "weekend" => "this weekend",
         "thisWeek" => "this week",
         "nextWeek" => "next week",
-        "thisMonth" => "thisMonth",
+        "thisMonth" => "this month",
       },
       fallback_title: "Live Music Listings",
       multiple_genres_text: "Live Music (multiple genres)",
