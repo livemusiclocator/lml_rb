@@ -3,11 +3,11 @@
 module Lml
   class Venue < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
-      %w[name location time_zone]
+      %w[name location time_zone admin_user_id]
     end
 
     def self.ransackable_associations(_auth_object = nil)
-      []
+      %w[admin_user]
     end
 
     validates(
@@ -22,6 +22,7 @@ module Lml
     has_many :uploads, dependent: :delete_all
     has_many :venue_managers, class_name: "Lml::VenueManager", foreign_key: :venue_id, dependent: :destroy
     has_many :managers, through: :venue_managers, source: :user
+    belongs_to :admin_user, class_name: "Lml::AdminUser", optional: true
     # custom join to Web::Location - if available
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first

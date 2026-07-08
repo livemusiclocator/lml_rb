@@ -9,8 +9,10 @@ module Lml
     end
 
     def self.ransackable_associations(_auth_object = nil)
-      []
+      %w[venues]
     end
+
+    has_many :venues, class_name: "Lml::Venue", foreign_key: :admin_user_id, dependent: :nullify
 
     validates(
       :time_zone,
