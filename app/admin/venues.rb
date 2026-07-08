@@ -18,11 +18,23 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :time_zone,
     :vibe,
     :website,
+    :admin_user_id
   )
+
+  batch_action :assign_to_admin_user, form: -> { { admin_user_id: Lml::AdminUser.all.map { |u| [u.email, u.id] } } } do |ids, inputs|
+    Lml::Venue.where(id: ids).update_all(admin_user_id: inputs[:admin_user_id])
+    redirect_to collection_path, notice: "Venues assigned to admin user."
+  end
+
+  batch_action :unassign_from_admin_user do |ids|
+    Lml::Venue.where(id: ids).update_all(admin_user_id: nil)
+    redirect_to collection_path, notice: "Venues unassigned."
+  end
 
   filter :name_cont, label: "Name"
   filter :time_zone_cont, label: "Time Zone"
   filter :location_cont, label: "Location"
+  filter :admin_user, label: "Researcher", as: :select, collection: -> { Lml::AdminUser.all.map { |u| [u.email, u.id] } }
 
   index do
     selectable_column
@@ -37,6 +49,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       else
         span "No match", class: "status_tag orange"
       end
+    end
+    column "Researcher" do |resource|
+      resource.admin_user&.email
     end
     column :created_at do |resource|
       admin_time(resource.created_at)
@@ -54,6 +69,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :name
       row :time_zone
       row :location
+      row :admin_user do |resource|
+        resource.admin_user&.email
+      end
       row :email
       row :phone
       row :address
@@ -158,6 +176,11 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         collection: Lml::Timezone::CANONICAL_TIMEZONES,
       )
       f.input :location, hint: "Should ideally match a Location's internal_identifier (case insensitive)"
+      f.input(
+        :admin_user,
+        as: :select,
+        collection: Lml::AdminUser.all.map { |u| [u.email, u.id] }
+      )
       f.input :email, input_html: { type: "email" }
       f.input :phone
       f.input :address
