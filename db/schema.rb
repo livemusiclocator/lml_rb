@@ -60,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_25_054552) do
     t.string "reset_password_token"
     t.string "time_zone"
     t.datetime "updated_at", null: false
+    t.string "username"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end

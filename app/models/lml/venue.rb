@@ -6,6 +6,16 @@ module Lml
       %w[name location time_zone admin_user_id]
     end
 
+    def self.ransackable_scopes(_auth_object = nil)
+      [:with_admin_user]
+    end
+
+    scope :with_admin_user, lambda { |id|
+      return where(admin_user_id: nil) if id == "none"
+
+      where(admin_user_id: id)
+    }
+
     def self.ransackable_associations(_auth_object = nil)
       %w[admin_user]
     end
