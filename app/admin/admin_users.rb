@@ -14,6 +14,9 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
       link_to(admin_user.email, admin_admin_user_path(admin_user))
     end
     column :time_zone
+    column :last_active_at do |resource|
+      admin_time(resource.last_active_at)
+    end
     column :created_at do |resource|
       admin_time(resource.created_at)
     end
@@ -28,6 +31,9 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
       row :id
       row :email
       row :time_zone
+      row :last_active_at do |resource|
+        admin_time(resource.last_active_at)
+      end
       row :created_at do |resource|
         admin_time(resource.created_at)
       end
@@ -114,6 +120,7 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
 
   filter :email_cont, label: "Email"
   filter :time_zone_cont, label: "Timezone"
+  filter :last_active_at
   filter :created_at
   filter :updated_at
 

@@ -173,6 +173,7 @@ ActiveAdmin.setup do |config|
   #
   config.before_action do
     Time.zone = current_admin_user&.time_zone || "UTC"
+    current_admin_user&.touch(:last_active_at)
   end
 
   # == Attribute Filters
