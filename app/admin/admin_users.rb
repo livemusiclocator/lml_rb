@@ -1,9 +1,10 @@
 ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
   permit_params do
     permitted = %i[email username time_zone password password_confirmation]
-    if params[:admin_user] && params[:admin_user][:password].blank? && params[:admin_user][:password_confirmation].blank?
-      params[:admin_user].delete(:password)
-      params[:admin_user].delete(:password_confirmation)
+    param_key = resource_class.model_name.param_key
+    if params[param_key] && params[param_key][:password].blank? && params[param_key][:password_confirmation].blank?
+      params[param_key].delete(:password)
+      params[param_key].delete(:password_confirmation)
     end
     permitted
   end
