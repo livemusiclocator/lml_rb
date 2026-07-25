@@ -1,3 +1,7 @@
 [tasks.prettier]
 description = "Prettify"
 run = "echo 'you are pretty enough'"
+
+[tasks.db-reset]
+description = "Drop, create, migrate and seed the development database"
+run = "bin/rails db:drop db:create db:migrate db:seed"
