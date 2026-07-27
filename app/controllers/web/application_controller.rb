@@ -12,13 +12,24 @@ module Web
       @schema_source = PageMetadataFactory.to_json_ld(model)
     end
 
+    def init_explorer_config
+      @explorer_config = Web::ExplorerConfig.find_by_edition_id(params[:edition_id]) || Web::ExplorerConfig.find_by_edition_id("main")
+    end
+
     private
 
     # TODO: should this go in the error controller instead? Not sure how.
-    def render_custom_not_found
+    def render_custom_not_found(exception)
       @error_message_heading = "404"
-      @error_message_sub_heading = "Gig not found"
-      @error_message_text = "We don't seem to have details about the gig you are looking for."
+
+      if exception.model == "Lml::Act"
+        @error_message_sub_heading = "Act not found"
+        @error_message_text = "We don't seem to have details about the act you are looking for."
+      else
+        @error_message_sub_heading = "Gig not found"
+        @error_message_text = "We don't seem to have details about the gig you are looking for."
+      end
+
       render "web/errors/404", status: :not_found, layout: "web/layouts/application"
     end
   end
