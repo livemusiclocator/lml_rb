@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class ActsController < ApplicationController
+  def index
+    @acts = Lml::Act.order(:name)
+  end
+
+  def show
+    @act = Lml::Act.find(params[:id])
+  end
+
   def autocomplete
     @acts = Lml::Act.order(:name)
   end

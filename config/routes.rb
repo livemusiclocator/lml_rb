@@ -112,8 +112,10 @@ Rails.application.routes.draw do
       get "search", to: "venues#search", defaults: { format: "json" }
     end
     scope "acts" do
+      get "/", to: "acts#index", defaults: { format: "json" }
       get "autocomplete", to: "acts#autocomplete", defaults: { format: "json" }
       get "search", to: "acts#search", defaults: { format: "json" }
+      get ":id", to: "acts#show", defaults: { format: "json" }
     end
     scope "docs" do
       get "/", to: "docs#index"
