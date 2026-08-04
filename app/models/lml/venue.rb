@@ -49,6 +49,36 @@ module Lml
       where(Venue.arel_table[:location].matches(location))
     }
 
+    # Venues with a gig - not hidden, not a draft - on or after this date. No upper bound, so a
+    # venue with something coming up counts as active just as much as one that had a gig last week.
+    scope :with_gigs_since, lambda { |date|
+      # A subquery rather than a join, which would return one row per gig.
+      where(id: Lml::Gig.visible.where(date: date..).select(:venue_id))
+    }
+
+    scope :named, ->(name) { where("LOWER(name) = ?", name.to_s.strip.downcase).order(:name) }
+
+    scope :resolved, -> { where.not(address_components: {}) }
+
+    # `@>` is subset matching, so this finds venues at this address *and* venues carrying extra
+    # identity keys - a subpremise within the same building. The caller decides which it wanted.
+    scope :at_address, lambda { |identity|
+      # `@> '{}'` is true of every row, so a place with no identity components at all must match
+      # nothing here rather than claiming the whole table.
+      next none if identity.blank?
+
+      where("address_components @> ?::jsonb", identity.to_json).order(:name)
+    }
+
+    # The part of the resolved address that decides whether two venues are at the same address.
+    def address_identity
+      (address_components || {}).slice(*Lml::Place::MATCH_KEYS).compact
+    end
+
+    def closed_permanently?
+      google_business_status == Lml::Place::CLOSED_PERMANENTLY
+    end
+
     def label
       "#{name} (#{location})"
     end

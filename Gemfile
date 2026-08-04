@@ -98,6 +98,11 @@ group :development do
 end
 
 gem "faraday"
+
+# reading and writing the venue import spreadsheet - see doc/google_sheets_venue_import.md
+gem "google-apis-sheets_v4"
+gem "googleauth"
+
 gem "kramdown"
 gem "ruby-openai"
 

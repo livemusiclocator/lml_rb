@@ -18,6 +18,10 @@ caddyfile
 /.env*
 !/.env*.erb
 
+# Local mise overrides - where the google credentials live.
+# See doc/google_sheets_venue_import.md
+/mise.local.toml
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*

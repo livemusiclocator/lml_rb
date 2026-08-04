@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_25_054552) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_04_010000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -304,11 +304,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_25_054552) do
 
   create_table "venues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "address"
+    t.jsonb "address_components", default: {}, null: false
     t.uuid "admin_user_id"
     t.integer "capacity"
     t.datetime "created_at", null: false
     t.string "email"
     t.string "facebook_url"
+    t.string "google_business_status"
+    t.string "google_place_id"
     t.string "instagram_url"
     t.float "latitude"
     t.string "location"
@@ -323,7 +326,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_25_054552) do
     t.datetime "updated_at", null: false
     t.string "vibe"
     t.string "website"
+    t.index ["address_components"], name: "index_venues_on_address_components", using: :gin
     t.index ["admin_user_id"], name: "index_venues_on_admin_user_id"
+    t.index ["google_business_status"], name: "index_venues_on_google_business_status"
+    t.index ["google_place_id"], name: "index_venues_on_google_place_id"
   end
 
   add_foreign_key "act_managers", "acts"

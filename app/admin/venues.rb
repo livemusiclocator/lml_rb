@@ -128,6 +128,32 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       end
     end
     # rubocop:enable Metrics/BlockLength
+
+    # Derived data, so it is shown but never edited - neither column is in permit_params, so the
+    # form cannot reach them either. Written by Lml::VenueImport; see
+    # doc/google_sheets_venue_import.md.
+    panel "Google Places" do
+      if resource.address_components.blank?
+        para "Not resolved through the Places API. Venues added by hand have none until an " \
+             "import matches them."
+      else
+        attributes_table_for resource do
+          row("Place ID") { resource.google_place_id }
+          row("Resolved name") { resource.address_components["name"] }
+          row("Business status") do
+            if resource.closed_permanently?
+              span resource.google_business_status, class: "status_tag red"
+            else
+              resource.google_business_status
+            end
+          end
+          # The subset that venue matching is actually done on, which is what explains why an
+          # import matched this venue or created a new one beside it.
+          row("Matched on") { pretty_json(resource.address_identity) }
+          row("All components") { pretty_json(resource.address_components) }
+        end
+      end
+    end
   end
 
   sidebar "Links", only: :show do

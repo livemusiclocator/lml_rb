@@ -10,4 +10,16 @@ module ActiveAdmin::ViewsHelper
 
     date.strftime("%a %d %b %y")
   end
+
+  # Renders a hash as indented json for reading rather than editing. `pre` keeps the indentation,
+  # and wrapping stops a long value from widening the whole page.
+  def pretty_json(data)
+    return "-" if data.blank?
+
+    content_tag(
+      :pre,
+      JSON.pretty_generate(data),
+      style: "margin: 0; white-space: pre-wrap; word-break: break-word;",
+    )
+  end
 end
