@@ -553,6 +553,28 @@ Lml::Venue.with_gigs_since(3.months.ago.to_date).where(google_business_status: "
 A permanently closed venue with recent gigs is worth a look either way — either
 the gigs are wrong or Google is.
 
+### Transient failures
+
+A run of a few hundred venues will meet the odd failure that has nothing to do
+with the request:
+
+- **503** — Google's side is briefly at capacity. Not throttling, and one in a few
+  hundred is normal.
+- **429** — a rate limit, ours rather than theirs.
+
+`GooglePlacesApiClient` retries both, along with dropped connections, with the
+exponential backoff Google's best-practices page asks for: 100 ms, doubling, up to
+four attempts. Retrying lives in the client so the sheet import gets it too.
+
+What is deliberately **not** retried is anything waiting cannot fix — a **403**
+for an API that is not enabled, a **400** for a malformed request. Google's page
+suggests retrying 4XX as well, but that only makes a misconfiguration take four
+times as long to report.
+
+A venue that still fails after all four attempts is counted `failed`, logged, and
+left unresolved — so the fix is simply to run it again, which only spends requests
+on the venues that are still unresolved.
+
 ## The code
 
 Modelled on `Management::SupplierLaunches` in fresho-app, which does the same job

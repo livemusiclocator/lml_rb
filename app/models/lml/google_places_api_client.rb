@@ -33,10 +33,29 @@ module Lml
       places.timeZone
     ].join(",").freeze
 
+    # Worth retrying: a 503 means Google's side is briefly at capacity rather than anything being
+    # wrong with the request, and one in a few hundred is normal. A 429 is a rate limit, which is
+    # also just a matter of waiting - and where it is a daily quota instead, the attempt cap stops us
+    # sitting on it.
+    #
+    # Deliberately not everything Google's best practices page suggests retrying: it says to retry
+    # 4XX as well, but a 403 for an API that is not enabled and a 400 for a malformed request are
+    # faults no amount of waiting fixes, and retrying them just makes a misconfiguration take four
+    # times as long to report.
+    RETRY_STATUSES = [429, 500, 502, 503, 504].freeze
+
+    NETWORK_ERRORS = [Faraday::ConnectionFailed, Faraday::TimeoutError].freeze
+
+    # Google's own guidance: start at 100ms and double, giving up after a few seconds.
+    MAX_ATTEMPTS = 4
+    INITIAL_DELAY = 0.1
+    MAX_DELAY = 5.0
+
     class Error < StandardError; end
 
-    def initialize(api_key: ENV.fetch(API_KEY_VAR, nil))
+    def initialize(api_key: ENV.fetch(API_KEY_VAR, nil), initial_delay: INITIAL_DELAY)
       @api_key = api_key
+      @initial_delay = initial_delay
       @client = Faraday.new
     end
 
@@ -47,13 +66,13 @@ module Lml
       body = { textQuery: query }
       body[:regionCode] = region_code if region_code.present?
 
-      parsed(@client.post(FIND_URL, body.to_json, headers(field_mask)))
+      with_retries { @client.post(FIND_URL, body.to_json, headers(field_mask)) }
     end
 
     def details(place_id, field_mask: "*")
       url = format(DETAILS_URL, place_id: place_id)
 
-      parsed(@client.get(url, {}, headers(field_mask)))
+      with_retries { @client.get(url, {}, headers(field_mask)) }
     end
 
     private
@@ -66,10 +85,49 @@ module Lml
       }
     end
 
-    def parsed(response)
-      raise Error, "places api returned #{response.status}: #{response.body}" unless response.success?
+    # A run that walks hundreds of venues will meet the odd transient failure, and without this one
+    # of them costs that venue its turn. Retrying here rather than in the callers means the sheet
+    # import and the backfill both get it.
+    def with_retries(&request)
+      delay = @initial_delay
 
-      JSON.parse(response.body)
+      (1..MAX_ATTEMPTS).each do |attempt|
+        final = attempt == MAX_ATTEMPTS
+
+        outcome = attempt_once(final, &request)
+
+        return outcome.fetch(:parsed) if outcome.key?(:parsed)
+
+        sleep(jittered(delay))
+        delay = [delay * 2, MAX_DELAY].min
+      end
+
+      # Unreachable - the last attempt either answers or raises - but without it the method would
+      # quietly return the range that `each` gives back.
+      raise Error, "places api gave up after #{MAX_ATTEMPTS} attempts"
+    end
+
+    # Returns { parsed: ... } where there is an answer, and an empty hash where it is worth another
+    # go. Raises where it is not, or where this was the last attempt.
+    def attempt_once(final)
+      response = yield
+
+      return { parsed: JSON.parse(response.body) } if response.success?
+
+      if final || RETRY_STATUSES.exclude?(response.status)
+        raise Error, "places api returned #{response.status}: #{response.body}"
+      end
+
+      {}
+    rescue *NETWORK_ERRORS => e
+      raise Error, "places api unreachable: #{e.message}" if final
+
+      {}
+    end
+
+    # Google's example has no jitter, but a little keeps a batch from lining its retries up.
+    def jittered(delay)
+      delay * (1 + (rand * 0.25))
     end
   end
 end
