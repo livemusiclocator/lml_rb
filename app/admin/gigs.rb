@@ -322,6 +322,124 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     script <<~SCRIPT.html_safe
       attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
+
+      (function() {
+        const setListField = document.getElementById("lml_gig_set_list");
+        const genreField = document.getElementById("lml_gig_genre_tag_list");
+        if (!setListField || !genreField) return;
+
+        // Container for results
+        const resultsContainer = document.createElement("div");
+        resultsContainer.id = "set_list_autocomplete_results";
+        resultsContainer.style.cssText = "position: relative; background: white; border: 1px solid #ccc; display: none; z-index: 1000; max-height: 200px; overflow-y: auto; width: " + setListField.offsetWidth + "px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);";
+        setListField.parentNode.style.position = "relative";
+        setListField.parentNode.appendChild(resultsContainer);
+
+        let actsData = [];
+        fetch("/acts/autocomplete").then(r => r.json()).then(data => { actsData = data; });
+
+        let selectedIndex = -1;
+        let filteredActs = [];
+
+        function updateGenres(act) {
+          if (!act || !act.genres) return;
+          let allGenres = genreField.value.split("\\n").map(g => g.trim()).filter(g => g !== "");
+          act.genres.forEach(g => {
+            if (!allGenres.includes(g)) {
+              allGenres.push(g);
+            }
+          });
+          genreField.value = allGenres.join("\\n");
+        }
+
+        setListField.addEventListener("input", function() {
+          const cursorPos = setListField.selectionStart;
+          const textBefore = setListField.value.substring(0, cursorPos);
+          const lines = textBefore.split("\\n");
+          const currentLine = lines[lines.length - 1];
+
+          if (currentLine.includes("|")) {
+            resultsContainer.style.display = "none";
+            return;
+          }
+
+          const query = currentLine.trim();
+          if (query.length < 2) {
+            resultsContainer.style.display = "none";
+            return;
+          }
+
+          filteredActs = actsData.filter(a => a.label.toLowerCase().includes(query.toLowerCase())).slice(0, 10);
+
+          if (filteredActs.length > 0) {
+            renderResults();
+            const rect = setListField.getBoundingClientRect();
+            resultsContainer.style.display = "block";
+            selectedIndex = 0;
+            highlightResult();
+          } else {
+            resultsContainer.style.display = "none";
+          }
+        });
+
+        function renderResults() {
+          resultsContainer.innerHTML = "";
+          filteredActs.forEach((act, index) => {
+            const div = document.createElement("div");
+            div.textContent = act.label;
+            div.style.padding = "5px";
+            div.style.cursor = "pointer";
+            div.addEventListener("click", () => selectAct(act));
+            resultsContainer.appendChild(div);
+          });
+        }
+
+        function highlightResult() {
+          Array.from(resultsContainer.children).forEach((child, index) => {
+            child.style.background = index === selectedIndex ? "#eee" : "white";
+          });
+        }
+
+        function selectAct(act) {
+          const cursorPos = setListField.selectionStart;
+          const textBefore = setListField.value.substring(0, cursorPos);
+          const textAfter = setListField.value.substring(cursorPos);
+          const lines = textBefore.split("\\n");
+          const currentLine = lines[lines.length - 1];
+
+          const newLine = act.label + " | ";
+          lines[lines.length - 1] = newLine;
+
+          setListField.value = lines.join("\\n") + textAfter;
+          const newCursorPos = lines.join("\\n").length;
+          setListField.setSelectionRange(newCursorPos, newCursorPos);
+
+          resultsContainer.style.display = "none";
+          updateGenres(act);
+          setListField.focus();
+        }
+
+        setListField.addEventListener("keydown", function(e) {
+          if (resultsContainer.style.display === "block") {
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              selectedIndex = (selectedIndex + 1) % filteredActs.length;
+              highlightResult();
+            } else if (e.key === "ArrowUp") {
+              e.preventDefault();
+              selectedIndex = (selectedIndex - 1 + filteredActs.length) % filteredActs.length;
+              highlightResult();
+            } else if (e.key === "Enter" || e.key === "Tab") {
+              e.preventDefault();
+              if (selectedIndex >= 0) {
+                selectAct(filteredActs[selectedIndex]);
+              }
+            } else if (e.key === "Escape") {
+              resultsContainer.style.display = "none";
+            }
+          }
+        });
+      })();
     SCRIPT
     f.actions
   end
@@ -355,4 +473,5 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       end
     end
   end
+
 end
