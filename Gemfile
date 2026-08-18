@@ -2,9 +2,6 @@
 
 source "https://rubygems.org"
 
-# a hopefully temporary fix for an issue with ruby 3.3.3 and net-pop
-gem "net-pop", github: "ruby/net-pop"
-
 gem "activeadmin"
 gem "devise"
 
