@@ -9,7 +9,9 @@ jobs:
   test:
     # Install gems, run rails tests
     docker:
-      - image: cimg/ruby:3.3.5-node
+      # The browsers variant of this image, which adds Chrome for the system
+      # specs on top of everything the node variant already provided.
+      - image: cimg/ruby:3.3.5-browsers
         environment:
           RAILS_ENV: test
           DATABASE_URL: postgresql://postgres@localhost/circle_test
@@ -20,6 +22,9 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
+      - run:
+          name: Resolve the system spec host
+          command: echo "127.0.0.1 api.lml.localhost" | sudo tee -a /etc/hosts
       - run:
           name: Database setup
           command: bundle exec rails db:create db:migrate db:seed

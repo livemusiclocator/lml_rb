@@ -67,6 +67,9 @@ gem "tailwindcss-rails"
 gem "meta-tags"
 
 group :development, :test do
+  gem "capybara"
+  # Drives headless Chrome over CDP directly - no webdriver binary, no JVM.
+  gem "cuprite"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
   gem "rspec-rails"

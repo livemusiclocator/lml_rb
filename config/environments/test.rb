@@ -61,7 +61,12 @@ Rails.application.configure do
   config.hosts = [
     #   "example.com",     # Allow requests from example.com
     /.*\.livemusiclocator\.com\.au/,
-    /.*\.lml\.live/
+    /.*\.lml\.live/,
+    # System specs drive a real browser, so they cannot use the production
+    # hostnames above - those resolve to production. Deliberately .localhost
+    # rather than development's .lml.test, so a spec can never reach a running
+    # development server and a stray dev request can never reach a spec.
+    /.*\.lml\.localhost/,
   ]
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
