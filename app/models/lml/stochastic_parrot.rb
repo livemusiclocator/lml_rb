@@ -10,7 +10,11 @@ module Lml
 
     def initialize(access_token: ENV.fetch(API_KEY_VAR, nil))
       @access_token = access_token
-      @client = OpenAI::Client.new(access_token: access_token, log_errors: true)
+      # Not under test: the specs that drive the sad paths stub error responses,
+      # and ruby-openai cannot tell a stubbed 429 from a real one, so it shouts
+      # "You have no credits remaining" into the spec output where it reads as a
+      # genuine problem.
+      @client = OpenAI::Client.new(access_token: access_token, log_errors: !Rails.env.test?)
       @logger = Rails.logger
     end
 
