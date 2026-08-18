@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
-
 Rails.application.routes.draw do
   # all the routes making up the main parts of the api
   concern :the_api do
@@ -167,4 +165,3 @@ Rails.application.routes.draw do
                           subdomain: "www",), via: :all
   end
 end
-# rubocop:enable Metrics/BlockLength

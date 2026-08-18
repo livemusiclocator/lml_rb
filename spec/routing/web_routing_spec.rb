@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
 require "rails_helper"
 shared_examples "www redirects" do |root_url, www_url|
   describe "www redirects at #{root_url} to #{www_url}" do
@@ -132,4 +131,3 @@ describe "routes" do
     it_behaves_like "No web endpoints", "https://api.lml.live/"
   end
 end
-# rubocop:enable Metrics/BlockLength

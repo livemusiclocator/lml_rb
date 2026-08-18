@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
 ActiveAdmin.register Web::Location, as: "Location" do
   # Permitted parameters - add the new fields
   permit_params :internal_identifier, :name, :latitude, :longitude,
@@ -79,4 +78,3 @@ ActiveAdmin.register Web::Location, as: "Location" do
   filter :internal_identifier
   filter :name
 end
-# rubocop:enable Metrics/BlockLength

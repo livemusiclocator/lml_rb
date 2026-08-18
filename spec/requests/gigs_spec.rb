@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
-# rubocop:disable Metrics/LineLength
+# rubocop:disable Layout/LineLength
 require "rails_helper"
 
 describe "gigs" do
@@ -444,5 +443,4 @@ describe "gigs" do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
-# rubocop:enable Metrics/LineLength
+# rubocop:enable Layout/LineLength

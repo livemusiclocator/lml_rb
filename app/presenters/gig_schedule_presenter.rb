@@ -76,10 +76,8 @@ class GigSchedulePresenter
       @visible_days ||= if @week_start > @week_end
                           []
                         else
-                          (0..6).map { |offset| @week_start + offset.days }.select do |date|
-                            date.between?(@week_start, @week_end)
-                          end
-
+                          (0..6).map { |offset| @week_start + offset.days }
+                                .grep(@week_start..@week_end)
                         end
     end
 

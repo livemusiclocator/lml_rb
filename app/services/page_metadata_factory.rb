@@ -1,23 +1,5 @@
 # frozen_string_literal: true
 
-module SchemaDotOrg
-  class SearchResultsPage < SchemaDotOrg::SchemaType
-    validated_attr :breadcrumb, type: String, allow_nil: true
-    validated_attr :name, type: String, allow_nil: true
-  end
-
-  class Place < SchemaDotOrg::SchemaType
-    validated_attr :address, type: String, presence: true
-    validated_attr :name, type: String, presence: false
-  end
-
-  class Event < SchemaDotOrg::SchemaType
-    validated_attr :name, type: String, allow_nil: false
-    validated_attr :startDate, type: Date
-    validated_attr :location, type: Place
-  end
-end
-
 class PageMetadataFactory
   class BaseGenerator
     def initialize(object)

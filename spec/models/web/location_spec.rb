@@ -2,9 +2,6 @@
 
 require "rails_helper"
 
-# TODO: pretty sure we can remove these with the right rubocop rules for rspec
-# rubocop:disable Metrics/BlockLength
-
 RSpec.describe Web::Location, type: :model do
   describe "validations" do
     subject { build(:lml_location) }
@@ -38,4 +35,3 @@ RSpec.describe Web::Location, type: :model do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
