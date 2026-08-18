@@ -11,7 +11,7 @@ jobs:
     docker:
       # The browsers variant of this image, which adds Chrome for the system
       # specs on top of everything the node variant already provided.
-      - image: cimg/ruby:3.3.5-browsers
+      - image: cimg/ruby:3.4.5-browsers
         environment:
           RAILS_ENV: test
           DATABASE_URL: postgresql://postgres@localhost/circle_test
@@ -34,7 +34,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/ruby:3.3.3
+      - image: cimg/ruby:3.4.5
     steps:
       - checkout
       - heroku/install
@@ -51,7 +51,7 @@ jobs:
 
   migrate:
     docker:
-      - image: cimg/ruby:3.3.3
+      - image: cimg/ruby:3.4.5
     steps:
       - checkout
       - heroku/install
