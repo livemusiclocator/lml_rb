@@ -3,17 +3,23 @@
 require "capybara/rspec"
 require "capybara/cuprite"
 
-Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(
-    app,
-    window_size: [1400, 1400],
-    headless: true,
-    process_timeout: 20,
-    timeout: 15,
-    # Chrome's sandbox needs privileges a CI container does not hand out.
-    browser_options: ENV["CI"] ? { "no-sandbox" => nil, "disable-dev-shm-usage" => nil } : {},
-  )
-end
+# HEADED=1 puts a real Chrome window on screen; SLOWMO=0.5 spaces the actions out
+# far enough to watch; `page.driver.pause` then breaks into it. All off by default
+# so a plain `rspec` stays headless.
+headed = ENV["HEADED"].present?
+
+# Passed through driven_by rather than a register_driver block, because Rails lists
+# :cuprite as one of the drivers it registers itself: driven_by re-registers the
+# name on every example and a block of our own would simply be overwritten.
+cuprite_options = {
+  headless: !headed,
+  inspector: headed,
+  slowmo: ENV["SLOWMO"]&.to_f,
+  process_timeout: 20,
+  timeout: 15,
+  # Chrome's sandbox needs privileges a CI container does not hand out.
+  browser_options: ENV["CI"] ? { "no-sandbox" => nil, "disable-dev-shm-usage" => nil } : {},
+}.compact
 
 # ActiveAdmin is mounted inside `constraints subdomain: /^api$/`, so the browser
 # has to arrive on a host Rails can read a subdomain from - 127.0.0.1 has none,
@@ -42,6 +48,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system) do
-    driven_by :cuprite
+    driven_by :cuprite, screen_size: [1400, 1400], options: cuprite_options
   end
 end
