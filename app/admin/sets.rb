@@ -2,7 +2,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
   permit_params(
     :gig_id,
     :act_id,
-    :start_offset_time,
+    :start_time,
     :stage,
     :duration,
   )
@@ -14,7 +14,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
     column :gig
     column :act
     column :stage
-    column :start_offset_time
+    column :start_time
     column :duration
     column :created_at do |resource|
       admin_time(resource.created_at)
@@ -67,7 +67,7 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       f.input :act_label, label: "Act"
       f.input :act_id, as: "hidden"
       f.input :stage
-      f.input :start_offset_time, as: :time_picker, label: "Start Time"
+      f.input :start_time, as: :time_picker, label: "Start Time"
       f.input :duration, label: "Duration (mins)"
     end
     script <<~SCRIPT.html_safe
