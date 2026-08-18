@@ -3,6 +3,10 @@
 # rubocop:disable Metrics/ClassLength
 module Lml
   class Gig < ApplicationRecord
+    include Lml::Searchable
+
+    SEARCH_COLUMNS = ["gigs.name", "gigs.date", "venues.name"].freeze
+
     # rubocop:disable Metrics/MethodLength
     def self.ransackable_attributes(_auth_object = nil)
       %w[
@@ -81,12 +85,25 @@ module Lml
            ON gigs.venue_id = dupes.venue_id
            AND gigs.date = dupes.date AND gigs.start_offset =  dupes.start_offset").joins(:venue)
     }
+    # Picker search. Always scoped to `visible` - an unannounced gig has no
+    # business showing up in an autocomplete dropdown, which is exactly how the
+    # public /gigs/autocomplete endpoint this replaces used to leak them.
+    scope :search, lambda { |query, venue_id: nil|
+      results = search_terms(query, SEARCH_COLUMNS).visible.joins(:venue).order(:date, "gigs.name")
+      venue_id.present? ? results.where(venue_id: venue_id) : results
+    }
 
+    # Returns whether tags were actually suggested. OpenAI declines often enough - an exhausted
+    # credit balance, a rate limit - that callers need to be able to say so rather than assume it
+    # worked, and none of them should fail outright just because the suggestion did.
     def suggest_tags!(force: false)
-      return if internal_description.blank?
-      return if !force && (proposed_genre_tags || []).present?
+      return false if internal_description.blank?
+      return false if !force && (proposed_genre_tags || []).present?
 
-      update!(proposed_genre_tags: Lml::StochasticParrot.new.gist(internal_description))
+      suggested = Lml::StochasticParrot.new.gist(internal_description)
+      return false if suggested.blank?
+
+      update!(proposed_genre_tags: suggested)
     end
 
     def published_genre_tags
@@ -194,6 +211,10 @@ module Lml
 
     def display_name
       [name, venue_label, date&.to_formatted_s].compact.join(" - ")
+    end
+
+    def search_label
+      display_name
     end
 
     def rss_description

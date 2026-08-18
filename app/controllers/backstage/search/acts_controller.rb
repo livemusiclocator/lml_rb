@@ -3,13 +3,10 @@
 module Backstage
   module Search
     class ActsController < Backstage::ApplicationController
-      def index
-        q = params[:q].to_s.strip
-        acts = Lml::Act.all
-        acts = acts.where("LOWER(name) LIKE LOWER(?)", "%#{q}%") if q.present?
-        acts = acts.order(:name).limit(10)
+      include PickerResults
 
-        render json: acts.map { |a| { id: a.id, label: a.name } }
+      def index
+        render_picker_results(Lml::Act.search(params[:q]))
       end
     end
   end

@@ -2,6 +2,12 @@
 
 module Lml
   class Venue < ApplicationRecord
+    include Lml::Searchable
+
+    SEARCH_COLUMNS = %w[name location].freeze
+
+    scope :search, ->(query) { search_terms(query, SEARCH_COLUMNS).order(:name) }
+
     def self.ransackable_attributes(_auth_object = nil)
       %w[name location time_zone admin_user_id]
     end
@@ -80,7 +86,11 @@ module Lml
     end
 
     def label
-      "#{name} (#{location})"
+      location.present? ? "#{name} (#{location})" : name
+    end
+
+    def search_label
+      label
     end
 
     def tag_list

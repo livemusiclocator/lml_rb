@@ -35,8 +35,7 @@ ActiveAdmin.register Lml::Price, as: "Price" do
       f.input :amount
     end
     script <<~SCRIPT.html_safe
-      attachAutocomplete("lml_set_gig", "/gigs/autocomplete", "Select Gig");
-      attachAutocomplete("lml_set_act", "/acts/autocomplete", "Select Act");
+      attachSearchAutocomplete("lml_price_gig", "/gigs/search", "Select Gig");
     SCRIPT
     f.actions
   end

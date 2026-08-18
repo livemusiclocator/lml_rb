@@ -1,5 +1,13 @@
+# frozen_string_literal: true
+
 module Lml
   class Act < ApplicationRecord
+    include Lml::Searchable
+
+    SEARCH_COLUMNS = %w[name country].freeze
+
+    scope :search, ->(query) { search_terms(query, SEARCH_COLUMNS).order(:name) }
+
     has_many :act_managers, class_name: "Lml::ActManager", foreign_key: :act_id, dependent: :destroy
     has_many :managers, through: :act_managers, source: :user
 
@@ -116,7 +124,11 @@ module Lml
     end
 
     def label
-      "#{name} (#{country})"
+      country.present? ? "#{name} (#{country})" : name
+    end
+
+    def search_label
+      label
     end
   end
 end

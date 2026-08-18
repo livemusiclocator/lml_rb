@@ -96,23 +96,23 @@ Rails.application.routes.draw do
     # api.lml.live/gigs - including the main api concerns documente above
 
     scope "gigs" do
-      # This has to go first or it will treat /gigs/feed.rss as a gig with id "feed"
+      # These have to go first or the_api's ":id" swallows them - /gigs/autocomplete
+      # spent its whole life being routed to gigs#show with id "autocomplete".
       # TODO: add constraints to avoid this perhaps
       get "feed", to: "gigs#feed", defaults: { format: "rss" }
+      get "search", to: "gigs#search", defaults: { format: "json" }
 
       # the main API routes defined above
       concerns :the_api
       # some other things I am not sure need to be here?
-      get "autocomplete", to: "gigs#autocomplete", defaults: { format: "json" }
       get "for/:location/:date", to: "gigs#for", defaults: { format: "json" }
     end
 
+    # Admin-only autocomplete pickers, not public API - see PickerResults.
     scope "venues" do
-      get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
       get "search", to: "venues#search", defaults: { format: "json" }
     end
     scope "acts" do
-      get "autocomplete", to: "acts#autocomplete", defaults: { format: "json" }
       get "search", to: "acts#search", defaults: { format: "json" }
     end
     scope "docs" do

@@ -3,13 +3,10 @@
 module Backstage
   module Search
     class VenuesController < Backstage::ApplicationController
-      def index
-        q = params[:q].to_s.strip
-        venues = Lml::Venue.all
-        venues = venues.where("LOWER(name) LIKE LOWER(?)", "%#{q}%") if q.present?
-        venues = venues.order(:name).limit(10)
+      include PickerResults
 
-        render json: venues.map { |v| { id: v.id, label: "#{v.name} (#{v.location})" } }
+      def index
+        render_picker_results(Lml::Venue.search(params[:q]))
       end
     end
   end

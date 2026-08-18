@@ -113,5 +113,56 @@ module Lml
         end
       end
     end
+
+    describe "#suggest_tags!" do
+      before do
+        @gig = FactoryBot.create(:lml_gig, internal_description: "a night of smooth jazz")
+        @parrot = instance_double(StochasticParrot, gist: %w[jazz lounge])
+        allow(StochasticParrot).to receive(:new).and_return(@parrot)
+      end
+
+      it "stores what was suggested" do
+        expect(@gig.suggest_tags!).to be_truthy
+
+        expect(@parrot).to have_received(:gist).with("a night of smooth jazz")
+
+        expect(@gig.reload.proposed_genre_tags).to eq(%w[jazz lounge])
+      end
+
+      # OpenAI declining - an exhausted credit balance, a rate limit - used to raise straight out of
+      # here, turning every upload and admin edit that tripped over it into a 500.
+      it "leaves the gig alone when nothing could be suggested" do
+        allow(@parrot).to receive(:gist).and_return(nil)
+
+        expect(@gig.suggest_tags!).to be_falsey
+
+        expect(@gig.reload.proposed_genre_tags).to be_blank
+      end
+
+      it "does not ask when there is no description to go on" do
+        @gig.update!(internal_description: nil)
+
+        expect(@gig.suggest_tags!).to be_falsey
+
+        expect(@parrot).not_to have_received(:gist)
+      end
+
+      it "does not ask again when tags have already been proposed" do
+        @gig.update!(proposed_genre_tags: %w[jazz])
+
+        expect(@gig.suggest_tags!).to be_falsey
+
+        expect(@parrot).not_to have_received(:gist)
+      end
+
+      it "asks again when forced" do
+        @gig.update!(proposed_genre_tags: %w[jazz])
+        allow(@parrot).to receive(:gist).and_return(%w[funk])
+
+        expect(@gig.suggest_tags!(force: true)).to be_truthy
+
+        expect(@gig.reload.proposed_genre_tags).to eq(%w[funk])
+      end
+    end
   end
 end

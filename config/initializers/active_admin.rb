@@ -335,10 +335,7 @@ ActiveAdmin.setup do |config|
   # you only pass content you trust.
   #
   config.head = <<~HEAD.html_safe
-    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
     <style>
-      .autoComplete_wrapper { display: block }
       .canva_panel {
 border: 1px black dashed;
 padding: 2rem;
@@ -353,100 +350,24 @@ margin: 2rem;
 }
     </style>
     <script>
-      function attachAutocomplete(selector, endpoint, placeholder) {
-        const label_field = `${selector}_label`;
-        const id_field = `${selector}_id`;
-        const autoCompleteJS = new autoComplete({
-          selector: `#${label_field}`,
-          data: {
-            src: async () => {
-              try {
-                // Loading placeholder text
-                document
-                  .getElementById(label_field)
-                  .setAttribute("placeholder", "Loading...");
-                // Fetch External Data Source
-                const source = await fetch(endpoint);
-                const data = await source.json();
-                // Post Loading placeholder text
-                document
-                  .getElementById(label_field)
-                  .setAttribute("placeholder", autoCompleteJS.placeHolder);
-                // Returns Fetched data
-                return data;
-              } catch (error) {
-                return error;
-              }
-            },
-            keys: ["label"],
-            cache: true,
-            filter: (list) => {
-              // Filter duplicates
-              // incase of multiple data keys usage
-              const filteredResults = Array.from(
-                new Set(list.map((value) => value.match))
-              ).map((text) => {
-                return list.find((value) => value.match === text);
-              });
-
-              return filteredResults;
-            }
-          },
-          placeHolder: placeholder,
-          resultsList: {
-            element: (list, data) => {
-              const info = document.createElement("p");
-              if (data.results.length > 0) {
-                info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
-              } else {
-                info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
-              }
-              list.prepend(info);
-            },
-            noResults: true,
-            maxResults: 15,
-            tabSelect: true
-          },
-          resultItem: {
-            element: (item, data) => {
-              // Modify Results Item Style
-              item.style = "display: flex; justify-content: space-between;";
-              // Modify Results Item Content
-              item.innerHTML = `
-              <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                ${data.match}
-              </span>
-              `;
-            },
-            highlight: true
-          },
-          events: {
-            input: {
-              focus: () => {
-                if (autoCompleteJS.input.value.length) autoCompleteJS.start();
-              }
-            }
-          }
-        });
-
-        autoCompleteJS.input.addEventListener(
-          "selection",
-          function (event) {
-            const feedback = event.detail;
-            autoCompleteJS.input.blur();
-            autoCompleteJS.input.value = feedback.selection.value.label;
-            document.getElementById(id_field).value = feedback.selection.value.id;
-          }
-        );
-      }
-
-      // Debounced, server-searched autocomplete (queries `endpoint?q=...` on each
-      // keystroke instead of preloading the full collection like attachAutocomplete above).
+      // Debounced, server-searched autocomplete. Queries `endpoint?q=...` on each
+      // keystroke, so no page ever ships a whole table to the browser. Needs a
+      // `<selector>_label` input and a `<selector>_id` hidden field; the results
+      // dropdown is created on demand if the form did not supply one.
       function attachSearchAutocomplete(selector, endpoint, placeholder) {
         const inputEl = document.getElementById(`${selector}_label`);
         const hiddenEl = document.getElementById(`${selector}_id`);
-        const resultsEl = document.getElementById(`${selector}_results`);
-        if (!inputEl || !hiddenEl || !resultsEl) return;
+        if (!inputEl || !hiddenEl) return;
+
+        let resultsEl = document.getElementById(`${selector}_results`);
+        if (!resultsEl) {
+          resultsEl = document.createElement("div");
+          resultsEl.id = `${selector}_results`;
+          resultsEl.style.cssText = "display: none; position: absolute; top: 100%; left: 0; right: 0; " +
+            "z-index: 10; background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;";
+          inputEl.parentNode.style.position = "relative";
+          inputEl.parentNode.appendChild(resultsEl);
+        }
 
         inputEl.setAttribute("placeholder", placeholder);
 

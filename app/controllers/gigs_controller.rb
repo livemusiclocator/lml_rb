@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class GigsController < ApplicationController
+  include PickerResults
+
+  # Everything else here is public API; the picker is admin only.
+  before_action :authenticate_admin_user!, only: :search
+
   def index
     @links = [
       {
@@ -101,8 +106,8 @@ class GigsController < ApplicationController
     @gig = Lml::Gig.find(params[:id])
   end
 
-  def autocomplete
-    @gigs = Lml::Gig.order(:name)
+  def search
+    render_picker_results(Lml::Gig.search(params[:q], venue_id: params[:venue_id]))
   end
 
   def feed

@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class ActsController < ApplicationController
-  def autocomplete
-    @acts = Lml::Act.order(:name)
-  end
+  include PickerResults
+
+  # Only the ActiveAdmin forms on this subdomain use this, and the admin session
+  # cookie is already there. It is not part of the public API.
+  before_action :authenticate_admin_user!
 
   def search
-    q = params[:q].to_s.strip
-    acts = Lml::Act.order(:name)
-    acts = acts.where("LOWER(name) LIKE LOWER(?)", "%#{q}%") if q.present?
-    @acts = acts.limit(10)
+    render_picker_results(Lml::Act.search(params[:q]))
   end
 end
-

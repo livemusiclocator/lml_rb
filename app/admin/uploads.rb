@@ -61,7 +61,7 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
     end
 
     script <<~SCRIPT.html_safe
-      attachAutocomplete("lml_upload_venue", "/venues/autocomplete", "Select Venue");
+      attachSearchAutocomplete("lml_upload_venue", "/venues/search", "Select Venue");
     SCRIPT
 
     f.actions

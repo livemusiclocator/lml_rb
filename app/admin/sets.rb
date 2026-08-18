@@ -71,8 +71,8 @@ ActiveAdmin.register Lml::Set, as: "Set" do
       f.input :duration, label: "Duration (mins)"
     end
     script <<~SCRIPT.html_safe
-      attachAutocomplete("lml_set_gig", "/gigs/autocomplete", "Select Gig");
-      attachAutocomplete("lml_set_act", "/acts/autocomplete", "Select Act");
+      attachSearchAutocomplete("lml_set_gig", "/gigs/search", "Select Gig");
+      attachSearchAutocomplete("lml_set_act", "/acts/search", "Select Act");
     SCRIPT
     f.actions
   end

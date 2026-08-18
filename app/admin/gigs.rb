@@ -217,11 +217,15 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   batch_action :suggest_tags do |ids|
-    batch_action_collection.find(ids).each do |gig|
-      gig.suggest_tags!(force: true)
-    end
+    gigs = batch_action_collection.find(ids)
+    suggested = gigs.count { |gig| gig.suggest_tags!(force: true) }
 
-    redirect_to collection_path, notice: "Added tags"
+    if suggested == gigs.size
+      redirect_to collection_path, notice: "Added tags"
+    else
+      redirect_to collection_path,
+                  alert: "Added tags to #{suggested} of #{gigs.size} gigs - see the log for the rest"
+    end
   end
 
   action_item :suggest_tags, only: %i[show] do
@@ -229,8 +233,11 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
   end
 
   member_action :suggest_tags, method: :put do
-    resource.suggest_tags!(force: true)
-    redirect_to resource_path, notice: "Added tags"
+    if resource.suggest_tags!(force: true)
+      redirect_to resource_path, notice: "Added tags"
+    else
+      redirect_to resource_path, alert: "No tags suggested - see the log for why"
+    end
   end
 
   action_item :clone, only: %i[show] do
@@ -321,7 +328,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       )
     end
     script <<~SCRIPT.html_safe
-      attachAutocomplete("lml_gig_venue", "/venues/autocomplete", "Select Venue");
+      attachSearchAutocomplete("lml_gig_venue", "/venues/search", "Select Venue");
     SCRIPT
     f.actions
   end
