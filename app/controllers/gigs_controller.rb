@@ -2,6 +2,7 @@
 
 class GigsController < ApplicationController
   include PickerResults
+  include TokenAccess
 
   # Everything else here is public API; the picker is admin only.
   before_action :authenticate_admin_user!, only: :search
@@ -97,7 +98,7 @@ class GigsController < ApplicationController
     date_from = Date.parse(params[:date_from] || "2000-01-01")
     date_to = Date.parse(params[:date_to] || "2000-01-01")
 
-    date_to = date_from + 7.days if !tokens.include?(params[:token]) && (date_to > date_from + 7.days)
+    date_to = date_from + 7.days if !token_authorized? && (date_to > date_from + 7.days)
 
     @gigs = Lml::Gig.eager.in_location(location).visible.where(date: (date_from..date_to))
   end
@@ -118,13 +119,5 @@ class GigsController < ApplicationController
     respond_to do |format|
       format.rss { render layout: false }
     end
-  end
-
-  private
-
-  def tokens
-    return [] unless ENV["TOKENS"]
-
-    ENV.fetch("TOKENS").split(",").map(&:strip)
   end
 end

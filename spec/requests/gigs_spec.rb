@@ -442,5 +442,52 @@ describe "gigs" do
       expect(@doc.xpath("//item/guid").first.text).to eq("https://lml.live/gigs/#{@first_gig.id}")
     end
   end
+
+  # The seven day cap on a query's date range, and the TOKENS shared secret that
+  # lifts it for internal callers - see TokenAccess.
+  describe "query date range cap" do
+    before do
+      @previous_tokens = ENV.fetch("TOKENS", nil)
+      ENV["TOKENS"] = "demo-token, other-token"
+
+      @venue = create(:lml_venue, location: "melbourne")
+      @soon = create(:lml_gig, name: "Within the week", venue: @venue, date: "2001-06-05")
+      @later = create(:lml_gig, name: "Beyond the week", venue: @venue, date: "2001-06-20")
+    end
+
+    after { ENV["TOKENS"] = @previous_tokens }
+
+    it "truncates an anonymous caller's range to seven days" do
+      get "/gigs/query?location=melbourne&date_from=2001-06-01&date_to=2001-06-30"
+
+      expect(response.parsed_body.map { |gig| gig["name"] }).to eq(["Within the week"])
+    end
+
+    it "honours the full range for a caller with a token" do
+      get "/gigs/query?location=melbourne&date_from=2001-06-01&date_to=2001-06-30&token=demo-token"
+
+      expect(response.parsed_body.map { |gig| gig["name"] }).to eq(["Within the week", "Beyond the week"])
+    end
+
+    it "truncates for a token we did not issue" do
+      get "/gigs/query?location=melbourne&date_from=2001-06-01&date_to=2001-06-30&token=guessed"
+
+      expect(response.parsed_body.map { |gig| gig["name"] }).to eq(["Within the week"])
+    end
+
+    it "truncates for a blank token, which an empty TOKENS entry would otherwise match" do
+      ENV["TOKENS"] = "demo-token,,other-token"
+
+      get "/gigs/query?location=melbourne&date_from=2001-06-01&date_to=2001-06-30&token="
+
+      expect(response.parsed_body.map { |gig| gig["name"] }).to eq(["Within the week"])
+    end
+
+    it "leaves a range already inside seven days alone" do
+      get "/gigs/query?location=melbourne&date_from=2001-06-01&date_to=2001-06-06"
+
+      expect(response.parsed_body.map { |gig| gig["name"] }).to eq(["Within the week"])
+    end
+  end
 end
 # rubocop:enable Layout/LineLength
