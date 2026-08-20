@@ -109,6 +109,8 @@ Rails.application.routes.draw do
     # Admin-only autocomplete pickers, not public API - see PickerResults.
     scope "venues" do
       get "search", to: "venues#search", defaults: { format: "json" }
+      # Temporary, and token gated rather than public - see VenuesController.
+      get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
     end
     scope "acts" do
       get "search", to: "acts#search", defaults: { format: "json" }

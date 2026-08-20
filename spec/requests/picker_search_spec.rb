@@ -74,8 +74,9 @@ describe "picker search" do
 
   # The gigs one never worked in the first place - the_api's ":id" always
   # claimed it - so it 404s via gigs#show rather than via an unknown route.
+  # /venues/autocomplete is back, token gated - see venue_autocomplete_spec.
   describe "the withdrawn autocomplete endpoints" do
-    %w[/acts/autocomplete /venues/autocomplete /gigs/autocomplete].each do |path|
+    %w[/acts/autocomplete /gigs/autocomplete].each do |path|
       it "does not serve #{path}" do
         get path
 
