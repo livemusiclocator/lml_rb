@@ -7,7 +7,7 @@ module Lml
     end
 
     def self.ransackable_associations(_auth_object = nil)
-      %w[proposals managed_venues managed_acts]
+      %w[proposals managed_venues managed_acts api_tokens]
     end
 
     devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
@@ -17,6 +17,7 @@ module Lml
     has_many :managed_venues, through: :venue_managers, source: :venue
     has_many :act_managers, class_name: "Lml::ActManager", dependent: :destroy
     has_many :managed_acts, through: :act_managers, source: :act
+    has_many :api_tokens, class_name: "Lml::ApiToken", dependent: :destroy
 
     scope :admins, -> { where(admin: true) }
 

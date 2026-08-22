@@ -70,6 +70,9 @@ ActiveAdmin.register Lml::User, as: "User" do
 
   member_action :revoke_admin, method: :delete do
     resource.update!(admin: false)
+    # Losing admin has to take the API keys with it, or a demoted admin keeps
+    # writing through a token nobody remembers issuing.
+    resource.api_tokens.active.find_each(&:revoke!)
     redirect_to admin_user_path(resource), notice: "#{resource.email} is no longer an admin."
   end
 
@@ -77,7 +80,7 @@ ActiveAdmin.register Lml::User, as: "User" do
     if resource.admin?
       link_to "Revoke admin", revoke_admin_admin_user_path(resource),
               method: :delete,
-              data: { confirm: "Revoke admin access for #{resource.email}?" }
+              data: { confirm: "Revoke admin access and all API tokens for #{resource.email}?" }
     else
       link_to "Grant admin", grant_admin_admin_user_path(resource),
               method: :post,

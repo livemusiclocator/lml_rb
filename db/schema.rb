@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_010000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_22_010001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -63,6 +63,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_010000) do
     t.string "username"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "api_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.datetime "last_used_at"
+    t.string "name", null: false
+    t.datetime "revoked_at"
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["token_digest"], name: "index_api_tokens_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_api_tokens_on_user_id"
   end
 
   create_table "explorer_configs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -335,6 +348,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_010000) do
 
   add_foreign_key "act_managers", "acts"
   add_foreign_key "act_managers", "users"
+  add_foreign_key "api_tokens", "users"
   add_foreign_key "gigs", "venues"
   add_foreign_key "proposals", "admin_users", column: "reviewed_by_id"
   add_foreign_key "proposals", "users"
