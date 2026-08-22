@@ -1,6 +1,39 @@
 require "rails_helper"
 
 describe Lml::Upload do
+  # Clipper assigns Time.zone per entry and never restores it. Time.zone is
+  # thread local and Rails does not reset it between requests, so a leak here
+  # means the next request on that thread renders its times in the wrong zone.
+  describe "the time zone it leaves behind" do
+    before do
+      @venue = Lml::Venue.create!(name: "THE VENUE NAME", time_zone: "Australia/Perth")
+      @upload = Lml::Upload.create!(
+        venue: @venue,
+        format: "clipper",
+        content: "name: A gig\ndate: 2026-09-01\n",
+      )
+    end
+
+    # Pinned to a known zone inside each example: without it, the first example
+    # to leak leaves Time.zone on the venue's zone for the rest of the run, and
+    # every later example passes because there is no longer a change to see.
+    it "puts Time.zone back after a successful upload" do
+      Time.use_zone("UTC") do
+        expect { @upload.process! }.not_to(change { Time.zone.name })
+      end
+    end
+
+    it "puts Time.zone back even when the upload fails" do
+      @upload.update!(content: "name: A gig\ndate: not a date\n")
+
+      Time.use_zone("UTC") do
+        expect { @upload.process! }.not_to(change { Time.zone.name })
+      end
+
+      expect(@upload.reload.status).to eq("Failed")
+    end
+  end
+
   describe "process!" do
     before do
       @venue = Lml::Venue.create!(
