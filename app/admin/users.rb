@@ -68,7 +68,7 @@ ActiveAdmin.register Lml::User, as: "User" do
     redirect_to admin_user_path(resource), notice: "#{resource.email} is now an admin."
   end
 
-  member_action :revoke_admin, method: :delete do
+  member_action :revoke_admin, method: :post do
     resource.update!(admin: false)
     # Losing admin has to take the API keys with it, or a demoted admin keeps
     # writing through a token nobody remembers issuing.
@@ -76,15 +76,23 @@ ActiveAdmin.register Lml::User, as: "User" do
     redirect_to admin_user_path(resource), notice: "#{resource.email} is no longer an admin."
   end
 
-  action_item :admin_access, only: :show do
+  # A real form rather than `link_to ..., method: :post`. ActiveAdmin 3.5 ships no
+  # rails-ujs, so `method:` on a link is silently ignored and you get a GET - which
+  # is why every other non-GET action in this app is a form too.
+  sidebar "Admin access", only: :show do
     if resource.admin?
-      link_to "Revoke admin", revoke_admin_admin_user_path(resource),
-              method: :delete,
-              data: { confirm: "Revoke admin access and all API tokens for #{resource.email}?" }
+      para "#{resource.email} is an admin: full ActiveAdmin access, and the admin API."
+      form action: revoke_admin_admin_user_path(resource), method: :post do
+        text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+        input type: :submit, value: "Revoke admin access"
+      end
+      para "Revoking also revokes every API token they have issued.", class: "inline-hints"
     else
-      link_to "Grant admin", grant_admin_admin_user_path(resource),
-              method: :post,
-              data: { confirm: "Grant #{resource.email} full admin access?" }
+      para "#{resource.email} is a regular backstage user."
+      form action: grant_admin_admin_user_path(resource), method: :post do
+        text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+        input type: :submit, value: "Grant admin access"
+      end
     end
   end
 

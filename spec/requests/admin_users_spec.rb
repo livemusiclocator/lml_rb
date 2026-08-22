@@ -43,7 +43,7 @@ describe "admin users" do
   it "revokes admin access from a backstage user" do
     user = create(:lml_user, :admin)
 
-    delete "/admin/users/#{user.id}/revoke_admin"
+    post "/admin/users/#{user.id}/revoke_admin"
 
     expect(response).to redirect_to("/admin/users/#{user.id}")
     expect(user.reload.admin?).to be(false)
@@ -53,7 +53,7 @@ describe "admin users" do
     user = create(:lml_user, :admin)
     token = Lml::ApiToken.issue!(user: user, name: "Import script")
 
-    delete "/admin/users/#{user.id}/revoke_admin"
+    post "/admin/users/#{user.id}/revoke_admin"
 
     expect(token.reload).to be_revoked
   end
