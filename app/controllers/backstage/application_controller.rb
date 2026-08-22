@@ -13,5 +13,13 @@ module Backstage
       end
     end
     helper_method :current_user_manages?
+
+    private
+
+    # Not a global before_action - most of backstage is for punters. Pages that
+    # carry admin authority opt in.
+    def require_admin!
+      redirect_to backstage_root_path, alert: "That area is for admins." unless current_user.admin?
+    end
   end
 end

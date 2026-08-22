@@ -20,6 +20,9 @@
           <%= link_to "Dashboard", backstage_root_path, class: "text-gray-200 hover:text-white text-sm px-3 py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
           <%= link_to "My Proposals", backstage_proposals_path, class: "text-gray-200 hover:text-white text-sm px-3 py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
           <%= link_to "+ New Proposal", new_backstage_proposal_path, class: "text-gray-200 hover:text-white text-sm px-3 py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
+          <% if current_user.admin? %>
+            <%= link_to "API Tokens", backstage_api_tokens_path, class: "text-gray-200 hover:text-white text-sm px-3 py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
+          <% end %>
         <% end %>
       </div>
       <div class="flex items-center gap-3 text-sm">

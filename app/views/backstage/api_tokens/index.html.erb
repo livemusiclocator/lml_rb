@@ -1,0 +1,79 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold tracking-tight">Admin API tokens 🔑</h1>
+  <p class="text-gray-500 mt-1">Tokens act as you, with your full admin access. One per integration, and revoke anything you are not using.</p>
+</div>
+
+<% if @issued %>
+  <div class="mb-8 bg-amber-50 border border-amber-300 rounded-xl p-5">
+    <h2 class="font-semibold text-amber-900 mb-2">Copy this now — it will not be shown again</h2>
+    <pre class="bg-white border border-amber-200 rounded-lg px-4 py-3 text-sm overflow-x-auto select-all"><%= @issued.plaintext %></pre>
+    <p class="text-xs text-amber-700 mt-3">We only keep a digest, so we cannot show it to you a second time. Lost it? Revoke this token and issue another.</p>
+  </div>
+<% end %>
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-8">
+  <h2 class="font-semibold text-gray-900 mb-4">Issue a token</h2>
+  <%= form_with url: backstage_api_tokens_path, method: :post, class: "flex flex-wrap items-end gap-3" do %>
+    <div class="flex-1 min-w-48">
+      <label for="name" class="block text-xs font-medium text-gray-600 mb-1">What is it for?</label>
+      <%= text_field_tag :name, nil, id: "name", placeholder: "Gig import script",
+            class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" %>
+    </div>
+    <div>
+      <label for="expires_in_days" class="block text-xs font-medium text-gray-600 mb-1">Expires</label>
+      <%= select_tag :expires_in_days,
+            options_for_select([["Never", ""], ["In 30 days", 30], ["In 90 days", 90], ["In a year", 365]]),
+            id: "expires_in_days",
+            class: "border border-gray-300 rounded-lg px-3 py-2 text-sm" %>
+    </div>
+    <%= submit_tag "Issue token",
+          class: "bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-lg shadow-sm transition-colors cursor-pointer" %>
+  <% end %>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+  <h2 class="font-semibold text-gray-900 mb-4">Your tokens</h2>
+  <% if @tokens.any? %>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-xs uppercase tracking-wide text-gray-400 border-b border-gray-200">
+          <th class="pb-2 font-medium">Name</th>
+          <th class="pb-2 font-medium">Status</th>
+          <th class="pb-2 font-medium">Last used</th>
+          <th class="pb-2 font-medium"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tokens.each do |token| %>
+          <tr class="border-b border-gray-100 last:border-0">
+            <td class="py-3 font-medium text-gray-900"><%= token.name %></td>
+            <td class="py-3">
+              <% if token.revoked? %>
+                <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">Revoked</span>
+              <% elsif token.expired? %>
+                <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">Expired</span>
+              <% else %>
+                <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Active</span>
+                <% if token.expires_at %>
+                  <span class="text-xs text-gray-400 ml-1">until <%= token.expires_at.to_date.to_fs(:long) %></span>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="py-3 text-gray-500">
+              <%= token.last_used_at ? "#{time_ago_in_words(token.last_used_at)} ago" : "never" %>
+            </td>
+            <td class="py-3 text-right">
+              <% unless token.revoked? %>
+                <%= link_to "Revoke", backstage_api_token_path(token),
+                      data: { turbo_method: :delete, turbo_confirm: "Revoke #{token.name}? Anything using it stops working immediately." },
+                      class: "text-red-600 hover:text-red-800 text-xs font-medium" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="text-sm text-gray-400 italic">No tokens yet.</p>
+  <% end %>
+</div>

@@ -55,6 +55,7 @@ Rails.application.routes.draw do
     scope "/backstage", module: "backstage", as: "backstage" do
       root to: "dashboard#index"
       resources :proposals, only: [:index, :new, :create, :show]
+      resources :api_tokens, only: [:index, :create, :destroy]
       namespace :search do
         resources :gigs, only: :index
         resources :acts, only: :index
