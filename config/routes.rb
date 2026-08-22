@@ -119,6 +119,17 @@ Rails.application.routes.draw do
     scope "docs" do
       get "/", to: "docs#index"
     end
+
+    # The admin write API. Bearer token per admin, see Lml::ApiToken and
+    # Api::V1::Admin::BaseController. Deliberately not under /admin, which
+    # ActiveAdmin owns, and versioned from day one because callers build
+    # against this and never come back to update.
+    namespace :v1, module: "api/v1", defaults: { format: "json" } do
+      namespace :admin do
+        resources :venues, only: [:index, :show, :create, :update]
+        resources :acts, only: [:index, :show, :create, :update]
+      end
+    end
   end
 
   # All the redirects
