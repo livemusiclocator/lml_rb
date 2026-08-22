@@ -13,7 +13,16 @@
 
 <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm mb-8">
   <h2 class="font-semibold text-gray-900 mb-4">Issue a token</h2>
-  <%= form_with url: backstage_api_tokens_path, method: :post, class: "flex flex-wrap items-end gap-3" do %>
+  <%#
+    turbo: false is load bearing. The create action renders rather than
+    redirects, so the secret is never put in the flash and never reaches a
+    cookie - but Turbo discards a 200 HTML response to a form POST, so the
+    secret was created and then thrown away unseen. A plain browser submit
+    renders the response. Do not "tidy" this back to a Turbo form without
+    moving to a turbo stream response.
+  %>
+  <%= form_with url: backstage_api_tokens_path, method: :post, data: { turbo: false },
+                class: "flex flex-wrap items-end gap-3" do %>
     <div class="flex-1 min-w-48">
       <label for="name" class="block text-xs font-medium text-gray-600 mb-1">What is it for?</label>
       <%= text_field_tag :name, nil, id: "name", placeholder: "Gig import script",
@@ -32,7 +41,11 @@
 </div>
 
 <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-  <h2 class="font-semibold text-gray-900 mb-4">Your tokens</h2>
+  <h2 class="font-semibold text-gray-900 mb-1">Your tokens</h2>
+  <p class="text-xs text-gray-500 mb-4">
+    Only a digest is stored, so a secret can never be shown again after the page that issued it.
+    If you did not manage to copy one, revoke it and issue another.
+  </p>
   <% if @tokens.any? %>
     <table class="w-full text-sm">
       <thead>

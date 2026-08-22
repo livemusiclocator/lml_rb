@@ -67,6 +67,9 @@ Rails.application.configure do
     # rather than development's .lml.test, so a spec can never reach a running
     # development server and a stray dev request can never reach a spec.
     /.*\.lml\.localhost/,
+    # Backstage is behind a livemusiclocator subdomain constraint, so its system
+    # specs need the .localhost twin of that hostname too.
+    /.*\.livemusiclocator\.com\.localhost/,
   ]
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true

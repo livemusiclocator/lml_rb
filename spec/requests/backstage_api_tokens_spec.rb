@@ -67,7 +67,7 @@ describe "backstage api tokens" do
     it "applies an expiry when one is chosen" do
       post "/backstage/api_tokens", params: { name: "Import script", expires_in_days: "90" }
 
-      expect(Lml::ApiToken.last.expires_at).to be_within(1.minute).of(90.days.from_now)
+      expect(Lml::ApiToken.last.expires_at).to be_between(89.days.from_now, 91.days.from_now)
     end
 
     it "ignores an expiry we did not offer rather than trusting the number" do

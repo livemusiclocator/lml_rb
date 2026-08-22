@@ -31,6 +31,12 @@ cuprite_options = {
 # a failure screenshot which one you are looking at.
 Capybara.server_host = "127.0.0.1"
 Capybara.app_host = "http://api.lml.localhost"
+
+# Backstage lives behind `constraints subdomain: /^(beta|www).livemusiclocator/`,
+# so a spec for it has to arrive on a matching host. Rails reads "www.livemusiclocator"
+# as the subdomain of this one. Assign Capybara.app_host in the spec that needs it.
+BACKSTAGE_APP_HOST = "http://www.livemusiclocator.com.localhost"
+SYSTEM_SPEC_HOSTS = ["api.lml.localhost", "www.livemusiclocator.com.localhost"].freeze
 Capybara.always_include_port = true
 
 # Long enough to cover the pickers' 250ms input debounce plus the round trip.
@@ -41,7 +47,7 @@ RSpec.configure do |config|
   # including Capybara's own server handshake. Let localhost through for system
   # specs only, so everything else keeps failing loudly on an unstubbed call.
   config.around(:each, type: :system) do |example|
-    WebMock.disable_net_connect!(allow_localhost: true, allow: ["api.lml.localhost"])
+    WebMock.disable_net_connect!(allow_localhost: true, allow: SYSTEM_SPEC_HOSTS)
     example.run
   ensure
     WebMock.disable_net_connect!
