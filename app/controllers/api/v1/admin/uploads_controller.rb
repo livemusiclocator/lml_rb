@@ -51,8 +51,16 @@ module Api
           # tries again. Clipper stops at the first bad entry, so anything before
           # it has already been applied; re-sending corrected content is safe
           # because gigs are matched on name, date and venue.
-          status = upload.status == "Failed" ? :unprocessable_content : :created
-          render json: { upload: serialize(upload, with_gigs: true) }, status: status
+          return render json: { upload: serialize(upload, with_gigs: true) }, status: :created unless
+            upload.status == "Failed"
+
+          # Carries `error` as well as the upload, so a client can keep one rule -
+          # every non 2xx response has an `error` string - and still get at the id
+          # and the partial result.
+          render json: {
+            error: upload.error_description,
+            upload: serialize(upload, with_gigs: true),
+          }, status: :unprocessable_content
         end
 
         def too_many_entries(upload)

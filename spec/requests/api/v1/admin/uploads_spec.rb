@@ -92,6 +92,8 @@ describe "admin api uploads" do
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(body["upload"]["error_description"]).to eq("1: 'not a date' is not a valid date")
+      # Same `error` key every other failure uses, so one client rule covers all of them.
+      expect(body["error"]).to eq("1: 'not a date' is not a valid date")
     end
 
     it "keeps a failed upload so its content can be fixed and resent" do
