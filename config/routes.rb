@@ -128,6 +128,9 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :venues, only: [:index, :show, :create, :update]
         resources :acts, only: [:index, :show, :create, :update]
+        # No update: an upload is a record of what was sent, and reprocessing
+        # edited content is a different thing to editing the record.
+        resources :uploads, only: [:index, :show, :create]
       end
     end
   end
