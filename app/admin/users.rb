@@ -9,12 +9,16 @@ ActiveAdmin.register Lml::User, as: "User" do
 
   filter :email
   filter :display_name
+  filter :admin
   filter :created_at
 
   index do
     selectable_column
     column :email
     column :display_name
+    column :admin do |u|
+      status_tag(u.admin? ? "admin" : "—", class: u.admin? ? :ok : nil)
+    end
     column :managed_venues do |u|
       u.managed_venues.map(&:name).join(", ").presence || "—"
     end
@@ -32,6 +36,9 @@ ActiveAdmin.register Lml::User, as: "User" do
     attributes_table do
       row :email
       row :display_name
+      row :admin do |u|
+        status_tag(u.admin? ? "admin" : "not an admin", class: u.admin? ? :ok : nil)
+      end
       row :managed_venues do |u|
         u.managed_venues.map(&:label).join(", ").presence || "None"
       end
@@ -51,6 +58,30 @@ ActiveAdmin.register Lml::User, as: "User" do
         end
         column :created_at
       end
+    end
+  end
+
+  # Admin is granted and revoked one user at a time and never through permit_params,
+  # so nothing that mass assigns a user's attributes can quietly promote anybody.
+  member_action :grant_admin, method: :post do
+    resource.update!(admin: true)
+    redirect_to admin_user_path(resource), notice: "#{resource.email} is now an admin."
+  end
+
+  member_action :revoke_admin, method: :delete do
+    resource.update!(admin: false)
+    redirect_to admin_user_path(resource), notice: "#{resource.email} is no longer an admin."
+  end
+
+  action_item :admin_access, only: :show do
+    if resource.admin?
+      link_to "Revoke admin", revoke_admin_admin_user_path(resource),
+              method: :delete,
+              data: { confirm: "Revoke admin access for #{resource.email}?" }
+    else
+      link_to "Grant admin", grant_admin_admin_user_path(resource),
+              method: :post,
+              data: { confirm: "Grant #{resource.email} full admin access?" }
     end
   end
 

@@ -3,7 +3,7 @@
 module Lml
   class User < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
-      %w[email display_name created_at]
+      %w[email display_name created_at admin]
     end
 
     def self.ransackable_associations(_auth_object = nil)
@@ -18,6 +18,10 @@ module Lml
     has_many :act_managers, class_name: "Lml::ActManager", dependent: :destroy
     has_many :managed_acts, through: :act_managers, source: :act
 
+    scope :admins, -> { where(admin: true) }
+
+    # Being an admin is the whole of the admin API's authority - there are no
+    # finer grained roles, so granting it hands over every endpoint at once.
     def manages_venue?(venue)
       managed_venues.exists?(venue.id)
     end

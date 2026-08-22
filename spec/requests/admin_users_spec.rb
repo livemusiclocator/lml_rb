@@ -30,4 +30,22 @@ describe "admin users" do
     expect(response).to redirect_to("/admin/admin_users/#{@admin_user.id}")
     expect(@admin_user.reload.username).to eq("new_username")
   end
+
+  it "grants admin access to a backstage user" do
+    user = create(:lml_user)
+
+    post "/admin/users/#{user.id}/grant_admin"
+
+    expect(response).to redirect_to("/admin/users/#{user.id}")
+    expect(user.reload.admin?).to be(true)
+  end
+
+  it "revokes admin access from a backstage user" do
+    user = create(:lml_user, :admin)
+
+    delete "/admin/users/#{user.id}/revoke_admin"
+
+    expect(response).to redirect_to("/admin/users/#{user.id}")
+    expect(user.reload.admin?).to be(false)
+  end
 end
