@@ -43,8 +43,10 @@ module Lml
       [name, match[1], match[2]]
     end
 
+    # These take either a handle or a pasted URL and keep the handle. nil means
+    # "clear it" rather than an exception, so an API caller can send null.
     def linktree=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def linktree_url
@@ -52,7 +54,7 @@ module Lml
     end
 
     def bandcamp=(value)
-      super(value.sub("https://", "").split(".").first)
+      super(value && value.sub("https://", "").split(".").first)
     end
 
     def bandcamp_url
@@ -60,7 +62,7 @@ module Lml
     end
 
     def instagram=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def instagram_url
@@ -68,7 +70,7 @@ module Lml
     end
 
     def facebook=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def facebook_url
@@ -76,7 +78,7 @@ module Lml
     end
 
     def musicbrainz=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def musicbrainz_url
@@ -84,7 +86,7 @@ module Lml
     end
 
     def rym=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def rym_url
@@ -92,7 +94,7 @@ module Lml
     end
 
     def spotify=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def spotify_url
@@ -100,7 +102,7 @@ module Lml
     end
 
     def wikipedia=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def wikipedia_url
@@ -108,7 +110,7 @@ module Lml
     end
 
     def youtube=(value)
-      super(value.split("/").last)
+      super(value&.split("/")&.last)
     end
 
     def youtube_url
@@ -120,7 +122,7 @@ module Lml
     end
 
     def genre_list=(value)
-      self.genres = value.split(",").map(&:strip)
+      self.genres = value.to_s.split(",").map(&:strip)
     end
 
     def label
