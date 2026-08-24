@@ -131,6 +131,12 @@ Rails.application.routes.draw do
         # No update: an upload is a record of what was sent, and reprocessing
         # edited content is a different thing to editing the record.
         resources :uploads, only: [:index, :show, :create]
+        # Read only - writing gigs goes through uploads. `resources` puts the
+        # collection route ahead of the ":id" member route, so /gigs/clipper is
+        # not swallowed the way /gigs/autocomplete was.
+        resources :gigs, only: [:index, :show] do
+          get "clipper", on: :collection, defaults: { format: :text }
+        end
       end
     end
   end
