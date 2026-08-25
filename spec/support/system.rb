@@ -32,10 +32,13 @@ cuprite_options = {
 Capybara.server_host = "127.0.0.1"
 Capybara.app_host = "http://api.lml.localhost"
 
-# Backstage lives behind `constraints subdomain: /^(beta|www).livemusiclocator/`,
-# so a spec for it has to arrive on a matching host. Rails reads "www.livemusiclocator"
-# as the subdomain of this one. Assign Capybara.app_host in the spec that needs it.
-BACKSTAGE_APP_HOST = "http://www.livemusiclocator.com.localhost"
+# Everything behind `constraints subdomain: /^(beta|www).livemusiclocator/` - the
+# gig guide, the static pages, backstage - has to be reached on a matching host.
+# Rails reads "www.livemusiclocator" as the subdomain of this one. Assign
+# Capybara.app_host in the spec that needs it, and restore it afterwards.
+WEB_APP_HOST = "http://www.livemusiclocator.com.localhost"
+# The name the backstage specs already use. Same host; backstage just got here first.
+BACKSTAGE_APP_HOST = WEB_APP_HOST
 SYSTEM_SPEC_HOSTS = ["api.lml.localhost", "www.livemusiclocator.com.localhost"].freeze
 Capybara.always_include_port = true
 
