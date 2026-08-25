@@ -19,21 +19,7 @@ json.array! @gigs do |gig|
   json.genre_tags gig.published_genre_tags || []
 
   venue = gig.venue
-  if venue
-    json.venue do
-      json.id venue.id
-      json.name venue.name
-      json.address venue.address
-      json.capacity venue.capacity
-      json.website venue.website
-      json.postcode venue.postcode
-      json.vibe venue.vibe
-      json.tags venue.tags || []
-      json.location_url venue.location_url
-      json.latitude venue.latitude
-      json.longitude venue.longitude
-    end
-  end
+  json.venue { json.partial!("shared/venue", venue: venue) } if venue
 
   json.sets gig.sets.sort_by{ |set| set.start_offset || 0} do |set|
     json.start_time set.start_time
@@ -42,26 +28,7 @@ json.array! @gigs do |gig|
     json.finish_time set.finish_time
     json.finish_timestamp set.finish_timestamp
 
-    act = set.act
-    json.act do
-      json.id act.id
-      json.name act.name
-      json.location act.location if act.location
-      json.country act.country if act.country
-      json.genres act.genres
-
-      json.website act.website if act.website
-
-      json.bandcamp_url act.bandcamp_url if act.bandcamp_url
-      json.facebook_url act.facebook_url if act.facebook_url
-      json.instagram_url act.instagram_url if act.instagram_url
-      json.linktree_url act.linktree_url if act.linktree_url
-      json.musicbrainz_url act.musicbrainz_url if act.musicbrainz_url
-      json.rym_url act.rym_url if act.rym_url
-      json.spotify_url act.spotify_url if act.spotify_url
-      json.wikipedia_url act.wikipedia_url if act.wikipedia_url
-      json.youtube_url act.youtube_url if act.youtube_url
-    end
+    json.act { json.partial!("shared/act", act: set.act) }
   end
 
   json.prices gig.prices do |price|

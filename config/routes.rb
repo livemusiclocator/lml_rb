@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Every id in this schema is a uuid, so a route constrained to one cannot
+  # shadow a named collection route added later. A local, like short_domain
+  # below - a constant here would land on Object. No anchors: rails rejects
+  # them in a routing requirement, and segments are anchored already.
+  uuid = /\h{8}-\h{4}-\h{4}-\h{4}-\h{12}/
+
   # all the routes making up the main parts of the api
   concern :the_api do
     root to: "gigs#index", defaults: { format: "json" }
@@ -115,6 +121,12 @@ Rails.application.routes.draw do
     end
     scope "acts" do
       get "search", to: "acts#search", defaults: { format: "json" }
+      # The public read API lives in its own namespace, away from the picker
+      # above and from the html page on www, which will be Web::ActsController.
+      # Same split for venues if they ever get a page. The uuid constraint keeps
+      # this from swallowing the next /acts/something the way ":id" swallowed
+      # /gigs/autocomplete for years.
+      get ":id", to: "api/acts#show", constraints: { id: uuid }, defaults: { format: "json" }
     end
     scope "docs" do
       get "/", to: "docs#index"

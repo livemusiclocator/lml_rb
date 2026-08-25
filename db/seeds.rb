@@ -43,4 +43,93 @@ if Rails.env.development?
       default_location: default_location,
     )
   end
+
+  ## Seed dummy venues for local tests
+  # Venues
+  venue1 = Lml::Venue.find_or_create_by!(name: "The Night Cat") do |v|
+    v.address = "137-141 Johnston St, Fitzroy VIC 3065"
+    v.location = "melbourne"
+    v.time_zone = "Australia/Melbourne"
+  end
+
+  venue2 = Lml::Venue.find_or_create_by!(name: "The Tote") do |v|
+    v.address = "67-71 Johnston St, Collingwood VIC 3066"
+    v.location = "melbourne"
+    v.time_zone = "Australia/Melbourne"
+  end
+
+  venue3 = Lml::Venue.find_or_create_by!(name: "Theatre Royal") do |v|
+    v.address = "30 Hargraves St, Castlemaine VIC 3450"
+    v.location = "castlemaine"
+    v.time_zone = "Australia/Melbourne"
+  end
+
+  puts "Created #{Lml::Venue.count} venues."
+
+  # Acts
+  act1 = Lml::Act.find_or_create_by!(name: "The Teskey Brothers") do |a|
+    a.country = "Australia"
+    a.genres = ["Soul", "Blues"]
+    a.email = "teskey@example.com"
+  end
+
+  act2 = Lml::Act.find_or_create_by!(name: "King Gizzard & The Lizard Wizard") do |a|
+    a.country = "Australia"
+    a.genres = ["Psychedelic Rock", "Garage Rock"]
+    a.email = "gizz@example.com"
+  end
+
+  act3 = Lml::Act.find_or_create_by!(name: "Amyl and The Sniffers") do |a|
+    a.country = "Australia"
+    a.genres = ["Punk Rock"]
+    a.email = "amyl@example.com"
+  end
+
+  act4 = Lml::Act.find_or_create_by!(name: "Khruangbin") do |a|
+    a.country = "USA"
+    a.genres = ["Thai Funk", "Psychedelic Soul"]
+    a.email = "khruangbin@example.com"
+  end
+
+  act_test = Lml::Act.find_or_create_by!(name: "test_act") do |a|
+    a.country = "Australia"
+    a.genres = ["Test Genre"]
+  end
+
+  puts "Created #{Lml::Act.count} acts."
+
+  # Seed a few upcoming gigs for testing
+  # Gigs & Sets. A lambda rather than a def - a def here would land on Object.
+  create_gig_with_sets = lambda do |name, venue, date, acts, attributes = {}|
+    gig = Lml::Gig.find_or_create_by!(name: name, venue: venue, date: date) do |g|
+      g.status = "confirmed"
+      attributes.each { |key, value| g.public_send(:"#{key}=", value) }
+    end
+
+    acts.each_with_index do |act, index|
+      Lml::Set.find_or_create_by!(gig: gig, act: act) do |s|
+        s.start_offset = index * 60
+        s.duration = 45
+      end
+    end
+    gig
+  end
+
+  today = Date.current
+
+  create_gig_with_sets.call("Friday Night Soul", venue1, today + 7, [act1, act4])
+  create_gig_with_sets.call("Gizz Fest", venue2, today + 14, [act2, act3])
+  create_gig_with_sets.call("Sniffers Live", venue3, today + 21, [act3])
+  create_gig_with_sets.call("Test Gig", venue1, today + 1, [act_test])
+  create_gig_with_sets.call("Surprise Show", venue1, today - 2, [act2]) # Past gig
+
+  # So a local act page can be checked against the visible scope rather than
+  # only ever seeing gigs that should show.
+  create_gig_with_sets.call("Hush Hush", venue2, today + 3, [act3], hidden: true)
+  create_gig_with_sets.call("Still Cooking", venue2, today + 4, [act3], status: "draft")
+
+  puts "Created #{Lml::Gig.count} gigs."
+  puts "Created #{Lml::Set.count} sets."
+
+  puts "Dummy data insertion complete."
 end

@@ -10,6 +10,16 @@ module Lml
 
     has_many :act_managers, class_name: "Lml::ActManager", foreign_key: :act_id, dependent: :destroy
     has_many :managers, through: :act_managers, source: :user
+    # No dependent: an act's sets belong to someone else's gig, so deleting the
+    # act is not this association's business. Left as it was before it existed.
+    has_many :sets, class_name: "Lml::Set", foreign_key: :act_id, inverse_of: :act
+    # What an act page lists. `visible` because an unannounced or draft gig has no
+    # business on a public page - every other public gig path scopes the same way
+    # - `eager` because the view renders each gig's venue and sets, and `distinct`
+    # because an act can play two sets at the one gig.
+    has_many :upcoming_gigs,
+             -> { visible.eager.where(date: Date.current..).distinct },
+             through: :sets, source: :gig
 
     def self.ransackable_attributes(_auth_object = nil)
       %w[name country location]
