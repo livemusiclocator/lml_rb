@@ -118,6 +118,9 @@ Rails.application.routes.draw do
       get "search", to: "venues#search", defaults: { format: "json" }
       # Temporary, and token gated rather than public - see VenuesController.
       get "autocomplete", to: "venues#autocomplete", defaults: { format: "json" }
+      # Public read api, namespaced away from the pickers above - see the acts
+      # scope below for the same split and why the uuid constraint is here.
+      get ":id", to: "api/venues#show", constraints: { id: uuid }, defaults: { format: "json" }
     end
     scope "acts" do
       get "search", to: "acts#search", defaults: { format: "json" }

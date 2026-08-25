@@ -21,14 +21,8 @@ json.array! @gigs do |gig|
   venue = gig.venue
   json.venue { json.partial!("shared/venue", venue: venue) } if venue
 
-  json.sets gig.sets.sort_by{ |set| set.start_offset || 0} do |set|
-    json.start_time set.start_time
-    json.start_timestamp set.start_timestamp
-    json.duration set.duration
-    json.finish_time set.finish_time
-    json.finish_timestamp set.finish_timestamp
-
-    json.act { json.partial!("shared/act", act: set.act) }
+  json.sets(gig.sets.sort_by { |set| set.start_offset || 0 }) do |set|
+    json.partial!("shared/set", set: set)
   end
 
   json.prices gig.prices do |price|

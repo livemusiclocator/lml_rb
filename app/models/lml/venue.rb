@@ -35,6 +35,13 @@ module Lml
     )
 
     has_many :gigs, dependent: :delete_all
+    # What a venue page lists, for the same reasons as Lml::Act#upcoming_gigs:
+    # `visible` because an unannounced or draft gig has no business on a public
+    # page, `eager` because the view renders each gig's sets. No distinct - a gig
+    # has the one venue, so nothing fans out the way an act's sets do.
+    has_many :upcoming_gigs,
+             -> { visible.eager.where(date: Date.current..) },
+             class_name: "Lml::Gig", foreign_key: :venue_id, inverse_of: :venue
     has_many :uploads, dependent: :delete_all
     has_many :venue_managers, class_name: "Lml::VenueManager", foreign_key: :venue_id, dependent: :destroy
     has_many :managers, through: :venue_managers, source: :user
