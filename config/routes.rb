@@ -83,6 +83,12 @@ Rails.application.routes.draw do
     scope "api/gigs", as: "web_api" do
       concerns :the_api
     end
+
+    # The same DocsController as api.lml.live, in the web layout. Deliberately
+    # outside the `module: "web"` scope below - it is not a Web:: controller -
+    # and it has to come before that scope's "*path" catch all.
+    get "docs", to: "docs#index", as: :web_docs
+
     # sitemap
 
     scope module: "web" do
@@ -141,9 +147,8 @@ Rails.application.routes.draw do
       # /gigs/autocomplete for years.
       get ":id", to: "api/acts#show", constraints: { id: uuid }, defaults: { format: "json" }
     end
-    scope "docs" do
-      get "/", to: "docs#index"
-    end
+    # The api documentation - see DocsController. Also served on www below.
+    get "docs", to: "docs#index"
 
     # The admin write API. Bearer token per admin, see Lml::ApiToken and
     # Api::V1::Admin::BaseController. Deliberately not under /admin, which
