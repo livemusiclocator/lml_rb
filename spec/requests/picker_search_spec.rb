@@ -33,11 +33,30 @@ describe "picker search" do
   describe "with an admin session" do
     before { sign_in @admin_user, scope: :admin_user }
 
-    it "returns id and label pairs for acts" do
+    # Acts carry two extras for the gig form's set list picker: the act as a set
+    # line names it - which is not the label, see Lml::Act#set_list_name - and
+    # the genres that picker copies onto the gig.
+    it "returns id and label pairs for acts, with the set list extras" do
+      @act.update!(location: "melbourne", genres: ["punk", "garage rock"])
+
       get "/acts/search", params: { q: "amyl" }
 
       expect(JSON.parse(response.body)).to eq(
-        [{ "id" => @act.id, "label" => "Amyl and the Sniffers (Australia)" }],
+        [{
+          "id" => @act.id,
+          "label" => "Amyl and the Sniffers (Australia)",
+          "set_list_name" => "Amyl and the Sniffers (melbourne/Australia)",
+          "genres" => ["punk", "garage rock"],
+        }],
+      )
+    end
+
+    it "sends an empty genre list for an act with no genres" do
+      get "/acts/search", params: { q: "amyl" }
+
+      expect(JSON.parse(response.body).first).to include(
+        "set_list_name" => "Amyl and the Sniffers",
+        "genres" => [],
       )
     end
 

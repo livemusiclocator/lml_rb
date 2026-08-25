@@ -419,6 +419,130 @@ margin: 2rem;
           if (!inputEl.contains(e.target) && !resultsEl.contains(e.target)) close();
         });
       }
+      // The set list is a textarea, one set per line, so the query is the line the
+      // caret sits on rather than the whole field, and choosing a result completes
+      // that line instead of replacing the value. Same debounced server search as
+      // attachSearchAutocomplete above - nothing is preloaded - and the chosen
+      // act's genres are added to the gig's genre tags.
+      function attachSetListAutocomplete(selector, endpoint, genreSelector) {
+        const inputEl = document.getElementById(selector);
+        const genreEl = document.getElementById(genreSelector);
+        if (!inputEl || !genreEl) return;
+
+        let resultsEl = document.getElementById(`${selector}_results`);
+        if (!resultsEl) {
+          resultsEl = document.createElement("div");
+          resultsEl.id = `${selector}_results`;
+          resultsEl.style.cssText = "display: none; position: absolute; top: 100%; left: 0; right: 0; " +
+            "z-index: 10; background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;";
+          inputEl.parentNode.style.position = "relative";
+          inputEl.parentNode.appendChild(resultsEl);
+        }
+
+        let debounceTimer;
+        let results = [];
+        let selectedIndex = -1;
+
+        const close = () => {
+          resultsEl.innerHTML = "";
+          resultsEl.style.display = "none";
+          results = [];
+          selectedIndex = -1;
+        };
+
+        // Everything before the caret, split into lines. The last one is the set
+        // being typed, and the only one this cares about.
+        const linesBeforeCaret = () => inputEl.value.substring(0, inputEl.selectionStart).split("\\n");
+
+        const highlight = () => {
+          Array.from(resultsEl.children).forEach((item, index) => {
+            item.style.background = index === selectedIndex ? "#eef" : "";
+          });
+        };
+
+        // Genre tags are one per line as well, and an act's genres add to whatever
+        // the gig already carries rather than replacing it.
+        const applyGenres = (genres) => {
+          const tags = genreEl.value.split("\\n").map((tag) => tag.trim()).filter((tag) => tag !== "");
+          (genres || []).forEach((genre) => {
+            if (!tags.includes(genre)) tags.push(genre);
+          });
+          genreEl.value = tags.join("\\n");
+        };
+
+        const choose = (act) => {
+          const lines = linesBeforeCaret();
+          const after = inputEl.value.substring(inputEl.selectionStart);
+          // set_list_name, not label - see Lml::Act#set_list_name.
+          lines[lines.length - 1] = `${act.set_list_name} | `;
+          const before = lines.join("\\n");
+          inputEl.value = before + after;
+          inputEl.setSelectionRange(before.length, before.length);
+          applyGenres(act.genres);
+          close();
+          inputEl.focus();
+        };
+
+        const render = (found) => {
+          resultsEl.innerHTML = "";
+          results = found;
+          if (!results.length) { close(); return; }
+          results.forEach((act, index) => {
+            const item = document.createElement("div");
+            item.textContent = act.label;
+            item.style.cssText = "padding: 6px 10px; cursor: pointer;";
+            item.addEventListener("mouseover", () => { selectedIndex = index; highlight(); });
+            item.addEventListener("mousedown", (e) => {
+              e.preventDefault();
+              choose(act);
+            });
+            resultsEl.appendChild(item);
+          });
+          resultsEl.style.display = "block";
+          selectedIndex = 0;
+          highlight();
+        };
+
+        const search = async () => {
+          const lines = linesBeforeCaret();
+          const q = lines[lines.length - 1].trim();
+          // Past the first pipe the line has already named its act.
+          if (q.includes("|") || q.length < 2) { close(); return; }
+          try {
+            const response = await fetch(`${endpoint}?q=${encodeURIComponent(q)}`, { headers: { Accept: "application/json" } });
+            render(await response.json());
+          } catch (e) {
+            close();
+          }
+        };
+
+        inputEl.addEventListener("input", () => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(search, 250);
+        });
+
+        inputEl.addEventListener("keydown", (e) => {
+          if (resultsEl.style.display !== "block" || !results.length) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedIndex = (selectedIndex + 1) % results.length;
+            highlight();
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedIndex = (selectedIndex - 1 + results.length) % results.length;
+            highlight();
+          } else if (e.key === "Enter" || e.key === "Tab") {
+            e.preventDefault();
+            if (selectedIndex >= 0) choose(results[selectedIndex]);
+          } else if (e.key === "Escape") {
+            close();
+          }
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!inputEl.contains(e.target) && !resultsEl.contains(e.target)) close();
+        });
+      }
     </script>
   HEAD
 

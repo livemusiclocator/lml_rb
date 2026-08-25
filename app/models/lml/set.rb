@@ -28,15 +28,7 @@ module Lml
     belongs_to :act
 
     def line
-      act_description = act.name
-      if act.location
-        act_description = if act.country
-                            "#{act_description} (#{act.location}/#{act.country})"
-                          else
-                            "#{act_description} (#{act.location}/Australia)"
-                          end
-      end
-      "#{act_description} | #{start_time} | #{finish_time} | #{stage}"
+      "#{act.set_list_name} | #{start_time} | #{finish_time} | #{stage}"
     end
 
     def gig_label

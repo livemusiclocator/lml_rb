@@ -132,5 +132,15 @@ module Lml
     def search_label
       label
     end
+
+    # The act half of a set list line, which has to round trip through
+    # find_or_create_act_from_line!. Deliberately not #label: that renders the
+    # country in the parens, and parsing it back reads a country as a location,
+    # so completing a set line with a label rewrites the act it names.
+    def set_list_name
+      return name unless location
+
+      "#{name} (#{location}/#{country || "Australia"})"
+    end
   end
 end

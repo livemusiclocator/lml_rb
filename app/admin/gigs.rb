@@ -329,6 +329,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     end
     script <<~SCRIPT.html_safe
       attachSearchAutocomplete("lml_gig_venue", "/venues/search", "Select Venue");
+      attachSetListAutocomplete("lml_gig_set_list", "/acts/search", "lml_gig_genre_tag_list");
     SCRIPT
     f.actions
   end

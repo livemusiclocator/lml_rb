@@ -75,6 +75,66 @@ describe "admin autocomplete pickers", type: :system do
     end
   end
 
+  # The set list is a textarea rather than a label/id pair, so it has its own
+  # picker: the query is the line the caret is on, and choosing completes that
+  # line and copies the act's genres onto the gig.
+  describe "the gig form set list" do
+    before do
+      @act.update!(location: "melbourne", genres: ["punk", "garage rock"])
+      visit "/admin/gigs/new"
+    end
+
+    it "suggests matching acts for the line being typed" do
+      fill_in "lml_gig_set_list", with: "amyl"
+
+      expect(page).to have_css("#lml_gig_set_list_results", text: "Amyl and the Sniffers (Australia)")
+    end
+
+    # Not the label: "(Australia)" parses back as a location, so completing with
+    # a label would rewrite the act it just named. See Lml::Act#set_list_name.
+    it "completes the line as a set line names the act" do
+      fill_in "lml_gig_set_list", with: "amyl"
+      within("#lml_gig_set_list_results") { find("div", text: "Amyl and the Sniffers").click }
+
+      expect(find("#lml_gig_set_list").value).to eq("Amyl and the Sniffers (melbourne/Australia) | ")
+    end
+
+    it "adds the chosen act's genres to the gig's genre tags" do
+      fill_in "lml_gig_set_list", with: "amyl"
+      within("#lml_gig_set_list_results") { find("div", text: "Amyl and the Sniffers").click }
+
+      expect(find("#lml_gig_genre_tag_list").value).to eq("punk\ngarage rock")
+    end
+
+    it "keeps the tags already there and does not repeat one" do
+      fill_in "lml_gig_genre_tag_list", with: "punk\nlocal"
+      fill_in "lml_gig_set_list", with: "amyl"
+      within("#lml_gig_set_list_results") { find("div", text: "Amyl and the Sniffers").click }
+
+      expect(find("#lml_gig_genre_tag_list").value).to eq("punk\nlocal\ngarage rock")
+    end
+
+    it "completes the line the caret is on, not the first one" do
+      fill_in "lml_gig_set_list", with: "The Supports | 8:00pm\namyl"
+      within("#lml_gig_set_list_results") { find("div", text: "Amyl and the Sniffers").click }
+
+      expect(find("#lml_gig_set_list").value)
+        .to eq("The Supports | 8:00pm\nAmyl and the Sniffers (melbourne/Australia) | ")
+    end
+
+    it "suggests nothing once the line has named its act" do
+      fill_in "lml_gig_set_list", with: "amyl | 9:00pm"
+
+      expect(page).to have_no_css("#lml_gig_set_list_results div")
+    end
+
+    it "suggests nothing for a single character" do
+      fill_in "lml_gig_set_list", with: "a"
+
+      expect(page).to have_no_css("#lml_gig_set_list_results div")
+    end
+  end
+
   describe "the upload form" do
     it "suggests matching venues" do
       visit "/admin/uploads/new"
