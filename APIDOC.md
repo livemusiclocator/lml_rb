@@ -1,4 +1,4 @@
-# Live Music Locatior - API Documentation
+# Live Music Locator - API Documentation
 
 ## Introduction
 
@@ -296,4 +296,146 @@ curl https://api.lml.live/gigs/for/melbourne/2025-01-06 | jq '.[:1]'
     "prices": []
   }
 ]
+```
+#### GET /gigs/feed
+
+An RSS 2.0 feed of every gig from today to seven days out, across all locations. Not JSON, and takes no parameters - it is the feed the "How To Use" page points subscribers at.
+
+Params: None
+
+Example:
+
+```
+curl https://api.lml.live/gigs/feed
+```
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Live Music Locator - gig feed</title>
+    <description>Discover all live music events in the City of Yarra.</description>
+    <link>https://lml.live</link>
+    <language>en</language>
+    <item>
+      <title>ITRI of the Sands – August Residency Night 4 - The Workers Club (Melbourne) - Tue, 25 Aug 2026</title>
+      <description>ITRI of the Sands – August Residency Night 4 - The Workers Club (Melbourne) - Tue, 25 Aug 2026</description>
+      <author>LML</author>
+      <pubDate>Wed, 18 Mar 2026 18:28:56 +1000</pubDate>
+      <link>https://lml.live/gigs/1c0dd490-2fb4-4f63-97cc-a1573cfa2f95</link>
+      <guid>https://lml.live/gigs/1c0dd490-2fb4-4f63-97cc-a1573cfa2f95</guid>
+    </item>
+  </channel>
+</rss>
+```
+
+### Acts
+
+#### GET /acts/:id
+
+Find an act by id, with the gigs it is playing from today onwards. Each upcoming gig carries the venue it is at.
+
+Params:
+
+```
+id: UUID (required)
+```
+
+Example:
+
+```
+curl https://api.lml.live/acts/cc3207f3-8ad3-4b16-8bfd-48a6c9df99c9 | jq
+```
+
+```
+{
+  "id": "cc3207f3-8ad3-4b16-8bfd-48a6c9df99c9",
+  "name": "Stevenson's Rockets",
+  "genres": null,
+  "upcoming_gigs": [
+    {
+      "id": "fa574b83-c3fd-4705-aa15-816c6e09c37a",
+      "name": "Jazz on Wednesday Nights - Stevenson's Rockets (Live)",
+      "date": "2026-08-26",
+      "start_time": "18:00",
+      "start_timestamp": "2026-08-26T18:00:00.000+10:00",
+      "ticketing_url": "https://bookings.nowbookit.com/?accountid=451752fd-fa6a-4a9f-8adc-3bcee1635ff4&venueid=7232",
+      "status": "confirmed",
+      "ticket_status": null,
+      "venue": {
+        "id": "fa92ec27-baf8-4353-b57b-adaeedfba807",
+        "name": "The Emerald",
+        "address": "415 Clarendon St, South Melbourne VIC 3205",
+        "capacity": null,
+        "website": "http://www.theemeraldhotel.com.au/",
+        "postcode": "3205",
+        "vibe": "",
+        "tags": [],
+        "location_url": "https://maps.app.goo.gl/rJJzEnSBEzFVwX2y7",
+        "latitude": -37.8372641,
+        "longitude": 144.9627459
+      }
+    }
+  ]
+}
+```
+
+### Venues
+
+#### GET /venues/:id
+
+Find a venue by id, with the gigs it is hosting from today onwards. This is the mirror of `/acts/:id`: each upcoming gig carries its sets and the acts playing them, rather than the venue.
+
+Params:
+
+```
+id: UUID (required)
+```
+
+Example:
+
+```
+curl https://api.lml.live/venues/fa92ec27-baf8-4353-b57b-adaeedfba807 | jq
+```
+
+```
+{
+  "id": "fa92ec27-baf8-4353-b57b-adaeedfba807",
+  "name": "The Emerald",
+  "address": "415 Clarendon St, South Melbourne VIC 3205",
+  "capacity": null,
+  "website": "http://www.theemeraldhotel.com.au/",
+  "postcode": "3205",
+  "vibe": "",
+  "tags": [],
+  "location_url": "https://maps.app.goo.gl/rJJzEnSBEzFVwX2y7",
+  "latitude": -37.8372641,
+  "longitude": 144.9627459,
+  "upcoming_gigs": [
+    {
+      "id": "fa574b83-c3fd-4705-aa15-816c6e09c37a",
+      "name": "Jazz on Wednesday Nights - Stevenson's Rockets (Live)",
+      "date": "2026-08-26",
+      "start_time": "18:00",
+      "start_timestamp": "2026-08-26T18:00:00.000+10:00",
+      "ticketing_url": "https://bookings.nowbookit.com/?accountid=451752fd-fa6a-4a9f-8adc-3bcee1635ff4&venueid=7232",
+      "status": "confirmed",
+      "ticket_status": null,
+      "sets": [
+        {
+          "start_time": "18:00",
+          "start_timestamp": "2026-08-26T18:00:00.000+10:00",
+          "duration": null,
+          "finish_time": null,
+          "finish_timestamp": null,
+          "act": {
+            "id": "cc3207f3-8ad3-4b16-8bfd-48a6c9df99c9",
+            "name": "Stevenson's Rockets",
+            "genres": null
+          }
+        }
+      ]
+    }
+  ]
+}
 ```
