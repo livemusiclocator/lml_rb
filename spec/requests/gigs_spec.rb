@@ -18,6 +18,16 @@ describe "gigs" do
       )
     end
 
+    # The bare api host answers with the same signpost. It used to 301 to the
+    # consumer gig guide - a leftover from when it redirected to /admin and the
+    # api host was the whole app, long before www existed.
+    it "answers on the bare api host too" do
+      get "/"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body["documentation"]).to eq("http://api.lml.live/docs")
+    end
+
     # Mounted at /api/gigs on www as well, where /docs is a different route to
     # the same controller - so the signpost has to follow the host it is on.
     it "points at the documentation on the host it was asked on" do

@@ -112,8 +112,14 @@ Rails.application.routes.draw do
       mount GoodJob::Engine => "/good_job"
     end
 
-    # TODO: we could redirect to web_root if we get the host config working
-    get "/", to: redirect("https://www.livemusiclocator.com.au")
+    # The bare api host is the most requested path on it, and every one of those
+    # requests used to be bounced to the consumer gig guide. Someone typing or
+    # curling api.lml.live wants the api, so answer with the signpost /gigs gives:
+    # the name, the attribution, and where the documentation is.
+    #
+    # Named api_root because the :the_api concern already took the plain `root`
+    # name for /gigs, which is the same action.
+    get "/", to: "api/gigs#index", as: :api_root, defaults: { format: "json" }
     # api.lml.live/gigs - including the main api concerns documente above
 
     scope "gigs" do
