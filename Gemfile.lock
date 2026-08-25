@@ -666,6 +666,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kramdown
+  kramdown-parser-gfm
   lefthook
   letter_opener
   meta-tags
@@ -691,4 +692,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   4.0.16
+  4.0.16

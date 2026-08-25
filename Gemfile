@@ -103,7 +103,11 @@ gem "faraday"
 gem "google-apis-sheets_v4"
 gem "googleauth"
 
+# DocsController renders APIDOC.md with input: "GFM". kramdown lazily requires
+# the parser gem, which was only ever installed as a transitive dependency of
+# solargraph - a development gem - so /docs 500ed in production for months.
 gem "kramdown"
+gem "kramdown-parser-gfm"
 gem "ruby-openai"
 
 gem "schema_dot_org", "~> 2.5"
