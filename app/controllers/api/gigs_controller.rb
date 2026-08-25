@@ -15,75 +15,21 @@ module Api
     # Everything else here is public API; the picker is admin only.
     before_action :authenticate_admin_user!, only: :search
 
+    # A signpost, not a hypermedia document. This used to return a HAL shaped
+    # `links` object of pre-baked query urls: every one of them hardcoded to
+    # location=castlemaine, and the `on_date` entry flagged `templated: true`
+    # over an href that was not a uri template - a TODO admitted as much. No
+    # client could traverse it and none tried. The documentation is the thing
+    # people read, so point at it.
+    #
+    # request.base_url rather than a route helper because /docs is mounted under
+    # two subdomain constraints and this action is mounted under both of them.
     def index
-      @links = [
-        {
-          id: "_self",
-          href: polymorphic_url(
-            [:root],
-            format: request.params[:format],
-          ),
-        },
-        {
-          id: "default",
-          href: polymorphic_url(
-            [:query],
-            format: request.params[:format],
-          ),
-        },
-        {
-          id: "today",
-          href: polymorphic_url(
-            [:query],
-            format: request.params[:format],
-            location: "castlemaine",
-            date_from: Date.today,
-            date_to: Date.today,
-          ),
-        },
-        {
-          id: "next_seven_days",
-          href: polymorphic_url(
-            [:query],
-            format: request.params[:format],
-            location: "castlemaine",
-            date_from: Date.today,
-            date_to: Date.today.advance(days: 7),
-          ),
-        },
-        {
-          id: "this_weekend",
-          href: polymorphic_url(
-            [:query],
-            format: request.params[:format],
-            location: "castlemaine",
-            date_from: Date.today.end_of_week.advance(days: -2),
-            date_to: Date.today.end_of_week,
-          ),
-        },
-        {
-          id: "next_weekend",
-          href: polymorphic_url(
-            [:query],
-            format: request.params[:format],
-            location: "castlemaine",
-            date_from: Date.today.next_week.end_of_week.advance(days: -2),
-            date_to: Date.today.next_week.end_of_week,
-          ),
-        },
-        # TODO: technically supposed to supply this as {?date} but that gets escaped so...
-        {
-          id: "on_date",
-          templated: true,
-          href: polymorphic_url(
-            [:query],
-            format: request.params[:format],
-            location: "castlemaine",
-            date_from: "date",
-            date_to: "date",
-          ),
-        },
-      ]
+      @index = {
+        name: "Live Music Locator API",
+        documentation: "#{request.base_url}/docs",
+        attribution: "Data courtesy of Live Music Locator: https://lml.live",
+      }
     end
 
     def for

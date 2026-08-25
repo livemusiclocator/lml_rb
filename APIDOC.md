@@ -24,7 +24,7 @@ All API endpoints are open and do not require authentication.
 
 #### GET /gigs
 
-Index endpoint which returns a list of commonly used API queries.
+A signpost to this documentation. It does not return gigs - use `/gigs/query` below.
 
 Params: None
 
@@ -36,30 +36,9 @@ curl https://api.lml.live/gigs | jq
 
 ```
 {
-  "links": {
-    "_self": {
-      "href": "https://api.lml.live/gigs"
-    },
-    "default": {
-      "href": "https://api.lml.live/gigs/query"
-    },
-    "today": {
-      "href": "https://api.lml.live/gigs/query?date_from=2025-01-06&date_to=2025-01-06&location=castlemaine"
-    },
-    "next_seven_days": {
-      "href": "https://api.lml.live/gigs/query?date_from=2025-01-06&date_to=2025-01-13&location=castlemaine"
-    },
-    "this_weekend": {
-      "href": "https://api.lml.live/gigs/query?date_from=2025-01-10&date_to=2025-01-12&location=castlemaine"
-    },
-    "next_weekend": {
-      "href": "https://api.lml.live/gigs/query?date_from=2025-01-17&date_to=2025-01-19&location=castlemaine"
-    },
-    "on_date": {
-      "href": "https://api.lml.live/gigs/query?date_from=date&date_to=date&location=castlemaine",
-      "templated": true
-    }
-  }
+  "name": "Live Music Locator API",
+  "documentation": "https://api.lml.live/docs",
+  "attribution": "Data courtesy of Live Music Locator: https://lml.live"
 }
 ```
 
@@ -297,6 +276,7 @@ curl https://api.lml.live/gigs/for/melbourne/2025-01-06 | jq '.[:1]'
   }
 ]
 ```
+
 #### GET /gigs/feed
 
 An RSS 2.0 feed of every gig from today to seven days out, across all locations. Not JSON, and takes no parameters - it is the feed the "How To Use" page points subscribers at.

@@ -8,39 +8,24 @@ describe "gigs" do
   # (todo: add web request tests which will need www.)
   before { host! "api.lml.live" }
   describe "index" do
-    it "returns links to query endpoints" do
-      travel_to(Time.iso8601("2001-06-02T00:00:00Z")) do
-        get "/gigs"
-      end
+    it "signposts the documentation" do
+      get "/gigs"
 
-      expect(response.body).to include_json(
-        {
-          "links" => {
-            "_self" => {
-              "href" => "http://api.lml.live/gigs",
-            },
-            "default" => {
-              "href" => "http://api.lml.live/gigs/query",
-            },
-            "next_seven_days" => {
-              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-09&location=castlemaine",
-            },
-            "next_weekend" => {
-              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-08&date_to=2001-06-10&location=castlemaine",
-            },
-            "on_date" => {
-              "href" => "http://api.lml.live/gigs/query?date_from=date&date_to=date&location=castlemaine",
-              "templated" => true,
-            },
-            "this_weekend" => {
-              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-01&date_to=2001-06-03&location=castlemaine",
-            },
-            "today" => {
-              "href" => "http://api.lml.live/gigs/query?date_from=2001-06-02&date_to=2001-06-02&location=castlemaine",
-            },
-          },
-        },
+      expect(response.parsed_body).to eq(
+        "name" => "Live Music Locator API",
+        "documentation" => "http://api.lml.live/docs",
+        "attribution" => "Data courtesy of Live Music Locator: https://lml.live",
       )
+    end
+
+    # Mounted at /api/gigs on www as well, where /docs is a different route to
+    # the same controller - so the signpost has to follow the host it is on.
+    it "points at the documentation on the host it was asked on" do
+      host! "www.livemusiclocator.com.au"
+
+      get "/api/gigs"
+
+      expect(response.parsed_body["documentation"]).to eq("http://www.livemusiclocator.com.au/docs")
     end
   end
 
