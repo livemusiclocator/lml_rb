@@ -17,6 +17,17 @@ module SchemaDotOrg
     validated_attr :name, type: String, presence: false
   end
 
+  # An act. Deliberately not the gem's Organization, which MusicGroup descends
+  # from in the real vocabulary: that one requires a logo and a url, and we hold
+  # neither for an act.
+  class MusicGroup < SchemaDotOrg::SchemaType
+    validated_attr :name, type: String, allow_nil: false
+    validated_attr :genre, type: Array, allow_nil: true
+    # Every other page that identifies the same artist, which is what the
+    # bandcamp/spotify/wikipedia links we keep actually are.
+    validated_attr :sameAs, type: Array, allow_nil: true
+  end
+
   class Event < SchemaDotOrg::SchemaType
     validated_attr :name, type: String, allow_nil: false
     validated_attr :startDate, type: Date

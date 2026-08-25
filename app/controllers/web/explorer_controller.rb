@@ -32,11 +32,5 @@ module Web
             .permit(:location, :date_range, :custom_date, :edition_id, :venues, genre: [])
             .slice(:location, :date_range, :custom_date, :genre)
     end
-
-    private
-
-    def init_explorer_config
-      @explorer_config = Web::ExplorerConfig.find_by_edition_id(params[:edition_id]) || Web::ExplorerConfig.find_by_edition_id("main")
-    end
   end
 end

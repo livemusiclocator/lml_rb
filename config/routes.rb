@@ -20,6 +20,11 @@ Rails.application.routes.draw do
     scope "gigs" do
       get ":id", to: "explorer#show"
     end
+    # The spa routes /acts/:id client side; this is the page it lands on, so a
+    # crawler and a cold load get the act rather than an empty shell.
+    scope "acts" do
+      get ":id", to: "acts#show", constraints: { id: uuid }
+    end
     get "/events", to: "pages#show", id: "events", section: "events", as: :web_events_page
     get "/about", to: "pages#show", id: "about", section: "about", as: :web_about_page
     get "/about/*id", to: "pages#show", section: "about", as: :web_about_section_page

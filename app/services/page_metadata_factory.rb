@@ -46,8 +46,32 @@ class PageMetadataFactory
       { title: @object.name }
     end
   end
+
+  class ActGenerator < BaseGenerator
+    # The links we keep for an act are exactly what sameAs is for: other pages
+    # that identify the same artist. website first, then alphabetical, matching
+    # the order the json api renders them in.
+    SAME_AS = %i[
+      website bandcamp_url facebook_url instagram_url linktree_url
+      musicbrainz_url rym_url spotify_url wikipedia_url youtube_url
+    ].freeze
+
+    def generate_schema_dot_org
+      SchemaDotOrg::MusicGroup.new(
+        name: @object.name,
+        genre: @object.genres.presence,
+        sameAs: SAME_AS.filter_map { |link| @object.public_send(link) }.presence,
+      )
+    end
+
+    def generate_meta_tags
+      { title: @object.name }
+    end
+  end
+
   # TODO: avoid using type names here as they play havoc with testing
   GENERATORS = {
+    "Lml::Act" => ActGenerator,
     "Lml::Gig" => GigGenerator,
     "Lml::Venue" => VenueGenerator,
     "Web::GigSearch" => GigSearchGenerator,

@@ -35,6 +35,55 @@ RSpec.describe "PageMetadataFactory" do
     end
   end
 
+  # Instance variables in a before block, per the repo convention - the let based
+  # contexts around this one predate it.
+  context "with act page data" do
+    before do
+      @act = build(:lml_act,
+                   name: "Amyl and the Sniffers",
+                   genres: ["punk", "garage rock"],
+                   website: "https://amyl.example",
+                   instagram: "amylandthesniffers",)
+    end
+
+    describe "generate_schema_dot_org_for" do
+      it "creates a MusicGroup schema object" do
+        schema = PageMetadataFactory.generate_schema_dot_org_for(@act)
+
+        expect(schema).to be_a(SchemaDotOrg::MusicGroup)
+          .and have_attributes(name: "Amyl and the Sniffers", genre: ["punk", "garage rock"])
+      end
+
+      # sameAs is the schema.org way of saying "these pages are the same artist",
+      # which is exactly what the handles we keep resolve to.
+      it "collects the act's other pages into sameAs" do
+        schema = PageMetadataFactory.generate_schema_dot_org_for(@act)
+
+        expect(schema.sameAs).to eq(["https://amyl.example",
+                                     "https://www.instagram.com/amylandthesniffers",])
+      end
+
+      it "leaves genre and sameAs out rather than sending empty ones" do
+        schema = PageMetadataFactory.generate_schema_dot_org_for(build(:lml_act, genres: []))
+
+        expect(schema).to have_attributes(genre: nil, sameAs: nil)
+      end
+    end
+
+    describe "to_json_ld" do
+      it "creates a script tag for embedding in an html page" do
+        expect(PageMetadataFactory.to_json_ld(@act))
+          .to include('<script type="application/ld+json">', '"@type": "MusicGroup"')
+      end
+    end
+
+    describe "to_meta_tags" do
+      it "populates the title attribute from the act name" do
+        expect(PageMetadataFactory.to_meta_tags(@act)).to include(title: "Amyl and the Sniffers")
+      end
+    end
+  end
+
   context "with gig page data" do
     let(:gig) { build(:lml_gig) }
 

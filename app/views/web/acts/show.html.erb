@@ -1,0 +1,29 @@
+<% content_for :title do %>
+    <%= @act.name %>
+<% end %>
+
+<%# What a crawler that does not run javascript sees, and what shows before the
+    spa mounts. The spa replaces all of it. %>
+<% content_for :html_fallback do %>
+  <div>
+    <h1><%= @act.name %></h1>
+    <% if @act.genres.present? %>
+      <p><%= @act.genres.join(", ") %></p>
+    <% end %>
+
+    <% gigs = @act.upcoming_gigs %>
+    <% if gigs.any? %>
+      <h2>Upcoming gigs</h2>
+      <ul>
+        <% gigs.each do |gig| %>
+          <li>
+            <%= link_to gig.name, "/gigs/#{gig.id}" %>
+            <%= gig.date %><%= " at #{gig.venue.name}" if gig.venue %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No upcoming gigs.</p>
+    <% end %>
+  </div>
+<% end %>
