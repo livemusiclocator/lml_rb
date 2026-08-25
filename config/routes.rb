@@ -9,9 +9,9 @@ Rails.application.routes.draw do
 
   # all the routes making up the main parts of the api
   concern :the_api do
-    root to: "gigs#index", defaults: { format: "json" }
-    get "query", to: "gigs#query", defaults: { format: "json" }
-    get ":id", to: "gigs#show", defaults: { format: "json" }
+    root to: "api/gigs#index", defaults: { format: "json" }
+    get "query", to: "api/gigs#query", defaults: { format: "json" }
+    get ":id", to: "api/gigs#show", defaults: { format: "json" }
   end
 
   # all the routes providing the standard front end
@@ -104,13 +104,13 @@ Rails.application.routes.draw do
       # These have to go first or the_api's ":id" swallows them - /gigs/autocomplete
       # spent its whole life being routed to gigs#show with id "autocomplete".
       # TODO: add constraints to avoid this perhaps
-      get "feed", to: "gigs#feed", defaults: { format: "rss" }
-      get "search", to: "gigs#search", defaults: { format: "json" }
+      get "feed", to: "api/gigs#feed", defaults: { format: "rss" }
+      get "search", to: "api/gigs#search", defaults: { format: "json" }
 
       # the main API routes defined above
       concerns :the_api
       # some other things I am not sure need to be here?
-      get "for/:location/:date", to: "gigs#for", defaults: { format: "json" }
+      get "for/:location/:date", to: "api/gigs#for", defaults: { format: "json" }
     end
 
     # Admin-only autocomplete pickers, not public API - see PickerResults.

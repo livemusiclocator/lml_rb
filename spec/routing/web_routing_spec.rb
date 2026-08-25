@@ -25,16 +25,16 @@ end
 shared_examples "API endpoints" do |root_url|
   describe "API routes at #{root_url}" do
     it "routes #{root_url}/gigs to gigs#index" do
-      expect(get("#{root_url}/gigs")).to route_to(controller: "gigs", action: "index", format: "json")
+      expect(get("#{root_url}/gigs")).to route_to(controller: "api/gigs", action: "index", format: "json")
     end
 
     it "routes #{root_url}/gigs/ABCDEF to gigs#show" do
-      expect(get("#{root_url}/gigs/ABCDEF")).to route_to(controller: "gigs", action: "show", id: "ABCDEF",
+      expect(get("#{root_url}/gigs/ABCDEF")).to route_to(controller: "api/gigs", action: "show", id: "ABCDEF",
                                                          format: "json",)
     end
 
     it "routes #{root_url}/gigs/query to gigs#query" do
-      expect(get("#{root_url}/gigs/query")).to route_to(controller: "gigs", action: "query", format: "json")
+      expect(get("#{root_url}/gigs/query")).to route_to(controller: "api/gigs", action: "query", format: "json")
     end
   end
 end
