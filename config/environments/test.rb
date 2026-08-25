@@ -70,6 +70,11 @@ Rails.application.configure do
     # Backstage is behind a livemusiclocator subdomain constraint, so its system
     # specs need the .localhost twin of that hostname too.
     /.*\.livemusiclocator\.com\.localhost/,
+    # The bare domains. Every pattern above requires a leading dot, so without
+    # these a request spec for the lml.live redirect gets a 403 instead of a
+    # 301. Production lists them too, unanchored; anchored here.
+    /\Alml\.live\z/,
+    /\Alivemusiclocator\.com\.au\z/,
   ]
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
