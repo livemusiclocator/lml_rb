@@ -51,9 +51,12 @@ describe "the act page" do
   it "embeds the act as json ld" do
     get "/acts/#{@act.id}"
 
-    expect(response.body).to include('"@type": "MusicGroup"')
-    expect(response.body).to include('"name": "Amyl and the Sniffers"')
-    expect(response.body).to include("https://www.instagram.com/amylandthesniffers")
+    expect(json_ld).to include(
+      "@type" => "MusicGroup",
+      "name" => "Amyl and the Sniffers",
+      "genre" => ["punk", "garage rock"],
+      "sameAs" => ["https://www.instagram.com/amylandthesniffers"],
+    )
   end
 
   it "mounts the spa" do
@@ -118,6 +121,14 @@ describe "the act page" do
 
       expect(response.body).to include("Gig not found")
     end
+  end
+
+  # Parsed rather than matched as a string: the gem pretty prints outside
+  # production and minifies in it, so an assertion on the raw body passes here
+  # and says nothing about what is actually deployed.
+  def json_ld
+    block = response.body[%r{<script type="application/ld\+json">(.*?)</script>}m, 1]
+    JSON.parse(block)
   end
 
   describe "routing", type: :routing do

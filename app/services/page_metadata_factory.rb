@@ -30,8 +30,22 @@ class PageMetadataFactory
   end
 
   class VenueGenerator < BaseGenerator
+    # Place demands an address, and a venue we have not resolved yet has none.
+    # Nil rather than an exception: to_json_ld renders nothing for nil, so the
+    # page loses its json-ld instead of falling over. Reached through a gig this
+    # was survivable - to_json_ld rescues in production - but the venue page
+    # calls to_meta_tags too, and that path has no rescue.
     def generate_schema_dot_org
+      return nil if @object.address.blank?
+
       SchemaDotOrg::Place.new(name: @object.name, address: @object.address)
+    end
+
+    # Never defined until the venue page needed one: until now a venue was only
+    # ever generated nested inside a gig's Event, which asks for the schema and
+    # not the tags, so this inherited BaseGenerator's raise.
+    def generate_meta_tags
+      { title: @object.name }
     end
   end
 

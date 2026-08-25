@@ -20,10 +20,15 @@ Rails.application.routes.draw do
     scope "gigs" do
       get ":id", to: "explorer#show"
     end
-    # The spa routes /acts/:id client side; this is the page it lands on, so a
-    # crawler and a cold load get the act rather than an empty shell.
+    # The spa routes /acts/:id and /venues/:id client side; these are the pages
+    # they land on, so a crawler and a cold load get the record rather than an
+    # empty shell. Every client side route needs one of these - a refresh or a
+    # shared link reaches rails first. See the README in the lml repo.
     scope "acts" do
       get ":id", to: "acts#show", constraints: { id: uuid }
+    end
+    scope "venues" do
+      get ":id", to: "venues#show", constraints: { id: uuid }
     end
     get "/events", to: "pages#show", id: "events", section: "events", as: :web_events_page
     get "/about", to: "pages#show", id: "about", section: "about", as: :web_about_page

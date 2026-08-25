@@ -84,6 +84,39 @@ RSpec.describe "PageMetadataFactory" do
     end
   end
 
+  context "with venue page data" do
+    before do
+      @venue = build(:lml_venue, name: "The Tote", address: "67-71 Johnston St, Collingwood VIC 3066")
+    end
+
+    it "creates a Place schema object" do
+      expect(PageMetadataFactory.generate_schema_dot_org_for(@venue))
+        .to be_a(SchemaDotOrg::Place)
+        .and have_attributes(name: "The Tote", address: "67-71 Johnston St, Collingwood VIC 3066")
+    end
+
+    # Until the venue page there was no caller for this: a venue was only ever
+    # generated nested inside a gig's Event, which asks for the schema alone, so
+    # VenueGenerator inherited BaseGenerator's raise and nobody noticed.
+    it "populates the title attribute from the venue name" do
+      expect(PageMetadataFactory.to_meta_tags(@venue)).to include(title: "The Tote")
+    end
+
+    # Place refuses a blank address, and an unresolved venue has none.
+    it "generates no schema at all for a venue with no address" do
+      expect(PageMetadataFactory.generate_schema_dot_org_for(build(:lml_venue, address: nil))).to be_nil
+    end
+
+    it "renders no json ld rather than raising for one" do
+      expect(PageMetadataFactory.to_json_ld(build(:lml_venue, address: nil))).to be_nil
+    end
+
+    it "still gives it a title" do
+      expect(PageMetadataFactory.to_meta_tags(build(:lml_venue, name: "Nowhere", address: nil)))
+        .to include(title: "Nowhere")
+    end
+  end
+
   context "with gig page data" do
     let(:gig) { build(:lml_gig) }
 
