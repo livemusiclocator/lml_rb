@@ -52,14 +52,30 @@ module Lml
     end
     scope :in_location, lambda { |location|
       if location == "anywhere"
-        # TODO: this could just be removed but I am in a bit of rush so this will do
-        return where.not(location: %w[placeholder])
+        # "anywhere" means the main edition's selectable locations, not literally
+        # every venue. A location left off that list is hidden: gigs can be
+        # entered against it and worked on without showing up in the gig guide,
+        # while `location=thatplace` still fetches them for whoever knows to ask.
+        public_locations = Web::ExplorerConfig.public_location_identifiers
+
+        # No config row, or an admin emptied the list. Falling back to everything
+        # keeps the old behaviour rather than serving an empty gig guide.
+        return where.not(location: %w[placeholder]) if public_locations.blank?
+
+        return in_locations(public_locations)
       end
       # Until we sort out locations properly, asking for 'location=melbourne' will show you everything
       # in stkilda location and melbourne (and "Melbourne"! )
       return where(location: %w[Melbourne melbourne stkilda]) if location == "melbourne"
 
       where(Venue.arel_table[:location].matches(location))
+    }
+
+    # The location column holds both "Melbourne" and "melbourne", so compare on
+    # the lowered column rather than trusting what was typed in. Table qualified
+    # because this is merged into a gigs query, and gigs has a location too.
+    scope :in_locations, lambda { |identifiers|
+      where("LOWER(venues.location) IN (?)", identifiers.map { |identifier| identifier.to_s.downcase })
     }
 
     # Venues with a gig - not hidden, not a draft - on or after this date. No upper bound, so a

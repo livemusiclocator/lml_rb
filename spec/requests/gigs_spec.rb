@@ -311,9 +311,109 @@ describe "gigs" do
         expect(response.parsed_body).to eq([])
       end
 
-      it "returns all gigs when location = anywhere" do
-        get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-08-08"
-        expect(response.parsed_body).to include(include("name" => "The One Gig You Should Not Miss Out On"))
+      # "anywhere" is the main edition's selectable locations, not literally every
+      # venue - a location left off that list is hidden, so gigs can be entered
+      # against it without turning up in the gig guide.
+      describe "location = anywhere" do
+        before do
+          @hidden_venue = Lml::Venue.create!(
+            name: "The Bendigo Bandstand",
+            location: "bendigo",
+            address: "the address",
+            postcode: 3550,
+            time_zone: "Australia/Melbourne",
+            capacity: 100,
+            website: "https://bendigobandstand.com.au",
+          )
+          Lml::Gig.create!(name: "A gig in bendigo", venue: @hidden_venue, date: "2001-06-08")
+
+          # The location column holds both spellings, so a capitalised venue has
+          # to come back for a lowercase identifier.
+          @capitalised_venue = Lml::Venue.create!(
+            name: "The Shouty Venue",
+            location: "Melbourne",
+            address: "the address",
+            postcode: 3000,
+            time_zone: "Australia/Melbourne",
+            capacity: 100,
+            website: "https://shoutyvenue.com.au",
+          )
+          Lml::Gig.create!(name: "A gig at a capitalised venue", venue: @capitalised_venue, date: "2001-06-08")
+        end
+
+        # ExplorerConfig strips any identifier with no locations row behind it, so
+        # the locations have to exist before the config will keep them.
+        def main_edition_selecting(identifiers)
+          identifiers.each do |identifier|
+            Web::Location.find_or_create_by!(internal_identifier: identifier) do |location|
+              location.name = identifier.capitalize
+              location.latitude = -37.8
+              location.longitude = 144.9
+            end
+          end
+
+          Web::ExplorerConfig.create!(
+            edition_id: "main",
+            allow_all_locations: true,
+            default_location: "anywhere",
+            selectable_locations: identifiers,
+          )
+        end
+
+        def gig_names
+          response.parsed_body.map { |gig| gig["name"] }
+        end
+
+        it "returns gigs in the locations the main edition selects" do
+          main_edition_selecting(%w[melbourne stkilda])
+
+          get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).to contain_exactly(
+            "The One Gig You Should Not Miss Out On",
+            "A gig at a capitalised venue",
+            "A gig in st kilda",
+            "Another gig in st kilda",
+          )
+        end
+
+        it "leaves out gigs in a location the main edition does not select" do
+          main_edition_selecting(%w[melbourne stkilda])
+
+          get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).not_to include("A gig in bendigo")
+        end
+
+        it "still fetches a hidden location for whoever asks for it by name" do
+          main_edition_selecting(%w[melbourne stkilda])
+
+          get "/gigs/query?location=bendigo&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).to contain_exactly("A gig in bendigo")
+        end
+
+        it "includes a location once the main edition selects it" do
+          main_edition_selecting(%w[melbourne stkilda bendigo])
+
+          get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).to include("A gig in bendigo")
+        end
+
+        it "falls back to every location when no main edition is configured" do
+          get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).to include("A gig in bendigo")
+        end
+
+        it "falls back to every location when the selectable list is empty" do
+          main_edition_selecting([])
+
+          get "/gigs/query?location=anywhere&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).to include("A gig in bendigo")
+        end
       end
 
       describe "matching sub-geographies of Melbourne" do

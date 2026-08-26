@@ -43,6 +43,17 @@ module Web
       all.pluck(:edition_id).compact + [:main]
     end
 
+    # What `location=anywhere` resolves to on the api. selectable_locations is
+    # the public set - a location left off it is hidden, so gigs can be entered
+    # against it without appearing in the gig guide.
+    #
+    # find_by rather than the `main` scope: edition_id is validated present and
+    # the main row stores the string "main", so `where(edition_id: nil)` never
+    # matches anything. Same lookup the web controllers do.
+    def self.public_location_identifiers
+      find_by(edition_id: "main")&.selectable_locations || []
+    end
+
     def locations
       return Web::Location.all if allow_all_locations
 
