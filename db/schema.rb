@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_010001) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_26_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -328,6 +328,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_010001) do
     t.string "google_place_id"
     t.string "instagram_url"
     t.float "latitude"
+    t.string "lga"
     t.string "location"
     t.string "location_url"
     t.float "longitude"

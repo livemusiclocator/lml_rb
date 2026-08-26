@@ -8,6 +8,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :facebook_url,
     :instagram_url,
     :lat_lng,
+    :lga,
     :location,
     :location_url,
     :name,
@@ -76,6 +77,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :phone
       row :address
       row :postcode
+      row :lga
       row :website do |resource|
         if resource.website.present?
           link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer")
@@ -194,6 +196,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   end
 
   form do |f|
+    # One input past Max, the same way the show block is.
+    # rubocop:disable Metrics/BlockLength
     f.inputs do
       f.input :name
       f.input(
@@ -211,6 +215,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input :phone
       f.input :address
       f.input :postcode
+      f.input :lga, hint: "Local government area, eg City of Yarra"
       f.input :website
       f.input :instagram_url
       f.input :facebook_url
@@ -221,6 +226,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input :tag_list
       f.input :notes, as: :text, input_html: { rows: 5 }
     end
+    # rubocop:enable Metrics/BlockLength
     f.actions
   end
 end

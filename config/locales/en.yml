@@ -33,3 +33,9 @@ en:
     resources:
       explorer_config:
         delete_confirmation: "Are you sure you want to delete this? It's totally gonna break the live site unless you know what you are doing !"
+  # ActiveAdmin titleizes an attribute name it has no translation for, and "Lga"
+  # is not what anyone calls a local government area.
+  activerecord:
+    attributes:
+      lml/venue:
+        lga: LGA
