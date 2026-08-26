@@ -218,7 +218,7 @@ anyway.
 | What | Where | How |
 | --- | --- | --- |
 | this app | heroku, app `live-music-locator` | `git push heroku main` (see below) |
-| the gig explorer | firebase hosting, project `lml-seo` | `./deploy_firebase` in `lml_frontend_client` |
+| the gig explorer | firebase hosting, project `lml-seo` | `make deploy` in `lml_frontend_client` |
 
 Both are manual. Tests run on CircleCI but do not gate either deploy.
 
