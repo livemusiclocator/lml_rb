@@ -15,6 +15,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     :website,
     :wikipedia,
     :youtube,
+    :alias_list,
   )
 
   filter :name_cont, label: "Name"
@@ -24,7 +25,9 @@ ActiveAdmin.register Lml::Act, as: "Act" do
   index do
     selectable_column
     column :name do |act|
-      link_to(act.name, admin_act_path(act))
+      label = act.name
+      label += " - (#{act.aliases.join(", ")})" if act.aliases.present?
+      link_to(label, admin_act_path(act))
     end
     column :country
     column :location
@@ -77,6 +80,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       end
 
       row :genre_list
+      row :alias_list
       row :created_at do |resource|
         admin_time(resource.updated_at)
       end
@@ -109,6 +113,7 @@ ActiveAdmin.register Lml::Act, as: "Act" do
       f.input :wikipedia
       f.input :youtube
       f.input :genre_list
+      f.input :alias_list
     end
     f.actions
   end
