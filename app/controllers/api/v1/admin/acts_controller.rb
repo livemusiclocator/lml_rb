@@ -44,12 +44,14 @@ module Api
         # column we add later is not writable by accident.
         def act_params
           params.require(:act).permit(*WRITABLE, genres: [])
+          params.require(:act).permit(*WRITABLE, aliases: [])
         end
 
         def serialize(act)
           act.slice(:id, :name, :country, :location, :email, :website)
              .merge(
                genres: act.genres || [],
+               aliases: act.aliases || [],
                handles: act.slice(
                  :bandcamp, :facebook, :instagram, :linktree,
                  :musicbrainz, :rym, :spotify, :wikipedia, :youtube,

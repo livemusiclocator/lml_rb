@@ -135,6 +135,14 @@ module Lml
       self.genres = value.to_s.split(",").map(&:strip)
     end
 
+    def alias_list
+      (aliases || []).join(", ")
+    end
+
+    def alias_list=(value)
+      self.aliases = value.to_s.split(",").map(&:strip)
+    end
+
     def label
       country.present? ? "#{name} (#{country})" : name
     end
