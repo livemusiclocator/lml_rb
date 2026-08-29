@@ -428,6 +428,25 @@ describe "gigs" do
                                                                         venue: { name: "The Gig Place" },  },
                                                                     ])
         end
+        # Every other location is matched with ILIKE. Melbourne was the exception
+        # for a year, an exact-match list of the two spellings anyone had seen.
+        it "returns a melbourne venue whatever its location was capitalised as" do
+          shouty_venue = Lml::Venue.create!(
+            name: "The Shouty Venue",
+            location: "MELBOURNE",
+            address: "the address",
+            postcode: 3000,
+            time_zone: "Australia/Melbourne",
+            capacity: 100,
+            website: "https://shoutyvenue.com.au",
+          )
+          Lml::Gig.create!(name: "A gig at a shouty venue", venue: shouty_venue, date: "2001-06-08")
+
+          get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
+
+          expect(response.parsed_body.map { |gig| gig["name"] }).to include("A gig at a shouty venue")
+        end
+
         it "returns venues with location=stkilda when location=stkilda" do
           get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
           expect(response.parsed_body).to match_unordered_json([

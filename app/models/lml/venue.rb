@@ -65,8 +65,9 @@ module Lml
         return in_locations(public_locations)
       end
       # Until we sort out locations properly, asking for 'location=melbourne' will show you everything
-      # in stkilda location and melbourne (and "Melbourne"! )
-      return where(location: %w[Melbourne melbourne stkilda]) if location == "melbourne"
+      # in stkilda location and melbourne. Both spellings of Melbourne used to be
+      # listed here by hand; in_locations lowers the column, so they no longer are.
+      return in_locations(%w[melbourne stkilda]) if location == "melbourne"
 
       where(Venue.arel_table[:location].matches(location))
     }
