@@ -109,6 +109,15 @@ module Lml
       google_business_status == Lml::Place::CLOSED_PERMANENTLY
     end
 
+    # Google's place ids are url safe base64 - letters, digits, hyphen, underscore, and never a
+    # space. Anything else in the column is one of Lml::VenuePlaceLookup's markers, recording a
+    # lookup that found nothing or found too much.
+    PLACE_ID = /\A[A-Za-z0-9_-]+\z/
+
+    def google_place_marker?
+      google_place_id.present? && !google_place_id.match?(PLACE_ID)
+    end
+
     def label
       location.present? ? "#{name} (#{location})" : name
     end

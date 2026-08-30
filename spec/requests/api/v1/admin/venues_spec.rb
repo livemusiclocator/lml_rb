@@ -150,4 +150,119 @@ describe "admin api venues" do
       expect(@tote.reload.google_place_id).to be_nil
     end
   end
+
+  describe "looking a venue up in google places" do
+    def places_returning(*places)
+      stub_request(:post, Lml::GooglePlacesApiClient::FIND_URL)
+        .to_return(status: 200, body: { places: places }.to_json, headers: { "Content-Type" => "application/json" })
+    end
+
+    def espy_place(id: "placeespy")
+      {
+        id: id,
+        displayName: { text: "Hotel Esplanade" },
+        formattedAddress: "11 The Esplanade, St Kilda VIC 3182",
+        businessStatus: "OPERATIONAL",
+        location: { latitude: -37.8676, longitude: 144.9756 },
+        addressComponents: [{ types: ["route"], shortText: "The Esplanade", longText: "The Esplanade" }],
+      }
+    end
+
+    it "resolves a venue and reports what it settled on" do
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["outcome"]).to eq("matched")
+      expect(body["venue"]["google_place_id"]).to eq("placeespy")
+    end
+
+    it "fills in a blank column from google" do
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(@tote.reload.latitude).to eq(-37.8676)
+    end
+
+    it "leaves a column that already has a value alone" do
+      @tote.update!(latitude: -37.0, longitude: 144.0)
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(@tote.reload.latitude).to eq(-37.0)
+    end
+
+    it "records a marker when google has nothing, rather than looking like it never ran" do
+      places_returning
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["outcome"]).to eq("no_match")
+      expect(@tote.reload.google_place_id).to eq("no match")
+    end
+
+    it "records a marker when google offers a choice" do
+      places_returning(espy_place(id: "one"), espy_place(id: "two"))
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["outcome"]).to eq("ambiguous")
+      expect(@tote.reload.google_place_id).to eq("ambiguous - 2 matches")
+    end
+
+    it "spends nothing on a venue that has already been asked about" do
+      @tote.update!(google_place_id: "no match")
+      request = places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["outcome"]).to eq("skipped")
+      expect(request).not_to have_been_requested
+    end
+
+    it "asks again when forced" do
+      @tote.update!(google_place_id: "no match")
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", params: { force: true }, headers: @headers
+
+      expect(body["outcome"]).to eq("matched")
+      expect(@tote.reload.google_place_id).to eq("placeespy")
+    end
+
+    it "reads force as the string a form or curl would send it as" do
+      @tote.update!(google_place_id: "no match")
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", params: { force: "true" }, headers: @headers
+
+      expect(body["outcome"]).to eq("matched")
+    end
+
+    it "does not treat force=false as a reason to spend" do
+      @tote.update!(google_place_id: "no match")
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", params: { force: "false" }, headers: @headers
+
+      expect(body["outcome"]).to eq("skipped")
+    end
+
+    it "blames google rather than itself when places will not answer" do
+      stub_request(:post, Lml::GooglePlacesApiClient::FIND_URL).to_return(status: 403, body: "api not enabled")
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(response).to have_http_status(:bad_gateway)
+      expect(body["error"]).to include("Places API")
+    end
+
+    it "needs an admin token like everything else here" do
+      post "/v1/admin/venues/#{@tote.id}/place_lookup"
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
 end

@@ -162,7 +162,11 @@ Rails.application.routes.draw do
     # against this and never come back to update.
     namespace :v1, module: "api/v1", defaults: { format: "json" } do
       namespace :admin do
-        resources :venues, only: [:index, :show, :create, :update]
+        # place_lookup spends money at Google, so it is a POST on the member
+        # rather than something a GET could set off by accident.
+        resources :venues, only: [:index, :show, :create, :update] do
+          post "place_lookup", on: :member
+        end
         resources :acts, only: [:index, :show, :create, :update]
         # No update: an upload is a record of what was sent, and reprocessing
         # edited content is a different thing to editing the record.

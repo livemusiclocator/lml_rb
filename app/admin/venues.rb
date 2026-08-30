@@ -131,13 +131,20 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
     # rubocop:enable Metrics/BlockLength
 
-    # Derived data, so it is shown but never edited - neither column is in permit_params, so the
-    # form cannot reach them either. Written by Lml::VenueImport; see
+    # Derived data, so it is shown but never edited - none of these columns is in permit_params, so
+    # the form cannot reach them either. Written by Lml::VenueImport and Lml::VenuePlaceLookup; see
     # doc/google_sheets_venue_import.md.
     panel "Google Places" do
-      if resource.address_components.blank?
+      if resource.google_place_marker?
+        para do
+          text_node "The last lookup did not settle on one place: "
+          span resource.google_place_id, class: "status_tag orange"
+        end
+        para "Nothing was written onto the venue. Correcting the name or address here and then " \
+             "forcing another lookup through the admin API is the way forward.", class: "inline-hints"
+      elsif resource.address_components.blank?
         para "Not resolved through the Places API. Venues added by hand have none until an " \
-             "import matches them."
+             "import matches them, or until somebody looks one up here."
       else
         attributes_table_for resource do
           row("Place ID") { resource.google_place_id }
@@ -155,7 +162,39 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
           row("All components") { pretty_json(resource.address_components) }
         end
       end
+
+      # A real form with an authenticity token, not `link_to method: :post` - ActiveAdmin 3.5 ships
+      # no rails-ujs, so that renders a GET and silently does nothing. See CLAUDE.md.
+      form action: lookup_place_admin_venue_path(resource), method: :post do
+        text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+
+        # One billable Places request per click, so the button closes the moment the column holds
+        # an answer of any kind. Asking again is deliberately awkward - it is `force` on the admin
+        # API's POST /v1/admin/venues/:id/place_lookup, and nothing in here.
+        if resource.google_place_id.present?
+          input type: :submit, value: "Look up in Google Places", disabled: "disabled"
+          para "Already answered. Asking Google again costs another request, so it is only " \
+               "available through the admin API, with force.", class: "inline-hints"
+        else
+          input type: :submit, value: "Look up in Google Places"
+          para "Searches Places for this venue's name and address. Fills in only the columns " \
+               "that are still blank.", class: "inline-hints"
+        end
+      end
     end
+  end
+
+  member_action :lookup_place, method: :post do
+    outcome = Lml::VenuePlaceLookup.call(resource)
+
+    redirect_to admin_venue_path(resource), notice: {
+      Lml::VenuePlaceLookup::MATCHED => "Matched one place. Blank columns filled in from Google.",
+      Lml::VenuePlaceLookup::NO_MATCH => "Places found nothing for that name and address.",
+      Lml::VenuePlaceLookup::AMBIGUOUS => "Places found more than one candidate, so nothing was written.",
+      Lml::VenuePlaceLookup::SKIPPED => "Already looked up - nothing spent.",
+    }.fetch(outcome)
+  rescue Lml::GooglePlacesApiClient::Error => e
+    redirect_to admin_venue_path(resource), alert: "Places API error: #{e.message}"
   end
 
   sidebar "Links", only: :show do
