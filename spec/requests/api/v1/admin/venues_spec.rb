@@ -51,6 +51,14 @@ describe "admin api venues" do
       expect(body["venue"]).to include("id" => @tote.id, "name" => "The Tote", "location" => "melbourne")
     end
 
+    it "returns the local government area, which is not derivable from location" do
+      @tote.update!(lga: "City of Yarra")
+
+      get "/v1/admin/venues/#{@tote.id}", headers: @headers
+
+      expect(body["venue"]).to include("lga" => "City of Yarra")
+    end
+
     it "returns a json 404 for a venue that does not exist" do
       get "/v1/admin/venues/#{SecureRandom.uuid}", headers: @headers
 
@@ -67,6 +75,14 @@ describe "admin api venues" do
 
       expect(response).to have_http_status(:created)
       expect(Lml::Venue.find(body["venue"]["id"]).name).to eq("The Curtin")
+    end
+
+    it "sets the local government area" do
+      post "/v1/admin/venues", headers: @headers, params: {
+        venue: { name: "The Curtin", time_zone: "Australia/Melbourne", lga: "City of Melbourne" },
+      }
+
+      expect(Lml::Venue.find(body["venue"]["id"]).lga).to eq("City of Melbourne")
     end
 
     it "reports validation failures rather than saving half a venue" do
@@ -107,6 +123,14 @@ describe "admin api venues" do
       patch "/v1/admin/venues/#{@tote.id}", headers: @headers, params: { venue: { capacity: 350 } }
 
       expect(@tote.reload.name).to eq("The Tote")
+    end
+
+    it "corrects the local government area" do
+      @tote.update!(lga: "City of Melbourne")
+
+      patch "/v1/admin/venues/#{@tote.id}", headers: @headers, params: { venue: { lga: "City of Yarra" } }
+
+      expect(@tote.reload.lga).to eq("City of Yarra")
     end
 
     it "reports validation failures without changing the venue" do

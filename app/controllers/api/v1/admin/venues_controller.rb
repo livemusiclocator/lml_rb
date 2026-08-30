@@ -11,7 +11,7 @@ module Api
         # deliberately absent - those are resolved from Google (see Lml::Place)
         # and a caller writing them by hand would silently break address matching.
         WRITABLE = %i[
-          name location address time_zone capacity vibe notes
+          name location address time_zone capacity vibe notes lga
           email phone postcode website location_url facebook_url instagram_url
           latitude longitude
         ].freeze
