@@ -148,6 +148,15 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       else
         attributes_table_for resource do
           row("Place ID") { resource.google_place_id }
+          # Built from the place id rather than stored, so it is here beside the id it comes from
+          # rather than up in Venue Details next to location_url, which means something else now.
+          row("Maps link") do
+            # Nil where a venue has components but no place id - Lml::Place writes the two together,
+            # so it means something else resolved this venue, and there is no id to build a link on.
+            if resource.google_maps_url
+              link_to("Open in Google Maps", resource.google_maps_url, target: "_blank", rel: "noopener noreferrer")
+            end
+          end
           row("Resolved name") { resource.address_components["name"] }
           row("Business status") do
             if resource.closed_permanently?

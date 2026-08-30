@@ -62,6 +62,28 @@ describe "looking a venue up in google places", type: :system do
     expect(@venue.reload.google_place_id).to eq("placeespy")
   end
 
+  it "offers a maps link built from the place id it settled on" do
+    places_returning(espy_place)
+
+    visit "/admin/venues/#{@venue.id}"
+    click_on BUTTON
+
+    link = find_link("Open in Google Maps")
+
+    expect(link[:href]).to include("query_place_id=placeespy")
+    expect(link[:href]).to include("query=The+Espy")
+  end
+
+  it "leaves location_url meaning the link a person chose" do
+    @venue.update!(location_url: "https://maps.app.goo.gl/shortlink")
+    places_returning(espy_place)
+
+    visit "/admin/venues/#{@venue.id}"
+    click_on BUTTON
+
+    expect(@venue.reload.location_url).to eq("https://maps.app.goo.gl/shortlink")
+  end
+
   it "fills in the venue's blank columns from google" do
     places_returning(espy_place)
 

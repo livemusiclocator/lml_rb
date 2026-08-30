@@ -194,6 +194,31 @@ describe "admin api venues" do
       expect(@tote.reload.latitude).to eq(-37.0)
     end
 
+    it "hands back a maps link built from the place id" do
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["venue"]["google_maps_url"]).to include("query_place_id=placeespy")
+    end
+
+    it "leaves location_url to mean the link a person chose" do
+      @tote.update!(location_url: "https://maps.app.goo.gl/shortlink")
+      places_returning(espy_place)
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["venue"]["location_url"]).to eq("https://maps.app.goo.gl/shortlink")
+    end
+
+    it "has no maps link for a venue it could not settle" do
+      places_returning
+
+      post "/v1/admin/venues/#{@tote.id}/place_lookup", headers: @headers
+
+      expect(body["venue"]["google_maps_url"]).to be_nil
+    end
+
     it "records a marker when google has nothing, rather than looking like it never ran" do
       places_returning
 

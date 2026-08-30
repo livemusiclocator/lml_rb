@@ -118,6 +118,23 @@ module Lml
       google_place_id.present? && !google_place_id.match?(PLACE_ID)
     end
 
+    # Built rather than stored, which is why Lml::Place::FILL_INS leaves location_url alone. Two
+    # reasons: deriving it means we are never stuck with whichever URL shape we preferred the day a
+    # venue was resolved, and it keeps location_url meaning "the link somebody chose".
+    #
+    # `query` is not decoration - the Maps URLs API requires it alongside query_place_id and falls
+    # back to searching it if the id has gone stale, which the googleMapsUri `?cid=` form has no
+    # equivalent of. It also makes the link readable, where a bare cid is a 19 digit number.
+    MAPS_SEARCH_URL = "https://www.google.com/maps/search/"
+
+    def google_maps_url
+      return nil unless google_place_id.present? && !google_place_marker?
+
+      query = [name, address].compact_blank.join(", ")
+
+      "#{MAPS_SEARCH_URL}?#{{ api: 1, query: query, query_place_id: google_place_id }.to_query}"
+    end
+
     def label
       location.present? ? "#{name} (#{location})" : name
     end

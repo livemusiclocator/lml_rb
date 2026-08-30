@@ -376,7 +376,6 @@ together costs exactly what the original four fields did:
 | Field | Used for |
 | --- | --- |
 | `id`, `displayName`, `formattedAddress`, `location`, `addressComponents` | Matching, and the address itself |
-| `googleMapsUri` | `location_url` |
 | `timeZone` | `time_zone`, where the sheet gave none — see below |
 | `businessStatus` | `google_business_status` — spotting venues that have closed |
 
@@ -530,7 +529,7 @@ Three different rules, because "derived" is not one thing:
 | --- | --- | --- |
 | Identity | `address_components`, `google_place_id` | Written **once**, then never again |
 | Volatile | `google_business_status` | Rewritten **every** time |
-| Fill-ins | `time_zone`, `location_url`, `address`, `postcode`, `latitude`, `longitude` | Written **only if the venue is blank** |
+| Fill-ins | `time_zone`, `address`, `postcode`, `latitude`, `longitude` | Written **only if the venue is blank** |
 
 Identity is written once because re-resolving could point a venue at a *different*
 place — a name match on two venues sharing a name is enough — and silently moving
@@ -543,6 +542,33 @@ here that genuinely changes, and a stale value is the whole problem.
 
 Fill-ins never overwrite, because a blank column is a gap and a filled one is
 somebody's research. Google is not a good enough reason to argue with a person.
+
+### The maps link is built, not stored
+
+`location_url` used to be a fill-in, taking `googleMapsUri`. It no longer is, and
+`googleMapsUri` has come out of the field mask with it.
+
+A maps link is *derivable* from the place id, so storing one froze whichever URL
+shape we happened to prefer the day a venue was resolved, and left nothing to tell
+a Google-generated link from one a person pasted in — the two sat in the same
+column looking identical. `Lml::Venue#google_maps_url` builds it on demand:
+
+```
+https://www.google.com/maps/search/?api=1&query=The+Espy%2C+11+The+Esplanade&query_place_id=ChIJ...
+```
+
+The `query` is not decoration. The Maps URLs API requires it alongside
+`query_place_id`, and it is the **fallback**: if the place id ever goes stale
+Google searches the text instead of erroring, which the `?cid=` form of
+`googleMapsUri` has no equivalent of. It is also readable, where a bare cid is a
+19-digit number.
+
+It returns `nil` for a venue that is unresolved or carrying one of the markers
+below, so nothing ever emits `query_place_id=ambiguous%20-%202%20matches`.
+
+`location_url` now means only "the link somebody chose" — which is what the sheet
+import has always put there. **Existing values were left alone**: a venue resolved
+before this keeps the `?cid=` link Google gave it, which is not wrong, just frozen.
 
 Finding what has closed since, which is the point of tracking it:
 

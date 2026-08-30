@@ -153,6 +153,39 @@ RSpec.describe Lml::VenuePlaceLookup do
     end
   end
 
+  describe "the maps link it makes possible" do
+    it "builds a link from the place id, with the name as google's fallback" do
+      lookup(@venue)
+
+      url = @venue.reload.google_maps_url
+
+      expect(url).to start_with("https://www.google.com/maps/search/?api=1")
+      expect(url).to include("query_place_id=placeespy")
+      expect(url).to include("query=The+Espy")
+    end
+
+    it "leaves location_url for whatever a person put there" do
+      @venue.update!(location_url: "https://maps.app.goo.gl/shortlink")
+
+      lookup(@venue)
+
+      expect(@venue.reload.location_url).to eq("https://maps.app.goo.gl/shortlink")
+    end
+
+    it "has no link for a venue nobody has looked up" do
+      expect(@venue.google_maps_url).to be_nil
+    end
+
+    # Or the link would read query_place_id=ambiguous%20-%202%20matches.
+    it "has no link for a venue carrying a marker" do
+      allow(@places).to receive(:find).and_return("places" => [])
+
+      lookup(@venue)
+
+      expect(@venue.reload.google_maps_url).to be_nil
+    end
+  end
+
   describe "telling a marker from an id" do
     it "reads a real place id as an id" do
       expect(create(:lml_venue, google_place_id: "ChIJ_abc-123").google_place_marker?).to be(false)

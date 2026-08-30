@@ -80,6 +80,10 @@ module Api
                .merge(
                  tags: venue.tags || [],
                  google_place_id: venue.google_place_id,
+                 # Derived, so read only - and nil for a venue that is unresolved or carrying one
+                 # of VenuePlaceLookup's markers. location_url beside it is the link a person
+                 # chose, which is a different thing and stays writable.
+                 google_maps_url: venue.google_maps_url,
                  google_business_status: venue.google_business_status,
                  created_at: venue.created_at,
                  updated_at: venue.updated_at,

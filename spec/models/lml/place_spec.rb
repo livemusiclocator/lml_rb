@@ -116,10 +116,17 @@ RSpec.describe Lml::Place do
         google_place_id: "place-espy",
         google_business_status: "OPERATIONAL",
         time_zone: "Australia/Melbourne",
-        location_url: "https://maps.google.com/?cid=espy",
         address: "11 The Esplanade, St Kilda VIC 3182",
         latitude: -37.8676,
       )
+    end
+
+    # location_url means "the link somebody chose". A maps link is derivable from the place id, so
+    # Lml::Venue#google_maps_url builds one rather than this claiming the column.
+    it "leaves location_url alone even on a venue that has none" do
+      attributes = described_class.new(payload).attributes_for(Lml::Venue.new)
+
+      expect(attributes).not_to have_key(:location_url)
     end
 
     it "leaves out anything the venue already has a value for" do
