@@ -7,8 +7,10 @@ Rails.application.configure do
   #   lml_frontend_client$ make watch
   #   lml_rb$ SPA_BASE_URL=https://assets.lml.test/lml_gig_explorer_dev bin/rails server
   #
-  # The file names are fixed by the frontend's rollup config, so unlike
-  # rake spa:fetch there is no manifest to read.
+  # Only the base url matters here: SpaAssets reads manifest.json beside the
+  # bundle at request time, so whatever the file names turn out to be, these two
+  # are just the bootstrap value it derives the base from and the fallback if the
+  # manifest cannot be read.
   if Rails.env.development? && ENV["SPA_BASE_URL"].present?
     base_url = ENV["SPA_BASE_URL"].chomp("/")
     config.spa_assets = {

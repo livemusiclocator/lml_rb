@@ -3,10 +3,10 @@
 module Web
   module ExplorerHelper
     def spa_entrypoint_javascript_tag
-      return unless Rails.application.config.spa_assets["entrypoint_script"]
+      return unless SpaAssets.current["entrypoint_script"]
 
       javascript_include_tag(
-        Rails.application.config.spa_assets["entrypoint_script"],
+        SpaAssets.current["entrypoint_script"],
         type: "module",
         preload: true,
         crossorigin: "anonymous",
@@ -15,9 +15,9 @@ module Web
     end
 
     def spa_stylesheet_tags
-      return unless Rails.application.config.spa_assets["css_files"]
+      return unless SpaAssets.current["css_files"]
 
-      tags = Rails.application.config.spa_assets["css_files"].map do |css_file|
+      tags = SpaAssets.current["css_files"].map do |css_file|
         stylesheet_link_tag(
           css_file,
           preload: true,
@@ -29,9 +29,9 @@ module Web
     end
 
     def spa_external_dependency_tags
-      return unless Rails.application.config.spa_assets["external_dependencies"]
+      return unless SpaAssets.current["external_dependencies"]
 
-      tags = Rails.application.config.spa_assets["external_dependencies"].map do |asset_path|
+      tags = SpaAssets.current["external_dependencies"].map do |asset_path|
         javascript_include_tag(
           asset_path,
           preload: true,
@@ -46,7 +46,7 @@ module Web
     def spa_preload_tags
       # TODO: preloading more css than we probably want to - do we want to or need to preload the leaflet stuff? it
       # will not result in flash of unstyled etc. as much as the main css and the fonts will?
-      spa_assets = Rails.application.config.spa_assets
+      spa_assets = SpaAssets.current
       preloadable_asset_paths = [spa_assets["entrypoint"]] + (spa_assets["css_files"] || [])
       tags = preloadable_asset_paths.compact.map do |asset_path|
         link_type = asset_path.end_with?("js") ? :script : :style
