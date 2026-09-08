@@ -9,12 +9,12 @@ describe Lml::VenueMerge do
   end
 
   def merge
-    described_class.new(survivor: @survivor, duplicate: @duplicate).call
+    Lml::VenueMerge.new(survivor: @survivor, duplicate: @duplicate).call
   end
 
   it "refuses to merge a venue into itself" do
-    expect { described_class.new(survivor: @survivor, duplicate: @survivor).call }
-      .to raise_error(described_class::Error, /into itself/)
+    expect { Lml::VenueMerge.new(survivor: @survivor, duplicate: @survivor).call }
+      .to raise_error(Lml::VenueMerge::Error, /into itself/)
   end
 
   describe "the duplicate's records" do

@@ -20,7 +20,7 @@ RSpec.describe Lml::VenuePlaceLookup do
   end
 
   def lookup(venue, **options)
-    described_class.call(venue, places: @places, **options)
+    Lml::VenuePlaceLookup.call(venue, places: @places, **options)
   end
 
   before do
@@ -32,7 +32,7 @@ RSpec.describe Lml::VenuePlaceLookup do
 
   describe "when exactly one place comes back" do
     it "records the place id" do
-      expect(lookup(@venue)).to eq(described_class::MATCHED)
+      expect(lookup(@venue)).to eq(Lml::VenuePlaceLookup::MATCHED)
       expect(@venue.reload.google_place_id).to eq("placeespy")
     end
 
@@ -81,14 +81,14 @@ RSpec.describe Lml::VenuePlaceLookup do
     it "marks a venue Google has nothing for, so the empty answer is not lost" do
       allow(@places).to receive(:find).and_return("places" => [])
 
-      expect(lookup(@venue)).to eq(described_class::NO_MATCH)
+      expect(lookup(@venue)).to eq(Lml::VenuePlaceLookup::NO_MATCH)
       expect(@venue.reload.google_place_id).to eq("no match")
     end
 
     it "treats a payload with no places key at all as nothing found" do
       allow(@places).to receive(:find).and_return({})
 
-      expect(lookup(@venue)).to eq(described_class::NO_MATCH)
+      expect(lookup(@venue)).to eq(Lml::VenuePlaceLookup::NO_MATCH)
     end
 
     it "marks an ambiguous venue with how many candidates there were" do
@@ -96,7 +96,7 @@ RSpec.describe Lml::VenuePlaceLookup do
         "places" => [place("The Espy", id: "one"), place("Espy Kitchen", id: "two")],
       )
 
-      expect(lookup(@venue)).to eq(described_class::AMBIGUOUS)
+      expect(lookup(@venue)).to eq(Lml::VenuePlaceLookup::AMBIGUOUS)
       expect(@venue.reload.google_place_id).to eq("ambiguous - 2 matches")
     end
 
@@ -125,21 +125,21 @@ RSpec.describe Lml::VenuePlaceLookup do
     it "skips a venue that already has a place id" do
       @venue.update!(google_place_id: "placeespy")
 
-      expect(lookup(@venue)).to eq(described_class::SKIPPED)
+      expect(lookup(@venue)).to eq(Lml::VenuePlaceLookup::SKIPPED)
       expect(@places).not_to have_received(:find)
     end
 
     it "skips a venue whose last lookup found nothing, rather than asking again for free" do
       @venue.update!(google_place_id: "no match")
 
-      expect(lookup(@venue)).to eq(described_class::SKIPPED)
+      expect(lookup(@venue)).to eq(Lml::VenuePlaceLookup::SKIPPED)
       expect(@places).not_to have_received(:find)
     end
 
     it "asks again when forced" do
       @venue.update!(google_place_id: "no match")
 
-      expect(lookup(@venue, force: true)).to eq(described_class::MATCHED)
+      expect(lookup(@venue, force: true)).to eq(Lml::VenuePlaceLookup::MATCHED)
       expect(@venue.reload.google_place_id).to eq("placeespy")
     end
 
@@ -148,7 +148,7 @@ RSpec.describe Lml::VenuePlaceLookup do
     it "refuses to repoint a venue that is genuinely resolved, even forced" do
       @venue.update!(google_place_id: "somewhereelse", address_components: { "route" => "Chapel Street" })
 
-      expect(lookup(@venue, force: true)).to eq(described_class::MATCHED)
+      expect(lookup(@venue, force: true)).to eq(Lml::VenuePlaceLookup::MATCHED)
       expect(@venue.reload.google_place_id).to eq("somewhereelse")
     end
   end

@@ -33,7 +33,7 @@ RSpec.describe Lml::VenueBackfill do
   end
 
   def backfill(**options)
-    described_class.new(places: @places, **options).call
+    Lml::VenueBackfill.new(places: @places, **options).call
   end
 
   before do

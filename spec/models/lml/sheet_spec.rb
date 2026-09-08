@@ -28,23 +28,23 @@ RSpec.describe Lml::Sheet do
 
     # pause: 0 because the one second a real run takes per row is deliberate, not something to wait
     # through twenty times here.
-    @sheet = described_class.new(url, service: @service, pause: 0)
+    @sheet = Lml::Sheet.new(url, service: @service, pause: 0)
   end
 
   describe ".id_from_url" do
     it "takes the id out of a sheet url" do
-      expect(described_class.id_from_url(url)).to eq("1AbC_dEf-123")
+      expect(Lml::Sheet.id_from_url(url)).to eq("1AbC_dEf-123")
     end
 
     it "refuses anything that is not one" do
-      expect { described_class.id_from_url("https://example.com/nope") }
-        .to raise_error(described_class::InvalidUrlError, /not a google sheets url/)
+      expect { Lml::Sheet.id_from_url("https://example.com/nope") }
+        .to raise_error(Lml::Sheet::InvalidUrlError, /not a google sheets url/)
     end
   end
 
   describe ".column_letter" do
     it "counts past Z the way sheets does" do
-      expect((0..27).map { |index| described_class.column_letter(index) })
+      expect((0..27).map { |index| Lml::Sheet.column_letter(index) })
         .to eq(%w[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB])
     end
   end
@@ -159,7 +159,7 @@ RSpec.describe Lml::Sheet do
 
       expect([range.start_column_index, range.end_column_index]).to eq([0, 2])
       expect(requests.first.repeat_cell.cell.user_entered_format.background_color)
-        .to eq(described_class::BACKGROUNDS.fetch(:attention))
+        .to eq(Lml::Sheet::BACKGROUNDS.fetch(:attention))
     end
 
     it "does not touch a row with nothing to write and no colour" do
@@ -170,7 +170,7 @@ RSpec.describe Lml::Sheet do
 
     it "refuses to write a column that was never created" do
       expect { @sheet.write_row(worksheet: "venues", index: 0, cells: { "import_status" => "created" }) }
-        .to raise_error(described_class::UnknownColumnError, /venues has no import_status column/)
+        .to raise_error(Lml::Sheet::UnknownColumnError, /venues has no import_status column/)
     end
   end
 end

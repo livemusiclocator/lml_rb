@@ -60,3 +60,9 @@ RSpec/MultipleExpectations:
   Enabled: false
 RSpec/ExampleLength:
   Enabled: false
+
+# Same objection as `let` and `subject`: it hides what is being built. `Lml::Upload.create!` says
+# what it makes on the line you are reading, where `described_class.create!` sends you to the top
+# of the file to find out.
+RSpec/DescribedClass:
+  Enabled: false

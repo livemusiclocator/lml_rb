@@ -27,7 +27,7 @@ describe Lml::CoverageStats do
     @stranded = create(:lml_venue, name: "The Lost", location: "St Kilda")
   end
 
-  def stats = described_class.new(today: @today)
+  def stats = Lml::CoverageStats.new(today: @today)
 
   def gig_at(venue, date, **attributes)
     create(:lml_gig, venue: venue, date: date, **attributes)

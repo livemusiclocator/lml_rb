@@ -28,7 +28,7 @@ RSpec.describe Lml::VenueImport do
   end
 
   def import
-    described_class.new(sheet: @sheet, worksheet: "venues", places: @places).call
+    Lml::VenueImport.new(sheet: @sheet, worksheet: "venues", places: @places).call
   end
 
   before do

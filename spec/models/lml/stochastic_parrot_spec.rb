@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Lml::StochasticParrot do
   before do
     @url = "https://api.openai.com/v1/chat/completions"
-    @parrot = described_class.new(access_token: "test-key")
+    @parrot = Lml::StochasticParrot.new(access_token: "test-key")
   end
 
   def answering(tags)
@@ -46,7 +46,7 @@ RSpec.describe Lml::StochasticParrot do
     it "returns nil without asking when there is no key configured" do
       request = stub_request(:post, @url)
 
-      expect(described_class.new(access_token: nil).gist("a night of smooth jazz")).to be_nil
+      expect(Lml::StochasticParrot.new(access_token: nil).gist("a night of smooth jazz")).to be_nil
 
       expect(request).not_to have_been_requested
     end

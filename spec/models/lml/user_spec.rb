@@ -10,13 +10,13 @@ describe Lml::User do
     end
 
     it "is not an admin by default, so a new registration gets nothing" do
-      expect(described_class.new.admin?).to be(false)
+      expect(Lml::User.new.admin?).to be(false)
       expect(@punter.admin?).to be(false)
     end
 
     it "knows which users are admins" do
       expect(@admin.admin?).to be(true)
-      expect(described_class.admins).to contain_exactly(@admin)
+      expect(Lml::User.admins).to contain_exactly(@admin)
     end
   end
 end

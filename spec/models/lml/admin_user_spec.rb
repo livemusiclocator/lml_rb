@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Lml::AdminUser do
   before do
-    @admin_user = described_class.create!(
+    @admin_user = Lml::AdminUser.create!(
       email: "admin_user_spec@example.com",
       username: "auspec",
       password: "supersecret123",
