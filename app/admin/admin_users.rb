@@ -69,33 +69,6 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
         "No assigned venues found."
       end
     end
-
-    div style: "height: 20px"
-
-    panel "Available Venues (Not Assigned)" do
-      available_venues = Lml::Venue.where(admin_user_id: nil).limit(50)
-      if available_venues.any?
-        form action: assign_venues_admin_admin_user_path(resource), method: :post do
-          input name: :authenticity_token, type: :hidden, value: form_authenticity_token
-          table_for available_venues do
-            column "" do |venue|
-              input type: :checkbox, name: "venue_ids[]", value: venue.id
-            end
-            column :name do |venue|
-              link_to venue.name, admin_venue_path(venue)
-            end
-            column :location
-            column :time_zone
-          end
-          div style: "margin-top: 10px" do
-            input type: :submit, value: "Assign Selected",
-                  class: "button"
-          end
-        end
-      else
-        "No available venues found."
-      end
-    end
   end
 
   member_action :unassign_venues, method: :post do
@@ -103,17 +76,6 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
     if venue_ids.present?
       count = resource.venues.where(id: venue_ids).update_all(admin_user_id: nil)
       flash[:notice] = "#{count} venue(s) unassigned."
-    else
-      flash[:error] = "No venues selected."
-    end
-    redirect_to admin_admin_user_path(resource)
-  end
-
-  member_action :assign_venues, method: :post do
-    venue_ids = params[:venue_ids]
-    if venue_ids.present?
-      count = Lml::Venue.where(id: venue_ids, admin_user_id: nil).update_all(admin_user_id: resource.id)
-      flash[:notice] = "#{count} venue(s) assigned."
     else
       flash[:error] = "No venues selected."
     end
