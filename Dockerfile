@@ -52,7 +52,7 @@ RUN useradd rails --create-home --shell /bin/bash && \
   chown -R rails:rails db log storage tmp
 USER rails:rails
 
-# Entrypoint prepares the database.
+# Entrypoint only execs the command now. Migrations run in heroku.yml's release phase.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
