@@ -8,6 +8,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :facebook_url,
     :instagram_url,
     :lat_lng,
+    :lga,
     :location,
     :location_url,
     :name,
@@ -18,10 +19,96 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :time_zone,
     :vibe,
     :website,
-    :admin_user_id
+    :admin_user_id,
   )
 
-  batch_action :assign_to_admin_user, form: -> { { admin_user_id: Lml::AdminUser.order(:username).map { |u| [u.username, u.id] } } } do |ids, inputs|
+  # Both delete paths below report what they were asked to do rather than what happened, so
+  # Lml::Venue's `dependent: :restrict_with_error` needs them rewritten or it silently produces a
+  # success message over a venue that is still there.
+  controller do
+    # InheritedResources' destroy discards destroy's return value and always flashes
+    # "successfully destroyed".
+    def destroy
+      if destroy_resource(resource)
+        redirect_to admin_venues_path, notice: "Venue was successfully destroyed."
+      else
+        redirect_to admin_venue_path(resource), alert: gigs_blocking_delete(resource)
+      end
+    end
+
+    # Also reached from the batch action, which runs in this controller.
+    def gigs_blocking_delete(venue)
+      count = venue.gigs.count
+
+      "#{venue.name} still has #{count} #{"gig".pluralize(count)}, so it was not deleted. " \
+        "Move them to another venue first."
+    end
+
+    # A merge quietly rewrites a lot of columns, so the flash says what it actually did rather
+    # than just claiming success.
+    def merge_summary(duplicate_name, result)
+      [
+        "Merged #{duplicate_name.inspect} into #{resource.name}.",
+        moved_summary(result),
+        filled_in_summary(result),
+        discarded_summary(result),
+      ].compact.join(" ")
+    end
+
+    def moved_summary(result)
+      counts = {
+        "gig" => result.gigs,
+        "upload" => result.uploads,
+        "manager" => result.managers,
+        "proposal" => result.proposals,
+      }
+        .select { |_, count| count.positive? }
+        .map { |label, count| "#{count} #{label.pluralize(count)}" }
+
+      "Moved #{counts.to_sentence}." if counts.any?
+    end
+
+    def filled_in_summary(result)
+      return if result.filled_in.empty?
+
+      columns = result.filled_in.map { |column| Lml::Venue.human_attribute_name(column).downcase }
+
+      "Filled in #{columns.to_sentence}."
+    end
+
+    def discarded_summary(result)
+      return if result.discarded.empty?
+
+      count = result.discarded.size
+
+      "Recorded #{count} differing #{"value".pluralize(count)} in the notes."
+    end
+  end
+
+  # ActiveAdmin's own delete batch action counts the ids that were submitted, not the records it
+  # managed to destroy, so it would claim every selected venue had gone.
+  batch_action :destroy, confirm: I18n.t("active_admin.delete_confirmation") do |ids|
+    deleted, blocked = Lml::Venue.where(id: ids).partition(&:destroy)
+
+    messages = []
+    messages << "Deleted #{deleted.size} #{"venue".pluralize(deleted.size)}." if deleted.any?
+    messages += blocked.map { |venue| gigs_blocking_delete(venue) }
+
+    if blocked.any?
+      redirect_to collection_path, alert: messages.join(" ")
+    else
+      redirect_to collection_path, notice: messages.join(" ")
+    end
+  end
+
+  batch_action :assign_to_admin_user,
+    form: -> {
+      {
+        admin_user_id: Lml::AdminUser.order(:username).map { |u|
+          [u.username, u.id]
+        },
+      }
+    } do |ids, inputs|
     Lml::Venue.where(id: ids).update_all(admin_user_id: inputs[:admin_user_id])
     redirect_to collection_path, notice: "Venues assigned to admin user."
   end
@@ -76,6 +163,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :phone
       row :address
       row :postcode
+      row :lga
       row :website do |resource|
         if resource.website.present?
           link_to(resource.website, resource.website, target: "_blank", rel: "noopener noreferrer")
@@ -129,16 +217,33 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
     # rubocop:enable Metrics/BlockLength
 
-    # Derived data, so it is shown but never edited - neither column is in permit_params, so the
-    # form cannot reach them either. Written by Lml::VenueImport; see
+    # Derived data, so it is shown but never edited - none of these columns is in permit_params, so
+    # the form cannot reach them either. Written by Lml::VenueImport and Lml::VenuePlaceLookup; see
     # doc/google_sheets_venue_import.md.
     panel "Google Places" do
-      if resource.address_components.blank?
+      if resource.google_place_marker?
+        para do
+          text_node "The last lookup did not settle on one place: "
+          span resource.google_place_id, class: "status_tag orange"
+        end
+        para "Nothing was written onto the venue. Correcting the name or address here and then " \
+             "forcing another lookup through the admin API is the way forward.",
+          class: "inline-hints"
+      elsif resource.address_components.blank?
         para "Not resolved through the Places API. Venues added by hand have none until an " \
-             "import matches them."
+             "import matches them, or until somebody looks one up here."
       else
         attributes_table_for resource do
           row("Place ID") { resource.google_place_id }
+          # Built from the place id rather than stored, so it is here beside the id it comes from
+          # rather than up in Venue Details next to location_url, which means something else now.
+          row("Maps link") do
+            # Nil where a venue has components but no place id - Lml::Place writes the two together,
+            # so it means something else resolved this venue, and there is no id to build a link on.
+            if resource.google_maps_url
+              link_to("Open in Google Maps", resource.google_maps_url, target: "_blank", rel: "noopener noreferrer")
+            end
+          end
           row("Resolved name") { resource.address_components["name"] }
           row("Business status") do
             if resource.closed_permanently?
@@ -153,7 +258,81 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
           row("All components") { pretty_json(resource.address_components) }
         end
       end
+
+      # A real form with an authenticity token, not `link_to method: :post` - ActiveAdmin 3.5 ships
+      # no rails-ujs, so that renders a GET and silently does nothing. See CLAUDE.md.
+      form action: lookup_place_admin_venue_path(resource), method: :post do
+        text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+
+        # One billable Places request per click, so the button closes the moment the column holds
+        # an answer of any kind. Asking again is deliberately awkward - it is `force` on the admin
+        # API's POST /v1/admin/venues/:id/place_lookup, and nothing in here.
+        if resource.google_place_id.present?
+          input type: :submit, value: "Look up in Google Places", disabled: "disabled"
+          para "Already answered. Asking Google again costs another request, so it is only " \
+               "available through the admin API, with force.",
+            class: "inline-hints"
+        else
+          input type: :submit, value: "Look up in Google Places"
+          para "Searches Places for this venue's name and address. Fills in only the columns " \
+               "that are still blank.",
+            class: "inline-hints"
+        end
+      end
     end
+  end
+
+  member_action :lookup_place, method: :post do
+    outcome = Lml::VenuePlaceLookup.call(resource)
+
+    redirect_to admin_venue_path(resource),
+      notice: {
+        Lml::VenuePlaceLookup::MATCHED => "Matched one place. Blank columns filled in from Google.",
+        Lml::VenuePlaceLookup::NO_MATCH => "Places found nothing for that name and address.",
+        Lml::VenuePlaceLookup::AMBIGUOUS => "Places found more than one candidate, so nothing was written.",
+        Lml::VenuePlaceLookup::SKIPPED => "Already looked up - nothing spent.",
+      }.fetch(outcome)
+  rescue Lml::GooglePlacesApiClient::Error => e
+    redirect_to admin_venue_path(resource), alert: "Places API error: #{e.message}"
+  end
+
+  member_action :merge, method: :post do
+    duplicate = Lml::Venue.find_by(id: params[:venue_id])
+
+    if duplicate.nil?
+      redirect_to admin_venue_path(resource), alert: "Pick a venue to merge in first."
+    else
+      result = Lml::VenueMerge.new(survivor: resource, duplicate: duplicate).call
+      redirect_to admin_venue_path(resource), notice: merge_summary(duplicate.name, result)
+    end
+  rescue Lml::VenueMerge::Error, ActiveRecord::RecordInvalid => e
+    # The merge is one transaction, so there is nothing half done to explain here.
+    redirect_to admin_venue_path(resource), alert: "Nothing was merged: #{e.message}"
+  end
+
+  sidebar "Merge a duplicate", only: :show do
+    para "The duplicate's gigs, uploads and managers move onto this venue, this venue fills in " \
+         "anything it had no value for, anything the duplicate knew differently is written into " \
+         "the notes above, and then the duplicate is deleted.",
+      class: "inline-hints"
+
+    # A real form with an authenticity token rather than `link_to method: :post`, for the reason
+    # given in the Google Places panel above.
+    form action: merge_admin_venue_path(resource), method: :post do
+      text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+      text_node hidden_field_tag("venue_id", nil, id: "merge_venue_id")
+      div style: "position: relative;" do
+        text_node text_field_tag(
+          "venue_label", nil, id: "merge_venue_label", placeholder: "Search venues...", autocomplete: "off",
+        )
+      end
+      br
+      input type: :submit, value: "Merge into this venue"
+    end
+
+    script <<~SCRIPT.html_safe
+      attachSearchAutocomplete("merge_venue", "/venues/search", "Search venues...");
+    SCRIPT
   end
 
   sidebar "Links", only: :show do
@@ -194,6 +373,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   end
 
   form do |f|
+    # One input past Max, the same way the show block is.
+    # rubocop:disable Metrics/BlockLength
     f.inputs do
       f.input :name
       f.input(
@@ -205,12 +386,13 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input(
         :admin_user,
         as: :select,
-        collection: Lml::AdminUser.order(:username).map { |u| [u.username, u.id] }
+        collection: Lml::AdminUser.order(:username).map { |u| [u.username, u.id] },
       )
       f.input :email, input_html: { type: "email" }
       f.input :phone
       f.input :address
       f.input :postcode
+      f.input :lga, hint: "Local government area, eg City of Yarra"
       f.input :website
       f.input :instagram_url
       f.input :facebook_url
@@ -221,6 +403,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input :tag_list
       f.input :notes, as: :text, input_html: { rows: 5 }
     end
+    # rubocop:enable Metrics/BlockLength
     f.actions
   end
 end

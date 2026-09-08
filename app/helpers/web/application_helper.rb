@@ -3,38 +3,59 @@
 # rubocop:disable Metrics/ModuleLength
 module Web
   module ApplicationHelper
-    STATIC_PAGES = { base: { about: {
-      pages: [
-        { name: "About", page_id: "about", content_page_id: "about", section_root_page: true },
-        { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
-        { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
-        { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
-        { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
-        { name: "Contact", page_id: "contact", content_page_id: "contact" },
-        { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
-      ],
-    } }, stkilda: { about: {
-      pages: [
-        { name: "About", page_id: "about", content_page_id: "st-kilda-live-music", section_root_page: true },
-        { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
-        { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
-        { name: "How To Use", page_id: "how-to-use-livemusiclocator", content_page_id: "how-to-use-livemusiclocator" },
-        { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
-        { name: "Contact", page_id: "contact", content_page_id: "contact" },
-        { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
-      ],
-    } }, geelong: { about: {
-      pages: [
-        { name: "About", page_id: "about", content_page_id: "about-geelong", section_root_page: true },
-        { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
-        { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
-        { name: "How To Use", page_id: "how-to-use-livemusiclocator",
-          content_page_id: "how-to-use-livemusiclocator", },
-        { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
-        { name: "Contact", page_id: "contact", content_page_id: "contact" },
-        { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
-      ],
-    } }, }.freeze
+    STATIC_PAGES = {
+      base: {
+        about: {
+          pages: [
+            { name: "About", page_id: "about", content_page_id: "about", section_root_page: true },
+            { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
+            { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
+            {
+              name: "How To Use",
+              page_id: "how-to-use-livemusiclocator",
+              content_page_id: "how-to-use-livemusiclocator",
+            },
+            { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
+            { name: "Contact", page_id: "contact", content_page_id: "contact" },
+            { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
+          ],
+        },
+      },
+      stkilda: {
+        about: {
+          pages: [
+            { name: "About", page_id: "about", content_page_id: "st-kilda-live-music", section_root_page: true },
+            { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
+            { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
+            {
+              name: "How To Use",
+              page_id: "how-to-use-livemusiclocator",
+              content_page_id: "how-to-use-livemusiclocator",
+            },
+            { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
+            { name: "Contact", page_id: "contact", content_page_id: "contact" },
+            { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
+          ],
+        },
+      },
+      geelong: {
+        about: {
+          pages: [
+            { name: "About", page_id: "about", content_page_id: "about-geelong", section_root_page: true },
+            { name: "The Team", page_id: "the-team", content_page_id: "the-team" },
+            { name: "Volunteering", page_id: "volunteering", content_page_id: "volunteering" },
+            {
+              name: "How To Use",
+              page_id: "how-to-use-livemusiclocator",
+              content_page_id: "how-to-use-livemusiclocator",
+            },
+            { name: "API, Stats, and Data", page_id: "api-stats-and-data", content_page_id: "api-stats-and-data" },
+            { name: "Contact", page_id: "contact", content_page_id: "contact" },
+            { name: "Privacy Policy", page_id: "privacy-policy", content_page_id: "privacy_policy" },
+          ],
+        },
+      },
+    }.freeze
 
     TOP_NAV = {
       home: { name: "Home", path_name: :web_root },

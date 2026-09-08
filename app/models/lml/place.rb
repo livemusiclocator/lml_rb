@@ -44,7 +44,14 @@ module Lml
 
     # Taken only where the venue has nothing there already. A blank column is a gap to fill; a
     # filled one is somebody's research, and Google is not a good enough reason to overwrite it.
-    FILL_INS = %i[time_zone location_url address postcode latitude longitude].freeze
+    #
+    # location_url is deliberately absent, though googleMapsUri would fill it: a maps link is
+    # derivable from the place id we already store, so storing one froze whichever URL shape we
+    # happened to prefer the day a venue was resolved, and left nothing to tell a Google generated
+    # link from one a person pasted in. Lml::Venue#google_maps_url builds it instead, and
+    # location_url now means only "the link somebody chose" - which is what the sheet import has
+    # always put there.
+    FILL_INS = %i[time_zone address postcode latitude longitude].freeze
 
     def initialize(payload)
       @payload = payload
@@ -64,10 +71,6 @@ module Lml
 
     def business_status
       @payload["businessStatus"]
-    end
-
-    def maps_uri
-      @payload["googleMapsUri"]
     end
 
     def closed_permanently?
@@ -130,7 +133,6 @@ module Lml
     def fill_ins
       {
         time_zone: time_zone,
-        location_url: maps_uri,
         address: formatted_address,
         postcode: components["postal_code"],
         latitude: components["latitude"],

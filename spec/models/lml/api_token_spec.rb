@@ -6,21 +6,21 @@ describe Lml::ApiToken do
   describe "issuing" do
     before do
       @user = create(:lml_user, :admin)
-      @token = described_class.issue!(user: @user, name: "Import script")
+      @token = Lml::ApiToken.issue!(user: @user, name: "Import script")
     end
 
     it "hands back the secret exactly once" do
       expect(@token.plaintext).to start_with("lml_admin_")
-      expect(described_class.find(@token.id).plaintext).to be_nil
+      expect(Lml::ApiToken.find(@token.id).plaintext).to be_nil
     end
 
     it "never stores the secret" do
-      expect(described_class.where(token_digest: @token.plaintext)).to be_empty
-      expect(@token.token_digest).to eq(described_class.digest(@token.plaintext))
+      expect(Lml::ApiToken.where(token_digest: @token.plaintext)).to be_empty
+      expect(@token.token_digest).to eq(Lml::ApiToken.digest(@token.plaintext))
     end
 
     it "issues a different secret every time" do
-      other = described_class.issue!(user: @user, name: "Something else")
+      other = Lml::ApiToken.issue!(user: @user, name: "Something else")
 
       expect(other.plaintext).not_to eq(@token.plaintext)
     end
@@ -29,39 +29,39 @@ describe Lml::ApiToken do
   describe "authenticating" do
     before do
       @user = create(:lml_user, :admin)
-      @token = described_class.issue!(user: @user, name: "Import script")
+      @token = Lml::ApiToken.issue!(user: @user, name: "Import script")
       @secret = @token.plaintext
     end
 
     it "recognises a token we issued" do
-      expect(described_class.authenticate(@secret)).to eq(@token)
+      expect(Lml::ApiToken.authenticate(@secret)).to eq(@token)
     end
 
     it "refuses a secret we never issued" do
-      expect(described_class.authenticate("lml_admin_guessed")).to be_nil
+      expect(Lml::ApiToken.authenticate("lml_admin_guessed")).to be_nil
     end
 
     it "refuses a blank secret, whatever the digest of an empty string might match" do
-      expect(described_class.authenticate("")).to be_nil
-      expect(described_class.authenticate(nil)).to be_nil
+      expect(Lml::ApiToken.authenticate("")).to be_nil
+      expect(Lml::ApiToken.authenticate(nil)).to be_nil
     end
 
     it "refuses a revoked token" do
       @token.revoke!
 
-      expect(described_class.authenticate(@secret)).to be_nil
+      expect(Lml::ApiToken.authenticate(@secret)).to be_nil
     end
 
     it "refuses an expired token" do
       @token.update!(expires_at: 1.minute.ago)
 
-      expect(described_class.authenticate(@secret)).to be_nil
+      expect(Lml::ApiToken.authenticate(@secret)).to be_nil
     end
 
     it "accepts a token whose expiry is still ahead of it" do
       @token.update!(expires_at: 1.day.from_now)
 
-      expect(described_class.authenticate(@secret)).to eq(@token)
+      expect(Lml::ApiToken.authenticate(@secret)).to eq(@token)
     end
   end
 

@@ -28,7 +28,7 @@ RSpec.describe Lml::VenueImport do
   end
 
   def import
-    described_class.new(sheet: @sheet, worksheet: "venues", places: @places).call
+    Lml::VenueImport.new(sheet: @sheet, worksheet: "venues", places: @places).call
   end
 
   before do
@@ -87,12 +87,14 @@ RSpec.describe Lml::VenueImport do
       import
 
       expect(@writes).to eq(
-        [{
-          worksheet: "venues",
-          index: 0,
-          cells: { "import_status" => "created", "venue_id" => Lml::Venue.last.id },
-          colour: :done,
-        }],
+        [
+          {
+            worksheet: "venues",
+            index: 0,
+            cells: { "import_status" => "created", "venue_id" => Lml::Venue.last.id },
+            colour: :done,
+          },
+        ],
       )
     end
 

@@ -61,8 +61,13 @@ ActiveAdmin.register_page "Venue Import" do
         text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
         label "Spreadsheet URL", for: "sheet_url"
         br
-        text_node text_field_tag(:sheet_url, params[:sheet_url], id: "sheet_url", size: 90,
-                                                                 placeholder: "https://docs.google.com/spreadsheets/d/.../edit",)
+        text_node text_field_tag(
+          :sheet_url,
+          params[:sheet_url],
+          id: "sheet_url",
+          size: 90,
+          placeholder: "https://docs.google.com/spreadsheets/d/.../edit",
+        )
         br
         br
         input type: :submit, value: "Import venues"
@@ -83,8 +88,8 @@ ActiveAdmin.register_page "Venue Import" do
       redirect_to admin_venue_import_path(sheet_url: url), notice: "Imported: #{describe(counts)}."
     rescue Lml::Sheet::InvalidUrlError
       redirect_to admin_venue_import_path(sheet_url: url),
-                  alert: "That is not a Google Sheets URL - it should look like " \
-                         "https://docs.google.com/spreadsheets/d/.../edit"
+        alert: "That is not a Google Sheets URL - it should look like " \
+               "https://docs.google.com/spreadsheets/d/.../edit"
     rescue StandardError => e
       # Anything Google refused: the sheet is not shared, there is no `venues`
       # worksheet, Places is not enabled, billing is off. The message is the only

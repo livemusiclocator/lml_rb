@@ -42,12 +42,14 @@ describe "picker search" do
       get "/acts/search", params: { q: "amyl" }
 
       expect(JSON.parse(response.body)).to eq(
-        [{
-          "id" => @act.id,
-          "label" => "Amyl and the Sniffers (Australia)",
-          "set_list_name" => "Amyl and the Sniffers (melbourne/Australia)",
-          "genres" => ["punk", "garage rock"],
-        }],
+        [
+          {
+            "id" => @act.id,
+            "label" => "Amyl and the Sniffers (Australia)",
+            "set_list_name" => "Amyl and the Sniffers (melbourne/Australia)",
+            "genres" => ["punk", "garage rock"],
+          },
+        ],
       )
     end
 

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Already over the limit before the sets guard was added to it, and the length is all association
+# and scope declarations - the same trade Lml::Gig makes.
+# rubocop:disable Metrics/ClassLength
 module Lml
   class Act < ApplicationRecord
     include Lml::Searchable
@@ -10,16 +13,23 @@ module Lml
 
     has_many :act_managers, class_name: "Lml::ActManager", foreign_key: :act_id, dependent: :destroy
     has_many :managers, through: :act_managers, source: :user
-    # No dependent: an act's sets belong to someone else's gig, so deleting the
-    # act is not this association's business. Left as it was before it existed.
-    has_many :sets, class_name: "Lml::Set", foreign_key: :act_id, inverse_of: :act
+    # Not a cascade, for the reason this association carried no dependent at all until now: an
+    # act's sets are lineup on someone else's gig, so deleting the act has no business ripping
+    # them out of three venues' listings. The sets foreign key was already refusing - it just did
+    # it as a 500 - so this refuses in a sentence instead, the way Lml::Venue#gigs does.
+    has_many :sets,
+      class_name: "Lml::Set",
+      foreign_key: :act_id,
+      inverse_of: :act,
+      dependent: :restrict_with_error
     # What an act page lists. `visible` because an unannounced or draft gig has no
     # business on a public page - every other public gig path scopes the same way
     # - `eager` because the view renders each gig's venue and sets, and `distinct`
     # because an act can play two sets at the one gig.
     has_many :upcoming_gigs,
-             -> { visible.eager.where(date: Date.current..).distinct },
-             through: :sets, source: :gig
+      -> { visible.eager.where(date: Date.current..).distinct },
+      through: :sets,
+      source: :gig
 
     def self.ransackable_attributes(_auth_object = nil)
       %w[name country location]
@@ -162,3 +172,4 @@ module Lml
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

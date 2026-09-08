@@ -4,6 +4,13 @@ module Api
   module V1
     module Admin
       class VenuesController < BaseController
+        # A lookup is the one thing here that talks to a third party, so it is the one thing that
+        # can fail for reasons that are nobody's fault. 502 rather than a 500, because the admin
+        # api itself is fine - Google is not answering.
+        rescue_from Lml::GooglePlacesApiClient::Error do |error|
+          render_error(:bad_gateway, "The Places API did not answer: #{error.message}")
+        end
+
         # No destroy: a venue owns its gigs with `dependent: :delete_all`, so one
         # DELETE would quietly take a venue's whole history with it.
         #
@@ -11,9 +18,23 @@ module Api
         # deliberately absent - those are resolved from Google (see Lml::Place)
         # and a caller writing them by hand would silently break address matching.
         WRITABLE = %i[
-          name location address time_zone capacity vibe notes
-          email phone postcode website location_url facebook_url instagram_url
-          latitude longitude
+          name
+          location
+          address
+          time_zone
+          capacity
+          vibe
+          notes
+          lga
+          email
+          phone
+          postcode
+          website
+          location_url
+          facebook_url
+          instagram_url
+          latitude
+          longitude
         ].freeze
 
         def index
@@ -43,7 +64,24 @@ module Api
           render json: { venue: serialize(venue) }
         end
 
+        # Resolves the venue against Places from its name and address, writing a place id where
+        # exactly one candidate came back and a marker where none or several did.
+        #
+        # Skipped, without spending anything, when google_place_id already holds either - pass
+        # `force` to ask again. That gate is the whole point of the endpoint being separate from
+        # update: a caller looping over a thousand venues should re-spend only where it means to.
+        def place_lookup
+          venue = Lml::Venue.find(params[:id])
+          outcome = Lml::VenuePlaceLookup.call(venue, force: force?)
+
+          render json: { outcome: outcome, venue: serialize(venue.reload) }
+        end
+
         private
+
+        def force?
+          ActiveModel::Type::Boolean.new.cast(params[:force]).present?
+        end
 
         # An explicit allowlist rather than the model's full attribute set, so a
         # column we add later is not writable by accident.
@@ -53,13 +91,17 @@ module Api
 
         def serialize(venue)
           venue.slice(*WRITABLE, :id)
-               .merge(
-                 tags: venue.tags || [],
-                 google_place_id: venue.google_place_id,
-                 google_business_status: venue.google_business_status,
-                 created_at: venue.created_at,
-                 updated_at: venue.updated_at,
-               )
+            .merge(
+              tags: venue.tags || [],
+              google_place_id: venue.google_place_id,
+              # Derived, so read only - and nil for a venue that is unresolved or carrying one
+              # of VenuePlaceLookup's markers. location_url beside it is the link a person
+              # chose, which is a different thing and stays writable.
+              google_maps_url: venue.google_maps_url,
+              google_business_status: venue.google_business_status,
+              created_at: venue.created_at,
+              updated_at: venue.updated_at,
+            )
         end
       end
     end

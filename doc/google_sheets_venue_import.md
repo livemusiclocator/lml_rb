@@ -376,7 +376,6 @@ together costs exactly what the original four fields did:
 | Field | Used for |
 | --- | --- |
 | `id`, `displayName`, `formattedAddress`, `location`, `addressComponents` | Matching, and the address itself |
-| `googleMapsUri` | `location_url` |
 | `timeZone` | `time_zone`, where the sheet gave none — see below |
 | `businessStatus` | `google_business_status` — spotting venues that have closed |
 
@@ -530,7 +529,7 @@ Three different rules, because "derived" is not one thing:
 | --- | --- | --- |
 | Identity | `address_components`, `google_place_id` | Written **once**, then never again |
 | Volatile | `google_business_status` | Rewritten **every** time |
-| Fill-ins | `time_zone`, `location_url`, `address`, `postcode`, `latitude`, `longitude` | Written **only if the venue is blank** |
+| Fill-ins | `time_zone`, `address`, `postcode`, `latitude`, `longitude` | Written **only if the venue is blank** |
 
 Identity is written once because re-resolving could point a venue at a *different*
 place — a name match on two venues sharing a name is enough — and silently moving
@@ -543,6 +542,33 @@ here that genuinely changes, and a stale value is the whole problem.
 
 Fill-ins never overwrite, because a blank column is a gap and a filled one is
 somebody's research. Google is not a good enough reason to argue with a person.
+
+### The maps link is built, not stored
+
+`location_url` used to be a fill-in, taking `googleMapsUri`. It no longer is, and
+`googleMapsUri` has come out of the field mask with it.
+
+A maps link is *derivable* from the place id, so storing one froze whichever URL
+shape we happened to prefer the day a venue was resolved, and left nothing to tell
+a Google-generated link from one a person pasted in — the two sat in the same
+column looking identical. `Lml::Venue#google_maps_url` builds it on demand:
+
+```
+https://www.google.com/maps/search/?api=1&query=The+Espy%2C+11+The+Esplanade&query_place_id=ChIJ...
+```
+
+The `query` is not decoration. The Maps URLs API requires it alongside
+`query_place_id`, and it is the **fallback**: if the place id ever goes stale
+Google searches the text instead of erroring, which the `?cid=` form of
+`googleMapsUri` has no equivalent of. It is also readable, where a bare cid is a
+19-digit number.
+
+It returns `nil` for a venue that is unresolved or carrying one of the markers
+below, so nothing ever emits `query_place_id=ambiguous%20-%202%20matches`.
+
+`location_url` now means only "the link somebody chose" — which is what the sheet
+import has always put there. **Existing values were left alone**: a venue resolved
+before this keeps the `?cid=` link Google gave it, which is not wrong, just frozen.
 
 Finding what has closed since, which is the point of tracking it:
 
@@ -575,6 +601,66 @@ A venue that still fails after all four attempts is counted `failed`, logged, an
 left unresolved — so the fix is simply to run it again, which only spends requests
 on the venues that are still unresolved.
 
+## Looking up one venue, on demand
+
+The backfill is a batch job scoped to venues with recent gigs. `Lml::VenuePlaceLookup`
+is the single-venue version, for somebody sitting on a venue's admin page who wants
+an answer about *that* venue now — the "Look up in Google Places" button in the
+Google Places panel, and `POST /v1/admin/venues/:id/place_lookup` in the admin API.
+
+```rb
+Lml::VenuePlaceLookup.call(venue)              # => :matched / :no_match / :ambiguous / :skipped
+Lml::VenuePlaceLookup.call(venue, force: true) # ask again anyway
+```
+
+```sh
+curl -X POST -H "Authorization: Bearer $TOKEN" \
+  https://api.lml.live/v1/admin/venues/$ID/place_lookup
+
+# {"outcome":"ambiguous","venue":{...,"google_place_id":"ambiguous - 2 matches"}}
+```
+
+It resolves exactly as the backfill does — same query (name, then address), same
+region bias, and the same three rules above for what gets written. The difference
+is what it does when the lookup *does not* settle.
+
+### Unsuccessful lookups are written down
+
+The backfill counts a `not found` and moves on, because the count is the report.
+A person clicking a button has no report, so the outcome goes into
+`google_place_id` as a marker instead:
+
+| Outcome | `google_place_id` becomes |
+| --- | --- |
+| One place | its real place id |
+| Nothing found | `no match` |
+| Several found | `ambiguous - 3 matches` |
+
+Nothing else is written in the unsuccessful cases — an ambiguous venue keeps its
+blank `address_components`, and a person decides.
+
+Markers are told apart from real ids by `Lml::Venue#google_place_marker?`: a
+Google place id is url-safe base64, so it never contains a space and every marker
+does. The show page renders a marker as an orange status tag rather than as an id.
+
+### Asking twice costs twice
+
+Every call is billable, so **anything at all** in `google_place_id` — a real id
+*or* a marker — means the question has been asked and the answer stands. The
+button is rendered disabled, and the API returns `{"outcome":"skipped"}` without
+touching Google.
+
+`force: true` asks again. It is deliberately API-only, with nothing in the UI:
+re-spending on a venue should be something you have to mean, and the realistic
+caller is a script sweeping the venues that came back `no match` after their
+addresses were tidied up.
+
+Forcing still cannot *repoint* a venue that is genuinely resolved — identity is
+write-once, per the table above — so a forced lookup on a venue with components
+refreshes its business status and leaves its place id alone. Where forcing earns
+its keep is on the marker venues, whose `address_components` are blank, so a
+second lookup that settles replaces the marker with a real id.
+
 ## The code
 
 Modelled on `Management::SupplierLaunches` in fresho-app, which does the same job
@@ -587,6 +673,7 @@ for customers and has already been through the failure modes.
 | `app/models/lml/place.rb` | One place as Places returned it: flattened components, matching identity, and what it settles about a venue |
 | `app/models/lml/venue_import.rb` | The sheet import: for each row, resolve, match or create, write the outcome back |
 | `app/models/lml/venue_backfill.rb` | The same resolution for venues we already have |
+| `app/models/lml/venue_place_lookup.rb` | The same resolution for one venue, on demand, recording the unsuccessful outcomes too |
 
 `Lml::Place` is where both of them meet, so there is one answer to "what does
 Google tell us about this venue" rather than two that drift apart. It holds

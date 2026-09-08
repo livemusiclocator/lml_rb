@@ -4,6 +4,86 @@ ActiveAdmin.register_page "Dashboard" do
   menu priority: 1, label: proc { I18n.t("active_admin.dashboard") }
 
   content title: "Live Music Locator Admin" do
+    coverage = Lml::CoverageStats.new
+
+    panel "Coverage" do
+      para do
+        text_node "Across Victoria we hold "
+        strong number_with_delimiter(coverage.venues)
+        text_node " venues in the regions the gig guide serves, are currently profiling gigs at "
+        strong number_with_delimiter(coverage.active_venues)
+        text_node " of them, and publish "
+        strong coverage.gigs_per_week.to_s
+        text_node " gigs a week averaged over the year to #{coverage.period.last.to_fs(:long)}."
+      end
+
+      table do
+        thead do
+          tr do
+            th "Region"
+            th "Venues"
+            th "Profiling (12 months)"
+            th "Profiling (90 days)"
+            th "Gigs a week"
+          end
+        end
+        tbody do
+          coverage.regions.each do |region|
+            tr do
+              td do
+                text_node region.name
+                span(" (outside Victoria)", class: "empty") unless region.victorian?
+              end
+              td number_with_delimiter(region.venues)
+              td number_with_delimiter(region.active)
+              td number_with_delimiter(region.recently_active)
+              td region.gigs_per_week.to_s
+            end
+          end
+          tr do
+            td(b { "Victoria" })
+            td(b { number_with_delimiter(coverage.venues) })
+            td(b { number_with_delimiter(coverage.active_venues) })
+            td(b { number_with_delimiter(coverage.recently_active_venues) })
+            td(b { coverage.gigs_per_week.to_s })
+          end
+        end
+      end
+    end
+
+    if coverage.unserved_locations.any?
+      panel "Venues no live region serves" do
+        para class: "empty" do
+          "#{number_with_delimiter(coverage.unserved_venues)} venues sit in a location that is not " \
+            "publicly selectable, so the gig guide never shows them. Some are interstate; a location " \
+            "spelled differently to its region - \"St Kilda\" rather than \"stkilda\" - is a venue we " \
+            "have lost track of."
+        end
+        table do
+          thead do
+            tr do
+              th "Location"
+              th "Venues"
+            end
+          end
+          tbody do
+            coverage.listed_unserved_locations.each do |location, count|
+              tr do
+                td { link_to location, admin_venues_path(q: { location_i_cont: location }) }
+                td count.to_s
+              end
+            end
+            if coverage.unlisted_unserved_locations.positive?
+              tr do
+                td(class: "empty") { "and #{coverage.unlisted_unserved_locations} more locations" }
+                td ""
+              end
+            end
+          end
+        end
+      end
+    end
+
     start_of_week = Date.today.beginning_of_week
     start_of_last_week = start_of_week - 7
     end_of_week = start_of_week + 6

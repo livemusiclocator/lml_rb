@@ -21,11 +21,12 @@ module Lml
     validates :name, presence: true
     validates :token_digest, presence: true, uniqueness: true
 
-    scope :active, lambda {
-      where(revoked_at: nil).where(expires_at: nil).or(
-        where(revoked_at: nil).where(expires_at: Time.current..),
-      )
-    }
+    scope :active,
+      lambda {
+        where(revoked_at: nil).where(expires_at: nil).or(
+          where(revoked_at: nil).where(expires_at: Time.current..),
+        )
+      }
 
     # Only ever populated on the request that issued the token - it is the one
     # chance the owner gets to copy it.

@@ -16,11 +16,12 @@ module Lml
       [:with_admin_user]
     end
 
-    scope :with_admin_user, lambda { |id|
-      return where(admin_user_id: nil) if id == "none"
+    scope :with_admin_user,
+      lambda { |id|
+        return where(admin_user_id: nil) if id == "none"
 
-      where(admin_user_id: id)
-    }
+        where(admin_user_id: id)
+      }
 
     def self.ransackable_associations(_auth_object = nil)
       %w[admin_user]
@@ -34,14 +35,21 @@ module Lml
       },
     )
 
-    has_many :gigs, dependent: :delete_all
+    # Not a cascade. `dependent: :delete_all` here used to issue one DELETE over the venue's gigs,
+    # skipping Gig's own dependents: a venue whose gigs had sets hit the sets foreign key and blew
+    # up with a 500, and a venue whose gigs had none was wiped clean under a success message,
+    # taking the gigs with it. Deleting a duplicate venue is a thing we want, but only once its
+    # gigs have been moved off it, so the gigs block the delete and say so.
+    has_many :gigs, dependent: :restrict_with_error
     # What a venue page lists, for the same reasons as Lml::Act#upcoming_gigs:
     # `visible` because an unannounced or draft gig has no business on a public
     # page, `eager` because the view renders each gig's sets. No distinct - a gig
     # has the one venue, so nothing fans out the way an act's sets do.
     has_many :upcoming_gigs,
-             -> { visible.eager.where(date: Date.current..) },
-             class_name: "Lml::Gig", foreign_key: :venue_id, inverse_of: :venue
+      -> { visible.eager.where(date: Date.current..) },
+      class_name: "Lml::Gig",
+      foreign_key: :venue_id,
+      inverse_of: :venue
     has_many :uploads, dependent: :delete_all
     has_many :venue_managers, class_name: "Lml::VenueManager", foreign_key: :venue_id, dependent: :destroy
     has_many :managers, through: :venue_managers, source: :user
@@ -50,24 +58,44 @@ module Lml
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first
     end
-    scope :in_location, lambda { |location|
-      if location == "anywhere"
-        # TODO: this could just be removed but I am in a bit of rush so this will do
-        return where.not(location: %w[placeholder])
-      end
-      # Until we sort out locations properly, asking for 'location=melbourne' will show you everything
-      # in stkilda location and melbourne (and "Melbourne"! )
-      return where(location: %w[Melbourne melbourne stkilda]) if location == "melbourne"
+    scope :in_location,
+      lambda { |location|
+        if location == "anywhere"
+          # "anywhere" means the main edition's selectable locations, not literally
+          # every venue. A location left off that list is hidden: gigs can be
+          # entered against it and worked on without showing up in the gig guide,
+          # while `location=thatplace` still fetches them for whoever knows to ask.
+          public_locations = Web::ExplorerConfig.public_location_identifiers
 
-      where(Venue.arel_table[:location].matches(location))
-    }
+          # No config row, or an admin emptied the list. Falling back to everything
+          # keeps the old behaviour rather than serving an empty gig guide.
+          return where.not(location: %w[placeholder]) if public_locations.blank?
+
+          return in_locations(public_locations)
+        end
+        # Until we sort out locations properly, asking for 'location=melbourne' will show you everything
+        # in stkilda location and melbourne. Both spellings of Melbourne used to be
+        # listed here by hand; in_locations lowers the column, so they no longer are.
+        return in_locations(%w[melbourne stkilda]) if location == "melbourne"
+
+        where(Venue.arel_table[:location].matches(location))
+      }
+
+    # The location column holds both "Melbourne" and "melbourne", so compare on
+    # the lowered column rather than trusting what was typed in. Table qualified
+    # because this is merged into a gigs query, and gigs has a location too.
+    scope :in_locations,
+      lambda { |identifiers|
+        where("LOWER(venues.location) IN (?)", identifiers.map { |identifier| identifier.to_s.downcase })
+      }
 
     # Venues with a gig - not hidden, not a draft - on or after this date. No upper bound, so a
     # venue with something coming up counts as active just as much as one that had a gig last week.
-    scope :with_gigs_since, lambda { |date|
-      # A subquery rather than a join, which would return one row per gig.
-      where(id: Lml::Gig.visible.where(date: date..).select(:venue_id))
-    }
+    scope :with_gigs_since,
+      lambda { |date|
+        # A subquery rather than a join, which would return one row per gig.
+        where(id: Lml::Gig.visible.where(date: date..).select(:venue_id))
+      }
 
     scope :named, ->(name) { where("LOWER(name) = ?", name.to_s.strip.downcase).order(:name) }
 
@@ -75,13 +103,14 @@ module Lml
 
     # `@>` is subset matching, so this finds venues at this address *and* venues carrying extra
     # identity keys - a subpremise within the same building. The caller decides which it wanted.
-    scope :at_address, lambda { |identity|
-      # `@> '{}'` is true of every row, so a place with no identity components at all must match
-      # nothing here rather than claiming the whole table.
-      next none if identity.blank?
+    scope :at_address,
+      lambda { |identity|
+        # `@> '{}'` is true of every row, so a place with no identity components at all must match
+        # nothing here rather than claiming the whole table.
+        next none if identity.blank?
 
-      where("address_components @> ?::jsonb", identity.to_json).order(:name)
-    }
+        where("address_components @> ?::jsonb", identity.to_json).order(:name)
+      }
 
     # The part of the resolved address that decides whether two venues are at the same address.
     def address_identity
@@ -90,6 +119,32 @@ module Lml
 
     def closed_permanently?
       google_business_status == Lml::Place::CLOSED_PERMANENTLY
+    end
+
+    # Google's place ids are url safe base64 - letters, digits, hyphen, underscore, and never a
+    # space. Anything else in the column is one of Lml::VenuePlaceLookup's markers, recording a
+    # lookup that found nothing or found too much.
+    PLACE_ID = /\A[A-Za-z0-9_-]+\z/
+
+    def google_place_marker?
+      google_place_id.present? && !google_place_id.match?(PLACE_ID)
+    end
+
+    # Built rather than stored, which is why Lml::Place::FILL_INS leaves location_url alone. Two
+    # reasons: deriving it means we are never stuck with whichever URL shape we preferred the day a
+    # venue was resolved, and it keeps location_url meaning "the link somebody chose".
+    #
+    # `query` is not decoration - the Maps URLs API requires it alongside query_place_id and falls
+    # back to searching it if the id has gone stale, which the googleMapsUri `?cid=` form has no
+    # equivalent of. It also makes the link readable, where a bare cid is a 19 digit number.
+    MAPS_SEARCH_URL = "https://www.google.com/maps/search/"
+
+    def google_maps_url
+      return nil unless google_place_id.present? && !google_place_marker?
+
+      query = [name, address].compact_blank.join(", ")
+
+      "#{MAPS_SEARCH_URL}?#{{ api: 1, query: query, query_place_id: google_place_id }.to_query}"
     end
 
     def label

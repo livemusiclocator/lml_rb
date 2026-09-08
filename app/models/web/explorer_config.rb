@@ -12,8 +12,16 @@ module Web
     validates :edition_id, uniqueness: true, presence: true
 
     def self.ransackable_attributes(_auth_object = nil)
-      %w[allow_all_locations created_at default_location edition_id id id_value
-         selectable_locations updated_at]
+      %w[
+        allow_all_locations
+        created_at
+        default_location
+        edition_id
+        id
+        id_value
+        selectable_locations
+        updated_at
+      ]
     end
 
     def self.ransackable_associations(_auth_object = nil)
@@ -41,6 +49,17 @@ module Web
     # Returns all edition names/keys
     def self.config_names
       all.pluck(:edition_id).compact + [:main]
+    end
+
+    # What `location=anywhere` resolves to on the api. selectable_locations is
+    # the public set - a location left off it is hidden, so gigs can be entered
+    # against it without appearing in the gig guide.
+    #
+    # find_by rather than the `main` scope: edition_id is validated present and
+    # the main row stores the string "main", so `where(edition_id: nil)` never
+    # matches anything. Same lookup the web controllers do.
+    def self.public_location_identifiers
+      find_by(edition_id: "main")&.selectable_locations || []
     end
 
     def locations

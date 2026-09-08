@@ -3,6 +3,10 @@ AllCops:
   NewCops: enable
   Exclude:
     - "db/**/*"
+    # Gitignored scratch space - rubocop was linting throwaway scripts in here and counting them.
+    - "tmp/**/*"
+    # Generated binstubs. Bundler and Rails rewrite these, so corrections here do not survive.
+    - "bin/**/*"
 Style/TrailingCommaInArguments:
   Enabled: true
   EnforcedStyleForMultiline: consistent_comma
@@ -46,3 +50,70 @@ Metrics/BlockLength:
     - "config/initializers/active_admin.rb" # should we just exclude all the config?
 
 plugins: rubocop-rspec
+
+# The specs in here set instance variables in `before` blocks and never use `let` or `let!`, which
+# is a deliberate house rule - see CLAUDE.md. This cop exists to push the other way, so it only
+# ever fires on specs that are already doing the right thing.
+RSpec/InstanceVariable:
+  Enabled: false
+
+# The other half of the same argument. These two enforce one-expectation-per-example, and the specs
+# in here deliberately assert a whole outcome in one go - that a control said the right thing *and*
+# left the right rows behind. Splitting those apart would mean driving the same form twice.
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+
+# Same objection as `let` and `subject`: it hides what is being built. `Lml::Upload.create!` says
+# what it makes on the line you are reading, where `described_class.create!` sends you to the top
+# of the file to find out.
+RSpec/DescribedClass:
+  Enabled: false
+
+# Consistent breaking, in Oppen's sense: an argument list, array or hash either fits on one line or
+# puts every element on its own line. Never a partial fill packed out to the margin. All eight of
+# these cops are opt-in - rubocop has no single name for the rule, and its defaults permit the fill.
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: true
+Layout/MultilineMethodParameterLineBreaks:
+  Enabled: true
+Layout/MultilineArrayLineBreaks:
+  Enabled: true
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: true
+Layout/FirstMethodParameterLineBreak:
+  Enabled: true
+Layout/FirstArrayElementLineBreak:
+  Enabled: true
+Layout/FirstHashElementLineBreak:
+  Enabled: true
+
+# The other half of the same opinion: an exploded list indents by one step, it does not align to
+# whatever column the opening paren happened to land on. Rubocop's defaults align, which is what
+# put the debug_domain lambda in config/routes.rb fourteen columns deep.
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+# That initializer is a 200 line CSS and JS heredoc with the admin's autocomplete in it. Correcting
+# the heredoc's indentation rewrites every one of those lines, which is a lot of noise over
+# whitespace that neither CSS nor JS cares about. Already excluded from Metrics/BlockLength above.
+Layout/HeredocIndentation:
+  Exclude:
+    - "config/initializers/active_admin.rb"

@@ -2,9 +2,13 @@
 
 ActiveAdmin.register Web::Location, as: "Location" do
   # Permitted parameters - add the new fields
-  permit_params :internal_identifier, :name, :latitude, :longitude,
-                :seo_title_format_string, :map_zoom_level,
-                visible_in_editions: []
+  permit_params :internal_identifier,
+    :name,
+    :latitude,
+    :longitude,
+    :seo_title_format_string,
+    :map_zoom_level,
+    visible_in_editions: []
 
   menu parent: "Web App"
 
@@ -66,9 +70,9 @@ ActiveAdmin.register Web::Location, as: "Location" do
 
     f.inputs "Display Settings" do
       f.input :map_zoom_level,
-              hint: "Zoom level for maps (1-20, default: 15)"
+        hint: "Zoom level for maps (1-20, default: 15)"
       f.input :seo_title_format_string,
-              hint: "Optional format string for SEO page titles"
+        hint: "Optional format string for SEO page titles"
     end
 
     f.actions

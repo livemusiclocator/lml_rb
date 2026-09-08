@@ -108,8 +108,11 @@ describe "venues" do
       end
 
       it "leaves out another venue's gigs" do
-        elsewhere = Lml::Venue.create!(name: "The Night Cat", location: "melbourne",
-                                       time_zone: "Australia/Melbourne",)
+        elsewhere = Lml::Venue.create!(
+          name: "The Night Cat",
+          location: "melbourne",
+          time_zone: "Australia/Melbourne",
+        )
         theirs = Lml::Gig.create!(name: "Not Ours", venue: elsewhere, date: Date.current + 3, status: :confirmed)
         Lml::Set.create!(gig: theirs, act: @act, start_offset: 1200)
 
@@ -145,10 +148,16 @@ describe "venues" do
 
     # The pickers were there first and must keep their paths.
     it "leaves the picker routes alone" do
-      expect(get: "http://api.lml.live/venues/search").to route_to(controller: "venues", action: "search",
-                                                                   format: "json",)
-      expect(get: "http://api.lml.live/venues/autocomplete").to route_to(controller: "venues", action: "autocomplete",
-                                                                         format: "json",)
+      expect(get: "http://api.lml.live/venues/search").to route_to(
+        controller: "venues",
+        action: "search",
+        format: "json",
+      )
+      expect(get: "http://api.lml.live/venues/autocomplete").to route_to(
+        controller: "venues",
+        action: "autocomplete",
+        format: "json",
+      )
     end
   end
 

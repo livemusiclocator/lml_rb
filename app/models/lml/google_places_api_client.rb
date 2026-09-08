@@ -28,7 +28,6 @@ module Lml
       places.formattedAddress
       places.addressComponents
       places.location
-      places.googleMapsUri
       places.businessStatus
       places.timeZone
     ].join(",").freeze

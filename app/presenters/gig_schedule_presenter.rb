@@ -77,7 +77,7 @@ class GigSchedulePresenter
                           []
                         else
                           (0..6).map { |offset| @week_start + offset.days }
-                                .grep(@week_start..@week_end)
+                            .grep(@week_start..@week_end)
                         end
     end
 
@@ -110,8 +110,11 @@ class GigSchedulePresenter
       g.date&.beginning_of_week(:monday)
     end
     gigs_by_week_start.map do |week_start, gigs|
-      WeekSchedulePresenter.new(week_start, gigs,
-                                @show_duplicates,)
+      WeekSchedulePresenter.new(
+        week_start,
+        gigs,
+        @show_duplicates,
+      )
     end
   end
 end

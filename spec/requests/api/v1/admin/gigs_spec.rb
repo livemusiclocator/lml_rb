@@ -54,8 +54,8 @@ describe "admin api gigs" do
 
     it "filters to a date range" do
       get "/v1/admin/gigs",
-          params: { venue_id: @vine.id, date_from: Date.current.iso8601, date_to: (Date.current + 7).iso8601 },
-          headers: @headers
+        params: { venue_id: @vine.id, date_from: Date.current.iso8601, date_to: (Date.current + 7).iso8601 },
+        headers: @headers
 
       expect(body["gigs"].map { |g| g["name"] }).to eq(["Open Mic night"])
     end

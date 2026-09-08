@@ -39,13 +39,31 @@ describe "admin api acts" do
   end
 
   describe "showing" do
-    before { @amyl.update!(genres: ["punk"], instagram: "https://www.instagram.com/amylsniffers") }
+    before do
+      @amyl.update!(
+        genres: ["punk"],
+        aliases: ["Amyl & the Sniffers"],
+        instagram: "https://www.instagram.com/amylsniffers",
+      )
+    end
 
     it "returns the act with its genres and handles" do
       get "/v1/admin/acts/#{@amyl.id}", headers: @headers
 
       expect(body["act"]).to include("id" => @amyl.id, "name" => "Amyl and the Sniffers", "genres" => ["punk"])
       expect(body["act"]["handles"]).to include("instagram" => "amylsniffers")
+    end
+
+    it "returns the aliases it is known by" do
+      get "/v1/admin/acts/#{@amyl.id}", headers: @headers
+
+      expect(body["act"]["aliases"]).to eq(["Amyl & the Sniffers"])
+    end
+
+    it "returns an empty alias list rather than null for an act with none" do
+      get "/v1/admin/acts/#{@cable.id}", headers: @headers
+
+      expect(body["act"]["aliases"]).to eq([])
     end
 
     it "returns a json 404 for an act that does not exist" do
@@ -58,18 +76,33 @@ describe "admin api acts" do
 
   describe "creating" do
     it "creates an act" do
-      post "/v1/admin/acts", headers: @headers, params: {
-        act: { name: "Cash Savage", country: "Australia", genres: ["blues"] },
-      }
+      post "/v1/admin/acts",
+        headers: @headers,
+        params: {
+          act: { name: "Cash Savage", country: "Australia", genres: ["blues"] },
+        }
 
       expect(response).to have_http_status(:created)
       expect(Lml::Act.find(body["act"]["id"]).genres).to eq(["blues"])
     end
 
+    it "creates an act with aliases" do
+      post "/v1/admin/acts",
+        headers: @headers,
+        params: {
+          act: { name: "Cash Savage", aliases: ["Cash Savage and the Last Drinks"] },
+        }
+
+      expect(response).to have_http_status(:created)
+      expect(Lml::Act.find(body["act"]["id"]).aliases).to eq(["Cash Savage and the Last Drinks"])
+    end
+
     it "keeps the handle from a pasted social url" do
-      post "/v1/admin/acts", headers: @headers, params: {
-        act: { name: "Cash Savage", instagram: "https://www.instagram.com/cashsavage" },
-      }
+      post "/v1/admin/acts",
+        headers: @headers,
+        params: {
+          act: { name: "Cash Savage", instagram: "https://www.instagram.com/cashsavage" },
+        }
 
       expect(body["act"]["handles"]["instagram"]).to eq("cashsavage")
     end
@@ -94,6 +127,25 @@ describe "admin api acts" do
       patch "/v1/admin/acts/#{@amyl.id}", headers: @headers, params: { act: { genres: ["pub rock"] } }
 
       expect(@amyl.reload.genres).to eq(["pub rock"])
+    end
+
+    it "replaces the alias list wholesale rather than merging it" do
+      @amyl.update!(aliases: ["Amyl & the Sniffers"])
+
+      patch "/v1/admin/acts/#{@amyl.id}", headers: @headers, params: { act: { aliases: ["Amyl"] } }
+
+      expect(@amyl.reload.aliases).to eq(["Amyl"])
+    end
+
+    # act_params has to permit both array columns in the one call. Permitting them in two
+    # statements looks right and silently drops the first, because only the last is returned.
+    it "permits genres and aliases in the same request" do
+      patch "/v1/admin/acts/#{@amyl.id}",
+        headers: @headers,
+        params: { act: { genres: ["punk"], aliases: ["Amyl"] } }
+
+      expect(@amyl.reload.genres).to eq(["punk"])
+      expect(@amyl.reload.aliases).to eq(["Amyl"])
     end
 
     it "clears a handle when given null" do

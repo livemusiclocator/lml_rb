@@ -3,8 +3,19 @@
 module Web
   class Location < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
-      %w[created_at id id_value internal_identifier latitude longitude map_zoom_level name
-         seo_title_format_string updated_at visible_in_editions]
+      %w[
+        created_at
+        id
+        id_value
+        internal_identifier
+        latitude
+        longitude
+        map_zoom_level
+        name
+        seo_title_format_string
+        updated_at
+        visible_in_editions
+      ]
     end
 
     def venues
@@ -13,12 +24,15 @@ module Web
 
     validates :internal_identifier, presence: true, uniqueness: true
     validates :name, presence: true
-    validates :latitude, presence: true,
-                         numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
-    validates :longitude, presence: true,
-                          numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
-    validates :map_zoom_level, presence: true,
-                               numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 20 }
+    validates :latitude,
+      presence: true,
+      numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
+    validates :longitude,
+      presence: true,
+      numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
+    validates :map_zoom_level,
+      presence: true,
+      numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 20 }
 
     # query by edition
 

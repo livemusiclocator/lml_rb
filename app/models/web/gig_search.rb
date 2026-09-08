@@ -11,7 +11,7 @@ module Web
       Garage, Trance, House, Techno, Drum and Bass, Dubstep, Funk, Chill, Disco, Opera, Swing, Acoustic,
       New Wave, DJ, Covers, Tribute
     GENRES_CSV
-             .split(/,\s*/).freeze
+      .split(/,\s*/).freeze
     DATE_RANGES = %w[today tomorrow thisWeek nextWeek thisMonth customDate].freeze
 
     # Configuration for display formatting

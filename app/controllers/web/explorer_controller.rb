@@ -29,8 +29,8 @@ module Web
       # expected parameters - stops warnings in the logs
 
       params.transform_keys(&:underscore)
-            .permit(:location, :date_range, :custom_date, :edition_id, :venues, genre: [])
-            .slice(:location, :date_range, :custom_date, :genre)
+        .permit(:location, :date_range, :custom_date, :edition_id, :venues, genre: [])
+        .slice(:location, :date_range, :custom_date, :genre)
     end
   end
 end

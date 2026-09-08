@@ -4,9 +4,11 @@
 ActiveAdmin.register Web::ExplorerConfig, as: "Explorer Config" do
   menu parent: "Web App", priority: 1
 
-  permit_params :edition_id, :allow_all_locations, :default_location,
-                selectable_locations: [],
-                series_themes_attributes: %i[id series_name search_result saved_map_pin default_map_pin _destroy]
+  permit_params :edition_id,
+    :allow_all_locations,
+    :default_location,
+    selectable_locations: [],
+    series_themes_attributes: %i[id series_name search_result saved_map_pin default_map_pin _destroy]
 
   # Index page
   index do
@@ -88,31 +90,31 @@ ActiveAdmin.register Web::ExplorerConfig, as: "Explorer Config" do
     f.inputs "Basic Configuration" do
       f.input :edition_id if f.object.new_record?
       f.input :default_location,
-              as: :select,
-              collection: Web::Location.all.collect { |loc| [loc.name, loc.internal_identifier] },
-              include_blank: "Select a location",
-              hint: "Default location for this configuration"
+        as: :select,
+        collection: Web::Location.all.collect { |loc| [loc.name, loc.internal_identifier] },
+        include_blank: "Select a location",
+        hint: "Default location for this configuration"
       f.input :allow_all_locations,
-              hint: "Allow locations not in the search criteria (via querystring parameter)"
+        hint: "Allow locations not in the search criteria (via querystring parameter)"
     end
 
     f.inputs "Location Selection" do
       f.input :selectable_locations,
-              as: :check_boxes,
-              collection: Web::Location.all.collect { |loc| [loc.name, loc.internal_identifier] },
-              hint: "Locations that can be selected (location filter is readonly if only one location is given)"
+        as: :check_boxes,
+        collection: Web::Location.all.collect { |loc| [loc.name, loc.internal_identifier] },
+        hint: "Locations that can be selected (location filter is readonly if only one location is given)"
     end
 
     f.inputs "Series Themes" do
       f.has_many :series_themes,
-                 heading: "Theme Configurations",
-                 allow_destroy: true,
-                 new_record: true do |theme_form|
+        heading: "Theme Configurations",
+        allow_destroy: true,
+        new_record: true do |theme_form|
         theme_form.input :series_name, hint: "Series name as appearing in the gig.series field"
         theme_form.input :search_result, hint: "image shown on gig pages when matching this series"
         theme_form.input :default_map_pin, hint: "map pin image for venue when has at least one gig in this series"
         theme_form.input :saved_map_pin,
-                         hint: "map pin image for venue with saved 'star' when has at least one gig in this series"
+          hint: "map pin image for venue with saved 'star' when has at least one gig in this series"
       end
     end
 
@@ -121,8 +123,9 @@ ActiveAdmin.register Web::ExplorerConfig, as: "Explorer Config" do
     else
 
       f.actions do
-        f.action :submit, label: "Update Explorer Configuration",
-                          button_html: { data: { confirm: "Are you sure you want to save these configuration changes? This will affect the live website immediately and might break stuff." } }
+        f.action :submit,
+          label: "Update Explorer Configuration",
+          button_html: { data: { confirm: "Are you sure you want to save these configuration changes? This will affect the live website immediately and might break stuff." } }
         f.action :cancel, label: "Cancel"
       end
     end

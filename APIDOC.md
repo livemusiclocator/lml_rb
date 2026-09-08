@@ -57,6 +57,8 @@ token: An API token
 
 If no `location`, `date_from`, and `date_to` are provided, returns an empty array. The `location` parameter is a string representing the gig location, for example *melbourne* or *goldfields*. Only fetches gigs for up to 7 days from `date_from` unless a valid `token` is supplied. 
 
+The special value *anywhere* returns gigs across every location the gig guide publishes, which is not necessarily every location we hold gigs for - a location can be kept out of the guide while it is being worked on. Name such a location explicitly and you will still get its gigs.
+
 Example:
 
 ```

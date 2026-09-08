@@ -17,15 +17,16 @@ describe "admin users" do
   end
 
   it "updates the username without requiring a password change" do
-    patch "/admin/admin_users/#{@admin_user.id}", params: {
-      lml_admin_user: {
-        email: @admin_user.email,
-        username: "new_username",
-        time_zone: @admin_user.time_zone,
-        password: "",
-        password_confirmation: "",
-      },
-    }
+    patch "/admin/admin_users/#{@admin_user.id}",
+      params: {
+        lml_admin_user: {
+          email: @admin_user.email,
+          username: "new_username",
+          time_zone: @admin_user.time_zone,
+          password: "",
+          password_confirmation: "",
+        },
+      }
 
     expect(response).to redirect_to("/admin/admin_users/#{@admin_user.id}")
     expect(@admin_user.reload.username).to eq("new_username")

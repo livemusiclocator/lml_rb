@@ -82,8 +82,8 @@ module Api
 
         def serialize(gig)
           gig.slice(:id, :name, :date, :status, :series, :category, :source)
-             .merge(times(gig), tags(gig), associations(gig), state(gig), links(gig))
-             .merge(created_at: gig.created_at, updated_at: gig.updated_at)
+            .merge(times(gig), tags(gig), associations(gig), state(gig), links(gig))
+            .merge(created_at: gig.created_at, updated_at: gig.updated_at)
         end
 
         def times(gig)

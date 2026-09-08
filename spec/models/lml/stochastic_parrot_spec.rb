@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Lml::StochasticParrot do
   before do
     @url = "https://api.openai.com/v1/chat/completions"
-    @parrot = described_class.new(access_token: "test-key")
+    @parrot = Lml::StochasticParrot.new(access_token: "test-key")
   end
 
   def answering(tags)
@@ -15,8 +15,8 @@ RSpec.describe Lml::StochasticParrot do
   describe "#gist" do
     it "returns the suggested tags, downcased" do
       request = stub_request(:post, @url)
-                .with(headers: { "Authorization" => "Bearer test-key" })
-                .to_return(status: 200, body: answering(%w[Jazz Lounge]))
+        .with(headers: { "Authorization" => "Bearer test-key" })
+        .to_return(status: 200, body: answering(%w[Jazz Lounge]))
 
       expect(@parrot.gist("a night of smooth jazz")).to eq(%w[jazz lounge])
 
@@ -36,8 +36,12 @@ RSpec.describe Lml::StochasticParrot do
     it "returns nil when the credit balance has run out" do
       stub_request(:post, @url).to_return(
         status: 429,
-        body: { error: { message: "You have no credits remaining.",
-                         code: "credit_balance_exhausted", } }.to_json,
+        body: {
+          error: {
+            message: "You have no credits remaining.",
+            code: "credit_balance_exhausted",
+          },
+        }.to_json,
       )
 
       expect(@parrot.gist("a night of smooth jazz")).to be_nil
@@ -46,7 +50,7 @@ RSpec.describe Lml::StochasticParrot do
     it "returns nil without asking when there is no key configured" do
       request = stub_request(:post, @url)
 
-      expect(described_class.new(access_token: nil).gist("a night of smooth jazz")).to be_nil
+      expect(Lml::StochasticParrot.new(access_token: nil).gist("a night of smooth jazz")).to be_nil
 
       expect(request).not_to have_been_requested
     end

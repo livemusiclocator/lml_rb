@@ -51,9 +51,11 @@ class PageMetadataFactory
 
   class GigGenerator < BaseGenerator
     def generate_schema_dot_org
-      SchemaDotOrg::Event.new(name: @object.name,
-                              startDate: @object.date,
-                              location: PageMetadataFactory.generate_schema_dot_org_for(@object.venue),)
+      SchemaDotOrg::Event.new(
+        name: @object.name,
+        startDate: @object.date,
+        location: PageMetadataFactory.generate_schema_dot_org_for(@object.venue),
+      )
     end
 
     def generate_meta_tags
@@ -66,8 +68,16 @@ class PageMetadataFactory
     # that identify the same artist. website first, then alphabetical, matching
     # the order the json api renders them in.
     SAME_AS = %i[
-      website bandcamp_url facebook_url instagram_url linktree_url
-      musicbrainz_url rym_url spotify_url wikipedia_url youtube_url
+      website
+      bandcamp_url
+      facebook_url
+      instagram_url
+      linktree_url
+      musicbrainz_url
+      rym_url
+      spotify_url
+      wikipedia_url
+      youtube_url
     ].freeze
 
     def generate_schema_dot_org

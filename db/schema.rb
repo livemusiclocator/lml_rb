@@ -329,6 +329,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_110000) do
     t.string "google_place_id"
     t.string "instagram_url"
     t.float "latitude"
+    t.string "lga"
     t.string "location"
     t.string "location_url"
     t.float "longitude"

@@ -7,8 +7,20 @@ module Api
         # No destroy: gigs point at acts through sets, and deleting one through
         # an API is not something we want to be one typo away from.
         WRITABLE = %i[
-          name country location email website
-          bandcamp facebook instagram linktree musicbrainz rym spotify wikipedia youtube
+          name
+          country
+          location
+          email
+          website
+          bandcamp
+          facebook
+          instagram
+          linktree
+          musicbrainz
+          rym
+          spotify
+          wikipedia
+          youtube
         ].freeze
 
         def index
@@ -43,22 +55,28 @@ module Api
         # An explicit allowlist rather than the model's full attribute set, so a
         # column we add later is not writable by accident.
         def act_params
-          params.require(:act).permit(*WRITABLE, genres: [])
-          params.require(:act).permit(*WRITABLE, aliases: [])
+          params.require(:act).permit(*WRITABLE, genres: [], aliases: [])
         end
 
         def serialize(act)
           act.slice(:id, :name, :country, :location, :email, :website)
-             .merge(
-               genres: act.genres || [],
-               aliases: act.aliases || [],
-               handles: act.slice(
-                 :bandcamp, :facebook, :instagram, :linktree,
-                 :musicbrainz, :rym, :spotify, :wikipedia, :youtube,
-               ),
-               created_at: act.created_at,
-               updated_at: act.updated_at,
-             )
+            .merge(
+              genres: act.genres || [],
+              aliases: act.aliases || [],
+              handles: act.slice(
+                :bandcamp,
+                :facebook,
+                :instagram,
+                :linktree,
+                :musicbrainz,
+                :rym,
+                :spotify,
+                :wikipedia,
+                :youtube,
+              ),
+              created_at: act.created_at,
+              updated_at: act.updated_at,
+            )
         end
       end
     end
