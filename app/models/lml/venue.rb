@@ -34,7 +34,12 @@ module Lml
       },
     )
 
-    has_many :gigs, dependent: :delete_all
+    # Not a cascade. `dependent: :delete_all` here used to issue one DELETE over the venue's gigs,
+    # skipping Gig's own dependents: a venue whose gigs had sets hit the sets foreign key and blew
+    # up with a 500, and a venue whose gigs had none was wiped clean under a success message,
+    # taking the gigs with it. Deleting a duplicate venue is a thing we want, but only once its
+    # gigs have been moved off it, so the gigs block the delete and say so.
+    has_many :gigs, dependent: :restrict_with_error
     # What a venue page lists, for the same reasons as Lml::Act#upcoming_gigs:
     # `visible` because an unannounced or draft gig has no business on a public
     # page, `eager` because the view renders each gig's sets. No distinct - a gig

@@ -22,6 +22,45 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     :admin_user_id
   )
 
+  # Both delete paths below report what they were asked to do rather than what happened, so
+  # Lml::Venue's `dependent: :restrict_with_error` needs them rewritten or it silently produces a
+  # success message over a venue that is still there.
+  controller do
+    # InheritedResources' destroy discards destroy's return value and always flashes
+    # "successfully destroyed".
+    def destroy
+      if destroy_resource(resource)
+        redirect_to admin_venues_path, notice: "Venue was successfully destroyed."
+      else
+        redirect_to admin_venue_path(resource), alert: gigs_blocking_delete(resource)
+      end
+    end
+
+    # Also reached from the batch action, which runs in this controller.
+    def gigs_blocking_delete(venue)
+      count = venue.gigs.count
+
+      "#{venue.name} still has #{count} #{"gig".pluralize(count)}, so it was not deleted. " \
+        "Move them to another venue first."
+    end
+  end
+
+  # ActiveAdmin's own delete batch action counts the ids that were submitted, not the records it
+  # managed to destroy, so it would claim every selected venue had gone.
+  batch_action :destroy, confirm: I18n.t("active_admin.delete_confirmation") do |ids|
+    deleted, blocked = Lml::Venue.where(id: ids).partition(&:destroy)
+
+    messages = []
+    messages << "Deleted #{deleted.size} #{"venue".pluralize(deleted.size)}." if deleted.any?
+    messages += blocked.map { |venue| gigs_blocking_delete(venue) }
+
+    if blocked.any?
+      redirect_to collection_path, alert: messages.join(" ")
+    else
+      redirect_to collection_path, notice: messages.join(" ")
+    end
+  end
+
   batch_action :assign_to_admin_user, form: -> { { admin_user_id: Lml::AdminUser.order(:username).map { |u| [u.username, u.id] } } } do |ids, inputs|
     Lml::Venue.where(id: ids).update_all(admin_user_id: inputs[:admin_user_id])
     redirect_to collection_path, notice: "Venues assigned to admin user."
