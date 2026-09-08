@@ -3,6 +3,10 @@ AllCops:
   NewCops: enable
   Exclude:
     - "db/**/*"
+    # Gitignored scratch space - rubocop was linting throwaway scripts in here and counting them.
+    - "tmp/**/*"
+    # Generated binstubs. Bundler and Rails rewrite these, so corrections here do not survive.
+    - "bin/**/*"
 Style/TrailingCommaInArguments:
   Enabled: true
   EnforcedStyleForMultiline: consistent_comma
