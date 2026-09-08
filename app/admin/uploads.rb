@@ -46,7 +46,6 @@ ActiveAdmin.register Lml::Upload, as: "Upload" do
   end
 
   form do |f|
-
     f.inputs do
       f.input :venue_label, label: "Venue"
       f.input :venue_id, as: "hidden"

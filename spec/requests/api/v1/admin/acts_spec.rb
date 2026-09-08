@@ -59,10 +59,10 @@ describe "admin api acts" do
   describe "creating" do
     it "creates an act" do
       post "/v1/admin/acts",
-           headers: @headers,
-           params: {
-             act: { name: "Cash Savage", country: "Australia", genres: ["blues"] },
-           }
+        headers: @headers,
+        params: {
+          act: { name: "Cash Savage", country: "Australia", genres: ["blues"] },
+        }
 
       expect(response).to have_http_status(:created)
       expect(Lml::Act.find(body["act"]["id"]).genres).to eq(["blues"])
@@ -70,10 +70,10 @@ describe "admin api acts" do
 
     it "keeps the handle from a pasted social url" do
       post "/v1/admin/acts",
-           headers: @headers,
-           params: {
-             act: { name: "Cash Savage", instagram: "https://www.instagram.com/cashsavage" },
-           }
+        headers: @headers,
+        params: {
+          act: { name: "Cash Savage", instagram: "https://www.instagram.com/cashsavage" },
+        }
 
       expect(body["act"]["handles"]["instagram"]).to eq("cashsavage")
     end

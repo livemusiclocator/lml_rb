@@ -126,10 +126,16 @@ ActiveAdmin.register Lml::User, as: "User" do
       text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
       text_node hidden_field_tag("venue_id", nil, id: "grant_venue_id")
       div style: "position: relative;" do
-        text_node text_field_tag("venue_label", nil, id: "grant_venue_label", placeholder: "Search venues...", autocomplete: "off")
+        text_node text_field_tag(
+          "venue_label",
+          nil,
+          id: "grant_venue_label",
+          placeholder: "Search venues...",
+          autocomplete: "off",
+        )
         div id: "grant_venue_results",
-            style: "display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; " \
-                    "background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"
+          style: "display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; " \
+                 "background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"
       end
       br
       input type: :submit, value: "Grant venue access"
@@ -140,10 +146,16 @@ ActiveAdmin.register Lml::User, as: "User" do
       text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
       text_node hidden_field_tag("act_id", nil, id: "grant_act_id")
       div style: "position: relative;" do
-        text_node text_field_tag("act_label", nil, id: "grant_act_label", placeholder: "Search acts...", autocomplete: "off")
+        text_node text_field_tag(
+          "act_label",
+          nil,
+          id: "grant_act_label",
+          placeholder: "Search acts...",
+          autocomplete: "off",
+        )
         div id: "grant_act_results",
-            style: "display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; " \
-                    "background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"
+          style: "display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; " \
+                 "background: #fff; border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"
       end
       br
       input type: :submit, value: "Grant act access"

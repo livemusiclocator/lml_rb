@@ -61,9 +61,9 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
           end
           div style: "margin-top: 10px" do
             input type: :submit,
-                  value: "Unassign Selected",
-                  class: "button",
-                  data: { confirm: "Are you sure you want to unassign these venues?" }
+              value: "Unassign Selected",
+              class: "button",
+              data: { confirm: "Are you sure you want to unassign these venues?" }
           end
         end
       else
@@ -82,7 +82,6 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
     end
     redirect_to admin_admin_user_path(resource)
   end
-
 
   filter :email_cont, label: "Email"
   filter :username, label: "Username"

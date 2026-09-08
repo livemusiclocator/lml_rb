@@ -57,10 +57,11 @@ module Backstage
 
     def apply_directly(target, attrs)
       if target.update(attrs)
-        redirect_to backstage_root_path, notice: "Changes applied directly — you manage this #{target.class.name.demodulize.downcase}."
+        redirect_to backstage_root_path,
+          notice: "Changes applied directly — you manage this #{target.class.name.demodulize.downcase}."
       else
         redirect_to new_backstage_proposal_path(target_type: target.class.name, target_id: target.id),
-                    alert: "Could not apply changes: #{target.errors.full_messages.to_sentence}"
+          alert: "Could not apply changes: #{target.errors.full_messages.to_sentence}"
       end
     end
 
@@ -75,7 +76,8 @@ module Backstage
       if proposal.save
         redirect_to backstage_proposal_path(proposal), notice: "Proposal submitted — thanks! We'll review it shortly."
       else
-        redirect_to new_backstage_proposal_path, alert: "Could not submit proposal: #{proposal.errors.full_messages.to_sentence}"
+        redirect_to new_backstage_proposal_path,
+          alert: "Could not submit proposal: #{proposal.errors.full_messages.to_sentence}"
       end
     end
   end

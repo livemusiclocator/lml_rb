@@ -62,8 +62,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         "manager" => result.managers,
         "proposal" => result.proposals,
       }
-               .select { |_, count| count.positive? }
-               .map { |label, count| "#{count} #{label.pluralize(count)}" }
+        .select { |_, count| count.positive? }
+        .map { |label, count| "#{count} #{label.pluralize(count)}" }
 
       "Moved #{counts.to_sentence}." if counts.any?
     end
@@ -101,7 +101,14 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
   end
 
-  batch_action :assign_to_admin_user, form: -> { { admin_user_id: Lml::AdminUser.order(:username).map { |u| [u.username, u.id] } } } do |ids, inputs|
+  batch_action :assign_to_admin_user,
+    form: -> {
+      {
+        admin_user_id: Lml::AdminUser.order(:username).map { |u|
+          [u.username, u.id]
+        },
+      }
+    } do |ids, inputs|
     Lml::Venue.where(id: ids).update_all(admin_user_id: inputs[:admin_user_id])
     redirect_to collection_path, notice: "Venues assigned to admin user."
   end
@@ -221,7 +228,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         end
         para "Nothing was written onto the venue. Correcting the name or address here and then " \
              "forcing another lookup through the admin API is the way forward.",
-             class: "inline-hints"
+          class: "inline-hints"
       elsif resource.address_components.blank?
         para "Not resolved through the Places API. Venues added by hand have none until an " \
              "import matches them, or until somebody looks one up here."
@@ -264,12 +271,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
           input type: :submit, value: "Look up in Google Places", disabled: "disabled"
           para "Already answered. Asking Google again costs another request, so it is only " \
                "available through the admin API, with force.",
-               class: "inline-hints"
+            class: "inline-hints"
         else
           input type: :submit, value: "Look up in Google Places"
           para "Searches Places for this venue's name and address. Fills in only the columns " \
                "that are still blank.",
-               class: "inline-hints"
+            class: "inline-hints"
         end
       end
     end
@@ -279,12 +286,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     outcome = Lml::VenuePlaceLookup.call(resource)
 
     redirect_to admin_venue_path(resource),
-                notice: {
-                  Lml::VenuePlaceLookup::MATCHED => "Matched one place. Blank columns filled in from Google.",
-                  Lml::VenuePlaceLookup::NO_MATCH => "Places found nothing for that name and address.",
-                  Lml::VenuePlaceLookup::AMBIGUOUS => "Places found more than one candidate, so nothing was written.",
-                  Lml::VenuePlaceLookup::SKIPPED => "Already looked up - nothing spent.",
-                }.fetch(outcome)
+      notice: {
+        Lml::VenuePlaceLookup::MATCHED => "Matched one place. Blank columns filled in from Google.",
+        Lml::VenuePlaceLookup::NO_MATCH => "Places found nothing for that name and address.",
+        Lml::VenuePlaceLookup::AMBIGUOUS => "Places found more than one candidate, so nothing was written.",
+        Lml::VenuePlaceLookup::SKIPPED => "Already looked up - nothing spent.",
+      }.fetch(outcome)
   rescue Lml::GooglePlacesApiClient::Error => e
     redirect_to admin_venue_path(resource), alert: "Places API error: #{e.message}"
   end
@@ -307,7 +314,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     para "The duplicate's gigs, uploads and managers move onto this venue, this venue fills in " \
          "anything it had no value for, anything the duplicate knew differently is written into " \
          "the notes above, and then the duplicate is deleted.",
-         class: "inline-hints"
+      class: "inline-hints"
 
     # A real form with an authenticity token rather than `link_to method: :post`, for the reason
     # given in the Google Places panel above.

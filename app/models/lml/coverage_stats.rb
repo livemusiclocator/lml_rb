@@ -55,7 +55,7 @@ module Lml
     # total on the dashboard follows the rows it is a total of.
     def regions
       @regions ||= live_identifiers.map { |identifier| region_for(identifier) }
-                                   .sort_by { |region| [region.victorian? ? 0 : 1, -region.venues] }
+        .sort_by { |region| [region.victorian? ? 0 : 1, -region.venues] }
     end
 
     def victorian_regions = regions.select(&:victorian?)
@@ -72,9 +72,9 @@ module Lml
     # in one of those is invisible to the gig guide, so it is worth seeing.
     def unserved_locations
       @unserved_locations ||= venues_by_location
-                              .except(*live_identifiers)
-                              .reject { |location, _| location.blank? }
-                              .sort_by { |_, count| -count }
+        .except(*live_identifiers)
+        .reject { |location, _| location.blank? }
+        .sort_by { |_, count| -count }
     end
 
     def unserved_venues = unserved_locations.sum { |_, count| count }
@@ -110,7 +110,7 @@ module Lml
 
     def location_names
       @location_names ||= Web::Location.pluck(:internal_identifier, :name)
-                                       .to_h { |identifier, name| [identifier.downcase, name] }
+        .to_h { |identifier, name| [identifier.downcase, name] }
     end
 
     # Keyed by the lowered location column, which is exactly the form a location's

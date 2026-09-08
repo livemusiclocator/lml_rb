@@ -15,8 +15,8 @@ RSpec.describe Lml::StochasticParrot do
   describe "#gist" do
     it "returns the suggested tags, downcased" do
       request = stub_request(:post, @url)
-                .with(headers: { "Authorization" => "Bearer test-key" })
-                .to_return(status: 200, body: answering(%w[Jazz Lounge]))
+        .with(headers: { "Authorization" => "Bearer test-key" })
+        .to_return(status: 200, body: answering(%w[Jazz Lounge]))
 
       expect(@parrot.gist("a night of smooth jazz")).to eq(%w[jazz lounge])
 

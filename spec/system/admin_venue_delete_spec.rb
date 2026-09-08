@@ -44,7 +44,9 @@ describe "deleting a venue in admin", type: :system do
     visit "/admin/venues/#{@venue.id}"
     accept_confirm { click_link "Delete Venue" }
 
-    expect(page).to have_content("The Duplicate still has 1 gig, so it was not deleted. Move them to another venue first.")
+    expect(page).to have_content(
+      "The Duplicate still has 1 gig, so it was not deleted. Move them to another venue first.",
+    )
     expect(Lml::Venue.exists?(@venue.id)).to be(true)
     expect(Lml::Gig.exists?(gig.id)).to be(true)
   end

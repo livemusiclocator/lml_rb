@@ -94,14 +94,14 @@ describe "admin venues" do
     # silently undone by the next run, so permit_params has to keep refusing it.
     it "ignores places data submitted anyway" do
       patch "/admin/venues/#{@venue.id}",
-            params: {
-              lml_venue: {
-                name: "The Espy",
-                time_zone: "Australia/Melbourne",
-                address_components: { "route" => "Somewhere Else" }.to_json,
-                google_place_id: "tampered",
-              },
-            }
+        params: {
+          lml_venue: {
+            name: "The Espy",
+            time_zone: "Australia/Melbourne",
+            address_components: { "route" => "Somewhere Else" }.to_json,
+            google_place_id: "tampered",
+          },
+        }
 
       expect(@venue.reload.address_components).to eq(@components)
       expect(@venue.google_place_id).to eq("place-espy")

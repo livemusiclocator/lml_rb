@@ -52,55 +52,55 @@ module Lml
     has_many :prices, dependent: :delete_all
 
     scope :eager,
-          lambda {
-            order(:date, :start_offset)
-              .includes(sets: :act)
-              .includes(:venue)
-              .includes(:prices)
-              .annotate("eager loading gig data")
-          }
+      lambda {
+        order(:date, :start_offset)
+          .includes(sets: :act)
+          .includes(:venue)
+          .includes(:prices)
+          .annotate("eager loading gig data")
+      }
     scope :this_week,
-          lambda {
-            where(date: Date.current.all_week)
-          }
+      lambda {
+        where(date: Date.current.all_week)
+      }
     scope :next_week,
-          lambda {
-            where(date: Date.current.all_week)
-          }
+      lambda {
+        where(date: Date.current.all_week)
+      }
     scope :modified_this_week,
-          lambda {
-            where(updated_at: Date.current.all_week)
-          }
+      lambda {
+        where(updated_at: Date.current.all_week)
+      }
     scope :missing_genre_tags,
-          lambda {
-            where("genre_tags = '{}' or genre_tags is NULL")
-              .where("proposed_genre_tags = '{}' or proposed_genre_tags is NULL")
-          }
+      lambda {
+        where("genre_tags = '{}' or genre_tags is NULL")
+          .where("proposed_genre_tags = '{}' or proposed_genre_tags is NULL")
+      }
 
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
     scope :potential_duplicates,
-          lambda {
-                # Self-join to find gigs sharing venue_id + date with other gigs
-            duplicate_combinations = where(hidden: [nil, false]).where.not(status: "draft").where.not(date: nil)
-                                                                .group(:venue_id, :date, :start_offset)
-                                                                .having("COUNT(*) > 1")
-                                                                .select(:venue_id, :date, :start_offset)
+      lambda {
+        # Self-join to find gigs sharing venue_id + date with other gigs
+        duplicate_combinations = where(hidden: [nil, false]).where.not(status: "draft").where.not(date: nil)
+          .group(:venue_id, :date, :start_offset)
+          .having("COUNT(*) > 1")
+          .select(:venue_id, :date, :start_offset)
 
-                joins(
-                  "INNER JOIN (#{duplicate_combinations.to_sql}) AS dupes
+        joins(
+          "INNER JOIN (#{duplicate_combinations.to_sql}) AS dupes
            ON gigs.venue_id = dupes.venue_id
            AND gigs.date = dupes.date AND gigs.start_offset =  dupes.start_offset",
-                ).joins(:venue)
-          }
+        ).joins(:venue)
+      }
     # Picker search. Always scoped to `visible` - an unannounced gig has no
     # business showing up in an autocomplete dropdown, which is exactly how the
     # public /gigs/autocomplete endpoint this replaces used to leak them.
     scope :search,
-          lambda { |query, venue_id: nil|
-            results = search_terms(query, SEARCH_COLUMNS).visible.joins(:venue).order(:date, "gigs.name")
-                venue_id.present? ? results.where(venue_id: venue_id) : results
-          }
+      lambda { |query, venue_id: nil|
+        results = search_terms(query, SEARCH_COLUMNS).visible.joins(:venue).order(:date, "gigs.name")
+        venue_id.present? ? results.where(venue_id: venue_id) : results
+      }
 
     # Returns whether tags were actually suggested. OpenAI declines often enough - an exhausted
     # credit balance, a rate limit - that callers need to be able to say so rather than assume it

@@ -90,3 +90,30 @@ Layout/FirstArrayElementLineBreak:
   Enabled: true
 Layout/FirstHashElementLineBreak:
   Enabled: true
+
+# The other half of the same opinion: an exploded list indents by one step, it does not align to
+# whatever column the opening paren happened to land on. Rubocop's defaults align, which is what
+# put the debug_domain lambda in config/routes.rb fourteen columns deep.
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+# That initializer is a 200 line CSS and JS heredoc with the admin's autocomplete in it. Correcting
+# the heredoc's indentation rewrites every one of those lines, which is a lot of noise over
+# whitespace that neither CSS nor JS cares about. Already excluded from Metrics/BlockLength above.
+Layout/HeredocIndentation:
+  Exclude:
+    - "config/initializers/active_admin.rb"

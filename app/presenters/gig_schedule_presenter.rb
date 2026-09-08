@@ -77,7 +77,7 @@ class GigSchedulePresenter
                           []
                         else
                           (0..6).map { |offset| @week_start + offset.days }
-                                .grep(@week_start..@week_end)
+                            .grep(@week_start..@week_end)
                         end
     end
 

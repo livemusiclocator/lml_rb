@@ -18,10 +18,10 @@ module Lml
     # itself - its status, reviewed_at and reviewer_note - is the part worth keeping, and this
     # account is meant to stop existing once admins move to backstage.
     has_many :reviewed_proposals,
-             class_name: "Lml::Proposal",
-             foreign_key: :reviewed_by_id,
-             inverse_of: :reviewed_by,
-             dependent: :nullify
+      class_name: "Lml::Proposal",
+      foreign_key: :reviewed_by_id,
+      inverse_of: :reviewed_by,
+      dependent: :nullify
 
     validates(
       :time_zone,

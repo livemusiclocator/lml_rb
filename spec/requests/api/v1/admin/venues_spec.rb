@@ -70,10 +70,10 @@ describe "admin api venues" do
   describe "creating" do
     it "creates a venue" do
       post "/v1/admin/venues",
-           headers: @headers,
-           params: {
-             venue: { name: "The Curtin", location: "melbourne", time_zone: "Australia/Melbourne", capacity: 200 },
-           }
+        headers: @headers,
+        params: {
+          venue: { name: "The Curtin", location: "melbourne", time_zone: "Australia/Melbourne", capacity: 200 },
+        }
 
       expect(response).to have_http_status(:created)
       expect(Lml::Venue.find(body["venue"]["id"]).name).to eq("The Curtin")
@@ -81,20 +81,20 @@ describe "admin api venues" do
 
     it "sets the local government area" do
       post "/v1/admin/venues",
-           headers: @headers,
-           params: {
-             venue: { name: "The Curtin", time_zone: "Australia/Melbourne", lga: "City of Melbourne" },
-           }
+        headers: @headers,
+        params: {
+          venue: { name: "The Curtin", time_zone: "Australia/Melbourne", lga: "City of Melbourne" },
+        }
 
       expect(Lml::Venue.find(body["venue"]["id"]).lga).to eq("City of Melbourne")
     end
 
     it "reports validation failures rather than saving half a venue" do
       post "/v1/admin/venues",
-           headers: @headers,
-           params: {
-             venue: { name: "Nowhere", time_zone: "Mars/Olympus_Mons" },
-           }
+        headers: @headers,
+        params: {
+          venue: { name: "Nowhere", time_zone: "Mars/Olympus_Mons" },
+        }
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(body["details"]).to include("time_zone")
@@ -108,15 +108,15 @@ describe "admin api venues" do
 
     it "ignores attributes we resolve from google rather than letting a caller set them" do
       post "/v1/admin/venues",
-           headers: @headers,
-           params: {
-             venue: {
-               name: "The Curtin",
-               time_zone: "Australia/Melbourne",
-               google_place_id: "forged",
-               address_components: { route: "Fake Street" },
-             },
-           }
+        headers: @headers,
+        params: {
+          venue: {
+            name: "The Curtin",
+            time_zone: "Australia/Melbourne",
+            google_place_id: "forged",
+            address_components: { route: "Fake Street" },
+          },
+        }
 
       expect(Lml::Venue.find(body["venue"]["id"]).google_place_id).to be_nil
     end
@@ -145,10 +145,10 @@ describe "admin api venues" do
 
     it "reports validation failures without changing the venue" do
       patch "/v1/admin/venues/#{@tote.id}",
-            headers: @headers,
-            params: {
-              venue: { name: "Renamed", time_zone: "Mars/Olympus_Mons" },
-            }
+        headers: @headers,
+        params: {
+          venue: { name: "Renamed", time_zone: "Mars/Olympus_Mons" },
+        }
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(@tote.reload.name).to eq("The Tote")
@@ -156,10 +156,10 @@ describe "admin api venues" do
 
     it "refuses to repoint a venue's google place" do
       patch "/v1/admin/venues/#{@tote.id}",
-            headers: @headers,
-            params: {
-              venue: { google_place_id: "forged" },
-            }
+        headers: @headers,
+        params: {
+          venue: { google_place_id: "forged" },
+        }
 
       expect(@tote.reload.google_place_id).to be_nil
     end

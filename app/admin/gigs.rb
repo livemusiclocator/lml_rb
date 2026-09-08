@@ -7,7 +7,7 @@ module ActiveAdmin
         @gig_schedule_presenter = GigSchedulePresenter.new(collection, params)
 
         render "admin/gigs/gigs_schedule",
-               { gig_schedule_presenter: GigSchedulePresenter.new(collection, params) }
+          { gig_schedule_presenter: GigSchedulePresenter.new(collection, params) }
         # render "admin/gigs/gig_schedule_view"
       end
 
@@ -224,7 +224,7 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
       redirect_to collection_path, notice: "Added tags"
     else
       redirect_to collection_path,
-                  alert: "Added tags to #{suggested} of #{gigs.size} gigs - see the log for the rest"
+        alert: "Added tags to #{suggested} of #{gigs.size} gigs - see the log for the rest"
     end
   end
 

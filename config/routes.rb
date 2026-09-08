@@ -38,21 +38,21 @@ Rails.application.routes.draw do
   # Debug route for development - shows how Rails parses domains/subdomains
   if Rails.env.development?
     get "debug_domain",
-        to: lambda { |env|
-              request = ActionDispatch::Request.new(env)
+      to: lambda { |env|
+            request = ActionDispatch::Request.new(env)
+            [
+              200,
+              { "Content-Type" => "text/plain" },
               [
-                200,
-                { "Content-Type" => "text/plain" },
-                [
-                  "Host: #{request.host}\n" \
-                  "Domain: #{request.domain.inspect}\n" \
-                  "Subdomain: #{request.subdomain.inspect}\n" \
-                  "Subdomains: #{request.subdomains.inspect}\n" \
-                  "Port: #{request.port}\n" \
-                  "Full URL: #{request.url}\n",
-                ],
-              ]
-            }
+                "Host: #{request.host}\n" \
+                "Domain: #{request.domain.inspect}\n" \
+                "Subdomain: #{request.subdomain.inspect}\n" \
+                "Subdomains: #{request.subdomains.inspect}\n" \
+                "Port: #{request.port}\n" \
+                "Full URL: #{request.url}\n",
+              ],
+            ]
+          }
   end
   # shared routes - no subdomain constraints
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -65,15 +65,15 @@ Rails.application.routes.draw do
   # (lax matching due to tld_length issues described in introducing commit notes)
   constraints subdomain: /^(beta|www).livemusiclocator/ do
     devise_for :users,
-               path: "backstage",
-               class_name: "Lml::User",
-               controllers: {
-                 sessions: "backstage/sessions",
-                 registrations: "backstage/registrations",
-                 passwords: "backstage/passwords",
-                 confirmations: "backstage/confirmations",
-               },
-               path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
+      path: "backstage",
+      class_name: "Lml::User",
+      controllers: {
+        sessions: "backstage/sessions",
+        registrations: "backstage/registrations",
+        passwords: "backstage/passwords",
+        confirmations: "backstage/confirmations",
+      },
+      path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
     scope "/backstage", module: "backstage", as: "backstage" do
       root to: "dashboard#index"
       resources :proposals, only: [:index, :new, :create, :show]
@@ -200,49 +200,49 @@ Rails.application.routes.draw do
   # lml.live => www.livemusiclocator.com.au/?location=melbourne
   constraints domain: short_domain, subdomain: "" do
     get "/",
-        to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
-        via: :all
+      to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
+      via: :all
   end
   # www.lml.live => www.livemusiclocator.com.au/?location=melbourne (copy pasted from "" subdomain handling above)
   constraints domain: short_domain, subdomain: "www" do
     get "/",
-        to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
-        via: :all
+      to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
+      via: :all
   end
   # Subdomain redirects to main gig guide, setting location search parameter
   %w[brisbane melbourne castlemaine goldfields].each do |standard_location|
     constraints domain: short_domain, subdomain: standard_location do
       get "/",
-          to: redirect(
-            status: 301,
-            domain: target_domain,
-            subdomain: "www",
-            params: { location: standard_location },
-          ),
-          via: :all
+        to: redirect(
+          status: 301,
+          domain: target_domain,
+          subdomain: "www",
+          params: { location: standard_location },
+        ),
+        via: :all
     end
   end
   # Subdomain redirects to location-specific 'edition' of the gig guide
   %w[stkilda geelong].each do |edition_location|
     constraints domain: short_domain, subdomain: edition_location do
       get "/",
-          to: redirect(
-            status: 301,
-            domain: target_domain,
-            subdomain: "www",
-            path: "/editions/#{edition_location}",
-          ),
-          via: :all
+        to: redirect(
+          status: 301,
+          domain: target_domain,
+          subdomain: "www",
+          path: "/editions/#{edition_location}",
+        ),
+        via: :all
     end
   end
   # livemusiclocator.com.au => www.livemusiclocator.com.au
   constraints host: target_domain do
     get "/",
-        to: redirect(
-          status: 301,
-          domain: target_domain,
-          subdomain: "www",
-        ),
-        via: :all
+      to: redirect(
+        status: 301,
+        domain: target_domain,
+        subdomain: "www",
+      ),
+      via: :all
   end
 end

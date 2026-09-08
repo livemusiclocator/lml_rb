@@ -61,7 +61,7 @@ module Api
                    error: upload.error_description,
                    upload: serialize(upload, with_gigs: true),
                  },
-                 status: :unprocessable_content
+            status: :unprocessable_content
         end
 
         def too_many_entries(upload)
@@ -82,7 +82,7 @@ module Api
 
         def serialize(upload, with_gigs: false)
           serialized = upload.slice(:id, :source, :format, :status, :venue_id, :created_at)
-                             .merge(error_description: upload.error_description.presence)
+            .merge(error_description: upload.error_description.presence)
           return serialized unless with_gigs
 
           serialized.merge(content: upload.content, gigs: gigs_for(upload))

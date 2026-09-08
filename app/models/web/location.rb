@@ -25,14 +25,14 @@ module Web
     validates :internal_identifier, presence: true, uniqueness: true
     validates :name, presence: true
     validates :latitude,
-              presence: true,
-              numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
+      presence: true,
+      numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
     validates :longitude,
-              presence: true,
-              numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
+      presence: true,
+      numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
     validates :map_zoom_level,
-              presence: true,
-              numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 20 }
+      presence: true,
+      numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 20 }
 
     # query by edition
 

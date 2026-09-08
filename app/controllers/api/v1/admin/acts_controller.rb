@@ -60,22 +60,22 @@ module Api
 
         def serialize(act)
           act.slice(:id, :name, :country, :location, :email, :website)
-             .merge(
-               genres: act.genres || [],
-               handles: act.slice(
-                 :bandcamp,
-                 :facebook,
-                 :instagram,
-                 :linktree,
-                 :musicbrainz,
-                 :rym,
-                 :spotify,
-                 :wikipedia,
-                 :youtube,
-               ),
-               created_at: act.created_at,
-               updated_at: act.updated_at,
-             )
+            .merge(
+              genres: act.genres || [],
+              handles: act.slice(
+                :bandcamp,
+                :facebook,
+                :instagram,
+                :linktree,
+                :musicbrainz,
+                :rym,
+                :spotify,
+                :wikipedia,
+                :youtube,
+              ),
+              created_at: act.created_at,
+              updated_at: act.updated_at,
+            )
         end
       end
     end

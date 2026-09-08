@@ -88,8 +88,8 @@ ActiveAdmin.register_page "Venue Import" do
       redirect_to admin_venue_import_path(sheet_url: url), notice: "Imported: #{describe(counts)}."
     rescue Lml::Sheet::InvalidUrlError
       redirect_to admin_venue_import_path(sheet_url: url),
-                  alert: "That is not a Google Sheets URL - it should look like " \
-                         "https://docs.google.com/spreadsheets/d/.../edit"
+        alert: "That is not a Google Sheets URL - it should look like " \
+               "https://docs.google.com/spreadsheets/d/.../edit"
     rescue StandardError => e
       # Anything Google refused: the sheet is not shared, there is no `venues`
       # worksheet, Places is not enabled, billing is off. The message is the only

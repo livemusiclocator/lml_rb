@@ -95,8 +95,8 @@ class SpaAssets
 
     def external_dependencies(manifest, base_url)
       manifest.values
-              .select { |item| item["isEntry"] && item["file"].to_s.end_with?("js") && item["src"] != "index.html" }
-              .map { |item| "#{base_url}/#{item["file"]}" }
+        .select { |item| item["isEntry"] && item["file"].to_s.end_with?("js") && item["src"] != "index.html" }
+        .map { |item| "#{base_url}/#{item["file"]}" }
     end
 
     def get(url)
