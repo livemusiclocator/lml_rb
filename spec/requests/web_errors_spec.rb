@@ -38,10 +38,14 @@ describe "an unroutable path on the gig guide" do
     expect(response).to have_http_status(:not_found)
   end
 
-  # The route is via: :all, so the probes that POST get here too.
-  it "answers a POST to an unroutable path" do
+  # The route is via: :all, so the probes that POST reach the handler too - but only here. In
+  # production CSRF protection rejects them first with a 422, where this environment has
+  # allow_forgery_protection false. Either way it is a client error and neither logs a backtrace,
+  # so what is worth pinning is that it does not become a 500.
+  it "does not turn a POST to an unroutable path into a server error" do
     post "/wp-login.php", headers: { "Accept" => "*/*" }
 
     expect(response).to have_http_status(:not_found)
+    expect(response).not_to have_http_status(:server_error)
   end
 end
