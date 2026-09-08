@@ -13078,50 +13078,6 @@ abbr[title] {
   text-decoration: none;
 }
 
-/* Webfont: Lato-Bold */
-@font-face {
-  font-family: 'LatoWeb';
-  src: url(/assets/Lato-Bold-163108a2af712135981269ba2fd5f1a6da6611476fe3ea6fab692bbdb84932dc.eot);
-  /* IE9 Compat Modes */
-  src: url(/assets/Lato-Bold-163108a2af712135981269ba2fd5f1a6da6611476fe3ea6fab692bbdb84932dc.eot?#iefix) format("embedded-opentype"), url(/assets/Lato-Bold-930842c5cb550531ca35a6c29b948ba0a5dc3d2f3d4fb2ffe7135f4640341576.woff2) format("woff2"), url(/assets/Lato-Bold-949c81dd7639652aa19f73af26730b5935f19e4189300408515d55f062b63027.woff) format("woff"), url(/assets/Lato-Bold-0143d6b5f84addba2f1dc83f4da635e4db899c3a5765cec39b55b2839ff5ef7f.ttf) format("truetype");
-  font-style: normal;
-  font-weight: bold;
-  text-rendering: optimizeLegibility;
-}
-
-/* Webfont: Lato-BoldItalic */
-@font-face {
-  font-family: 'LatoWeb';
-  src: url(/assets/Lato-BoldItalic-b58ccdadfe1989b0cf1084e9ef5f3819d24574c13290c8b8e86986aec9401b78.eot);
-  /* IE9 Compat Modes */
-  src: url(/assets/Lato-BoldItalic-b58ccdadfe1989b0cf1084e9ef5f3819d24574c13290c8b8e86986aec9401b78.eot?#iefix) format("embedded-opentype"), url(/assets/Lato-BoldItalic-9b1362648212d8b0fea5685e1784d97436e742e5865ca2abe7e35999796bde4e.woff2) format("woff2"), url(/assets/Lato-BoldItalic-605d1defa20f55064dfb49e487208ac7c6086ba2be893d5718e61f76c7943649.woff) format("woff"), url(/assets/Lato-BoldItalic-927275527eac2bdc4b351c7ebea0ca4e1fee53cf377ac54bb7cf19af8b64b32c.ttf) format("truetype");
-  font-style: italic;
-  font-weight: bold;
-  text-rendering: optimizeLegibility;
-}
-
-/* Webfont: Lato-Italic */
-@font-face {
-  font-family: 'LatoWeb';
-  src: url(/assets/Lato-Italic-4c07d8e5ba589b4f610614e6b5dbff20269544ecef47998e7d7dd47391c40f0b.eot);
-  /* IE9 Compat Modes */
-  src: url(/assets/Lato-Italic-4c07d8e5ba589b4f610614e6b5dbff20269544ecef47998e7d7dd47391c40f0b.eot?#iefix) format("embedded-opentype"), url(/assets/Lato-Italic-562ac9b5fdcce75a2ab14ccadc616f8a7777a5a2022b9b771921225d30c985b6.woff2) format("woff2"), url(/assets/Lato-Italic-0784ee57b780dab2b3ffd10ad3d03ec2c5bb70cb7f755a465f98b576afeda97b.woff) format("woff"), url(/assets/Lato-Italic-eaa9e195c3316687e2fc9eef8a15251a94377bcf689509858351b251e7598636.ttf) format("truetype");
-  font-style: italic;
-  font-weight: normal;
-  text-rendering: optimizeLegibility;
-}
-
-/* Webfont: Lato-Regular */
-@font-face {
-  font-family: 'LatoWeb';
-  src: url(/assets/Lato-Regular-0913feb135140cd5eca2d1f8ff9ce24ef546bbc9f3d986580c04407244a4d88d.eot);
-  /* IE9 Compat Modes */
-  src: url(/assets/Lato-Regular-0913feb135140cd5eca2d1f8ff9ce24ef546bbc9f3d986580c04407244a4d88d.eot?#iefix) format("embedded-opentype"), url(/assets/Lato-Regular-ac623c4f4d28763b570eb344074ec263f6ea490b14587c7671e5c5bf2cdc7897.woff2) format("woff2"), url(/assets/Lato-Regular-2948d601d5eb46a709a30b3ce588c3eff186cbbde6eaf6be6e79a583fa54e2c7.woff) format("woff"), url(/assets/Lato-Regular-c662204107728519d8263eb10743cb696804842e22441f657ae0b092043dd94c.ttf) format("truetype");
-  font-style: normal;
-  font-weight: normal;
-  text-rendering: optimizeLegibility;
-}
-
 /* line 1, ../../../.asdf/installs/ruby/3.4.4/lib/ruby/gems/3.4.0/gems/arctic_admin-4.3.3/app/assets/stylesheets/arctic_admin/_common.scss */
 code {
   display: block;
@@ -15520,7 +15476,7 @@ body.show #active_admin_content.with_sidebar #sidebar tr:hover {
 
 /* line 17, ../../../.asdf/installs/ruby/3.4.4/lib/ruby/gems/3.4.0/gems/arctic_admin-4.3.3/app/assets/stylesheets/arctic_admin/_base.scss */
 body {
-  font-family: "LatoWeb", Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background-color: #eee;
   color: #323537;
 }
