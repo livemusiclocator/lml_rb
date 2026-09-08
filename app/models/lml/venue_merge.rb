@@ -46,7 +46,7 @@ module Lml
       website
     ].freeze
 
-    Result = Struct.new(:gigs, :uploads, :managers, :filled_in, :discarded, keyword_init: true)
+    Result = Struct.new(:gigs, :uploads, :managers, :proposals, :filled_in, :discarded, keyword_init: true)
 
     def initialize(survivor:, duplicate:)
       @survivor = survivor
@@ -164,7 +164,17 @@ module Lml
       # key to stop that pointing at nothing.
       uploads = Lml::Upload.where(venue_id: @duplicate.id).update_all(venue_id: @survivor.id, updated_at: now)
 
-      { gigs: gigs, uploads: uploads, managers: move_managers(now) }
+      { gigs: gigs, uploads: uploads, managers: move_managers(now), proposals: move_proposals(now) }
+    end
+
+    # An amendment proposal names the venue it wants changed, and after a merge the survivor is
+    # that venue. Polymorphic, so no foreign key was going to catch these - they would just have
+    # been left pointing at a destroyed row, and Lml::Proposal#approve! calls update! on the
+    # target it finds there. target_type is Lml::Venue on both sides, so only the id moves.
+    def move_proposals(now)
+      Lml::Proposal
+        .where(target_type: "Lml::Venue", target_id: @duplicate.id)
+        .update_all(target_id: @survivor.id, updated_at: now)
     end
 
     # venue_managers is unique on [user_id, venue_id], so a user who manages both venues cannot have

@@ -43,6 +43,17 @@ describe Lml::VenueMerge do
       expect(@upload.reload.venue).to eq(@survivor)
     end
 
+    # Polymorphic, so nothing in the database was going to stop these dangling.
+    it "repoints an amendment proposal at the survivor" do
+      user = Lml::User.create!(
+        email: "proposer@example.com", password: "supersecret123", confirmed_at: Time.current,
+      )
+      proposal = Lml::Proposal.create!(user: user, target: @duplicate, proposed_attributes: { "capacity" => 10 })
+
+      expect(merge.proposals).to eq(1)
+      expect(proposal.reload.target).to eq(@survivor)
+    end
+
     it "moves the managers across" do
       expect(merge.managers).to eq(1)
       expect(@survivor.reload.managers).to eq([@manager])

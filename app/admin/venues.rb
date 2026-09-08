@@ -56,7 +56,10 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
 
     def moved_summary(result)
-      counts = { "gig" => result.gigs, "upload" => result.uploads, "manager" => result.managers }
+      counts = {
+        "gig" => result.gigs, "upload" => result.uploads,
+        "manager" => result.managers, "proposal" => result.proposals,
+      }
                .select { |_, count| count.positive? }
                .map { |label, count| "#{count} #{label.pluralize(count)}" }
 
