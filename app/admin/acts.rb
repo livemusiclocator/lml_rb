@@ -17,6 +17,41 @@ ActiveAdmin.register Lml::Act, as: "Act" do
     :youtube,
   )
 
+  # Same shape as app/admin/venues.rb, and for the same reason: ActiveAdmin reports what it was
+  # asked to do rather than what happened, so Lml::Act's `dependent: :restrict_with_error` needs
+  # both delete paths rewritten or they claim a deletion that did not occur.
+  controller do
+    def destroy
+      if destroy_resource(resource)
+        redirect_to admin_acts_path, notice: "Act was successfully destroyed."
+      else
+        redirect_to admin_act_path(resource), alert: sets_blocking_delete(resource)
+      end
+    end
+
+    # Also reached from the batch action, which runs in this controller.
+    def sets_blocking_delete(act)
+      count = act.sets.count
+
+      "#{act.name} is still on the bill for #{count} #{"gig".pluralize(count)}, so it was not " \
+        "deleted. Take it off those line ups first."
+    end
+  end
+
+  batch_action :destroy, confirm: I18n.t("active_admin.delete_confirmation") do |ids|
+    deleted, blocked = Lml::Act.where(id: ids).partition(&:destroy)
+
+    messages = []
+    messages << "Deleted #{deleted.size} #{"act".pluralize(deleted.size)}." if deleted.any?
+    messages += blocked.map { |act| sets_blocking_delete(act) }
+
+    if blocked.any?
+      redirect_to collection_path, alert: messages.join(" ")
+    else
+      redirect_to collection_path, notice: messages.join(" ")
+    end
+  end
+
   filter :name_cont, label: "Name"
   filter :country_cont, label: "Country"
   filter :location_cont, label: "Location"
