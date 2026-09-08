@@ -43,6 +43,41 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       "#{venue.name} still has #{count} #{"gig".pluralize(count)}, so it was not deleted. " \
         "Move them to another venue first."
     end
+
+    # A merge quietly rewrites a lot of columns, so the flash says what it actually did rather
+    # than just claiming success.
+    def merge_summary(duplicate_name, result)
+      [
+        "Merged #{duplicate_name.inspect} into #{resource.name}.",
+        moved_summary(result),
+        filled_in_summary(result),
+        discarded_summary(result),
+      ].compact.join(" ")
+    end
+
+    def moved_summary(result)
+      counts = { "gig" => result.gigs, "upload" => result.uploads, "manager" => result.managers }
+               .select { |_, count| count.positive? }
+               .map { |label, count| "#{count} #{label.pluralize(count)}" }
+
+      "Moved #{counts.to_sentence}." if counts.any?
+    end
+
+    def filled_in_summary(result)
+      return if result.filled_in.empty?
+
+      columns = result.filled_in.map { |column| Lml::Venue.human_attribute_name(column).downcase }
+
+      "Filled in #{columns.to_sentence}."
+    end
+
+    def discarded_summary(result)
+      return if result.discarded.empty?
+
+      count = result.discarded.size
+
+      "Recorded #{count} differing #{"value".pluralize(count)} in the notes."
+    end
   end
 
   # ActiveAdmin's own delete batch action counts the ids that were submitted, not the records it
@@ -243,6 +278,44 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     }.fetch(outcome)
   rescue Lml::GooglePlacesApiClient::Error => e
     redirect_to admin_venue_path(resource), alert: "Places API error: #{e.message}"
+  end
+
+  member_action :merge, method: :post do
+    duplicate = Lml::Venue.find_by(id: params[:venue_id])
+
+    if duplicate.nil?
+      redirect_to admin_venue_path(resource), alert: "Pick a venue to merge in first."
+    else
+      result = Lml::VenueMerge.new(survivor: resource, duplicate: duplicate).call
+      redirect_to admin_venue_path(resource), notice: merge_summary(duplicate.name, result)
+    end
+  rescue Lml::VenueMerge::Error, ActiveRecord::RecordInvalid => e
+    # The merge is one transaction, so there is nothing half done to explain here.
+    redirect_to admin_venue_path(resource), alert: "Nothing was merged: #{e.message}"
+  end
+
+  sidebar "Merge a duplicate", only: :show do
+    para "The duplicate's gigs, uploads and managers move onto this venue, this venue fills in " \
+         "anything it had no value for, anything the duplicate knew differently is written into " \
+         "the notes above, and then the duplicate is deleted.", class: "inline-hints"
+
+    # A real form with an authenticity token rather than `link_to method: :post`, for the reason
+    # given in the Google Places panel above.
+    form action: merge_admin_venue_path(resource), method: :post do
+      text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
+      text_node hidden_field_tag("venue_id", nil, id: "merge_venue_id")
+      div style: "position: relative;" do
+        text_node text_field_tag(
+          "venue_label", nil, id: "merge_venue_label", placeholder: "Search venues...", autocomplete: "off",
+        )
+      end
+      br
+      input type: :submit, value: "Merge into this venue"
+    end
+
+    script <<~SCRIPT.html_safe
+      attachSearchAutocomplete("merge_venue", "/venues/search", "Search venues...");
+    SCRIPT
   end
 
   sidebar "Links", only: :show do
