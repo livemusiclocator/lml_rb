@@ -52,3 +52,11 @@ plugins: rubocop-rspec
 # ever fires on specs that are already doing the right thing.
 RSpec/InstanceVariable:
   Enabled: false
+
+# The other half of the same argument. These two enforce one-expectation-per-example, and the specs
+# in here deliberately assert a whole outcome in one go - that a control said the right thing *and*
+# left the right rows behind. Splitting those apart would mean driving the same form twice.
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
