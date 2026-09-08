@@ -300,6 +300,11 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
+    lograge (0.15.0)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.25.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -469,6 +474,8 @@ GEM
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
       uber (< 0.2.0)
+    request_store (1.7.0)
+      rack (>= 1.4)
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
@@ -527,6 +534,13 @@ GEM
     schema_dot_org (2.5.3)
       validated_object (~> 2.3.4)
     securerandom (0.4.1)
+    sentry-rails (7.0.0)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 7.0.0)
+    sentry-ruby (7.0.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     shellany (0.0.1)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
@@ -669,6 +683,7 @@ DEPENDENCIES
   kramdown-parser-gfm
   lefthook
   letter_opener
+  lograge
   meta-tags
   money-rails
   pg
@@ -681,6 +696,8 @@ DEPENDENCIES
   rubocop-rspec
   ruby-openai
   schema_dot_org (~> 2.5)
+  sentry-rails
+  sentry-ruby
   shoulda-matchers
   solargraph
   sprockets-rails

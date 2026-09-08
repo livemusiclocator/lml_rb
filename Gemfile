@@ -15,6 +15,15 @@ gem "money-rails"
 # allow CORS
 gem "rack-cors"
 
+# One structured line per request instead of Rails' three, which is both easier to read and about
+# 60% less to ship to whatever is retaining the logs. Configured in config/environments/production.rb.
+gem "lograge"
+
+# Exception tracking. Inert unless SENTRY_DSN is set, so it costs nothing in development or CI -
+# see config/initializers/sentry.rb.
+gem "sentry-rails"
+gem "sentry-ruby"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

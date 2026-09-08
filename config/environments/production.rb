@@ -66,6 +66,19 @@ Rails.application.configure do
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
+  # One line per request rather than Rails' Started / Parameters / Completed trio. Three quarters of
+  # this app's log lines were that trio, so collapsing it is most of the volume, and a single line
+  # is what a log search is actually able to work with.
+  config.lograge.enabled = true
+  # key=value, which greps and parses without a JSON reader in the way. Swap for Lograge::Formatters::Json
+  # if whatever is retaining these would rather index fields.
+  config.lograge.formatter = Lograge::Formatters::KeyValue.new
+  # Rails does not put the host in the request log, and this app serves several - the gig guide, the
+  # api and backstage all answer on different subdomains, so which one was asked matters.
+  config.lograge.custom_payload do |controller|
+    { host: controller.request.host }
+  end
+
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
