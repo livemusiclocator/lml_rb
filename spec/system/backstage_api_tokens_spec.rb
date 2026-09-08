@@ -13,8 +13,13 @@ describe "backstage api tokens", type: :system do
     Capybara.app_host = BACKSTAGE_APP_HOST
 
     @password = "supersecret123"
-    @admin = create(:lml_user, :admin, email: "token_system_spec@example.com",
-                                       password: @password, password_confirmation: @password,)
+    @admin = create(
+      :lml_user,
+      :admin,
+      email: "token_system_spec@example.com",
+      password: @password,
+      password_confirmation: @password,
+    )
 
     sign_in_as_admin
   end

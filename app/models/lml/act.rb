@@ -17,15 +17,19 @@ module Lml
     # act's sets are lineup on someone else's gig, so deleting the act has no business ripping
     # them out of three venues' listings. The sets foreign key was already refusing - it just did
     # it as a 500 - so this refuses in a sentence instead, the way Lml::Venue#gigs does.
-    has_many :sets, class_name: "Lml::Set", foreign_key: :act_id, inverse_of: :act,
-                    dependent: :restrict_with_error
+    has_many :sets,
+             class_name: "Lml::Set",
+             foreign_key: :act_id,
+             inverse_of: :act,
+             dependent: :restrict_with_error
     # What an act page lists. `visible` because an unannounced or draft gig has no
     # business on a public page - every other public gig path scopes the same way
     # - `eager` because the view renders each gig's venue and sets, and `distinct`
     # because an act can play two sets at the one gig.
     has_many :upcoming_gigs,
              -> { visible.eager.where(date: Date.current..).distinct },
-             through: :sets, source: :gig
+             through: :sets,
+             source: :gig
 
     def self.ransackable_attributes(_auth_object = nil)
       %w[name country location]

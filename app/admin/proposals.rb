@@ -79,12 +79,16 @@ ActiveAdmin.register Lml::Proposal, as: "Proposal" do
   end
 
   action_item :approve, only: :show, if: -> { resource.pending? } do
-    link_to "Approve", approve_admin_proposal_path(resource), method: :put,
+    link_to "Approve",
+            approve_admin_proposal_path(resource),
+            method: :put,
             data: { confirm: "Approve and apply this proposal?" }
   end
 
   action_item :reject, only: :show, if: -> { resource.pending? } do
-    link_to "Reject", reject_admin_proposal_path(resource), method: :put,
+    link_to "Reject",
+            reject_admin_proposal_path(resource),
+            method: :put,
             data: { confirm: "Reject this proposal?" }
   end
 end

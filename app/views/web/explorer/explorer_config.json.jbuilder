@@ -5,7 +5,7 @@ json.rootPath relative_path({ path_name: :web_root})
 json.shuffleSeriesAssignments ["stkildaFestival2025", "nope", "nope", "nope"]
 json.allowSelectLocation @explorer_config.locations.length>1
 json.allLocations @explorer_config.locations do |location|
-   json.id location.internal_identifier
+  json.id location.internal_identifier
    json.caption location.name
    json.mapCenter [location.latitude,location.longitude]
    json.zoom location.map_zoom_level

@@ -19,8 +19,11 @@ module Lml
     # has no foreign key, so nothing was stopping it dangling once an upload went. Nullify rather
     # than restrict: deleting a processed upload should not be gated on the gigs it happened to
     # create, and those gigs stand on their own afterwards.
-    has_many :gigs, class_name: "Lml::Gig", foreign_key: :upload_id, inverse_of: :upload,
-                    dependent: :nullify
+    has_many :gigs,
+             class_name: "Lml::Gig",
+             foreign_key: :upload_id,
+             inverse_of: :upload,
+             dependent: :nullify
 
     def venue_label
       venue&.label

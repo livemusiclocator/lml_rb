@@ -61,8 +61,13 @@ ActiveAdmin.register_page "Venue Import" do
         text_node hidden_field_tag(:authenticity_token, form_authenticity_token)
         label "Spreadsheet URL", for: "sheet_url"
         br
-        text_node text_field_tag(:sheet_url, params[:sheet_url], id: "sheet_url", size: 90,
-                                                                 placeholder: "https://docs.google.com/spreadsheets/d/.../edit",)
+        text_node text_field_tag(
+          :sheet_url,
+          params[:sheet_url],
+          id: "sheet_url",
+          size: 90,
+          placeholder: "https://docs.google.com/spreadsheets/d/.../edit",
+        )
         br
         br
         input type: :submit, value: "Import venues"

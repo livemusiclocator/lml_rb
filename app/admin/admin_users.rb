@@ -60,7 +60,8 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
             column :time_zone
           end
           div style: "margin-top: 10px" do
-            input type: :submit, value: "Unassign Selected",
+            input type: :submit,
+                  value: "Unassign Selected",
                   class: "button",
                   data: { confirm: "Are you sure you want to unassign these venues?" }
           end

@@ -29,8 +29,12 @@ shared_examples "API endpoints" do |root_url|
     end
 
     it "routes #{root_url}/gigs/ABCDEF to gigs#show" do
-      expect(get("#{root_url}/gigs/ABCDEF")).to route_to(controller: "api/gigs", action: "show", id: "ABCDEF",
-                                                         format: "json",)
+      expect(get("#{root_url}/gigs/ABCDEF")).to route_to(
+        controller: "api/gigs",
+        action: "show",
+        id: "ABCDEF",
+        format: "json",
+      )
     end
 
     it "routes #{root_url}/gigs/query to gigs#query" do
@@ -46,25 +50,42 @@ shared_examples "Web endpoints" do |root_url, **additional_params|
     end
 
     it "routes #{root_url}/gigs/ABCDEF to explorer#show" do
-      expect(get("#{root_url}/gigs/ABCDEF")).to route_to(controller: "web/explorer", action: "show", id: "ABCDEF",
-                                                         **additional_params,)
+      expect(get("#{root_url}/gigs/ABCDEF")).to route_to(
+        controller: "web/explorer",
+        action: "show",
+        id: "ABCDEF",
+        **additional_params,
+      )
     end
 
     it "routes #{root_url}/events to pages#show for about page" do
-      expect(get("#{root_url}/events")).to route_to(controller: "web/pages", action: "show", section: "events",
-                                                    id: "events", **additional_params,)
+      expect(get("#{root_url}/events")).to route_to(
+        controller: "web/pages",
+        action: "show",
+        section: "events",
+        id: "events",
+        **additional_params,
+      )
     end
 
     it "routes #{root_url}/about to pages#show for about page" do
-      expect(get("#{root_url}/about")).to route_to(controller: "web/pages", action: "show",
-                                                   id: "about", section: "about",
-                                                   **additional_params,)
+      expect(get("#{root_url}/about")).to route_to(
+        controller: "web/pages",
+        action: "show",
+        id: "about",
+        section: "about",
+        **additional_params,
+      )
     end
 
     it "routes #{root_url}/about/ABCDE to pages#show for ABCDE page" do
-      expect(get("#{root_url}/about/ABCDE")).to route_to(controller: "web/pages", action: "show",
-                                                         id: "ABCDE", section: "about",
-                                                         **additional_params,)
+      expect(get("#{root_url}/about/ABCDE")).to route_to(
+        controller: "web/pages",
+        action: "show",
+        id: "ABCDE",
+        section: "about",
+        **additional_params,
+      )
     end
   end
 end

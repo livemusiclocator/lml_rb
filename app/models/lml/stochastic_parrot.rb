@@ -39,11 +39,13 @@ module Lml
     private
 
     def chat(description)
-      @client.chat(parameters: {
-                     model: MODEL,
-                     response_format: { type: "json_object" },
-                     messages: messages(description),
-                   })
+      @client.chat(
+        parameters: {
+          model: MODEL,
+          response_format: { type: "json_object" },
+          messages: messages(description),
+        },
+      )
     rescue Faraday::Error => e
       @logger.warn("OpenAI request for genre tags failed, leaving them unsuggested: #{e.message}")
       nil

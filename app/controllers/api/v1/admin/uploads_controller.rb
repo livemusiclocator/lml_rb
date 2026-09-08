@@ -58,9 +58,10 @@ module Api
           # every non 2xx response has an `error` string - and still get at the id
           # and the partial result.
           render json: {
-            error: upload.error_description,
-            upload: serialize(upload, with_gigs: true),
-          }, status: :unprocessable_content
+                   error: upload.error_description,
+                   upload: serialize(upload, with_gigs: true),
+                 },
+                 status: :unprocessable_content
         end
 
         def too_many_entries(upload)

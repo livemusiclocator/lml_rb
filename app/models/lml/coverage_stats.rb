@@ -27,7 +27,13 @@ module Lml
     ACTIVE_DAYS = 90
 
     Region = Struct.new(
-      :identifier, :name, :victorian, :venues, :active, :recently_active, :gigs,
+      :identifier,
+      :name,
+      :victorian,
+      :venues,
+      :active,
+      :recently_active,
+      :gigs,
       keyword_init: true,
     ) do
       def gigs_per_week = (gigs / WEEKS.to_f).round(1)

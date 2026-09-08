@@ -106,8 +106,11 @@ describe Lml::VenueMerge do
 
     it "inherits a researcher only when unassigned" do
       researcher = Lml::AdminUser.create!(
-        email: "researcher@example.com", username: "res", password: "supersecret123",
-        password_confirmation: "supersecret123", time_zone: "Australia/Melbourne",
+        email: "researcher@example.com",
+        username: "res",
+        password: "supersecret123",
+        password_confirmation: "supersecret123",
+        time_zone: "Australia/Melbourne",
       )
       @duplicate.update!(admin_user: researcher)
 

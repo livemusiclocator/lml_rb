@@ -12,9 +12,11 @@ RSpec.describe Web::GigSearch do
   end
 
   let(:explorer_config) do
-    instance_double(Web::ExplorerConfig,
-                    locations: [default_location_object, bendigo_location_object],
-                    default_location_object: default_location_object,)
+    instance_double(
+      Web::ExplorerConfig,
+      locations: [default_location_object, bendigo_location_object],
+      default_location_object: default_location_object,
+    )
   end
 
   describe "#title" do
@@ -104,9 +106,12 @@ RSpec.describe Web::GigSearch do
       end
 
       it "shows multiple genres text for more than 3 genres" do
-        search = Web::GigSearch.new({
-                                      genre: %w[Rock Jazz Blues Pop Metal],
-                                    }, explorer_config,)
+        search = Web::GigSearch.new(
+          {
+            genre: %w[Rock Jazz Blues Pop Metal],
+          },
+          explorer_config,
+        )
         expect(search.title).to eq("Live Music (multiple genres) in Melbourne this week")
       end
 

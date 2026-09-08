@@ -24,7 +24,8 @@ module Api
         # Best effort only - the cache store is per dyno, and guessing a 256 bit
         # secret is not the threat. This is here to stop a runaway integration
         # from taking the database down with it.
-        rate_limit to: 300, within: 1.minute,
+        rate_limit to: 300,
+                   within: 1.minute,
                    by: -> { current_api_token.id },
                    with: -> { render_error(:too_many_requests, "Slow down - 300 requests a minute.") }
 

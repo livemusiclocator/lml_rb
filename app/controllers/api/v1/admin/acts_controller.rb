@@ -7,8 +7,20 @@ module Api
         # No destroy: gigs point at acts through sets, and deleting one through
         # an API is not something we want to be one typo away from.
         WRITABLE = %i[
-          name country location email website
-          bandcamp facebook instagram linktree musicbrainz rym spotify wikipedia youtube
+          name
+          country
+          location
+          email
+          website
+          bandcamp
+          facebook
+          instagram
+          linktree
+          musicbrainz
+          rym
+          spotify
+          wikipedia
+          youtube
         ].freeze
 
         def index
@@ -51,8 +63,15 @@ module Api
              .merge(
                genres: act.genres || [],
                handles: act.slice(
-                 :bandcamp, :facebook, :instagram, :linktree,
-                 :musicbrainz, :rym, :spotify, :wikipedia, :youtube,
+                 :bandcamp,
+                 :facebook,
+                 :instagram,
+                 :linktree,
+                 :musicbrainz,
+                 :rym,
+                 :spotify,
+                 :wikipedia,
+                 :youtube,
                ),
                created_at: act.created_at,
                updated_at: act.updated_at,

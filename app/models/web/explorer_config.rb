@@ -12,8 +12,16 @@ module Web
     validates :edition_id, uniqueness: true, presence: true
 
     def self.ransackable_attributes(_auth_object = nil)
-      %w[allow_all_locations created_at default_location edition_id id id_value
-         selectable_locations updated_at]
+      %w[
+        allow_all_locations
+        created_at
+        default_location
+        edition_id
+        id
+        id_value
+        selectable_locations
+        updated_at
+      ]
     end
 
     def self.ransackable_associations(_auth_object = nil)

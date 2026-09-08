@@ -4,7 +4,9 @@
 ActiveAdmin.register Web::ExplorerConfig, as: "Explorer Config" do
   menu parent: "Web App", priority: 1
 
-  permit_params :edition_id, :allow_all_locations, :default_location,
+  permit_params :edition_id,
+                :allow_all_locations,
+                :default_location,
                 selectable_locations: [],
                 series_themes_attributes: %i[id series_name search_result saved_map_pin default_map_pin _destroy]
 
@@ -121,8 +123,9 @@ ActiveAdmin.register Web::ExplorerConfig, as: "Explorer Config" do
     else
 
       f.actions do
-        f.action :submit, label: "Update Explorer Configuration",
-                          button_html: { data: { confirm: "Are you sure you want to save these configuration changes? This will affect the live website immediately and might break stuff." } }
+        f.action :submit,
+                 label: "Update Explorer Configuration",
+                 button_html: { data: { confirm: "Are you sure you want to save these configuration changes? This will affect the live website immediately and might break stuff." } }
         f.action :cancel, label: "Cancel"
       end
     end

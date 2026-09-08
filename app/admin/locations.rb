@@ -2,8 +2,12 @@
 
 ActiveAdmin.register Web::Location, as: "Location" do
   # Permitted parameters - add the new fields
-  permit_params :internal_identifier, :name, :latitude, :longitude,
-                :seo_title_format_string, :map_zoom_level,
+  permit_params :internal_identifier,
+                :name,
+                :latitude,
+                :longitude,
+                :seo_title_format_string,
+                :map_zoom_level,
                 visible_in_editions: []
 
   menu parent: "Web App"

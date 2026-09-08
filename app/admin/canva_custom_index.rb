@@ -3,7 +3,7 @@ module ActiveAdmin
     class CanvaCustomIndex < ActiveAdmin::Component
 
       def build(page_presenter, collection)
-            script <<~SCRIPT.html_safe
+        script <<~SCRIPT.html_safe
                  function selectClick (e){
                   e.preventDefault();
                   const panel = e.target.parentNode

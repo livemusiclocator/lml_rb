@@ -39,11 +39,13 @@ RSpec.describe "PageMetadataFactory" do
   # contexts around this one predate it.
   context "with act page data" do
     before do
-      @act = build(:lml_act,
-                   name: "Amyl and the Sniffers",
-                   genres: ["punk", "garage rock"],
-                   website: "https://amyl.example",
-                   instagram: "amylandthesniffers",)
+      @act = build(
+        :lml_act,
+        name: "Amyl and the Sniffers",
+        genres: ["punk", "garage rock"],
+        website: "https://amyl.example",
+        instagram: "amylandthesniffers",
+      )
     end
 
     describe "generate_schema_dot_org_for" do
@@ -59,8 +61,12 @@ RSpec.describe "PageMetadataFactory" do
       it "collects the act's other pages into sameAs" do
         schema = PageMetadataFactory.generate_schema_dot_org_for(@act)
 
-        expect(schema.sameAs).to eq(["https://amyl.example",
-                                     "https://www.instagram.com/amylandthesniffers",])
+        expect(schema.sameAs).to eq(
+          [
+            "https://amyl.example",
+            "https://www.instagram.com/amylandthesniffers",
+          ],
+        )
       end
 
       it "leaves genre and sameAs out rather than sending empty ones" do

@@ -40,8 +40,16 @@ module Backstage
         :note,
         :proposed_type,
         proposed_attributes: [
-          :name, :date, :venue_id, :description, :url, :ticketing_url,
-          :start_time, :finish_time, :series, :set_list,
+          :name,
+          :date,
+          :venue_id,
+          :description,
+          :url,
+          :ticketing_url,
+          :start_time,
+          :finish_time,
+          :series,
+          :set_list,
           genre_tags: [], proposed_genre_tags: [], information_tags: [],
         ],
       )

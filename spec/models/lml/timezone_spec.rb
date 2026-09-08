@@ -52,8 +52,14 @@ RSpec.describe Lml::Timezone do
 
     it "has an australian zone for every state and territory" do
       %w[
-        Australia/Melbourne Australia/Sydney Australia/Brisbane Australia/Adelaide
-        Australia/Perth Australia/Hobart Australia/Darwin Australia/Canberra
+        Australia/Melbourne
+        Australia/Sydney
+        Australia/Brisbane
+        Australia/Adelaide
+        Australia/Perth
+        Australia/Hobart
+        Australia/Darwin
+        Australia/Canberra
       ].each do |zone|
         expect(Lml::Timezone.canonical(zone)).to eq(zone)
       end

@@ -419,14 +419,22 @@ describe "gigs" do
       describe "matching sub-geographies of Melbourne" do
         it "returns venues with location=stkilda and location=melbourne when location=melbourne" do
           get "/gigs/query?location=melbourne&date_from=2001-06-08&date_to=2001-08-08"
-          expect(response.parsed_body).to match_unordered_json([
-                                                                      { name: "A gig in st kilda",
-                                                                        venue: { name: "The Escry" }, },
-                                                                      { name: "Another gig in st kilda",
-                                                                        venue: { name: "The Mildred Hotel" }, },
-                                                                      { name: "The One Gig You Should Not Miss Out On",
-                                                                        venue: { name: "The Gig Place" },  },
-                                                                    ])
+          expect(response.parsed_body).to match_unordered_json(
+            [
+              {
+                name: "A gig in st kilda",
+                venue: { name: "The Escry" },
+              },
+              {
+                name: "Another gig in st kilda",
+                venue: { name: "The Mildred Hotel" },
+              },
+              {
+                name: "The One Gig You Should Not Miss Out On",
+                venue: { name: "The Gig Place" },
+              },
+            ],
+          )
         end
         # Every other location is matched with ILIKE. Melbourne was the exception
         # for a year, an exact-match list of the two spellings anyone had seen.
@@ -449,12 +457,18 @@ describe "gigs" do
 
         it "returns venues with location=stkilda when location=stkilda" do
           get "/gigs/query?location=stkilda&date_from=2001-06-08&date_to=2001-08-08"
-          expect(response.parsed_body).to match_unordered_json([
-                                                                      { name: "A gig in st kilda",
-                                                                        venue: { name: "The Escry" }, },
-                                                                      { name: "Another gig in st kilda",
-                                                                        venue: { name: "The Mildred Hotel" }, },
-                                                                    ])
+          expect(response.parsed_body).to match_unordered_json(
+            [
+              {
+                name: "A gig in st kilda",
+                venue: { name: "The Escry" },
+              },
+              {
+                name: "Another gig in st kilda",
+                venue: { name: "The Mildred Hotel" },
+              },
+            ],
+          )
         end
       end
     end

@@ -104,7 +104,9 @@ Rails.application.configure do
   ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # and temporarily for api and admin while we check it works
-  config.host_authorization = { exclude: ->(request) {
-    request.path == "/up" || (request.path || "").start_with?("/admin") || (request.path || "").start_with?("/gigs")
-  } }
+  config.host_authorization = {
+    exclude: ->(request) {
+      request.path == "/up" || (request.path || "").start_with?("/admin") || (request.path || "").start_with?("/gigs")
+    },
+  }
 end

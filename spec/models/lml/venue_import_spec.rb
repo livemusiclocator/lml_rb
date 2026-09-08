@@ -87,12 +87,14 @@ RSpec.describe Lml::VenueImport do
       import
 
       expect(@writes).to eq(
-        [{
-          worksheet: "venues",
-          index: 0,
-          cells: { "import_status" => "created", "venue_id" => Lml::Venue.last.id },
-          colour: :done,
-        }],
+        [
+          {
+            worksheet: "venues",
+            index: 0,
+            cells: { "import_status" => "created", "venue_id" => Lml::Venue.last.id },
+            colour: :done,
+          },
+        ],
       )
     end
 

@@ -13,7 +13,7 @@ namespace :spa do
   desc "Fetch SPA build from Firebase and generate manifest helper and update the checked in configuration file"
   task :fetch do
     def per_install_fetch install, allow_override=false
-        base_url = (allow_override and ENV['SPA_BASE_URL']) ? ENV['SPA_BASE_URL'] : "https://assets.livemusiclocator.com.au/lml_gig_explorer_#{install}"
+      base_url = (allow_override and ENV['SPA_BASE_URL']) ? ENV['SPA_BASE_URL'] : "https://assets.livemusiclocator.com.au/lml_gig_explorer_#{install}"
         manifest_url = "#{base_url}/manifest.json"
         manifest_response = fetch_url(manifest_url)
         manifest = JSON.parse(manifest_response.body)
@@ -34,7 +34,7 @@ namespace :spa do
       # switch to www install when we go live (because cors headers are different - there was probably a better way!)
       production: per_install_fetch("live"),
       test: per_install_fetch("beta"),
-      development: per_install_fetch("dev",true)
+      development: per_install_fetch("dev",true),
     }
     File.open('config/spa_assets.yml', 'w') do |config_file|
       config_file.write("# Please run rake spa:fetch to update this file\n")

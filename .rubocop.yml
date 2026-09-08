@@ -70,3 +70,23 @@ RSpec/ExampleLength:
 # of the file to find out.
 RSpec/DescribedClass:
   Enabled: false
+
+# Consistent breaking, in Oppen's sense: an argument list, array or hash either fits on one line or
+# puts every element on its own line. Never a partial fill packed out to the margin. All eight of
+# these cops are opt-in - rubocop has no single name for the rule, and its defaults permit the fill.
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: true
+Layout/MultilineMethodParameterLineBreaks:
+  Enabled: true
+Layout/MultilineArrayLineBreaks:
+  Enabled: true
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: true
+Layout/FirstMethodParameterLineBreak:
+  Enabled: true
+Layout/FirstArrayElementLineBreak:
+  Enabled: true
+Layout/FirstHashElementLineBreak:
+  Enabled: true

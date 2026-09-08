@@ -36,8 +36,12 @@ RSpec.describe Lml::StochasticParrot do
     it "returns nil when the credit balance has run out" do
       stub_request(:post, @url).to_return(
         status: 429,
-        body: { error: { message: "You have no credits remaining.",
-                         code: "credit_balance_exhausted", } }.to_json,
+        body: {
+          error: {
+            message: "You have no credits remaining.",
+            code: "credit_balance_exhausted",
+          },
+        }.to_json,
       )
 
       expect(@parrot.gist("a night of smooth jazz")).to be_nil
