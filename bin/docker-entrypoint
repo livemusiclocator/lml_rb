@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
-fi
+# Deliberately no db:prepare here. Migrating from the entrypoint runs once per dyno boot, which
+# races when web is scaled past one, fires on every restart rather than every deploy, and applies
+# the migration while this dyno is already coming up with the new code. heroku.yml's release phase
+# does it once, before any of that.
 
 exec "${@}"

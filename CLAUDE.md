@@ -61,12 +61,28 @@ jj git push --remote origin --bookmark main
 jj git push --remote heroku --bookmark main
 ```
 
-There is no `release:` line in the `Procfile`, so **migrations do not run on
-deploy**. Check `db/migrate/` across the undeployed range and run them yourself:
+**Migrations run themselves**, in `heroku.yml`'s release phase - after the image
+is built, before the new release's dynos start. A failure there means the release
+is not promoted and the old dynos keep serving, so a bad migration blocks the
+deploy rather than crash-looping the app. Nothing to run by hand.
 
-```
-heroku run rails db:migrate --app live-music-locator
-```
+Two things this app does *not* work the way you would guess:
 
-Additive migrations are safe to run right after the push. Anything that a
-running old release would trip over needs more thought than that.
+- **The `Procfile` is inert.** The app is on the `container` stack, so process
+  types come from the image, not the `Procfile`. The web dyno runs the
+  `Dockerfile`'s `CMD ["./bin/rails", "server"]`, not the `Procfile`'s puma
+  line. A `release:` line in the `Procfile` would do nothing either, which is
+  why the release phase lives in `heroku.yml`. The `Procfile`'s
+  `worker: bundle exec good_job start` is not what would start a worker: the
+  dyno formation holds only `web`, so declaring the process type is part of
+  turning good_job on whenever there is async work to run. There is none yet,
+  which is why nothing is running one.
+- **`bin/docker-entrypoint` no longer migrates.** It used to run `db:prepare`
+  on every web dyno boot, which raced when web scaled past one, fired on every
+  restart, and applied migrations as the new code was already coming up.
+
+The release phase runs while the *old* code is still serving, which is right for
+an additive migration and not enough for a destructive one. Dropping or renaming
+anything a running old release reads still wants expand and contract across two
+deploys. Very long migrations want running out of band, since the release phase
+is time limited and a timeout fails the deploy.

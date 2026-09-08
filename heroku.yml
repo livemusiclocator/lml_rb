@@ -3,3 +3,18 @@ build:
     web: Dockerfile
   config:
     RAILS_ENV: production
+# Runs after the image is built and before the new release's dynos start, so a migration is applied
+# while the old code is still serving and the new code never boots against a database it is ahead
+# of. A non-zero exit here means the release is not promoted at all - the old dynos keep serving,
+# which is the behaviour a crash-looping dyno could never give us.
+#
+# This is the only place migrations run. bin/docker-entrypoint used to run db:prepare on every web
+# dyno boot, which raced across dynos and applied the migration as the new code was already coming
+# up. It does not any more.
+#
+# Note this assumes the database exists. A brand new environment needs its schema loaded by hand
+# before the first deploy, which db:prepare used to paper over.
+release:
+  image: web
+  command:
+    - ./bin/rails db:migrate
