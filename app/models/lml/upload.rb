@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Lml
   class Upload < ApplicationRecord
     def self.ransackable_attributes(_auth_object = nil)
@@ -12,6 +14,13 @@ module Lml
     end
 
     belongs_to :venue, optional: true
+    # gigs.upload_id records which upload a gig arrived on, and Lml::Processors::Clipper reassigns
+    # it every time a gig is processed again, so it is provenance rather than ownership. The column
+    # has no foreign key, so nothing was stopping it dangling once an upload went. Nullify rather
+    # than restrict: deleting a processed upload should not be gated on the gigs it happened to
+    # create, and those gigs stand on their own afterwards.
+    has_many :gigs, class_name: "Lml::Gig", foreign_key: :upload_id, inverse_of: :upload,
+                    dependent: :nullify
 
     def venue_label
       venue&.label

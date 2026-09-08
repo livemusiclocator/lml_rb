@@ -1,6 +1,23 @@
 require "rails_helper"
 
 describe Lml::Upload do
+  # gigs.upload_id has no foreign key, so a deleted upload used to leave the gigs it created
+  # pointing at a row that was not there any more.
+  describe "being destroyed" do
+    before do
+      @venue = Lml::Venue.create!(name: "The Tote", time_zone: "Australia/Melbourne", location: "melbourne")
+      @upload = Lml::Upload.create!(venue: @venue, content: "something")
+      @gig = Lml::Gig.create!(name: "A gig", venue: @venue, date: Date.current, upload: @upload)
+    end
+
+    it "keeps the gigs it created and clears their reference to it" do
+      @upload.destroy!
+
+      expect(Lml::Gig.exists?(@gig.id)).to be(true)
+      expect(@gig.reload.upload_id).to be_nil
+    end
+  end
+
   # Clipper assigns Time.zone per entry and never restores it. Time.zone is
   # thread local and Rails does not reset it between requests, so a leak here
   # means the next request on that thread renders its times in the wrong zone.
