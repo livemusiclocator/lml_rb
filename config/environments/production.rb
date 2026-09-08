@@ -66,6 +66,16 @@ Rails.application.configure do
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
+  # Scanner traffic - /wp/wp/v2/posts/999999 and friends - raises ActionController::RoutingError,
+  # and rails logs each one at ERROR with a full backtrace. That was 41% of this app's log volume,
+  # for requests nobody will ever debug. With this false, DebugExceptions skips anything it already
+  # has a rescue_response mapping for (RoutingError, UnknownFormat, RecordNotFound); a genuine 500
+  # has no such mapping and still logs in full.
+  #
+  # Nothing is lost: lograge never logged these anyway, because a routing error is raised before any
+  # controller action, and heroku's own router line still records the path and the 404 either way.
+  config.action_dispatch.log_rescued_responses = false
+
   # One line per request rather than Rails' Started / Parameters / Completed trio. Three quarters of
   # this app's log lines were that trio, so collapsing it is most of the volume, and a single line
   # is what a log search is actually able to work with.
