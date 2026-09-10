@@ -265,6 +265,7 @@ Input columns, all optional except `name`:
 | `capacity` | Copied straight across; a number. |
 | `vibe`, `notes` | Copied straight across; free text. |
 | `tags` | Comma separated, e.g. `live music, band room`. |
+| `lga` | Local government area, e.g. `Bass Coast Shire Council`. Places does not supply it. |
 
 Anything else is ignored, so columns tracking who researched a row or what still
 needs checking can sit alongside these without upsetting the import.
@@ -283,6 +284,53 @@ Output columns, written back as each row is decided:
 
 Both are appended to the header row by the importer if they are not already
 there, so a new sheet only needs the input columns.
+
+### Which worksheet
+
+The importer reads one worksheet, named on the admin page and defaulting to
+`venues`. A spreadsheet of research usually holds one tab per region rather than
+a single `venues`, so the name is usually typed.
+
+It is the tab's **title**, not the `gid` in the url. Copying a tab's url out of
+the browser gives you `#gid=1958834234`, and the sheets api has no way to address
+a worksheet by that — `Lml::Sheet` looks tabs up by title. So paste the
+spreadsheet url in one field and type the tab's name, exactly as it reads on the
+tab, in the other.
+
+### The gig research template's column names
+
+The research template names its columns for the person filling them in — `Venue
+Name`, `Insta`, `Best Website` — rather than for the importer. `ALIASES` in
+`Lml::VenueImport` maps them onto the names above so a tab that came out of the
+template imports as it stands, instead of being retyped into a fresh sheet first.
+
+| Template column | Read as |
+| --- | --- |
+| `Venue Name` | `name` |
+| `Address` + `Location` + `State` + `Postcode` | `address`, joined with commas |
+| `Best Website`, falling back to `Website` | `website` |
+| `Insta`, `FB`, `Location Url` | `instagram_url`, `facebook_url`, `location_url` |
+| `Email`, `Phone`, `Capacity`, `Vibe` | the same, lower cased |
+| `Tag List` | `tags` |
+| `LGA` | `lga` |
+| `RDV` | `location`, as an identifier — see below |
+
+Two of those are worth spelling out.
+
+**The address is joined back up.** The template splits it over four columns and
+its `Address` alone is a street: `Surf Beach Rd & Market Pl` is neither an address
+worth storing nor a query Places can resolve to one place. `Cape Tavern, Surf
+Beach Rd & Market Pl, Cape Paterson, VIC, 3995` is both.
+
+**`location` comes from `RDV`, not from `Location`.** The template's `Location`
+column holds a suburb — `Bright`, `Colac` — and `location` is the volunteer group
+that decides which gig guide a venue appears in, which is not geography. `RDV`,
+the Regional Development Victoria region, is the column that means roughly that,
+and it is a display name, so it is squashed to an identifier: `Barwon South West`
+becomes `barwonsouthwest`, matching the `stkilda` already in the column.
+
+A column the importer already understands always wins, so a sheet written to the
+names in the table above is read exactly as it was before any of this existed.
 
 ### A sample sheet
 

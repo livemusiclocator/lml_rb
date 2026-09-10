@@ -344,4 +344,100 @@ RSpec.describe Lml::VenueImport do
       "no name" => 1,
     )
   end
+
+  # Ian's gig research template, whose columns are named for a person rather than for the
+  # importer. Before these aliases every row of one read as "no name", which is a whole sheet
+  # coloured yellow and nothing created.
+  describe "a sheet in the gig research template's shape" do
+    before do
+      @rows = [
+        {
+          "Source" => "VLMVA",
+          "Venue Name" => "Cape Tavern",
+          "Location" => "Cape Paterson",
+          "Email" => "capetavern@westnet.com.au",
+          "Phone" => "03 5674 8122",
+          "Address" => "Surf Beach Rd & Market Pl",
+          "Postcode" => "3995",
+          "State" => "VIC",
+          "LGA" => "Bass Coast Shire Council",
+          "RDV" => "Barwon South West",
+          "Best Website" => "https://capetavern.example",
+          "Website" => "https://old.example",
+          "Insta" => "https://instagram.com/capetavern",
+          "FB" => "https://facebook.com/capetavern",
+          "Location Url" => "https://maps.example/cape",
+          "Capacity" => "120",
+        },
+      ]
+    end
+
+    it "creates the venue from the template's column names" do
+      import
+
+      expect(Lml::Venue.last).to have_attributes(
+        name: "Cape Tavern",
+        email: "capetavern@westnet.com.au",
+        phone: "03 5674 8122",
+        lga: "Bass Coast Shire Council",
+        instagram_url: "https://instagram.com/capetavern",
+        facebook_url: "https://facebook.com/capetavern",
+        location_url: "https://maps.example/cape",
+        capacity: 120,
+      )
+    end
+
+    it "joins the address back up out of the four columns it is split over" do
+      import
+
+      expect(@places).to have_received(:find).with(
+        "Cape Tavern, Surf Beach Rd & Market Pl, Cape Paterson, VIC, 3995",
+        region_code: "AU",
+      )
+    end
+
+    it "takes the location from the region rather than the suburb, as an identifier" do
+      import
+
+      expect(Lml::Venue.last.location).to eq("barwonsouthwest")
+    end
+
+    it "prefers the best website over the other one" do
+      import
+
+      expect(Lml::Venue.last.website).to eq("https://capetavern.example")
+    end
+
+    it "falls back to the plain website column when there is no best one" do
+      @rows.first["Best Website"] = nil
+
+      import
+
+      expect(Lml::Venue.last.website).to eq("https://old.example")
+    end
+  end
+
+  # The aliases are additive: a sheet written to the importer's own column names is read exactly
+  # as it was before they existed.
+  describe "a sheet using the importer's own column names" do
+    it "is unaffected by the aliases" do
+      @rows = [
+        {
+          "name" => "The Espy",
+          "address" => "11 The Esplanade St Kilda",
+          "location" => "stkilda",
+          "Venue Name" => "Ignored",
+          "RDV" => "Melbourne",
+        },
+      ]
+
+      import
+
+      expect(Lml::Venue.last).to have_attributes(
+        name: "The Espy",
+        address: "11 The Esplanade St Kilda",
+        location: "stkilda",
+      )
+    end
+  end
 end

@@ -46,7 +46,42 @@ module Lml
       "vibe" => :vibe,
       "notes" => :notes,
       "tags" => :tag_list,
+      "lga" => :lga,
     }.freeze
+
+    # The gig research template names its columns for a person reading them rather than for the
+    # importer, so a sheet that came out of it is read through this instead of being retyped by
+    # hand first. Canonical column => the template's columns feeding it, most preferred first, so
+    # a blank "Best Website" falls through to "Website".
+    #
+    # The template's own "Location" column is deliberately absent: it holds a suburb, and
+    # `location` is the volunteer group that decides which gig guide a venue appears in. "RDV" -
+    # the Regional Development Victoria region - is the column that means that, and it is a
+    # display name rather than an identifier, which is what LOCATION_IDENTIFIER is for.
+    ALIASES = {
+      "name" => ["Venue Name"],
+      "email" => ["Email"],
+      "phone" => ["Phone"],
+      "website" => ["Best Website", "Website"],
+      "instagram_url" => ["Insta"],
+      "facebook_url" => ["FB"],
+      "location_url" => ["Location Url"],
+      "capacity" => ["Capacity"],
+      "vibe" => ["Vibe"],
+      "tags" => ["Tag List"],
+      "lga" => ["LGA"],
+      "location" => ["RDV"],
+    }.freeze
+
+    # The template splits an address over four columns, and its "Address" alone is a street:
+    # "Surf Beach Rd & Market Pl" is neither an address worth storing nor a query Places can
+    # resolve to one place. Joined back up before either is asked for.
+    COMPOSITES = { "address" => %w[Address Location State Postcode] }.freeze
+
+    # "Barwon South West" => "barwonsouthwest", to match the "stkilda" already in the column.
+    LOCATION_IDENTIFIER = ->(value) { value.gsub(/[^A-Za-z0-9]/, "").downcase }
+
+    TRANSFORMS = { "location" => LOCATION_IDENTIFIER }.freeze
 
     CREATED = "created"
     MATCHED = "matched"
@@ -84,13 +119,42 @@ module Lml
       @sheet.ensure_headers(worksheet: @worksheet, headers: OUTPUT_COLUMNS)
 
       @sheet.rows(worksheet: @worksheet).each_with_index do |row, index|
-        record(outcome_for(row), index)
+        record(outcome_for(with_aliases(row)), index)
       end
 
       @counts
     end
 
     private
+
+    # A column the importer already understands always wins, so a sheet written to its own column
+    # names goes through this untouched.
+    def with_aliases(row)
+      result = row.dup
+
+      COMPOSITES.each { |column, sources| fill(result, column) { joined(row, sources) } }
+      ALIASES.each { |column, sources| fill(result, column) { aliased(row, column, sources) } }
+
+      result
+    end
+
+    def fill(result, column)
+      return if result[column].present?
+
+      result[column] = yield
+    end
+
+    # A blank column is left out rather than punched through as an empty part of the address.
+    def joined(row, sources)
+      sources.filter_map { |source| row[source].presence&.strip }.join(", ").presence
+    end
+
+    def aliased(row, column, sources)
+      value = sources.filter_map { |source| row[source] }.first
+      transform = TRANSFORMS[column]
+
+      transform && value ? transform.call(value) : value
+    end
 
     # One row that raises is one row for someone to go and look at, not a reason to abandon the rest
     # of the sheet. The message goes into the sheet because that is where the work is happening - an
