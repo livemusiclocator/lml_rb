@@ -13,10 +13,9 @@ ActiveAdmin.register_page "Venue Import" do
 
   content title: "Import venues from a Google Sheet" do
     para do
-      text_node "Reads the "
-      strong "venues"
-      text_node " worksheet, resolves each row through the Places API, and writes the outcome " \
-                "back into the row it came from. A row that already has a "
+      text_node "Reads one worksheet of the spreadsheet, resolves each row through the Places " \
+                "API, and writes the outcome back into the row it came from. A row that already " \
+                "has a "
       strong "venue_id"
       text_node " is skipped, so this is safe to run again after adding rows."
     end
@@ -70,6 +69,19 @@ ActiveAdmin.register_page "Venue Import" do
         )
         br
         br
+        label "Worksheet", for: "worksheet"
+        br
+        # The tab's name, not its gid - a gid in the url picks the tab on screen, but the sheets
+        # api addresses a worksheet by title. Named tabs are the normal case: a spreadsheet of
+        # research usually holds one per region rather than a single "venues".
+        text_node text_field_tag(
+          :worksheet,
+          params[:worksheet].presence || Lml::VenueImport::WORKSHEET,
+          id: "worksheet",
+          size: 50,
+        )
+        br
+        br
         input type: :submit, value: "Import venues"
       end
     end
@@ -77,25 +89,27 @@ ActiveAdmin.register_page "Venue Import" do
 
   page_action :run, method: :post do
     url = params[:sheet_url].to_s.strip
+    worksheet = params[:worksheet].to_s.strip.presence || Lml::VenueImport::WORKSHEET
 
     if url.empty?
-      redirect_to admin_venue_import_path, alert: "Paste the spreadsheet's URL first."
+      redirect_to admin_venue_import_path(worksheet: worksheet), alert: "Paste the spreadsheet's URL first."
       next
     end
 
     begin
-      counts = Lml::VenueImport.call(url)
-      redirect_to admin_venue_import_path(sheet_url: url), notice: "Imported: #{describe(counts)}."
+      counts = Lml::VenueImport.call(url, worksheet: worksheet)
+      redirect_to admin_venue_import_path(sheet_url: url, worksheet: worksheet),
+        notice: "Imported #{worksheet}: #{describe(counts)}."
     rescue Lml::Sheet::InvalidUrlError
-      redirect_to admin_venue_import_path(sheet_url: url),
+      redirect_to admin_venue_import_path(sheet_url: url, worksheet: worksheet),
         alert: "That is not a Google Sheets URL - it should look like " \
                "https://docs.google.com/spreadsheets/d/.../edit"
     rescue StandardError => e
-      # Anything Google refused: the sheet is not shared, there is no `venues`
-      # worksheet, Places is not enabled, billing is off. The message is the only
-      # useful thing here, and it belongs on screen rather than in the log.
+      # Anything Google refused: the sheet is not shared, the worksheet is named
+      # something else, Places is not enabled, billing is off. The message is the
+      # only useful thing here, and it belongs on screen rather than in the log.
       Rails.logger.error("Venue import failed: #{e.class}: #{e.message}")
-      redirect_to admin_venue_import_path(sheet_url: url), alert: "#{e.class}: #{e.message}"
+      redirect_to admin_venue_import_path(sheet_url: url, worksheet: worksheet), alert: "#{e.class}: #{e.message}"
     end
   end
 

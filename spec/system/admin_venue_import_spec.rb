@@ -46,7 +46,42 @@ describe "the venue import page", type: :system do
     fill_in "sheet_url", with: "https://docs.google.com/spreadsheets/d/abc123DEF/edit"
     click_on "Import venues"
 
-    expect(page).to have_content("Imported: 2 created, 1 ambiguous.")
+    expect(page).to have_content("Imported venues: 2 created, 1 ambiguous.")
+  end
+
+  # The tabs this is actually pointed at are named per region - "IJ's Gippsland Final" - and the
+  # sheets api addresses a worksheet by title, so the gid in the url someone copies out of the
+  # browser is no use. Typing a name has to reach the import.
+  it "imports the worksheet that was typed in" do
+    allow(Lml::VenueImport).to receive(:call).and_return({ "created" => 3 })
+
+    visit "/admin/venue_import"
+    fill_in "sheet_url", with: "https://docs.google.com/spreadsheets/d/abc123DEF/edit"
+    fill_in "worksheet", with: "IJ's Gippsland Final 10/9/26"
+    click_on "Import venues"
+
+    expect(Lml::VenueImport).to have_received(:call).with(
+      "https://docs.google.com/spreadsheets/d/abc123DEF/edit",
+      worksheet: "IJ's Gippsland Final 10/9/26",
+    )
+    expect(page).to have_content("Imported IJ's Gippsland Final 10/9/26: 3 created.")
+  end
+
+  it "keeps the worksheet in the field after a run, so the next tab is one edit away" do
+    allow(Lml::VenueImport).to receive(:call).and_return({ "created" => 1 })
+
+    visit "/admin/venue_import"
+    fill_in "sheet_url", with: "https://docs.google.com/spreadsheets/d/abc123DEF/edit"
+    fill_in "worksheet", with: "IJ's Hume Final 10/9/26"
+    click_on "Import venues"
+
+    expect(page).to have_field("worksheet", with: "IJ's Hume Final 10/9/26")
+  end
+
+  it "defaults the worksheet to venues" do
+    visit "/admin/venue_import"
+
+    expect(page).to have_field("worksheet", with: "venues")
   end
 
   it "puts the reason on screen when the import fails" do
