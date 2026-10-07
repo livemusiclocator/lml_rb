@@ -60,12 +60,13 @@ module Lml
     end
     scope :in_location,
       lambda { |location|
-        if location == "anywhere"
+        if %w[anywhere everywhere].include?(location)
           # "anywhere" means the main edition's selectable locations, not literally
           # every venue. A location left off that list is hidden: gigs can be
           # entered against it and worked on without showing up in the gig guide,
           # while `location=thatplace` still fetches them for whoever knows to ask.
-          public_locations = Web::ExplorerConfig.public_location_identifiers
+          # "everywhere" is literally every venue, hidden locations included.
+          public_locations = location == "anywhere" ? Web::ExplorerConfig.public_location_identifiers : []
 
           # No config row, or an admin emptied the list. Falling back to everything
           # keeps the old behaviour rather than serving an empty gig guide.

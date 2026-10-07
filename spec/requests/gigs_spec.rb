@@ -414,6 +414,20 @@ describe "gigs" do
 
           expect(gig_names).to include("A gig in bendigo")
         end
+
+        it "returns gigs in every location, hidden ones included, for location = everywhere" do
+          main_edition_selecting(%w[melbourne stkilda])
+
+          get "/gigs/query?location=everywhere&date_from=2001-06-08&date_to=2001-06-08"
+
+          expect(gig_names).to contain_exactly(
+            "The One Gig You Should Not Miss Out On",
+            "A gig at a capitalised venue",
+            "A gig in st kilda",
+            "Another gig in st kilda",
+            "A gig in bendigo",
+          )
+        end
       end
 
       describe "matching sub-geographies of Melbourne" do
