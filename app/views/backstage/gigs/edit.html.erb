@@ -1,0 +1,7 @@
+<div class="mb-8">
+  <%= link_to "‹ #{@venue.name}", backstage_venue_path(@venue), class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-3xl font-bold tracking-tight mt-1">Edit gig</h1>
+  <p class="text-gray-500 mt-1">At <%= @venue.name %>. Changes go live as soon as you save them.</p>
+</div>
+
+<%= render "form", gig: @gig, venue: @venue, url: backstage_gig_path(@gig), method: :patch, submit_label: "Save gig" %>

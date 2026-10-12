@@ -50,4 +50,17 @@ describe "backstage gigs", type: :system do
     expect(page).to have_content("Name can't be blank")
     expect(page).to have_field("Date", with: (Date.current + 5).iso8601)
   end
+
+  it "edits a gig at a venue they manage" do
+    create(:lml_gig, venue: @venue, name: "Old name", date: Date.current + 2)
+    visit "/backstage/venues/#{@venue.id}"
+
+    within("li", text: "Old name") { click_on "Edit" }
+    fill_in "Gig name / headliner", with: "New name"
+    click_button "Save gig"
+
+    expect(page).to have_content("Saved New name.")
+    expect(page).to have_content("New name")
+    expect(page).to have_no_content("Old name")
+  end
 end

@@ -21,10 +21,30 @@ module Backstage
       end
     end
 
+    def edit
+      @gig = managed_gig
+      @venue = @gig.venue
+    end
+
+    def update
+      @gig = managed_gig
+      @venue = @gig.venue
+
+      if save_gig(@gig)
+        redirect_to backstage_venue_path(@venue), notice: "Saved #{@gig.name}."
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
     private
 
     def managed_venue
       current_user.managed_venues.find(params[:venue_id])
+    end
+
+    def managed_gig
+      Lml::Gig.where(venue_id: current_user.managed_venues.select(:id)).find(params[:id])
     end
 
     def gig_params

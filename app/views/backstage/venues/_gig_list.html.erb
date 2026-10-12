@@ -19,6 +19,7 @@
           <span class="block text-sm text-gray-500 truncate"><%= gig.sets.map { |set| set.act.name }.join(", ") %></span>
         <% end %>
       </div>
+      <%= link_to "Edit", edit_backstage_gig_path(gig), class: "text-sm font-medium text-indigo-600 hover:text-indigo-800 sm:self-center", aria: { label: "Edit #{gig.name}" } %>
     </li>
   <% end %>
 </ul>

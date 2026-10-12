@@ -61,4 +61,50 @@ describe "backstage gigs" do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "editing a gig" do
+    before do
+      @gig = create(:lml_gig, venue: @venue, name: "Old name", date: "2026-11-14")
+      @gig.set_list = "Old Act"
+    end
+
+    it "updates it, replacing its sets" do
+      patch "/backstage/gigs/#{@gig.id}", params: @params
+
+      expect(response).to redirect_to("/backstage/venues/#{@venue.id}")
+      @gig.reload
+      expect(@gig.name).to eq("Gut Health")
+      expect(@gig.finish_time).to eq("23:30")
+      expect(@gig.sets.map { |set| set.act.name }).to contain_exactly("Gut Health", "Support Act")
+    end
+
+    it "clears a start time that is emptied" do
+      @gig.update!(start_time: "19:00")
+      @params[:gig].merge!(start_time: "", finish_time: "")
+
+      patch "/backstage/gigs/#{@gig.id}", params: @params
+
+      expect(@gig.reload.start_time).to be_nil
+    end
+
+    it "leaves the gig and its sets alone when the change is refused" do
+      @params[:gig][:name] = ""
+
+      patch "/backstage/gigs/#{@gig.id}", params: @params
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      @gig.reload
+      expect(@gig.name).to eq("Old name")
+      expect(@gig.sets.map { |set| set.act.name }).to eq(["Old Act"])
+    end
+
+    it "does not find a gig at a venue somebody else manages" do
+      other_gig = create(:lml_gig, venue: @other_venue, name: "Not yours")
+
+      patch "/backstage/gigs/#{other_gig.id}", params: @params
+
+      expect(response).to have_http_status(:not_found)
+      expect(other_gig.reload.name).to eq("Not yours")
+    end
+  end
 end
