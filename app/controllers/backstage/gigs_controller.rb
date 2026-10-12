@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 module Backstage
-  # Gigs at the venues a user manages. Managing a venue is the authority to
-  # change its gigs directly - the same rule ProposalsController applies - so
-  # nothing here goes through review.
+  # Gigs at the venues a user manages, or at any venue for an admin. Managing a
+  # venue is the authority to change its gigs directly - the same rule
+  # ProposalsController applies - so nothing here goes through review.
   class GigsController < ApplicationController
     def new
-      @venue = managed_venue
+      @venue = accessible_venue
       @gig = @venue.gigs.build(status: :confirmed)
     end
 
     def create
-      @venue = managed_venue
+      @venue = accessible_venue
       @gig = @venue.gigs.build
 
       if save_gig(@gig)
@@ -22,12 +22,12 @@ module Backstage
     end
 
     def edit
-      @gig = managed_gig
+      @gig = accessible_gig
       @venue = @gig.venue
     end
 
     def update
-      @gig = managed_gig
+      @gig = accessible_gig
       @venue = @gig.venue
 
       if save_gig(@gig)
@@ -39,12 +39,12 @@ module Backstage
 
     private
 
-    def managed_venue
-      current_user.managed_venues.find(params[:venue_id])
+    def accessible_venue
+      accessible_venues.find(params[:venue_id])
     end
 
-    def managed_gig
-      Lml::Gig.where(venue_id: current_user.managed_venues.select(:id)).find(params[:id])
+    def accessible_gig
+      Lml::Gig.where(venue_id: accessible_venues.select(:id)).find(params[:id])
     end
 
     def gig_params

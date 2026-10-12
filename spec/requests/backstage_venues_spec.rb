@@ -55,4 +55,38 @@ describe "backstage venues" do
 
     expect(response.body).to include("You haven't been allocated any venues yet.")
   end
+
+  describe "as an admin" do
+    before do
+      @admin = create(:lml_user, :admin)
+      Lml::VenueManager.create!(user: @admin, venue: @venue)
+      sign_in @admin
+    end
+
+    it "lists their own venues and every other venue separately" do
+      get "/backstage/venues"
+
+      own, others = response.body.split("All other venues")
+      expect(own).to include("The Tote")
+      expect(others).to include("The Corner")
+      expect(others).not_to include("The Tote")
+    end
+
+    it "searches the other venues" do
+      create(:lml_venue, name: "The Gasometer")
+
+      get "/backstage/venues", params: { q: "gaso" }
+
+      others = response.body.split("All other venues").last
+      expect(others).to include("The Gasometer")
+      expect(others).not_to include("The Corner")
+    end
+
+    it "opens a venue they do not manage, and says so" do
+      get "/backstage/venues/#{@other_venue.id}"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("because you're an admin")
+    end
+  end
 end

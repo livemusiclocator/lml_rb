@@ -40,4 +40,17 @@ describe "backstage venues", type: :system do
 
     expect(page).to have_css("h1", text: "The Tote")
   end
+
+  it "lets an admin find and open a venue they do not manage" do
+    @manager.update!(admin: true)
+    create(:lml_venue, name: "The Gasometer")
+
+    click_on "Venues"
+    fill_in "q", with: "gaso"
+    click_button "Search"
+    click_on "The Gasometer"
+
+    expect(page).to have_css("h1", text: "The Gasometer")
+    expect(page).to have_link("Add a gig")
+  end
 end

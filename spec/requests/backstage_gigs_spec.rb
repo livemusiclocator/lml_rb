@@ -107,4 +107,22 @@ describe "backstage gigs" do
       expect(other_gig.reload.name).to eq("Not yours")
     end
   end
+
+  describe "as an admin" do
+    before do
+      sign_in create(:lml_user, :admin)
+    end
+
+    it "adds a gig at a venue they do not manage" do
+      expect { post "/backstage/venues/#{@other_venue.id}/gigs", params: @params }.to change(@other_venue.gigs, :count).by(1)
+    end
+
+    it "edits a gig at a venue they do not manage" do
+      gig = create(:lml_gig, venue: @other_venue, name: "Old name")
+
+      patch "/backstage/gigs/#{gig.id}", params: @params
+
+      expect(gig.reload.name).to eq("Gut Health")
+    end
+  end
 end

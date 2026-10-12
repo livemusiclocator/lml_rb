@@ -14,6 +14,11 @@ module Backstage
     end
     helper_method :current_user_manages?
 
+    # An admin can reach every venue; anybody else only the ones they manage.
+    def accessible_venues
+      current_user.admin? ? Lml::Venue.all : current_user.managed_venues
+    end
+
     private
 
     # Not a global before_action - most of backstage is for punters. Pages that

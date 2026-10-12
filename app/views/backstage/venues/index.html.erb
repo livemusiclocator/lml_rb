@@ -1,25 +1,42 @@
 <div class="mb-8">
-  <h1 class="text-3xl font-bold tracking-tight">My venues</h1>
-  <p class="text-gray-500 mt-1">The venues you look after. Gigs you add or change here go live straight away.</p>
+  <h1 class="text-3xl font-bold tracking-tight"><%= current_user.admin? ? "Venues" : "My venues" %></h1>
+  <p class="text-gray-500 mt-1">Gigs you add or change here go live straight away.</p>
 </div>
 
-<% if @venues.any? %>
-  <ul class="bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-100">
-    <% @venues.each do |venue| %>
-      <li>
-        <%= link_to backstage_venue_path(venue), class: "flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50" do %>
-          <span>
-            <span class="block font-medium text-indigo-600"><%= venue.name %></span>
-            <span class="block text-sm text-gray-500"><%= [venue.address, venue.location].compact_blank.join(" · ") %></span>
-          </span>
-          <span class="text-gray-400" aria-hidden="true">&rsaquo;</span>
-        <% end %>
-      </li>
+<section class="mb-10">
+  <% if current_user.admin? %>
+    <h2 class="font-semibold text-gray-900 mb-3">Your venues</h2>
+  <% end %>
+  <% if @venues.any? %>
+    <%= render "venue_list", venues: @venues %>
+  <% elsif current_user.admin? %>
+    <p class="text-sm text-gray-400 italic">You don't manage any venues yourself.</p>
+  <% else %>
+    <div class="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center text-gray-500">
+      <p>You haven't been allocated any venues yet.</p>
+      <p class="text-sm mt-1">Once an editor makes you a manager of a venue, it shows up here.</p>
+    </div>
+  <% end %>
+</section>
+
+<% if current_user.admin? %>
+  <section>
+    <h2 class="font-semibold text-gray-900 mb-3">All other venues</h2>
+    <%= form_with url: backstage_venues_path, method: :get, class: "flex gap-2 mb-4" do %>
+      <%= search_field_tag :q, @query, placeholder: "Search by name or location",
+          aria: { label: "Search venues" },
+          class: "flex-1 min-w-0 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      <%= submit_tag "Search", name: nil, class: "bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg cursor-pointer" %>
     <% end %>
-  </ul>
-<% else %>
-  <div class="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center text-gray-500">
-    <p>You haven't been allocated any venues yet.</p>
-    <p class="text-sm mt-1">Once an editor makes you a manager of a venue, it shows up here.</p>
-  </div>
+    <% if @other_venues.any? %>
+      <%= render "venue_list", venues: @other_venues %>
+      <% if @other_venue_count > @other_venues.size %>
+        <p class="text-sm text-gray-500 mt-3">
+          Showing the first <%= @other_venues.size %> of <%= @other_venue_count %>. Search to narrow it down.
+        </p>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-gray-400 italic">No venues match "<%= @query %>".</p>
+    <% end %>
+  </section>
 <% end %>
