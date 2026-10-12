@@ -1,0 +1,73 @@
+<% field = "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+<% label = "block text-sm font-medium text-gray-700 mb-1.5" %>
+<% hint = "text-gray-400 font-normal" %>
+
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+  <%= form_with model: gig, scope: :gig, url: url, method: method, html: { class: "space-y-5" } do |f| %>
+    <% if gig.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
+        <%= gig.errors.full_messages.to_sentence %>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="sm:col-span-2">
+        <%= f.label :name, "Gig name / headliner", class: label %>
+        <%= f.text_field :name, required: true, class: field, placeholder: "e.g. King Stingray with Gut Health" %>
+      </div>
+      <div>
+        <%= f.label :date, class: label %>
+        <%= f.date_field :date, required: true, class: field %>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :start_time, "Starts", class: label %>
+          <%= f.time_field :start_time, class: field %>
+        </div>
+        <div>
+          <%= f.label :finish_time, "Finishes", class: label %>
+          <%= f.time_field :finish_time, class: field %>
+        </div>
+      </div>
+      <div>
+        <%= f.label :status, class: label %>
+        <%= f.select :status, Lml::Gig.statuses.keys.map { |s| [s.humanize, s] }, {}, class: field %>
+      </div>
+      <div>
+        <%= f.label :ticket_status, "Tickets", class: label %>
+        <%= f.select :ticket_status, Lml::Gig.ticket_statuses.keys.map { |s| [s.humanize, s] }, { include_blank: "On sale" }, class: field %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :ticketing_url, "Ticketing URL", class: label %>
+        <%= f.url_field :ticketing_url, class: field, placeholder: "https://..." %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :set_list, class: label do %>
+          Set list <span class="<%= hint %>">(one act per line: act | start | finish | stage)</span>
+        <% end %>
+        <%= f.text_area :set_list, rows: 4, class: "#{field} font-mono text-sm", placeholder: "Gut Health | 8:00pm | 8:45pm\nKing Stingray | 9:15pm | 10:30pm" %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :price_list, class: label do %>
+          Prices <span class="<%= hint %>">(one per line: amount | description)</span>
+        <% end %>
+        <%= f.text_area :price_list, rows: 3, class: "#{field} font-mono text-sm", placeholder: "25.00 | General admission\n20.00 | Concession" %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :genre_tag_list, class: label do %>
+          Genres <span class="<%= hint %>">(one per line)</span>
+        <% end %>
+        <%= f.text_area :genre_tag_list, rows: 3, class: "#{field} text-sm", placeholder: "indie rock\npost-punk" %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :description, class: label %>
+        <%= f.text_area :description, rows: 3, class: field %>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <%= f.submit submit_label, class: "bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer" %>
+      <%= link_to "Cancel", backstage_venue_path(venue), class: "text-sm text-gray-500 hover:text-gray-700" %>
+    </div>
+  <% end %>
+</div>

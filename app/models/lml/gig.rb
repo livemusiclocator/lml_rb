@@ -137,8 +137,9 @@ module Lml
       (genre_tags || []).join("\n")
     end
 
+    # compact_blank because a textarea's trailing newline would otherwise publish an empty tag.
     def genre_tag_list=(value)
-      self.genre_tags = value.split("\n").map(&:strip)
+      self.genre_tags = value.split("\n").map(&:strip).compact_blank
     end
 
     def information_tag_list
