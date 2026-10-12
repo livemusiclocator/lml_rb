@@ -21,6 +21,8 @@ module Backstage
 
       if target && current_user_manages?(target.is_a?(Lml::Set) ? target.gig.venue : target)
         apply_directly(target, proposed_attrs)
+      elsif admin_proposing_new_gig?(target)
+        create_directly(proposed_attrs)
       else
         submit_proposal(target, proposed_attrs)
       end
@@ -57,12 +59,28 @@ module Backstage
 
     def apply_directly(target, attrs)
       if target.update(attrs)
-        redirect_to backstage_root_path,
-          notice: "Changes applied directly — you manage this #{target.class.name.demodulize.downcase}."
+        redirect_to backstage_root_path, notice: "Changes applied directly — #{direct_access_reason(target)}."
       else
         redirect_to new_backstage_proposal_path(target_type: target.class.name, target_id: target.id),
           alert: "Could not apply changes: #{target.errors.full_messages.to_sentence}"
       end
+    end
+
+    def direct_access_reason(target)
+      current_user.admin? ? "you're an admin" : "you manage this #{target.class.name.demodulize.downcase}"
+    end
+
+    def admin_proposing_new_gig?(target)
+      target.nil? && current_user.admin? && proposal_params[:proposed_type] == "Lml::Gig"
+    end
+
+    # Goes through Proposal#apply! so an admin's new gig is made exactly as an
+    # approved proposal would make it, without leaving a proposal behind.
+    def create_directly(attrs)
+      Lml::Proposal.new(user: current_user, proposed_type: "Lml::Gig", proposed_attributes: attrs).apply!
+      redirect_to backstage_root_path, notice: "Gig created directly — you're an admin."
+    rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
+      redirect_to new_backstage_proposal_path(target_type: "new_gig"), alert: "Could not create the gig: #{e.message}"
     end
 
     def submit_proposal(target, attrs)

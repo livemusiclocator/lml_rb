@@ -32,6 +32,20 @@ module Lml
     def approve!(admin:, note: nil)
       return false unless pending?
 
+      apply!
+      update!(
+        status: :approved,
+        reviewed_by: admin,
+        reviewed_at: Time.current,
+        reviewer_note: note,
+      )
+      # ProposalMailer.approved(self).deliver_now
+      true
+    end
+
+    # Makes the proposed change. Apart from approve! so that a backstage admin's
+    # own change can be made without ever being recorded as a proposal.
+    def apply!
       if amendment?
         target.update!(proposed_attributes)
       elsif proposed_type == "Lml::Gig"
@@ -44,14 +58,6 @@ module Lml
           details: details,
         )
       end
-      update!(
-        status: :approved,
-        reviewed_by: admin,
-        reviewed_at: Time.current,
-        reviewer_note: note,
-      )
-      # ProposalMailer.approved(self).deliver_now
-      true
     end
 
     def reject!(admin:, note: nil)

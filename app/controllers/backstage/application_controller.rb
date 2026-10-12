@@ -5,7 +5,10 @@ module Backstage
     before_action :authenticate_user!
     layout "backstage"
 
+    # Admins carry every manager's authority, so their changes skip review too.
     def current_user_manages?(resource)
+      return true if current_user.admin?
+
       case resource
       when Lml::Venue then current_user.manages_venue?(resource)
       when Lml::Act then current_user.manages_act?(resource)

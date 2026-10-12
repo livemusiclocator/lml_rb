@@ -1,6 +1,9 @@
 <div class="mb-8">
   <h1 class="text-3xl font-bold tracking-tight">Propose changes</h1>
   <p class="text-gray-500 mt-1">Only fill in the fields you have information about — leave others blank.</p>
+  <% if current_user.admin? %>
+    <p class="text-sm text-amber-700 mt-2">You're an admin, so anything you submit here goes live straight away, without review.</p>
+  <% end %>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
