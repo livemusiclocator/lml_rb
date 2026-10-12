@@ -78,6 +78,7 @@ Rails.application.routes.draw do
       root to: "dashboard#index"
       resources :proposals, only: [:index, :new, :create, :show]
       resources :api_tokens, only: [:index, :create, :destroy]
+      resources :venues, only: [:index, :show]
       namespace :search do
         resources :gigs, only: :index
         resources :acts, only: :index

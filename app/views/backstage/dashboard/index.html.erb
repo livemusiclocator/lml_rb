@@ -9,7 +9,7 @@
       <span class="text-indigo-500">&#9679;</span> Your direct access
     </h2>
     <% if @managed_venues.any? %>
-      <p class="text-sm text-indigo-800 mb-1"><span class="font-medium">Venues:</span> <%= @managed_venues.map(&:name).join(", ") %></p>
+      <p class="text-sm text-indigo-800 mb-1"><span class="font-medium">Venues:</span> <%= safe_join(@managed_venues.map { |venue| link_to(venue.name, backstage_venue_path(venue), class: "underline hover:text-indigo-950") }, ", ") %></p>
     <% end %>
     <% if @managed_acts.any? %>
       <p class="text-sm text-indigo-800"><span class="font-medium">Acts:</span> <%= @managed_acts.map(&:name).join(", ") %></p>

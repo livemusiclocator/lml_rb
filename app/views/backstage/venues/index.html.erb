@@ -1,0 +1,25 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold tracking-tight">My venues</h1>
+  <p class="text-gray-500 mt-1">The venues you look after. Gigs you add or change here go live straight away.</p>
+</div>
+
+<% if @venues.any? %>
+  <ul class="bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-100">
+    <% @venues.each do |venue| %>
+      <li>
+        <%= link_to backstage_venue_path(venue), class: "flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50" do %>
+          <span>
+            <span class="block font-medium text-indigo-600"><%= venue.name %></span>
+            <span class="block text-sm text-gray-500"><%= [venue.address, venue.location].compact_blank.join(" · ") %></span>
+          </span>
+          <span class="text-gray-400" aria-hidden="true">&rsaquo;</span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center text-gray-500">
+    <p>You haven't been allocated any venues yet.</p>
+    <p class="text-sm mt-1">Once an editor makes you a manager of a venue, it shows up here.</p>
+  </div>
+<% end %>

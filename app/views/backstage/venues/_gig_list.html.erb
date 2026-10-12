@@ -1,0 +1,24 @@
+<ul class="bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-100">
+  <% gigs.each do |gig| %>
+    <li class="px-5 py-4 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-6">
+      <div class="sm:w-36 shrink-0 text-sm">
+        <span class="block font-medium text-gray-900"><%= gig.date&.strftime("%a %-d %b %Y") %></span>
+        <% if gig.start_time %>
+          <span class="block text-gray-500"><%= gig.start_time %><%= " – #{gig.finish_time}" if gig.finish_time %></span>
+        <% end %>
+      </div>
+      <div class="min-w-0 flex-1">
+        <span class="font-medium text-gray-900"><%= gig.name.presence || "Untitled gig" %></span>
+        <% unless gig.status_confirmed? %>
+          <span class="ml-2 inline-flex px-2 py-0.5 rounded-full text-xs font-semibold <%= gig.status_cancelled? ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-800" %>"><%= gig.status.capitalize %></span>
+        <% end %>
+        <% if gig.hidden? %>
+          <span class="ml-2 inline-flex px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">Hidden</span>
+        <% end %>
+        <% if gig.sets.any? %>
+          <span class="block text-sm text-gray-500 truncate"><%= gig.sets.map { |set| set.act.name }.join(", ") %></span>
+        <% end %>
+      </div>
+    </li>
+  <% end %>
+</ul>
