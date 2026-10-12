@@ -83,15 +83,10 @@ Browse to https://api.lml.test/admin and log in as admin@example.com and passwor
 
 ## Active admin styles
 
-Conflicts with tailwind and sass-rails mean we had to take out sass-rails and sass in general. As a result, the active_admin.css has been prebuilt from the former scss code. To refresh these styles, something like the following will work:
-
-+ Restore old active_admin.scss file
-+ Add gem "sass-rails" to Gemfile
-+ bundle install
-+ rails assets:precompile
-+ Find active_admin*.css in public/assets/
-+ Copy contents to new app/assets/stylesheets/active_admin.css
-+ Remove Sass gem and .scss file 
+`app/assets/stylesheets/active_admin.css` is plain, hand-written CSS against
+stock ActiveAdmin markup - there is no sass and no theme gem, so edit it
+directly. It keeps the index filters on screen at every width: a sticky column
+beside the table on a wide screen, stacked above it on a narrow one.
 
 ## Heroku Stuff
 

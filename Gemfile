@@ -8,8 +8,6 @@ gem "devise"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails"
 
-gem "arctic_admin"
-
 gem "money-rails"
 
 # allow CORS

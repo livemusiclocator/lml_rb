@@ -90,9 +90,6 @@ GEM
     arbre (1.7.0)
       activesupport (>= 3.0.0)
       ruby2_keywords (>= 0.0.2)
-    arctic_admin (4.4.1)
-      activeadmin (>= 1.1.0, < 4.0)
-      font-awesome-sass (~> 6.0)
     ast (2.4.3)
     backport (1.2.0)
     base64 (0.3.0)
@@ -179,8 +176,6 @@ GEM
     ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
     ffi (1.17.4-x86_64-linux-musl)
-    font-awesome-sass (6.7.2)
-      sassc (~> 2.0)
     formatador (1.2.3)
       reline
     formtastic (5.0.0)
@@ -529,8 +524,6 @@ GEM
       faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    sassc (2.4.0)
-      ffi (~> 1.9)
     schema_dot_org (2.5.3)
       validated_object (~> 2.3.4)
     securerandom (0.4.1)
@@ -663,7 +656,6 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin
-  arctic_admin
   bootsnap
   capybara
   cuprite
