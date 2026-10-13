@@ -12,6 +12,7 @@ module Backstage
       case resource
       when Lml::Venue then current_user.manages_venue?(resource)
       when Lml::Act then current_user.manages_act?(resource)
+      when Lml::Gig then resource.venue.present? && current_user.manages_venue?(resource.venue)
       else false
       end
     end

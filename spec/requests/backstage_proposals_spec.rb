@@ -47,6 +47,21 @@ describe "backstage proposals" do
     end
   end
 
+  describe "from the manager of the gig's venue" do
+    before do
+      @user = create(:lml_user)
+      Lml::VenueManager.create!(user: @user, venue: @venue)
+      sign_in @user
+    end
+
+    it "applies a change to the gig straight away, with no proposal" do
+      expect { post "/backstage/proposals", params: @amendment_params }.not_to change(Lml::Proposal, :count)
+
+      expect(@gig.reload.name).to eq("New name")
+      expect(flash[:notice]).to eq("Changes applied directly — you manage this gig.")
+    end
+  end
+
   describe "from a plain backstage user" do
     before { sign_in create(:lml_user) }
 
