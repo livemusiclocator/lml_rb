@@ -5,7 +5,10 @@ export default class extends Controller {
   static values = {
     url: String,
     param: { type: String, default: "q" },
-    extras: { type: String, default: "" }
+    extras: { type: String, default: "" },
+    // Which key of a result goes in the text box once picked. The dropdown
+    // always shows the label.
+    textKey: { type: String, default: "label" }
   }
 
   connect() {
@@ -23,9 +26,16 @@ export default class extends Controller {
 
   clear() {
     // Only clear the hidden ID if the text was manually wiped
-    if (!this.inputTarget.value.trim()) {
+    if (this.hasHiddenTarget && !this.inputTarget.value.trim()) {
       this.hiddenTarget.value = ""
     }
+  }
+
+  // Picking a result keeps focus (mousedown is cancelled), so a blur means the
+  // box was left without one.
+  close() {
+    clearTimeout(this._debounce)
+    this._close()
   }
 
   async _fetch() {
@@ -56,13 +66,13 @@ export default class extends Controller {
     this.resultsTarget.innerHTML = ""
     if (!results.length) { this._close(); return }
 
-    results.forEach(({ id, label }) => {
+    results.forEach((result) => {
       const div = document.createElement("div")
       div.className = "px-3 py-2 cursor-pointer hover:bg-indigo-50 text-sm text-gray-900"
-      div.textContent = label
+      div.textContent = result.label
       div.addEventListener("mousedown", (e) => {
         e.preventDefault()
-        this._select(id, label)
+        this._select(result.id, result[this.textKeyValue] ?? result.label)
       })
       this.resultsTarget.appendChild(div)
     })
@@ -71,10 +81,13 @@ export default class extends Controller {
     document.addEventListener("click", this._onClickOutside)
   }
 
-  _select(id, label) {
-    this.hiddenTarget.value = id
-    this.inputTarget.value = label
+  _select(id, text) {
+    if (this.hasHiddenTarget) this.hiddenTarget.value = id
+    this.inputTarget.value = text
     this._close()
+    // Setting a value from script fires no input event, so say so for anyone
+    // listening to the box.
+    this.dispatch("selected", { detail: { id, text } })
   }
 
   _close() {
