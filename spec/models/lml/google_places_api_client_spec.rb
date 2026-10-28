@@ -127,10 +127,18 @@ RSpec.describe Lml::GooglePlacesApiClient do
     end
   end
 
+  # The mask is the bill, so nothing from Enterprise + Atmosphere, and nothing we chose to go without.
+  it "asks for nothing priced above Enterprise, and no reviews or photos" do
+    expect(Lml::GooglePlacesApiClient::FIELDS)
+      .not_to include("reviews", "photos", "editorialSummary", "generativeSummary", "paymentOptions", "restroom")
+    expect(Lml::GooglePlacesApiClient::FIND_FIELDS).not_to include("*")
+    expect(Lml::GooglePlacesApiClient::FIND_FIELDS.split(",")).to all(start_with("places."))
+  end
+
   describe "#details" do
     it "asks for one place by id" do
       stub_request(:get, Lml::GooglePlacesApiClient::DETAILS_URL.sub("%<place_id>s", "place-espy"))
-        .with(headers: { "X-Goog-FieldMask" => "*" })
+        .with(headers: { "X-Goog-FieldMask" => Lml::GooglePlacesApiClient::DETAILS_FIELDS })
         .to_return(status: 200, body: { id: "place-espy" }.to_json)
 
       expect(@client.details("place-espy")).to eq("id" => "place-espy")

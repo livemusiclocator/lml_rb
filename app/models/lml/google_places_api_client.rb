@@ -15,12 +15,47 @@ module Lml
     AUTOCOMPLETE_URL = "https://places.googleapis.com/v1/places:autocomplete"
     DETAILS_URL = "https://places.googleapis.com/v1/places/%<place_id>s"
 
-    # Everything. Places bills per request by the most expensive tier any requested field belongs
-    # to, so this puts every search in the Enterprise + Atmosphere tier rather than Pro - a few
-    # dollars per thousand more, and a smaller free allowance. That was chosen: a venue keeps the
-    # whole answer in google_place, and a field we never asked for is one nobody can use later.
-    # See doc/google_sheets_venue_import.md.
-    FIND_FIELDS = "places.*"
+    # What we ask Google for, and so the price: Places bills each request at the most expensive tier
+    # any requested field belongs to. This is everything up to Enterprise, for the website, phone
+    # numbers and opening hours, and nothing from Enterprise + Atmosphere - reviews, Google's
+    # summaries, amenities. photos is left out though it is cheap, because we never show one and
+    # each image is another paid request. A field added here can move every call up a tier, so
+    # check its tier first. See doc/google_sheets_venue_import.md.
+    FIELDS = %w[
+      id
+      displayName
+      types
+      primaryType
+      primaryTypeDisplayName
+      googleMapsTypeLabel
+      businessStatus
+      openingDate
+      formattedAddress
+      shortFormattedAddress
+      addressComponents
+      postalAddress
+      plusCode
+      location
+      viewport
+      entrances
+      timeZone
+      utcOffsetMinutes
+      googleMapsUri
+      accessibilityOptions
+      websiteUri
+      nationalPhoneNumber
+      internationalPhoneNumber
+      regularOpeningHours
+      currentOpeningHours
+      rating
+      userRatingCount
+      priceLevel
+      priceRange
+    ].freeze
+
+    # Text Search wraps each place in a list, so its mask names fields inside it.
+    FIND_FIELDS = FIELDS.map { |field| "places.#{field}" }.join(",").freeze
+    DETAILS_FIELDS = FIELDS.join(",").freeze
 
     # Worth retrying: a 503 means Google's side is briefly at capacity rather than anything being
     # wrong with the request, and one in a few hundred is normal. A 429 is a rate limit, which is
@@ -72,7 +107,7 @@ module Lml
       with_retries { @client.post(AUTOCOMPLETE_URL, body.to_json, headers("*")) }
     end
 
-    def details(place_id, field_mask: "*", session_token: nil)
+    def details(place_id, field_mask: DETAILS_FIELDS, session_token: nil)
       url = format(DETAILS_URL, place_id: place_id)
       params = session_token.present? ? { sessionToken: session_token } : {}
 

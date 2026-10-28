@@ -417,19 +417,30 @@ column.
 ### What is asked for, and what it costs
 
 Places bills per request by the **most expensive tier any requested field belongs
-to**, so the field mask is the price. `FIND_FIELDS` is `places.*` - everything -
-and the whole place each search settles on is kept on the venue in
-`google_place`, as it is for a venue added from a place in backstage. A field we
-never asked for is one nobody can use later, so this was chosen over the cheaper
-Pro mask the import used to ask for. Of what comes back, these are written into
-venue columns:
+to**, so the field mask is the price. `GooglePlacesApiClient::FIELDS` names
+everything up to the **Enterprise** tier and nothing above it, and both Text
+Search (`FIND_FIELDS`) and Place Details (`DETAILS_FIELDS`) ask for that list.
+Enterprise is there for the website, phone numbers and opening hours.
+Everything in Enterprise + Atmosphere is left out on purpose: reviews, Google's
+editorial and generated summaries, and amenities like payment options and
+restrooms. We would never show any of it. `photos` is cheap but left out too,
+since we never show one and each image is another paid request.
+
+Check a field's tier on Google's
+[data fields page](https://developers.google.com/maps/documentation/places/web-service/data-fields)
+before adding it, because a single field from a higher tier moves every call up
+to that tier.
+
+The whole place each search settles on is kept on the venue in `google_place`,
+as it is for a venue added from a place in backstage. Of what comes back, these
+are written into venue columns:
 
 | Field | Used for |
 | --- | --- |
 | `id`, `displayName`, `formattedAddress`, `location`, `addressComponents` | Matching, and the address itself |
 | `timeZone` | `time_zone`, where the sheet gave none - see below |
 | `businessStatus` | `google_business_status` - spotting venues that have closed |
-| everything | `google_place`, whole, whenever the place is the venue's own |
+| all of `FIELDS` | `google_place`, whole, whenever the place is the venue's own |
 
 Google answers with an IANA identifier, which goes through
 `Lml::Timezone.canonical` rather than being taken at face value, because a venue
@@ -453,13 +464,13 @@ Melbourne default.
 tags: Google's are noisy (`point_of_interest`, `establishment`) and LML's tags
 are curated and user-facing.
 
-At the time of writing the tiers cost $32 / $35 / $40 per 1,000 requests for
-Pro / Enterprise / Enterprise + Atmosphere, and asking for everything lands in
-the last. **The per-request delta matters much less than the free allowance**,
-which is 5,000 calls a month on Pro and only 1,000 on either Enterprise tier. With
-roughly 1,150 venues in total, a one-off pass over all of them now runs a little
-past the free allowance - a few dollars - and the cost only bites on repeated
-large runs.
+At the time of writing Text Search costs $32 / $35 / $40 per 1,000 requests for
+Pro / Enterprise / Enterprise + Atmosphere, and this mask lands in Enterprise.
+**The per-request delta matters much less than the free allowance**, which is
+5,000 calls a month on Pro and only 1,000 on either Enterprise tier. Each product
+has its own allowance, so Text Search and Place Details do not share one. At our
+volumes a month's lookups fit inside it, and a one-off pass over every venue
+would run a little past it, costing a few dollars.
 
 The definitive check on which tier a mask lands in is one real call followed by
 reading the SKU off the billing report — Google's own docs disagree with
