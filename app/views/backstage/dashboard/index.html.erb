@@ -1,6 +1,8 @@
 <div class="mb-8">
   <h1 class="text-3xl font-bold tracking-tight">Welcome back<% if current_user.display_name.present? %>, <%= current_user.display_name %><% end %> 👋</h1>
-  <p class="text-gray-500 mt-1"><%= current_user.admin? ? "Your changes go live as soon as you save them." : "Here's what's happening with your proposals." %></p>
+  <% unless current_user.admin? %>
+    <p class="text-gray-500 mt-1">Here's what's happening with your proposals.</p>
+  <% end %>
 </div>
 
 <% if current_user.admin? %>
