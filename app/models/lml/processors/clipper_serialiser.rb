@@ -30,6 +30,7 @@ module Lml
         (gig.genre_tags || []).each { |tag| row(out, :genre, tag) }
         (gig.information_tags || []).each { |tag| row(out, :information, tag) }
         gig.sets.each { |set| row(out, :set, set.line) }
+        row(out, :proposed_acts, (gig.proposed_acts || []).join(" | "))
         gig.prices.each { |price| row(out, :price, price.line) }
       end
 

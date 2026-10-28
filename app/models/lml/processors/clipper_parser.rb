@@ -55,6 +55,11 @@ module Lml
               details[:internal_description] = value
             when "name", "gig_name"
               details[:name] = value
+            # Suggested acts, for a person to confirm in backstage review. They
+            # never become sets on their own - see Gig#proposed_acts.
+            when "proposed_acts"
+              details[:proposed_acts] ||= []
+              details[:proposed_acts] += value.split("|").map(&:strip).compact_blank
             when "price"
               details[:prices] ||= []
               details[:prices] << value

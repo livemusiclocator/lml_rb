@@ -99,6 +99,7 @@ module Lml
             gig.url = details[:url]
             gig.information_tags = details[:information_tags] if details[:information_tags].present?
             gig.genre_tags = details[:genre_tags] if details[:genre_tags].present?
+            gig.proposed_acts = details[:proposed_acts] if details[:proposed_acts].present?
             gig.series = details[:series]
             gig.category = details[:category]
             gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?

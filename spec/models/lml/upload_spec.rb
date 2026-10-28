@@ -323,4 +323,32 @@ describe Lml::Upload do
       end
     end
   end
+
+  # A research upload names a gig after its event title and guesses at the
+  # lineup. The guess is for backstage review to confirm, so it must not
+  # create acts or sets on its own.
+  describe "suggested acts" do
+    before do
+      @venue = Lml::Venue.create!(name: "The Tote", time_zone: "Australia/Melbourne")
+    end
+
+    def upload(content)
+      Lml::Upload.create!(time_zone: "Australia/Melbourne", format: "clipper", source: "research",
+                          venue: @venue, content: content).tap(&:process!)
+    end
+
+    it "keeps them on the gig and makes no sets or acts from them" do
+      expect do
+        upload(<<~CONTENT)
+          name: DOLE NIGHT w/ Contact Sport + Brodown
+          date: 2024-03-01
+          proposed_acts: Contact Sport | Brodown |
+        CONTENT
+      end.not_to change(Lml::Act, :count)
+
+      gig = Lml::Gig.find_by!(name: "DOLE NIGHT w/ Contact Sport + Brodown")
+      expect(gig.proposed_acts).to eq(["Contact Sport", "Brodown"])
+      expect(gig.sets).to be_empty
+    end
+  end
 end

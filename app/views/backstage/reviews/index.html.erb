@@ -1,0 +1,69 @@
+<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-3xl font-bold tracking-tight">Review gigs</h1>
+    <p class="text-gray-500 mt-1">
+      Gigs from today on that nobody has checked yet. They're already live; this is where they get tidied up.
+    </p>
+    <% narrowed = @filters.except(:who) %>
+    <% if narrowed.any? %>
+      <p class="text-sm text-gray-500 mt-2">
+        Showing only <%= narrowed.map { |key, value| "#{key.to_s.humanize.downcase} #{key == :venue_id ? (Lml::Venue.find_by(id: value)&.name || value) : value}" }.to_sentence %>.
+        <%= link_to "Show all of them", backstage_reviews_path(who: @filters[:who]), class: "text-indigo-600 hover:text-indigo-800 underline" %>
+      </p>
+    <% end %>
+  </div>
+  <% if @first %>
+    <%= link_to backstage_review_path(@first, @filters),
+        class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm transition-colors" do %>
+      Start reviewing <span class="bg-indigo-500 text-xs font-semibold px-2 py-0.5 rounded-full"><%= @count %></span>
+    <% end %>
+  <% end %>
+</div>
+
+<nav class="flex gap-2 mb-6" aria-label="Whose gigs">
+  <% { "mine" => "Your uploads", "everyone" => "Everyone's" }.each do |who, label| %>
+    <% current = @filters[:who] == who %>
+    <%= link_to backstage_reviews_path(@filters.merge(who: who)),
+        aria: { current: current ? "page" : nil },
+        class: "inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border #{current ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+      <%= label %> <span class="<%= current ? 'text-indigo-100' : 'text-gray-400' %>"><%= @counts[who] %></span>
+    <% end %>
+  <% end %>
+</nav>
+
+<% if @count.zero? %>
+  <div class="bg-white border border-dashed border-gray-300 rounded-xl p-8 text-center text-gray-500">
+    <p>Nothing left to review here.</p>
+    <% if @filters[:who] == "mine" %>
+      <p class="text-sm mt-1">Gigs show up here when an upload made with one of your API tokens puts them in.</p>
+    <% end %>
+  </div>
+<% else %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <section class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <h2 class="font-semibold text-gray-900 mb-4">By source</h2>
+      <ul class="space-y-2 text-sm">
+        <% @by_source.each do |source, count| %>
+          <li class="flex justify-between gap-4">
+            <%= link_to (source.presence || "no source"), backstage_reviews_path(@filters.merge(source: source)),
+                class: "text-indigo-600 hover:text-indigo-800 font-medium truncate" %>
+            <span class="text-gray-500"><%= count %></span>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+
+    <section class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <h2 class="font-semibold text-gray-900 mb-4">By venue</h2>
+      <ul class="space-y-2 text-sm">
+        <% @by_venue.each do |(venue_id, name), count| %>
+          <li class="flex justify-between gap-4">
+            <%= link_to name, backstage_reviews_path(@filters.merge(venue_id: venue_id)),
+                class: "text-indigo-600 hover:text-indigo-800 font-medium truncate" %>
+            <span class="text-gray-500"><%= count %></span>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  </div>
+<% end %>

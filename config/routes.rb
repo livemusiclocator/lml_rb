@@ -83,6 +83,9 @@ Rails.application.routes.draw do
         resources :gigs, only: [:new, :create]
       end
       resources :gigs, only: [:edit, :update]
+      # Working through unchecked gigs a screen at a time - see ReviewsController.
+      # The id is the gig's.
+      resources :reviews, only: [:index, :show, :update]
       resources :acts, only: [:index, :new, :create, :edit, :update]
       # Place details spend money at Google, so they are fetched only for the
       # place somebody picks - see Backstage::PlacesController.

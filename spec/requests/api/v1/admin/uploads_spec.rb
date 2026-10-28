@@ -44,6 +44,19 @@ describe "admin api uploads" do
       expect(Lml::Gig.pluck(:name)).to contain_exactly("Sniffers Live", "Quiet Tuesday")
     end
 
+    # Whose token sent it is who sent it, and that is what the backstage review
+    # queue starts from.
+    it "records which user's token sent it" do
+      post "/v1/admin/uploads",
+        headers: @headers,
+        params: {
+          upload: { content: CLIPPER, source: "cli", venue_id: @tote.id },
+        }
+
+      expect(Lml::Upload.last.user).to eq(@admin)
+      expect(body["upload"]["user_id"]).to eq(@admin.id)
+    end
+
     it "reports the gigs it touched, so a caller can see what landed" do
       post "/v1/admin/uploads",
         headers: @headers,

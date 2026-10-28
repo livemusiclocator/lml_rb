@@ -14,6 +14,8 @@ module Lml
     end
 
     belongs_to :venue, optional: true
+    # Who sent it, where it came through a backstage user's API token.
+    belongs_to :user, class_name: "Lml::User", optional: true
     # gigs.upload_id records which upload a gig arrived on, and Lml::Processors::Clipper reassigns
     # it every time a gig is processed again, so it is provenance rather than ownership. The column
     # has no foreign key, so nothing was stopping it dangling once an upload went. Nullify rather

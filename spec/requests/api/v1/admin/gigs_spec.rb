@@ -114,6 +114,18 @@ describe "admin api gigs" do
       expect(body["gig"]).to include("id" => @swift.id, "name" => "Andrew Swift")
     end
 
+    # Suggested acts sit apart from the sets, the same way proposed genre tags
+    # sit apart from confirmed ones, so a caller can tell a lineup somebody
+    # confirmed from one a research upload guessed at.
+    it "says which acts were only suggested" do
+      @open_mic.update!(proposed_acts: ["Contact Sport", "Brodown"])
+
+      get "/v1/admin/gigs/#{@open_mic.id}", headers: @headers
+
+      expect(body["gig"]["proposed_acts"]).to eq(["Contact Sport", "Brodown"])
+      expect(body["gig"]["acts"]).to eq([])
+    end
+
     it "returns a json 404 for a gig that does not exist" do
       get "/v1/admin/gigs/#{SecureRandom.uuid}", headers: @headers
 
@@ -134,6 +146,17 @@ describe "admin api gigs" do
 
     # Half a clipper file is not a clipper file - it would upload as a partial
     # week and quietly leave the tail out.
+    # The export is what research uploads back, and clipper blanks what an
+    # entry leaves out - so a suggestion that was not exported would be wiped
+    # by the next round trip.
+    it "carries suggested acts, so a round trip keeps them" do
+      @swift.update!(proposed_acts: ["Andrew Swift", "Support"])
+
+      get "/v1/admin/gigs/clipper", params: { venue_id: @vine.id }, headers: @headers
+
+      expect(response.body).to include("proposed_acts: Andrew Swift | Support")
+    end
+
     it "ignores pagination" do
       get "/v1/admin/gigs/clipper", params: { venue_id: @vine.id, per_page: 1 }, headers: @headers
 

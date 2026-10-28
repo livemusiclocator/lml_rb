@@ -33,7 +33,7 @@ module Api
         end
 
         def create
-          upload = Lml::Upload.new(upload_params.merge(format: "clipper"))
+          upload = Lml::Upload.new(upload_params.merge(format: "clipper", user: current_api_token.user))
           return render_invalid(upload) unless upload.valid?
           return too_many_entries(upload) if entry_count(upload) > PROCESSING_LIMIT
 
@@ -81,7 +81,7 @@ module Api
         end
 
         def serialize(upload, with_gigs: false)
-          serialized = upload.slice(:id, :source, :format, :status, :venue_id, :created_at)
+          serialized = upload.slice(:id, :source, :format, :status, :venue_id, :user_id, :created_at)
             .merge(error_description: upload.error_description.presence)
           return serialized unless with_gigs
 

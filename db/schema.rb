@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -100,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
     t.string "information_tags", array: true
     t.text "internal_description"
     t.string "name"
+    t.string "proposed_acts", default: [], array: true
     t.string "proposed_genre_tags", array: true
     t.string "series"
     t.string "source"
@@ -285,7 +286,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
     t.string "status"
     t.string "time_zone"
     t.datetime "updated_at", null: false
+    t.uuid "user_id"
     t.uuid "venue_id"
+    t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -360,6 +363,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
   add_foreign_key "series_themes", "explorer_configs"
   add_foreign_key "sets", "acts"
   add_foreign_key "sets", "gigs"
+  add_foreign_key "uploads", "users"
   add_foreign_key "venue_managers", "users"
   add_foreign_key "venue_managers", "venues"
 end

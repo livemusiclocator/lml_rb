@@ -18,6 +18,8 @@ module Lml
     has_many :act_managers, class_name: "Lml::ActManager", dependent: :destroy
     has_many :managed_acts, through: :act_managers, source: :act
     has_many :api_tokens, class_name: "Lml::ApiToken", dependent: :destroy
+    # Nullified rather than destroyed: an upload is the record of what was sent.
+    has_many :uploads, class_name: "Lml::Upload", dependent: :nullify
 
     scope :admins, -> { where(admin: true) }
 

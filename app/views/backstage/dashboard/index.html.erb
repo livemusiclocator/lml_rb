@@ -6,7 +6,14 @@
 </div>
 
 <% if current_user.admin? %>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+    <%= link_to backstage_reviews_path, class: "block bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:border-indigo-300 hover:shadow" do %>
+      <h2 class="font-semibold text-gray-900 flex items-center justify-between gap-2">
+        Review gigs
+        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full"><%= @to_review %></span>
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">Upcoming gigs from your uploads that nobody has checked yet: confirm acts and genres, or hide what isn't a gig.</p>
+    <% end %>
     <%= link_to backstage_venues_path, class: "block bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:border-indigo-300 hover:shadow" do %>
       <h2 class="font-semibold text-gray-900">Venues</h2>
       <p class="text-sm text-gray-500 mt-1">Venue details, and adding or changing their gigs.</p>

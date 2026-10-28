@@ -1,0 +1,83 @@
+<% field = "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+<% label = "block text-sm font-medium text-gray-700 mb-1.5" %>
+<% hint = "text-gray-400 font-normal" %>
+<% venue = @gig.venue %>
+
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <%= link_to "‹ All gigs to review", backstage_reviews_path(@filters), class: "text-sm text-gray-500 hover:text-gray-700" %>
+    <h1 class="text-2xl font-bold tracking-tight mt-1"><%= @gig.name %></h1>
+    <p class="text-gray-500 mt-1">
+      <%= @gig.date&.strftime("%a %-d %b %Y") %><% if @gig.start_time %> at <%= @gig.start_time %><% end %>
+      &middot; <%= venue ? link_to(venue.name, backstage_venue_path(venue), class: "underline hover:text-gray-700") : "no venue" %>
+      <% if @gig.source.present? %>&middot; from <%= @gig.source %><% end %>
+    </p>
+  </div>
+  <p class="text-sm text-gray-500"><%= pluralize(@remaining, "more gig") %> after this one</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+  <div class="lg:col-span-2 bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+    <%= form_with model: @gig, scope: :gig, url: backstage_review_path(@gig), method: :patch, html: { class: "space-y-5" } do |f| %>
+      <% @filters.each do |key, value| %>
+        <%= hidden_field_tag key, value %>
+      <% end %>
+
+      <% if @gig.errors.any? %>
+        <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
+          <%= @gig.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :name, "Gig name / headliner", class: label %>
+        <%= f.text_field :name, required: true, class: field %>
+      </div>
+
+      <div>
+        <%= f.label :set_list, class: label do %>
+          Acts <span class="<%= hint %>">(suggested - check them against the description)</span>
+        <% end %>
+        <%= render "backstage/shared/sets_field", name: "gig[set_list]", value: @acts, id: "gig_set_list",
+              textarea_class: "#{field} font-mono text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :genre_tag_list, class: label do %>
+          Genres <span class="<%= hint %>">(suggested)</span>
+        <% end %>
+        <%= render "backstage/shared/genres_field", name: "gig[genre_tag_list]", value: @genres, id: "gig_genre_tag_list",
+              textarea_class: "#{field} text-sm" %>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 pt-2">
+        <%= button_tag "Save & mark checked", name: "decision", value: "save",
+              class: "bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer" %>
+        <%# formnovalidate: hiding or skipping a gig does not need its name filled in. %>
+        <%= button_tag "Hide - not a gig", name: "decision", value: "hide", formnovalidate: true,
+              class: "bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl cursor-pointer" %>
+        <%= button_tag "Skip", name: "decision", value: "skip", formnovalidate: true,
+              class: "text-sm text-gray-500 hover:text-gray-700 px-3 py-2.5 cursor-pointer" %>
+        <%= link_to "Edit everything", edit_backstage_gig_path(@gig), class: "text-sm text-gray-500 hover:text-gray-700 ml-auto" %>
+      </div>
+    <% end %>
+  </div>
+
+  <aside class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 text-sm space-y-4">
+    <% if @gig.ticketing_url.present? || @gig.url.present? %>
+      <div>
+        <h2 class="font-semibold text-gray-900 mb-1">Links</h2>
+        <% if @gig.ticketing_url.present? %>
+          <p><%= link_to "Tickets", @gig.ticketing_url, target: "_blank", rel: "noopener", class: "text-indigo-600 hover:text-indigo-800 underline" %></p>
+        <% end %>
+        <% if @gig.url.present? && @gig.url != @gig.ticketing_url %>
+          <p><%= link_to "Event page", @gig.url, target: "_blank", rel: "noopener", class: "text-indigo-600 hover:text-indigo-800 underline" %></p>
+        <% end %>
+      </div>
+    <% end %>
+    <div>
+      <h2 class="font-semibold text-gray-900 mb-1">Description</h2>
+      <p class="text-gray-600 whitespace-pre-line"><%= @gig.internal_description.presence || "None." %></p>
+    </div>
+  </aside>
+</div>

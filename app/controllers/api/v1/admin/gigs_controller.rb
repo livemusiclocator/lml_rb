@@ -114,6 +114,9 @@ module Api
           {
             genre_tags: gig.genre_tags || [],
             proposed_genre_tags: gig.proposed_genre_tags || [],
+            # The same split for the lineup: acts a research upload guessed at,
+            # waiting for backstage review to turn them into sets.
+            proposed_acts: gig.proposed_acts || [],
             information_tags: gig.information_tags || [],
           }
         end
