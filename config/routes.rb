@@ -239,14 +239,12 @@ Rails.application.routes.draw do
         via: :all
     end
   end
-  # livemusiclocator.com.au => www.livemusiclocator.com.au
+  # livemusiclocator.com.au/anything => www.livemusiclocator.com.au/anything
+  # The redirect keeps the path and query, so a link typed without the www -
+  # to backstage, say - lands where it was meant to rather than on a 404.
   constraints host: target_domain do
-    get "/",
-      to: redirect(
-        status: 301,
-        domain: target_domain,
-        subdomain: "www",
-      ),
-      via: :all
+    www = redirect(status: 301, domain: target_domain, subdomain: "www")
+    match "/", to: www, via: :all
+    match "*path", to: www, via: :all, format: false
   end
 end
