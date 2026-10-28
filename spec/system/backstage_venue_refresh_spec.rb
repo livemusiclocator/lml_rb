@@ -81,4 +81,15 @@ describe "refreshing a venue from google", type: :system do
     expect(page).to have_content("Google has nothing new for this venue.")
     expect(page).to have_no_content("Was:")
   end
+
+  it "goes from the venue page's disagreements to the refresh" do
+    @venue.update!(google_place: @place, google_place_fetched_at: 1.day.ago)
+
+    visit "/backstage/venues/#{@venue.id}"
+    expect(page).to have_content("Google says differently")
+    click_link "Refresh from Google"
+
+    expect(page).to have_content("last checked 1 day ago")
+    expect(page).to have_button("Refresh from Google")
+  end
 end

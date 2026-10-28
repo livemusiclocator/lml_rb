@@ -209,6 +209,16 @@ RSpec.describe Lml::Place do
     end
   end
 
+  describe "#settled_for" do
+    it "records when the answer it keeps was fetched" do
+      freeze_time do
+        settled = Lml::Place.new(payload).settled_for(Lml::Venue.new)
+
+        expect(settled).to include(google_place: payload, google_place_fetched_at: Time.current)
+      end
+    end
+  end
+
   describe "#address" do
     it "is the short form, without the state, postcode and country" do
       place = Lml::Place.new(payload("shortFormattedAddress" => "11 The Esplanade, St Kilda"))

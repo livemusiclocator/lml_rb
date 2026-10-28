@@ -47,6 +47,33 @@ describe "backstage venues" do
       expect(response.body).not_to include("Somebody else")
     end
 
+    it "shows what google says about the venue, and where it disagrees" do
+      @venue.update!(
+        google_place: {
+          "displayName" => { "text" => "The Tote Hotel" },
+          "businessStatus" => "CLOSED_PERMANENTLY",
+          "primaryTypeDisplayName" => { "text" => "Live Music Venue" },
+        },
+        google_place_fetched_at: 3.days.ago,
+      )
+
+      get "/backstage/venues/#{@venue.id}"
+
+      expect(response.body).to include("On Google")
+      expect(response.body).to include("Checked 3 days ago")
+      expect(response.body).to include("Closed permanently")
+      expect(response.body).to include("Live Music Venue")
+      expect(response.body).to include("Google says differently")
+      # Refreshing is for admins.
+      expect(response.body).not_to include("Refresh from Google")
+    end
+
+    it "leaves the google card off a venue google has not answered for" do
+      get "/backstage/venues/#{@venue.id}"
+
+      expect(response.body).not_to include("On Google")
+    end
+
     it "updates the details of a venue they manage" do
       patch "/backstage/venues/#{@venue.id}",
         params: {

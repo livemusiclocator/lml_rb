@@ -17,6 +17,11 @@
   </div>
 </div>
 
+<% google = Lml::PlaceSummary.new(@venue) %>
+<% if google.present? %>
+  <%= render "google_card", google: google, venue: @venue, today: @today %>
+<% end %>
+
 <section class="mb-10">
   <h2 class="font-semibold text-gray-900 mb-3">Upcoming gigs</h2>
   <% if @upcoming.any? %>

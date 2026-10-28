@@ -1,0 +1,75 @@
+<%# What Google says about this venue, from the answer stored at its last lookup - see Lml::PlaceSummary. %>
+<% status_badge = {
+     "OPERATIONAL" => ["Open", "bg-green-100 text-green-800"],
+     "CLOSED_TEMPORARILY" => ["Temporarily closed", "bg-amber-100 text-amber-800"],
+     "CLOSED_PERMANENTLY" => ["Closed permanently", "bg-red-100 text-red-700"],
+   }[google.status] %>
+<% access = google.accessibility %>
+<% differences = google.differences %>
+
+<section class="mb-10 bg-white border border-gray-200 rounded-xl shadow-sm p-5" aria-labelledby="on-google">
+  <div class="flex flex-wrap items-start justify-between gap-2">
+    <div>
+      <h2 id="on-google" class="font-semibold text-gray-900">On Google</h2>
+      <p class="text-xs text-gray-400">
+        <%= google.fetched_at ? "Checked #{time_ago_in_words(google.fetched_at)} ago" : "Not known when this was checked" %>
+      </p>
+    </div>
+    <% if google.maps_url %>
+      <%= link_to "Open in Google Maps ↗", google.maps_url, target: "_blank", rel: "noopener noreferrer",
+            class: "text-sm font-medium text-indigo-600 hover:text-indigo-800" %>
+    <% end %>
+  </div>
+
+  <div class="mt-3">
+    <span class="font-medium text-gray-900"><%= google.name %></span>
+    <% if google.kind %><span class="text-gray-500"> · <%= google.kind %></span><% end %>
+    <% if status_badge %>
+      <span class="ml-2 inline-flex px-2 py-0.5 rounded-full text-xs font-semibold <%= status_badge.last %>"><%= status_badge.first %></span>
+    <% end %>
+  </div>
+  <% if google.address %><p class="text-sm text-gray-600"><%= google.address %></p><% end %>
+  <% if google.types.any? %><p class="text-xs text-gray-400 mt-1"><%= google.types.join(" · ") %></p><% end %>
+
+  <dl class="mt-4 grid grid-cols-[5rem_1fr] gap-x-3 gap-y-2 text-sm">
+    <dt class="text-gray-500">Hours</dt>
+    <dd>
+      <% if google.hours.any? %>
+        <details>
+          <summary class="cursor-pointer"><%= google.hours_on(today) %></summary>
+          <ul class="mt-1 text-gray-600">
+            <% google.hours.each do |line| %><li><%= line %></li><% end %>
+          </ul>
+        </details>
+      <% else %>
+        <span class="text-gray-400">Google has none</span>
+      <% end %>
+    </dd>
+    <dt class="text-gray-500">Access</dt>
+    <dd>
+      <% if access.values.any?(&:any?) %>
+        <% if access[:accessible].any? %>Wheelchair accessible <%= access[:accessible].to_sentence %><% end %><% if access[:accessible].any? && access[:not_accessible].any? %>; <% end %><% if access[:not_accessible].any? %>no accessible <%= access[:not_accessible].to_sentence %><% end %>
+      <% else %>
+        <span class="text-gray-400">Google doesn't know</span>
+      <% end %>
+    </dd>
+  </dl>
+
+  <% if differences.any? %>
+    <div class="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
+      <p class="font-medium text-amber-900">Google says differently</p>
+      <dl class="mt-1 grid grid-cols-[6rem_1fr] gap-x-3 gap-y-1">
+        <% differences.each do |column, (theirs, ours)| %>
+          <dt class="text-amber-800"><%= Lml::Venue.human_attribute_name(column) %></dt>
+          <dd class="min-w-0 break-words">
+            <%= theirs %> <span class="text-amber-700">· ours: <%= ours.presence || "none" %></span>
+          </dd>
+        <% end %>
+      </dl>
+      <% if current_user.admin? %>
+        <%= link_to "Refresh from Google", edit_backstage_venue_path(venue),
+              class: "inline-block mt-2 font-medium text-indigo-600 hover:text-indigo-800" %>
+      <% end %>
+    </div>
+  <% end %>
+</section>

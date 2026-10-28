@@ -2,7 +2,10 @@
     answer - see venue_place_controller.js. Every changed field shows what it was, to keep or not. %>
 <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
   <div class="flex flex-wrap items-center justify-between gap-3">
-    <p class="text-sm text-indigo-900">Linked to a Google place. Refreshing shows anything Google now says differently.</p>
+    <p class="text-sm text-indigo-900">
+      Linked to a Google place<%= ", last checked #{time_ago_in_words(venue.google_place_fetched_at)} ago" if venue.google_place_fetched_at %>.
+      Refreshing shows anything Google now says differently.
+    </p>
     <button type="button" data-action="venue-place#refresh" data-venue-place-id-param="<%= venue.google_place_id %>"
             class="bg-white border border-indigo-300 text-indigo-700 hover:bg-indigo-100 font-medium text-sm px-4 py-2 rounded-lg">
       Refresh from Google

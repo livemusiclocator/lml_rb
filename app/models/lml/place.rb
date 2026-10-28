@@ -125,7 +125,9 @@ module Lml
     # who kept or rejected each one.
     def settled_for(venue)
       settled = venue.address_components.blank? ? identity_attributes : {}
-      settled = settled.merge(google_place: @payload) if settled.fetch(:google_place_id, venue.google_place_id) == id
+      if settled.fetch(:google_place_id, venue.google_place_id) == id
+        settled = settled.merge(google_place: @payload, google_place_fetched_at: Time.current)
+      end
 
       settled.merge(volatile)
     end

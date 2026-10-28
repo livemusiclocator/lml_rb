@@ -43,10 +43,10 @@ module Backstage
 
     def show
       @venue = accessible_venues.find(params[:id])
-      today = venue_today
+      @today = venue_today
       gigs = @venue.gigs.includes(sets: :act)
-      @upcoming = gigs.where(date: today..).order(:date, :start_offset)
-      @past = gigs.where(date: ...today).order(date: :desc, start_offset: :desc).limit(PAST_GIG_LIMIT)
+      @upcoming = gigs.where(date: @today..).order(:date, :start_offset)
+      @past = gigs.where(date: ...@today).order(date: :desc, start_offset: :desc).limit(PAST_GIG_LIMIT)
     end
 
     def new
