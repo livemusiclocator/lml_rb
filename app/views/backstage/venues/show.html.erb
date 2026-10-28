@@ -32,3 +32,33 @@
     <%= render "gig_list", gigs: @past %>
   </section>
 <% end %>
+
+<% if current_user.admin? %>
+  <section class="mt-10 bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+    <h2 class="font-semibold text-gray-900">Merge a duplicate into this venue</h2>
+    <p class="text-sm text-gray-700 mt-1">
+      Do this from the <strong>better</strong> of the two venues - the one with the right name and its Google
+      details - and pick the worse one below. This venue keeps its name, its details and its Google link.
+    </p>
+    <p class="text-sm text-gray-500 mt-1">
+      The duplicate's gigs and managers move here, anything this venue is missing is filled in from it, and
+      anything it has that's different goes into the notes. Then the duplicate is deleted.
+    </p>
+    <%= form_with url: backstage_venue_merge_path(@venue), method: :post, class: "mt-4 flex flex-wrap items-start gap-3",
+          data: { turbo_confirm: "Keep #{@venue.name} and delete the venue you picked, moving its gigs here?" } do %>
+      <div data-controller="autocomplete" data-autocomplete-url-value="<%= backstage_search_venues_path %>" class="relative flex-1 min-w-64">
+        <label for="merge-duplicate" class="sr-only">Duplicate venue</label>
+        <input type="text" id="merge-duplicate"
+               data-autocomplete-target="input"
+               data-action="input->autocomplete#search blur->autocomplete#clear"
+               placeholder="Search for the duplicate..."
+               autocomplete="off" required
+               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        <%= hidden_field_tag :duplicate_id, nil, data: { autocomplete_target: "hidden" } %>
+        <div data-autocomplete-target="results"
+             class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 divide-y divide-gray-100 max-h-60 overflow-y-auto"></div>
+      </div>
+      <%= submit_tag "Merge into this venue", class: "bg-white border border-red-300 text-red-700 hover:bg-red-50 font-medium px-5 py-2 rounded-lg cursor-pointer" %>
+    <% end %>
+  </section>
+<% end %>

@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       resources :proposals, only: [:index, :new, :create, :show]
       resources :api_tokens, only: [:index, :create, :destroy]
       resources :venues, only: [:index, :show, :new, :create, :edit, :update] do
+        resource :merge, only: :create, controller: "venue_merges"
         resources :gigs, only: [:new, :create]
       end
       resources :gigs, only: [:edit, :update]

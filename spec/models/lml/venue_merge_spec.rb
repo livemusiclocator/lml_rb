@@ -139,6 +139,17 @@ describe Lml::VenueMerge do
       expect(@survivor.notes).to include('Name: "Tote Hotel"')
     end
 
+    it "remembers the duplicate's id, and every id merged into it before" do
+      earlier = SecureRandom.uuid
+      @duplicate.update!(merged_venue_ids: [earlier])
+      duplicate_id = @duplicate.id
+
+      merge
+
+      expect(@survivor.reload.merged_venue_ids).to contain_exactly(duplicate_id, earlier)
+      expect(@survivor.notes).to include(duplicate_id)
+    end
+
     it "keeps the duplicate's own notes" do
       @survivor.update!(notes: "Load in round the back.")
       @duplicate.update!(notes: "Ask for Sam.")
@@ -164,11 +175,12 @@ describe Lml::VenueMerge do
       @components = { "name" => "The Tote Hotel", "route" => "Johnston St", "street_number" => "71" }
     end
 
-    it "moves all three when the survivor has none of them" do
+    it "moves them all when the survivor has none of them" do
       @duplicate.update!(
         google_place_id: "ChIJduplicate",
         address_components: @components,
         google_business_status: "OPERATIONAL",
+        google_place: { "id" => "ChIJduplicate" },
       )
 
       merge
@@ -177,6 +189,7 @@ describe Lml::VenueMerge do
         google_place_id: "ChIJduplicate",
         address_components: @components,
         google_business_status: "OPERATIONAL",
+        google_place: { "id" => "ChIJduplicate" },
       )
     end
 

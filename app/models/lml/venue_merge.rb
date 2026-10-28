@@ -17,11 +17,11 @@ module Lml
   class VenueMerge
     class Error < StandardError; end
 
-    # Lml::Place writes these three as a unit and they are misleading apart: a place id without the
-    # components it resolved would claim this venue matched an address it never did. So they cross
-    # together or not at all, gated on the components alone - the rule Lml::Place#attributes_for
-    # already applies for the same reason.
-    PLACE_COLUMNS = %w[google_place_id address_components google_business_status].freeze
+    # Lml::Place writes these as a unit and they are misleading apart: a place id without the
+    # components it resolved would claim this venue matched an address it never did, and
+    # google_place is the answer they all came from. So they cross together or not at all, gated on
+    # the components alone - the rule Lml::Place#attributes_for already applies for the same reason.
+    PLACE_COLUMNS = %w[google_place_id address_components google_business_status google_place].freeze
 
     # A latitude without its longitude locates nothing, so this pair crosses as a unit too.
     POINT_COLUMNS = %w[latitude longitude].freeze
@@ -46,7 +46,35 @@ module Lml
       website
     ].freeze
 
-    Result = Struct.new(:gigs, :uploads, :managers, :proposals, :filled_in, :discarded, keyword_init: true)
+    Result = Struct.new(:gigs, :uploads, :managers, :proposals, :filled_in, :discarded, keyword_init: true) do
+      # A merge quietly rewrites a lot of columns, so whoever ran it is told what it actually did
+      # rather than just that it worked.
+      def summary
+        [moved_summary, filled_in_summary, discarded_summary].compact.join(" ")
+      end
+
+      private
+
+      def moved_summary
+        counts = { "gig" => gigs, "upload" => uploads, "manager" => managers, "proposal" => proposals }
+          .select { |_, count| count.positive? }
+          .map { |label, count| "#{count} #{label.pluralize(count)}" }
+
+        "Moved #{counts.to_sentence}." if counts.any?
+      end
+
+      def filled_in_summary
+        return if filled_in.empty?
+
+        "Filled in #{filled_in.map { |column| Lml::Venue.human_attribute_name(column).downcase }.to_sentence}."
+      end
+
+      def discarded_summary
+        return if discarded.empty?
+
+        "Recorded #{discarded.size} differing #{"value".pluralize(discarded.size)} in the notes."
+      end
+    end
 
     def initialize(survivor:, duplicate:)
       @survivor = survivor
@@ -60,6 +88,7 @@ module Lml
 
       Lml::Venue.transaction do
         fold_in_columns
+        record_merged_ids
         @survivor.save!
 
         moved = move_associations
@@ -122,6 +151,12 @@ module Lml
       end
     end
 
+    # Where the duplicate went, and everything that had already been merged into it, so a link to
+    # any of them can still find this venue.
+    def record_merged_ids
+      @survivor.merged_venue_ids = (@survivor.merged_venue_ids + [@duplicate.id] + @duplicate.merged_venue_ids).uniq
+    end
+
     # A tag list is a set, so the union loses nothing and there is no conflict to record.
     def fold_in_tags
       theirs = @duplicate.tags || []
@@ -150,7 +185,7 @@ module Lml
     end
 
     def merge_record
-      record = ["Merged #{@duplicate.name.inspect} on #{Date.current.iso8601}."]
+      record = ["Merged #{@duplicate.name.inspect} (#{@duplicate.id}) on #{Date.current.iso8601}."]
       record << "Discarded from it: #{@discarded.join("; ")}." if @discarded.any?
       record << @duplicate.notes.strip if @duplicate.notes.present?
       record

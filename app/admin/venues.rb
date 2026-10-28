@@ -44,44 +44,8 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         "Move them to another venue first."
     end
 
-    # A merge quietly rewrites a lot of columns, so the flash says what it actually did rather
-    # than just claiming success.
     def merge_summary(duplicate_name, result)
-      [
-        "Merged #{duplicate_name.inspect} into #{resource.name}.",
-        moved_summary(result),
-        filled_in_summary(result),
-        discarded_summary(result),
-      ].compact.join(" ")
-    end
-
-    def moved_summary(result)
-      counts = {
-        "gig" => result.gigs,
-        "upload" => result.uploads,
-        "manager" => result.managers,
-        "proposal" => result.proposals,
-      }
-        .select { |_, count| count.positive? }
-        .map { |label, count| "#{count} #{label.pluralize(count)}" }
-
-      "Moved #{counts.to_sentence}." if counts.any?
-    end
-
-    def filled_in_summary(result)
-      return if result.filled_in.empty?
-
-      columns = result.filled_in.map { |column| Lml::Venue.human_attribute_name(column).downcase }
-
-      "Filled in #{columns.to_sentence}."
-    end
-
-    def discarded_summary(result)
-      return if result.discarded.empty?
-
-      count = result.discarded.size
-
-      "Recorded #{count} differing #{"value".pluralize(count)} in the notes."
+      ["Merged #{duplicate_name.inspect} into #{resource.name}.", result.summary.presence].compact.join(" ")
     end
   end
 

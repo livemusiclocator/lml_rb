@@ -77,6 +77,12 @@ describe "backstage venues" do
       expect(@venue.google_place_id).to be_nil
     end
 
+    it "does not let a venue manager merge venues" do
+      post "/backstage/venues/#{@venue.id}/merge", params: { duplicate_id: @other_venue.id }
+
+      expect(Lml::Venue.exists?(@other_venue.id)).to be(true)
+    end
+
     it "does not update a venue somebody else manages" do
       patch "/backstage/venues/#{@other_venue.id}", params: { venue: { name: "Mine now" } }
 
