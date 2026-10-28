@@ -70,8 +70,10 @@ module Backstage
 
     def update
       @venue = accessible_venues.find(params[:id])
+      @venue.assign_attributes(venue_params)
+      settle_google_place(@venue) if current_user.admin?
 
-      if @venue.update(venue_params)
+      if save_venue(@venue)
         redirect_to backstage_venue_path(@venue), notice: "Saved #{@venue.name}."
       else
         render :edit, status: :unprocessable_entity
@@ -89,12 +91,36 @@ module Backstage
     # business status and the whole response in google_place - and fills
     # anything the form left blank.
     def apply_google_place(venue)
-      payload = JSON.parse(params.dig(:venue, :google_place).presence || "null")
-      return unless payload.is_a?(Hash)
+      place = submitted_place or return
 
-      venue.assign_attributes(Lml::Place.new(payload).attributes_for(venue))
+      venue.assign_attributes(place.attributes_for(venue))
+    end
+
+    # The edit form's refresh or search has already put Google's values in front of somebody, who
+    # kept or rejected each one, so only what the place settles beyond those columns is taken here.
+    # A place that is not this venue's own is ignored once the venue is resolved - it would only
+    # overwrite the business status with somewhere else's.
+    def settle_google_place(venue)
+      place = submitted_place or return
+      return if venue.address_components.present? && place.id != venue.google_place_id
+
+      venue.assign_attributes(place.settled_for(venue))
+    end
+
+    def submitted_place
+      payload = JSON.parse(params.dig(:venue, :google_place).presence || "null")
+      payload.is_a?(Hash) ? Lml::Place.new(payload) : nil
     rescue JSON::ParserError
       nil
+    end
+
+    def save_venue(venue)
+      taken = Lml::Venue.where.not(id: venue.id).exists?(google_place_id: venue.google_place_id)
+      if venue.google_place_id_changed? && taken
+        venue.errors.add(:base, "There is already a venue for that Google place")
+        return false
+      end
+      venue.save
     end
 
     # Imports create venues with next to nothing, so the model does not insist

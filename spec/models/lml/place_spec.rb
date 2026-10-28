@@ -209,6 +209,20 @@ RSpec.describe Lml::Place do
     end
   end
 
+  describe "#address" do
+    it "is the short form, without the state, postcode and country" do
+      place = Lml::Place.new(payload("shortFormattedAddress" => "11 The Esplanade, St Kilda"))
+
+      expect(place.address).to eq("11 The Esplanade, St Kilda")
+      expect(place.attributes_for(Lml::Venue.new)[:address]).to eq("11 The Esplanade, St Kilda")
+      expect(place.form_attributes[:address]).to eq("11 The Esplanade, St Kilda")
+    end
+
+    it "falls back to the full address where Google gives no short one" do
+      expect(Lml::Place.new(payload).address).to eq("11 The Esplanade, St Kilda VIC 3182")
+    end
+  end
+
   describe "#form_attributes" do
     it "starts a new venue from everything the place says about it" do
       place = Lml::Place.new(

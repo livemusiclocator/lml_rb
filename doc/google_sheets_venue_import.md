@@ -437,7 +437,9 @@ are written into venue columns:
 
 | Field | Used for |
 | --- | --- |
-| `id`, `displayName`, `formattedAddress`, `location`, `addressComponents` | Matching, and the address itself |
+| `id`, `displayName`, `location`, `addressComponents` | Matching |
+| `shortFormattedAddress` | `address` - street and suburb only, since the postcode has its own column and every venue is in Australia. `formattedAddress` where there is no short form |
+| `googleMapsUri` | `location_url`, the map link |
 | `timeZone` | `time_zone`, where the sheet gave none - see below |
 | `businessStatus` | `google_business_status` - spotting venues that have closed |
 | all of `FIELDS` | `google_place`, whole, whenever the place is the venue's own |
@@ -604,6 +606,17 @@ here that genuinely changes, and a stale value is the whole problem.
 
 Fill-ins never overwrite, because a blank column is a gap and a filled one is
 somebody's research. Google is not a good enough reason to argue with a person.
+
+### Refreshing one venue from backstage
+
+An admin editing a venue in backstage sees **Refresh from Google** when the venue
+is linked to a place, or the same **Find it on Google** search the new venue page
+has when it is not. Either one asks Place Details and fills the form in. Each field
+Google changes shows what it was, with a **Keep old** button, and nothing is saved
+until the form is. On save, the place settles what any lookup settles: the whole
+answer in `google_place`, the business status and, for a venue not yet linked, its
+place id and components. A place that is not the venue's own is ignored once the
+venue is linked, and a place another venue already has is refused.
 
 ### The map link
 

@@ -65,6 +65,12 @@ module Lml
       @payload["formattedAddress"]
     end
 
+    # The address a venue shows: street and suburb, without the state, postcode and country that
+    # formattedAddress tacks on - the postcode has its own column, and every venue is in Australia.
+    def address
+      @payload["shortFormattedAddress"].presence || formatted_address
+    end
+
     def business_status
       @payload["businessStatus"]
     end
@@ -112,11 +118,16 @@ module Lml
     # replaces a stale one - but never onto a venue resolved to some other place, where it would
     # describe somewhere the rest of the venue is not.
     def attributes_for(venue)
-      gaps = fill_ins.reject { |attribute, _| venue[attribute].present? }
-      gaps = gaps.merge(identity_attributes) if venue.address_components.blank?
-      gaps = gaps.merge(google_place: @payload) if gaps.fetch(:google_place_id, venue.google_place_id) == id
+      fill_ins.reject { |attribute, _| venue[attribute].present? }.merge(settled_for(venue))
+    end
 
-      gaps.merge(volatile)
+    # attributes_for without the fill-ins, for a venue form that has already shown them to a person
+    # who kept or rejected each one.
+    def settled_for(venue)
+      settled = venue.address_components.blank? ? identity_attributes : {}
+      settled = settled.merge(google_place: @payload) if settled.fetch(:google_place_id, venue.google_place_id) == id
+
+      settled.merge(volatile)
     end
 
     # What a new venue's form starts from when this place is picked. Unlike attributes_for, nothing
@@ -124,7 +135,7 @@ module Lml
     def form_attributes # rubocop:disable Metrics/MethodLength -- one line per form field
       {
         name: name,
-        address: formatted_address,
+        address: address,
         postcode: components["postal_code"],
         lga: council,
         lat_lng: location.values_at("latitude", "longitude").compact.join(", ").presence,
@@ -161,7 +172,7 @@ module Lml
     def fill_ins
       {
         time_zone: time_zone,
-        address: formatted_address,
+        address: address,
         postcode: components["postal_code"],
         latitude: components["latitude"],
         longitude: components["longitude"],

@@ -69,6 +69,14 @@ describe "backstage venues" do
       expect(@venue.reload.time_zone).to eq("Australia/Melbourne")
     end
 
+    it "does not take google's answer from a venue manager, since only admins can ask for one" do
+      patch "/backstage/venues/#{@venue.id}",
+        params: { venue: { name: "The Tote", google_place: { id: "place-tote" }.to_json } }
+
+      expect(@venue.reload.google_place).to be_nil
+      expect(@venue.google_place_id).to be_nil
+    end
+
     it "does not update a venue somebody else manages" do
       patch "/backstage/venues/#{@other_venue.id}", params: { venue: { name: "Mine now" } }
 
@@ -116,6 +124,40 @@ describe "backstage venues" do
 
       expect(response).to redirect_to("/backstage/venues/#{@other_venue.id}")
       expect(@other_venue.reload.name).to eq("The Corner Hotel")
+    end
+
+    it "links an unlinked venue to the google place picked" do
+      place = { id: "place-corner", displayName: { text: "Corner Hotel" }, addressComponents: [] }
+
+      patch "/backstage/venues/#{@other_venue.id}",
+        params: { venue: { name: "The Corner", google_place: place.to_json } }
+
+      expect(@other_venue.reload.google_place_id).to eq("place-corner")
+      expect(@other_venue.google_place).to eq(place.deep_stringify_keys)
+    end
+
+    it "refuses to link a venue to a place another venue already has" do
+      create(:lml_venue, name: "Corner Hotel", google_place_id: "place-corner")
+      place = { id: "place-corner", displayName: { text: "Corner Hotel" }, addressComponents: [] }
+
+      patch "/backstage/venues/#{@other_venue.id}",
+        params: { venue: { name: "The Corner", google_place: place.to_json } }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("already a venue for that Google place")
+      expect(@other_venue.reload.google_place_id).to be_nil
+    end
+
+    it "ignores a place that is not the venue's own once it is linked" do
+      @other_venue.update!(google_place_id: "place-corner", address_components: { "postal_code" => "3121" })
+      place = { id: "place-elsewhere", businessStatus: "CLOSED_PERMANENTLY", addressComponents: [] }
+
+      patch "/backstage/venues/#{@other_venue.id}",
+        params: { venue: { name: "The Corner", google_place: place.to_json } }
+
+      @other_venue.reload
+      expect(@other_venue.google_place).to be_nil
+      expect(@other_venue.google_business_status).to be_nil
     end
 
     it "opens a venue they do not manage, and says so" do

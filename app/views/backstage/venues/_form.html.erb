@@ -3,17 +3,20 @@
 <% hint = "text-gray-400 font-normal" %>
 
 <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-  <% place_search = venue.new_record? %>
+  <%# Google lookups spend money, so they are for admins - who are also the only ones who can add a venue. %>
+  <% google = current_user.admin? %>
+  <% linked = venue.persisted? && venue.google_place_id.present? && !venue.google_place_marker? %>
   <%= form_with model: venue, scope: :venue, url: url, method: method, html: { class: "space-y-5" },
-        data: place_search ? { controller: "venue-place", venue_place_details_url_value: backstage_place_path("PLACE_ID") } : {} do |f| %>
+        data: google ? { controller: "venue-place", venue_place_details_url_value: backstage_place_path("PLACE_ID"),
+                         venue_place_venue_url_value: venue.persisted? ? backstage_venue_path(venue) : "" } : {} do |f| %>
     <% if venue.errors.any? %>
       <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
         <%= venue.errors.full_messages.to_sentence %>
       </div>
     <% end %>
 
-    <% if place_search %>
-      <%= render "place_search", f: f %>
+    <% if google %>
+      <%= render linked ? "place_refresh" : "place_search", f: f, venue: venue %>
     <% end %>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

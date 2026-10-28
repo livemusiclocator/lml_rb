@@ -1,0 +1,13 @@
+<%# Asks Google again about the place this venue is linked to, and fills the form below with the
+    answer - see venue_place_controller.js. Every changed field shows what it was, to keep or not. %>
+<div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <p class="text-sm text-indigo-900">Linked to a Google place. Refreshing shows anything Google now says differently.</p>
+    <button type="button" data-action="venue-place#refresh" data-venue-place-id-param="<%= venue.google_place_id %>"
+            class="bg-white border border-indigo-300 text-indigo-700 hover:bg-indigo-100 font-medium text-sm px-4 py-2 rounded-lg">
+      Refresh from Google
+    </button>
+  </div>
+  <%= f.hidden_field :google_place, value: params.dig(:venue, :google_place), data: { venue_place_target: "payload" } %>
+  <p data-venue-place-target="status" class="text-sm text-indigo-800 mt-2" aria-live="polite"></p>
+</div>
