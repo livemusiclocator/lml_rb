@@ -20,6 +20,17 @@ describe "backstage acts", type: :system do
 
   after { Capybara.app_host = @previous_app_host }
 
+  # An admin's changes go straight in, so there is nothing for them to propose.
+  it "shows an admin what they can change rather than proposals" do
+    within("nav") do
+      expect(page).to have_link("Acts")
+      expect(page).to have_link("Venues")
+      expect(page).to have_no_link("My Proposals")
+      expect(page).to have_no_link("+ New Proposal")
+    end
+    expect(page).to have_no_content("Pending proposals")
+  end
+
   it "adds an act" do
     click_on "Acts"
     click_on "Add an act"

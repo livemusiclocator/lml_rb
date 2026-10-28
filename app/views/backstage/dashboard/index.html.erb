@@ -1,7 +1,20 @@
 <div class="mb-8">
   <h1 class="text-3xl font-bold tracking-tight">Welcome back<% if current_user.display_name.present? %>, <%= current_user.display_name %><% end %> 👋</h1>
-  <p class="text-gray-500 mt-1">Here's what's happening with your proposals.</p>
+  <p class="text-gray-500 mt-1"><%= current_user.admin? ? "Your changes go live as soon as you save them." : "Here's what's happening with your proposals." %></p>
 </div>
+
+<% if current_user.admin? %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+    <%= link_to backstage_venues_path, class: "block bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:border-indigo-300 hover:shadow" do %>
+      <h2 class="font-semibold text-gray-900">Venues</h2>
+      <p class="text-sm text-gray-500 mt-1">Venue details, and adding or changing their gigs.</p>
+    <% end %>
+    <%= link_to backstage_acts_path, class: "block bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:border-indigo-300 hover:shadow" do %>
+      <h2 class="font-semibold text-gray-900">Acts</h2>
+      <p class="text-sm text-gray-500 mt-1">Finding, adding and editing acts.</p>
+    <% end %>
+  </div>
+<% else %>
 
 <% if current_user.manager? %>
   <div class="mb-8 bg-indigo-50 border border-indigo-200 rounded-xl p-5">
@@ -62,4 +75,5 @@
 <%= link_to new_backstage_proposal_path,
     class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors" do %>
   <span class="text-lg leading-none">+</span> Propose something new
+<% end %>
 <% end %>
