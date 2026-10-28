@@ -59,6 +59,7 @@ describe "looking a venue up in google places", type: :system do
 
     expect(page).to have_content("Matched one place")
     expect(page).to have_content("placeespy")
+    expect(page).to have_content("formattedAddress")
     expect(@venue.reload.google_place_id).to eq("placeespy")
   end
 

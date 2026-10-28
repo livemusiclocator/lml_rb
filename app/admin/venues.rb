@@ -256,6 +256,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
           # import matched this venue or created a new one beside it.
           row("Matched on") { pretty_json(resource.address_identity) }
           row("All components") { pretty_json(resource.address_components) }
+          # Everything Google said, of which the rows above are the parts we use. Empty for venues
+          # resolved before google_place existed until Lml::GooglePlaceBackfill reaches them.
+          row("Google's whole answer") { pretty_json(resource.google_place) if resource.google_place }
         end
       end
 
