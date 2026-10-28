@@ -1,0 +1,6 @@
+<div class="mb-8">
+  <%= link_to "‹ Acts", backstage_acts_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-3xl font-bold tracking-tight mt-1">Add an act</h1>
+</div>
+
+<%= render "form", act: @act, url: backstage_acts_path, method: :post, submit_label: "Add act" %>

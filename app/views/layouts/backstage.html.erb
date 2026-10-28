@@ -24,6 +24,7 @@
             <%= link_to current_user.admin? ? "Venues" : "My Venues", backstage_venues_path, class: "text-gray-200 hover:text-white text-sm px-3 py-2 sm:py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
           <% end %>
           <% if current_user.admin? %>
+            <%= link_to "Acts", backstage_acts_path, class: "text-gray-200 hover:text-white text-sm px-3 py-2 sm:py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
             <%= link_to "API Tokens", backstage_api_tokens_path, class: "text-gray-200 hover:text-white text-sm px-3 py-2 sm:py-4 border-b-2 border-transparent hover:border-indigo-400 transition-all" %>
           <% end %>
         <% end %>

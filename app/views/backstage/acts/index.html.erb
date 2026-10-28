@@ -1,0 +1,40 @@
+<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-3xl font-bold tracking-tight">Acts</h1>
+    <p class="text-gray-500 mt-1">Changes go live as soon as you save them.</p>
+  </div>
+  <%= link_to new_backstage_act_path,
+      class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm transition-colors" do %>
+    <span class="text-lg leading-none">+</span> Add an act
+  <% end %>
+</div>
+
+<%= form_with url: backstage_acts_path, method: :get, class: "flex gap-2 mb-4" do %>
+  <%= search_field_tag :q, @query, placeholder: "Search by name, location or country",
+      aria: { label: "Search acts" },
+      class: "flex-1 min-w-0 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+  <%= submit_tag "Search", name: nil, class: "bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg cursor-pointer" %>
+<% end %>
+
+<% if @acts.any? %>
+  <ul class="bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-100">
+    <% @acts.each do |act| %>
+      <li>
+        <%= link_to edit_backstage_act_path(act), class: "flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50" do %>
+          <span class="min-w-0">
+            <span class="block font-medium text-indigo-600"><%= act.name %></span>
+            <span class="block text-sm text-gray-500 truncate"><%= [act.location, act.country, act.genre_list].compact_blank.join(" · ") %></span>
+          </span>
+          <span class="text-gray-400" aria-hidden="true">&rsaquo;</span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <% if @act_count > @acts.size %>
+    <p class="text-sm text-gray-500 mt-3">
+      Showing the first <%= @acts.size %> of <%= @act_count %>. Search to narrow it down.
+    </p>
+  <% end %>
+<% else %>
+  <p class="text-sm text-gray-400 italic">No acts match "<%= @query %>".</p>
+<% end %>

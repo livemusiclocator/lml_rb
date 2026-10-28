@@ -82,6 +82,7 @@ Rails.application.routes.draw do
         resources :gigs, only: [:new, :create]
       end
       resources :gigs, only: [:edit, :update]
+      resources :acts, only: [:index, :new, :create, :edit, :update]
       namespace :search do
         resources :gigs, only: :index
         resources :acts, only: :index
