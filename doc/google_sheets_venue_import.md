@@ -713,6 +713,37 @@ refreshes its business status and leaves its place id alone. Where forcing earns
 its keep is on the marker venues, whose `address_components` are blank, so a
 second lookup that settles replaces the marker with a real id.
 
+## Keeping Google's whole answer for venues already resolved
+
+`google_place` holds the whole Places answer for a venue, but it arrived long
+after most venues were resolved, by lookups that asked for a handful of fields
+and kept only what fitted into columns. `Lml::GooglePlaceBackfill` fetches the
+rest:
+
+```rb
+Lml::GooglePlaceBackfill.call(dry_run: true)   # how many Details calls, spends nothing
+Lml::GooglePlaceBackfill.call                  # venues with gigs in the last 12 months
+Lml::GooglePlaceBackfill.call(months: 3)
+
+# => { "filled" => 395, "place id changed" => 2, "failed" => 1 }
+```
+
+It asks **Place Details** for the id the venue already has, rather than running
+Text Search again, so there is no query to get wrong and nothing to be ambiguous
+about, and each call is cheaper. Measured against production in October 2026,
+about 400 venues with a gig in the last year have a place id — inside a month's
+free Details allowance.
+
+Only venues with a real place id and no `google_place` are in scope, so a second
+run only spends on what the first one failed. What comes back is written by the
+same `Lml::VenueBackfill.apply` as every other lookup: gaps filled, business
+status refreshed, and the payload kept.
+
+`place id changed` means Google answered with a different id than the one asked
+for, which it does when it reissues ids. Nothing is written for those, since
+whether the venue should follow is the identity question above, and so for a
+person.
+
 ## The code
 
 Modelled on `Management::SupplierLaunches` in fresho-app, which does the same job
@@ -726,6 +757,7 @@ for customers and has already been through the failure modes.
 | `app/models/lml/venue_import.rb` | The sheet import: for each row, resolve, match or create, write the outcome back |
 | `app/models/lml/venue_backfill.rb` | The same resolution for venues we already have |
 | `app/models/lml/venue_place_lookup.rb` | The same resolution for one venue, on demand, recording the unsuccessful outcomes too |
+| `app/models/lml/google_place_backfill.rb` | The whole Details answer for venues resolved before `google_place` existed |
 
 `Lml::Place` is where both of them meet, so there is one answer to "what does
 Google tell us about this venue" rather than two that drift apart. It holds
