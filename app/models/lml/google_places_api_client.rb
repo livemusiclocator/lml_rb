@@ -15,23 +15,12 @@ module Lml
     AUTOCOMPLETE_URL = "https://places.googleapis.com/v1/places:autocomplete"
     DETAILS_URL = "https://places.googleapis.com/v1/places/%<place_id>s"
 
-    # Places bills per request by the most expensive tier any requested field belongs to, and only
-    # returns what is asked for. Every field here is in the "Pro" tier, which this call was already
-    # in for addressComponents alone, so all of them together cost exactly what the original four
-    # did. `websiteUri` and `nationalPhoneNumber` would be useful too but are Enterprise tier, which
-    # is a deliberate price change rather than a free one.
-    #
-    # Only fields something actually reads are listed - an unused field is free but still noise.
+    # Everything. Places bills per request by the most expensive tier any requested field belongs
+    # to, so this puts every search in the Enterprise + Atmosphere tier rather than Pro - a few
+    # dollars per thousand more, and a smaller free allowance. That was chosen: a venue keeps the
+    # whole answer in google_place, and a field we never asked for is one nobody can use later.
     # See doc/google_sheets_venue_import.md.
-    FIND_FIELDS = %w[
-      places.id
-      places.displayName
-      places.formattedAddress
-      places.addressComponents
-      places.location
-      places.businessStatus
-      places.timeZone
-    ].join(",").freeze
+    FIND_FIELDS = "places.*"
 
     # Worth retrying: a 503 means Google's side is briefly at capacity rather than anything being
     # wrong with the request, and one in a few hundred is normal. A 429 is a rate limit, which is

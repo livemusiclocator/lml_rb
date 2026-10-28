@@ -417,15 +417,19 @@ column.
 ### What is asked for, and what it costs
 
 Places bills per request by the **most expensive tier any requested field belongs
-to**, so the field mask is the price. Everything in `FIND_FIELDS` is in the **Pro**
-tier, which the call was already in for `addressComponents` alone — so all of it
-together costs exactly what the original four fields did:
+to**, so the field mask is the price. `FIND_FIELDS` is `places.*` - everything -
+and the whole place each search settles on is kept on the venue in
+`google_place`, as it is for a venue added from a place in backstage. A field we
+never asked for is one nobody can use later, so this was chosen over the cheaper
+Pro mask the import used to ask for. Of what comes back, these are written into
+venue columns:
 
 | Field | Used for |
 | --- | --- |
 | `id`, `displayName`, `formattedAddress`, `location`, `addressComponents` | Matching, and the address itself |
-| `timeZone` | `time_zone`, where the sheet gave none — see below |
-| `businessStatus` | `google_business_status` — spotting venues that have closed |
+| `timeZone` | `time_zone`, where the sheet gave none - see below |
+| `businessStatus` | `google_business_status` - spotting venues that have closed |
+| everything | `google_place`, whole, whenever the place is the venue's own |
 
 Google answers with an IANA identifier, which goes through
 `Lml::Timezone.canonical` rather than being taken at face value, because a venue
@@ -445,19 +449,17 @@ A spec asserts the invariant directly: every identifier in IANA's `Australia/*`
 must map to a zone we accept, or a venue in that state would silently get the
 Melbourne default.
 
-`websiteUri` and `nationalPhoneNumber` would fill two more columns but are
-**Enterprise** tier, and `liveMusic`, `editorialSummary` and the rest of the
-atmosphere fields are **Enterprise + Atmosphere**. Adding any of them moves the
-SKU for *every* request, including rows that turn out to be duplicates, so it is a
-deliberate decision rather than a free one. `types` is free but deliberately not
-wired: Google's are noisy (`point_of_interest`, `establishment`) and LML's tags
+`types` comes back with everything else but is deliberately not mapped onto
+tags: Google's are noisy (`point_of_interest`, `establishment`) and LML's tags
 are curated and user-facing.
 
-At the time of writing the tiers cost $32 / $35 / $40 per 1,000 requests. **The
-per-request delta matters much less than the free allowance**, which is 5,000
-calls a month on Pro and only 1,000 on either Enterprise tier — so moving up cuts
-the free allowance fivefold. With roughly 1,150 venues in total, every tier is
-free for a one-off pass; the cost only starts to bite on repeated large runs.
+At the time of writing the tiers cost $32 / $35 / $40 per 1,000 requests for
+Pro / Enterprise / Enterprise + Atmosphere, and asking for everything lands in
+the last. **The per-request delta matters much less than the free allowance**,
+which is 5,000 calls a month on Pro and only 1,000 on either Enterprise tier. With
+roughly 1,150 venues in total, a one-off pass over all of them now runs a little
+past the free allowance - a few dollars - and the cost only bites on repeated
+large runs.
 
 The definitive check on which tier a mask lands in is one real call followed by
 reading the SKU off the billing report — Google's own docs disagree with
@@ -546,8 +548,9 @@ Lml::Venue.with_gigs_since(3.months.ago.to_date)
 ```
 
 Measured against production: **284 of 1,155 venues** have gigs in the last three
-months, 460 in the last twelve. The window is **not** about cost — even all 1,155
-fits inside Pro's free monthly allowance. It is about not resolving rows that have
+months, 460 in the last twelve. The window is mostly **not** about cost — 284 fits
+easily inside the free monthly allowance, and even all 1,155 only runs a little
+past it. It is about not resolving rows that have
 not earned it: a venue nobody has programmed in a year is as likely to be a typo
 or a duplicate as a real place, and giving it a structured address only teaches
 future imports to match against the mistake.
@@ -593,8 +596,9 @@ somebody's research. Google is not a good enough reason to argue with a person.
 
 ### The maps link is built, not stored
 
-`location_url` used to be a fill-in, taking `googleMapsUri`. It no longer is, and
-`googleMapsUri` has come out of the field mask with it.
+`location_url` used to be a fill-in, taking `googleMapsUri`. It no longer is.
+`googleMapsUri` still comes back, kept in `google_place` with everything else,
+but nothing writes it to a column.
 
 A maps link is *derivable* from the place id, so storing one froze whichever URL
 shape we happened to prefer the day a venue was resolved, and left nothing to tell

@@ -84,15 +84,14 @@ module Backstage
       params.require(:venue).permit(*EDITABLE_ATTRIBUTES)
     end
 
-    # The Place Details response the form was filled from, kept whole on the
-    # venue. It also settles what Lml::Place settles for any venue - its place
-    # id, address components and business status - and fills anything the
-    # form left blank.
+    # The Place Details response the form was filled from settles what
+    # Lml::Place settles for any venue - its place id, address components,
+    # business status and the whole response in google_place - and fills
+    # anything the form left blank.
     def apply_google_place(venue)
       payload = JSON.parse(params.dig(:venue, :google_place).presence || "null")
       return unless payload.is_a?(Hash)
 
-      venue.google_place = payload
       venue.assign_attributes(Lml::Place.new(payload).attributes_for(venue))
     rescue JSON::ParserError
       nil

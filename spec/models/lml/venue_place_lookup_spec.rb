@@ -36,6 +36,12 @@ RSpec.describe Lml::VenuePlaceLookup do
       expect(@venue.reload.google_place_id).to eq("placeespy")
     end
 
+    it "keeps everything Google said about the place" do
+      lookup(@venue)
+
+      expect(@venue.reload.google_place).to eq(place("Hotel Esplanade"))
+    end
+
     it "asks for the venue's name and address, biased to Australia" do
       lookup(@venue)
 

@@ -105,9 +105,14 @@ module Lml
     # Identity is all or nothing, gated on the components alone - a venue with components but no
     # place id was resolved by something else, and giving it this place's id would claim its address
     # came from here when it did not.
+    #
+    # The whole payload goes into google_place whenever this is the venue's place, so a fresh answer
+    # replaces a stale one - but never onto a venue resolved to some other place, where it would
+    # describe somewhere the rest of the venue is not.
     def attributes_for(venue)
       gaps = fill_ins.reject { |attribute, _| venue[attribute].present? }
       gaps = gaps.merge(identity_attributes) if venue.address_components.blank?
+      gaps = gaps.merge(google_place: @payload) if gaps.fetch(:google_place_id, venue.google_place_id) == id
 
       gaps.merge(volatile)
     end

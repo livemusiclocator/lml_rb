@@ -170,6 +170,29 @@ RSpec.describe Lml::Place do
       expect(attributes).not_to have_key(:address_components)
       expect(attributes).not_to have_key(:google_place_id)
     end
+
+    # Nothing Google says is thrown away - but only onto the venue it is about.
+    describe "the whole payload" do
+      it "goes onto a venue being resolved to this place" do
+        expect(Lml::Place.new(payload).attributes_for(Lml::Venue.new)).to include(google_place: payload)
+      end
+
+      it "replaces the last answer for a venue already resolved to this place" do
+        venue = Lml::Venue.new(
+          address_components: { "route" => "The Esplanade" },
+          google_place_id: "place-espy",
+          google_place: { "id" => "place-espy", "displayName" => { "text" => "Old name" } },
+        )
+
+        expect(Lml::Place.new(payload).attributes_for(venue)).to include(google_place: payload)
+      end
+
+      it "stays off a venue resolved to some other place" do
+        venue = Lml::Venue.new(address_components: { "route" => "somewhere else" }, google_place_id: "other")
+
+        expect(Lml::Place.new(payload).attributes_for(venue)).not_to have_key(:google_place)
+      end
+    end
   end
 
   describe "#closed_permanently?" do
