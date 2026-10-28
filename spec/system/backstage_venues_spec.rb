@@ -53,4 +53,18 @@ describe "backstage venues", type: :system do
     expect(page).to have_css("h1", text: "The Gasometer")
     expect(page).to have_link("Add a gig")
   end
+
+  it "edits the venue's details" do
+    visit "/backstage/venues/#{@venue.id}"
+    click_on "Edit venue details"
+    fill_in "Name", with: "The Tote Hotel"
+    fill_in "Capacity", with: "250"
+    select "Australia/Sydney", from: "Time zone"
+    click_button "Save venue"
+
+    expect(page).to have_content("Saved The Tote Hotel.")
+    expect(page).to have_css("h1", text: "The Tote Hotel")
+    expect(@venue.reload.time_zone).to eq("Australia/Sydney")
+    expect(@venue.capacity).to eq(250)
+  end
 end

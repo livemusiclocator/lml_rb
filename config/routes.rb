@@ -78,7 +78,7 @@ Rails.application.routes.draw do
       root to: "dashboard#index"
       resources :proposals, only: [:index, :new, :create, :show]
       resources :api_tokens, only: [:index, :create, :destroy]
-      resources :venues, only: [:index, :show] do
+      resources :venues, only: [:index, :show, :edit, :update] do
         resources :gigs, only: [:new, :create]
       end
       resources :gigs, only: [:edit, :update]

@@ -7,10 +7,14 @@
       <p class="text-xs text-amber-700 mt-2">You don't manage this venue - you can change it because you're an admin.</p>
     <% end %>
   </div>
-  <%= link_to new_backstage_venue_gig_path(@venue),
-      class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm transition-colors" do %>
-    <span class="text-lg leading-none">+</span> Add a gig
-  <% end %>
+  <div class="flex flex-wrap items-center gap-3">
+    <%= link_to "Edit venue details", edit_backstage_venue_path(@venue),
+        class: "bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-5 py-2.5 rounded-xl shadow-sm transition-colors" %>
+    <%= link_to new_backstage_venue_gig_path(@venue),
+        class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm transition-colors" do %>
+      <span class="text-lg leading-none">+</span> Add a gig
+    <% end %>
+  </div>
 </div>
 
 <section class="mb-10">
