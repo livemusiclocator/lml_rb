@@ -118,11 +118,10 @@ RSpec.describe Lml::VenueBackfill do
       )
     end
 
-    it "leaves location_url for a person to fill in, and builds the maps link instead" do
+    it "fills the map link from the place's listing" do
       backfill
 
-      expect(@venue.reload.location_url).to be_nil
-      expect(@venue.google_maps_url).to include("query_place_id=place-espy")
+      expect(@venue.reload.location_url).to eq("https://maps.google.com/?cid=espy")
     end
 
     it "does not overwrite a value the venue already had" do

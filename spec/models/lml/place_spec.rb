@@ -121,12 +121,18 @@ RSpec.describe Lml::Place do
       )
     end
 
-    # location_url means "the link somebody chose". A maps link is derivable from the place id, so
-    # Lml::Venue#google_maps_url builds one rather than this claiming the column.
-    it "leaves location_url alone even on a venue that has none" do
-      attributes = Lml::Place.new(payload).attributes_for(Lml::Venue.new)
+    it "fills the map link from the place's own listing, without the api's tracking parameter" do
+      place = Lml::Place.new(payload("googleMapsUri" => "https://maps.google.com/?cid=3264005606005329900&g_mp=Cidnb29n"))
 
-      expect(attributes).not_to have_key(:location_url)
+      attributes = place.attributes_for(Lml::Venue.new)
+
+      expect(attributes[:location_url]).to eq("https://maps.google.com/?cid=3264005606005329900")
+    end
+
+    it "leaves a map link somebody chose" do
+      venue = Lml::Venue.new(location_url: "https://maps.example/espy")
+
+      expect(Lml::Place.new(payload).attributes_for(venue)).not_to have_key(:location_url)
     end
 
     it "leaves out anything the venue already has a value for" do
@@ -225,11 +231,12 @@ RSpec.describe Lml::Place do
         time_zone: "Australia/Melbourne",
         website: "https://espy.com.au",
         phone: "(03) 9534 0211",
+        location_url: "https://maps.google.com/?cid=espy",
       )
     end
 
     it "leaves out what the place does not say" do
-      place = Lml::Place.new(payload("location" => nil, "addressComponents" => []))
+      place = Lml::Place.new(payload("location" => nil, "addressComponents" => [], "googleMapsUri" => nil))
 
       expect(place.form_attributes.keys).to contain_exactly(:name, :address, :time_zone)
     end

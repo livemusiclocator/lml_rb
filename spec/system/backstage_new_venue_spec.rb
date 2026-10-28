@@ -18,6 +18,7 @@ describe "adding a venue from backstage", type: :system do
       "timeZone" => { "id" => "Australia/Melbourne" },
       "location" => { "latitude" => -37.7986, "longitude" => 144.9876 },
       "websiteUri" => "https://thetotehotel.com",
+      "googleMapsUri" => "https://maps.google.com/?cid=3264005606005329900&g_mp=Cidnb29n",
       "nationalPhoneNumber" => "(03) 9419 5320",
       "addressComponents" => [{ "types" => ["postal_code"], "shortText" => "3066", "longText" => "3066" }],
     }
@@ -59,6 +60,7 @@ describe "adding a venue from backstage", type: :system do
     expect(page).to have_field("Name", with: "The Tote Hotel")
     expect(page).to have_field("Address", with: "71 Johnston St, Collingwood VIC 3066")
     expect(page).to have_field("Website", with: "https://thetotehotel.com")
+    expect(page).to have_field("Map link", with: "https://maps.google.com/?cid=3264005606005329900")
     fill_in "Location", with: "melbourne"
     click_button "Add venue"
 

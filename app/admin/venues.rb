@@ -236,7 +236,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         attributes_table_for resource do
           row("Place ID") { resource.google_place_id }
           # Built from the place id rather than stored, so it is here beside the id it comes from
-          # rather than up in Venue Details next to location_url, which means something else now.
+          # rather than up in Venue Details next to location_url.
           row("Maps link") do
             # Nil where a venue has components but no place id - Lml::Place writes the two together,
             # so it means something else resolved this venue, and there is no id to build a link on.

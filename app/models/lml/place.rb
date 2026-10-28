@@ -7,7 +7,7 @@ module Lml
   # Google tell us about this venue" rather than two that can drift apart.
   #
   # See doc/google_sheets_venue_import.md.
-  class Place
+  class Place # rubocop:disable Metrics/ClassLength
     # The resolved components that define address identity, and so what an existing venue is looked
     # up by. Which of these Google returns varies by country: locality is absent in GB (postal_town
     # is its equivalent) and subpremise is what distinguishes one tenancy from another.
@@ -45,13 +45,9 @@ module Lml
     # Taken only where the venue has nothing there already. A blank column is a gap to fill; a
     # filled one is somebody's research, and Google is not a good enough reason to overwrite it.
     #
-    # location_url is deliberately absent, though googleMapsUri would fill it: a maps link is
-    # derivable from the place id we already store, so storing one froze whichever URL shape we
-    # happened to prefer the day a venue was resolved, and left nothing to tell a Google generated
-    # link from one a person pasted in. Lml::Venue#google_maps_url builds it instead, and
-    # location_url now means only "the link somebody chose" - which is what the sheet import has
-    # always put there.
-    FILL_INS = %i[time_zone address postcode latitude longitude].freeze
+    # location_url is the map link the site shows, and the most tedious column to fill by hand,
+    # so it takes googleMapsUri - the place's own listing - wherever nobody has chosen a link.
+    FILL_INS = %i[time_zone address postcode latitude longitude location_url].freeze
 
     def initialize(payload)
       @payload = payload
@@ -71,6 +67,12 @@ module Lml
 
     def business_status
       @payload["businessStatus"]
+    end
+
+    # The link to the place's own listing on Google Maps, without the g_mp parameter Google adds
+    # after the cid to say which API call produced it - it means nothing to a visitor.
+    def maps_url
+      @payload["googleMapsUri"]&.sub(/&g_mp=[^&]*/, "")
     end
 
     def closed_permanently?
@@ -119,7 +121,7 @@ module Lml
 
     # What a new venue's form starts from when this place is picked. Unlike attributes_for, nothing
     # here is written - it is all somebody's to check and change before they save.
-    def form_attributes
+    def form_attributes # rubocop:disable Metrics/MethodLength -- one line per form field
       {
         name: name,
         address: formatted_address,
@@ -129,6 +131,7 @@ module Lml
         time_zone: time_zone,
         website: @payload["websiteUri"],
         phone: @payload["nationalPhoneNumber"],
+        location_url: maps_url,
       }.compact
     end
 
@@ -162,6 +165,7 @@ module Lml
         postcode: components["postal_code"],
         latitude: components["latitude"],
         longitude: components["longitude"],
+        location_url: maps_url,
       }.compact
     end
 

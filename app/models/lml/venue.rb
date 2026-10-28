@@ -131,9 +131,8 @@ module Lml
       google_place_id.present? && !google_place_id.match?(PLACE_ID)
     end
 
-    # Built rather than stored, which is why Lml::Place::FILL_INS leaves location_url alone. Two
-    # reasons: deriving it means we are never stuck with whichever URL shape we preferred the day a
-    # venue was resolved, and it keeps location_url meaning "the link somebody chose".
+    # Built from the place id, for the ActiveAdmin panel. location_url, the link the site shows, is
+    # filled from Google's own listing link instead - see Lml::Place::FILL_INS.
     #
     # `query` is not decoration - the Maps URLs API requires it alongside query_place_id and falls
     # back to searching it if the id has gone stale, which the googleMapsUri `?cid=` form has no

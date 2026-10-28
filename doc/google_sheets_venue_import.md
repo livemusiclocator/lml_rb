@@ -605,33 +605,24 @@ here that genuinely changes, and a stale value is the whole problem.
 Fill-ins never overwrite, because a blank column is a gap and a filled one is
 somebody's research. Google is not a good enough reason to argue with a person.
 
-### The maps link is built, not stored
+### The map link
 
-`location_url` used to be a fill-in, taking `googleMapsUri`. It no longer is.
-`googleMapsUri` still comes back, kept in `google_place` with everything else,
-but nothing writes it to a column.
+`location_url` is the map link the site shows, and it is a fill-in like the
+others: wherever a venue has none, it takes `googleMapsUri`, the place's own
+Google Maps listing (`https://maps.google.com/?cid=...`). The `g_mp` parameter
+Google appends, which only records which API call produced the link, is
+stripped first. A link somebody already chose is never replaced, and the new
+venue form in backstage fills the field in from the place picked.
 
-A maps link is *derivable* from the place id, so storing one froze whichever URL
-shape we happened to prefer the day a venue was resolved, and left nothing to tell
-a Google-generated link from one a person pasted in — the two sat in the same
-column looking identical. `Lml::Venue#google_maps_url` builds it on demand:
+Separately, `Lml::Venue#google_maps_url` builds a link from the place id for
+ActiveAdmin's Places panel:
 
 ```
 https://www.google.com/maps/search/?api=1&query=The+Espy%2C+11+The+Esplanade&query_place_id=ChIJ...
 ```
 
-The `query` is not decoration. The Maps URLs API requires it alongside
-`query_place_id`, and it is the **fallback**: if the place id ever goes stale
-Google searches the text instead of erroring, which the `?cid=` form of
-`googleMapsUri` has no equivalent of. It is also readable, where a bare cid is a
-19-digit number.
-
 It returns `nil` for a venue that is unresolved or carrying one of the markers
 below, so nothing ever emits `query_place_id=ambiguous%20-%202%20matches`.
-
-`location_url` now means only "the link somebody chose" — which is what the sheet
-import has always put there. **Existing values were left alone**: a venue resolved
-before this keeps the `?cid=` link Google gave it, which is not wrong, just frozen.
 
 Finding what has closed since, which is the point of tracking it:
 
