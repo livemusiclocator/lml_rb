@@ -55,6 +55,15 @@ describe "backstage gigs" do
       expect(response.body).to include("Name can&#39;t be blank")
     end
 
+    it "refuses a start time it cannot read, rather than erroring" do
+      @params[:gig].merge!(start_time: "late")
+
+      expect { post "/backstage/venues/#{@venue.id}/gigs", params: @params }.not_to change(Lml::Gig, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("Start time isn&#39;t a time we can read")
+    end
+
     it "does not find a venue somebody else manages" do
       expect { post "/backstage/venues/#{@other_venue.id}/gigs", params: @params }.not_to change(Lml::Gig, :count)
 

@@ -42,6 +42,10 @@ BACKSTAGE_APP_HOST = WEB_APP_HOST
 SYSTEM_SPEC_HOSTS = ["api.lml.localhost", "www.livemusiclocator.com.localhost"].freeze
 Capybara.always_include_port = true
 
+# Row editors label their boxes with aria-label, since a visible label per row
+# would be noise and a placeholder is better spent on an example value.
+Capybara.enable_aria_label = true
+
 # Long enough to cover the pickers' 250ms input debounce plus the round trip.
 Capybara.default_max_wait_time = 5
 

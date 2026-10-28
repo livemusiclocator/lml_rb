@@ -15,9 +15,12 @@
       <div data-autocomplete-target="results"
            class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 divide-y divide-gray-100 max-h-60 overflow-y-auto"></div>
     </div>
-    <% %w[Start Finish Stage].each do |column| %>
-      <input type="text" data-field="<%= column.downcase %>" data-action="input->line-list#sync keydown.enter->line-list#next"
-             placeholder="<%= column %>" aria-label="<%= column %>" autocomplete="off" class="<%= input %> sm:col-span-2">
+    <% { "Start" => "8pm", "Finish" => "8:45pm" }.each do |column, example| %>
+      <input type="text" data-field="<%= column.downcase %>" data-controller="time-field"
+             data-action="input->line-list#sync blur->time-field#tidy keydown.enter->line-list#next"
+             placeholder="<%= example %>" aria-label="<%= column %>" autocomplete="off" class="<%= input %> sm:col-span-2">
     <% end %>
+    <input type="text" data-field="stage" data-action="input->line-list#sync keydown.enter->line-list#next"
+           placeholder="Stage" aria-label="Stage" autocomplete="off" class="<%= input %> sm:col-span-2">
   </div>
 <% end %>

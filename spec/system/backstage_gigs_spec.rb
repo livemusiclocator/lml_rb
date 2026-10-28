@@ -83,6 +83,51 @@ describe "backstage gigs", type: :system do
     expect(gig.genre_tags).to eq(["post-punk", "indie rock"])
   end
 
+  it "reads times however they are typed and shows what they were read as" do
+    click_on "Add a gig"
+    fill_in "Gig name / headliner", with: "Gut Health"
+    fill_in "Date", with: Date.current + 5
+    fill_in "Starts", with: "730"
+    fill_in "Finishes", with: "11.30 PM"
+    within(set_rows[0]) do
+      fill_in "Act - new or existing", with: "Gut Health"
+      fill_in "Start", with: "9"
+      fill_in "Finish", with: "22:15"
+    end
+    find_field("Gig name / headliner").click
+
+    expect(page).to have_field("Starts", with: "7:30pm")
+    expect(page).to have_field("Finishes", with: "11:30pm")
+    expect(set_rows[0].find_field("Start").value).to eq("9:00pm")
+    expect(set_rows[0].find_field("Finish").value).to eq("10:15pm")
+    click_button "Add gig"
+
+    expect(page).to have_content("Added Gut Health.")
+    gig = @venue.gigs.sole
+    expect([gig.start_time, gig.finish_time]).to eq(["19:30", "23:30"])
+    expect(gig.set_list).to eq("Gut Health | 21:00 | 22:15 | ")
+  end
+
+  it "does not submit a time it cannot read" do
+    click_on "Add a gig"
+    fill_in "Gig name / headliner", with: "Gut Health"
+    fill_in "Date", with: Date.current + 5
+    fill_in "Starts", with: "late"
+    click_button "Add gig"
+
+    expect(page).to have_css("input#gig_start_time:invalid")
+    expect(page).to have_no_content("Added Gut Health.")
+    expect(@venue.gigs).to be_empty
+  end
+
+  it "shows a saved gig's times the same way" do
+    gig = create(:lml_gig, venue: @venue, name: "Old name", date: Date.current + 2)
+    gig.update!(start_time: "20:00")
+    visit "/backstage/gigs/#{gig.id}/edit"
+
+    expect(page).to have_field("Starts", with: "8:00pm")
+  end
+
   # New acts are the common case, so a lineup has to be typable straight through.
   it "moves to a fresh row on enter instead of submitting" do
     click_on "Add a gig"
@@ -152,7 +197,7 @@ describe "backstage gigs", type: :system do
 
     within("li", text: "Old name") { click_on "Edit" }
     fill_in "Gig name / headliner", with: "New name"
-    expect(set_rows[0].find_field("Start").value).to eq("20:00")
+    expect(set_rows[0].find_field("Start").value).to eq("8:00pm")
     within(set_rows[1]) { click_button "Remove" }
     click_button "Save gig"
 

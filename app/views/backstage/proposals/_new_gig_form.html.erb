@@ -34,7 +34,8 @@
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1.5">Start time</label>
-        <input type="time" name="proposal[proposed_attributes][start_time]"
+        <input type="text" name="proposal[proposed_attributes][start_time]" placeholder="8pm" autocomplete="off"
+            data-controller="time-field" data-action="blur->time-field#tidy"
           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
       </div>
       <div>

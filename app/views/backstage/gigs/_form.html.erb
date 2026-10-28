@@ -22,11 +22,13 @@
       <div class="grid grid-cols-2 gap-4">
         <div>
           <%= f.label :start_time, "Starts", class: label %>
-          <%= f.time_field :start_time, class: field %>
+          <%= f.text_field :start_time, class: field, placeholder: "8pm", autocomplete: "off",
+                data: { controller: "time-field", action: "blur->time-field#tidy" } %>
         </div>
         <div>
           <%= f.label :finish_time, "Finishes", class: label %>
-          <%= f.time_field :finish_time, class: field %>
+          <%= f.text_field :finish_time, class: field, placeholder: "11:30pm", autocomplete: "off",
+                data: { controller: "time-field", action: "blur->time-field#tidy" } %>
         </div>
       </div>
       <div>

@@ -51,6 +51,8 @@ module Lml
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all
 
+    validate :times_readable
+
     scope :eager,
       lambda {
         order(:date, :start_offset)
@@ -170,11 +172,13 @@ module Lml
 
     def start_time=(value)
       self.start_offset = nil
+      unreadable_times.delete(:start_time)
 
       return if value.blank?
 
-      time = Time.parse(value)
-      self.start_offset = (time.hour * 60) + time.min
+      self.start_offset = minutes_into_day(value)
+    rescue ArgumentError
+      unreadable_times << :start_time
     end
 
     def start_time
@@ -185,14 +189,16 @@ module Lml
 
     def finish_time=(value)
       self.duration = nil
+      unreadable_times.delete(:finish_time)
 
       return if value.blank?
       return unless start_offset
 
-      time = Time.parse(value)
-      finish_offset = (time.hour * 60) + time.min
+      finish_offset = minutes_into_day(value)
       finish_offset += 24 * 60 if finish_offset < start_offset
       self.duration = finish_offset - start_offset
+    rescue ArgumentError
+      unreadable_times << :finish_time
     end
 
     def finish_time
@@ -233,6 +239,25 @@ module Lml
 
     def to_meta_tags
       {}
+    end
+
+    private
+
+    def minutes_into_day(value)
+      time = Time.parse(value)
+      (time.hour * 60) + time.min
+    end
+
+    # A time Time.parse cannot read is left blank and reported, rather than
+    # raising out of assign_attributes as a 500.
+    def unreadable_times
+      @unreadable_times ||= ::Set.new
+    end
+
+    def times_readable
+      unreadable_times.each do |attribute|
+        errors.add(attribute, "isn't a time we can read - try something like 8pm")
+      end
     end
   end
 end

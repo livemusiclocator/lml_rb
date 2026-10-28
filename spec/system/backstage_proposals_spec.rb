@@ -35,7 +35,7 @@ describe "backstage proposals", type: :system do
     click_button "Submit proposal"
 
     expect(page).to have_no_css("[data-line-list-row]")
-    expect(Lml::Proposal.sole.proposed_attributes["set_list"]).to eq("Gut Health | 9pm\nSupport Act")
+    expect(Lml::Proposal.sole.proposed_attributes["set_list"]).to eq("Gut Health | 9:00pm\nSupport Act")
   end
 
   # A genre change on its own used to be dropped, leaving an empty proposal.
