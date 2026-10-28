@@ -1,6 +1,14 @@
-<div class="mb-8">
-  <h1 class="text-3xl font-bold tracking-tight"><%= current_user.admin? ? "Venues" : "My venues" %></h1>
-  <p class="text-gray-500 mt-1">Gigs you add or change here go live straight away.</p>
+<div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-3xl font-bold tracking-tight"><%= current_user.admin? ? "Venues" : "My venues" %></h1>
+    <p class="text-gray-500 mt-1">Gigs you add or change here go live straight away.</p>
+  </div>
+  <% if current_user.admin? %>
+    <%= link_to new_backstage_venue_path,
+        class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm transition-colors" do %>
+      <span class="text-lg leading-none">+</span> Add a venue
+    <% end %>
+  <% end %>
 </div>
 
 <section class="mb-10">

@@ -112,7 +112,27 @@ module Lml
       gaps.merge(volatile)
     end
 
+    # What a new venue's form starts from when this place is picked. Unlike attributes_for, nothing
+    # here is written - it is all somebody's to check and change before they save.
+    def form_attributes
+      {
+        name: name,
+        address: formatted_address,
+        postcode: components["postal_code"],
+        lga: council,
+        lat_lng: location.values_at("latitude", "longitude").compact.join(", ").presence,
+        time_zone: time_zone,
+        website: @payload["websiteUri"],
+        phone: @payload["nationalPhoneNumber"],
+      }.compact
+    end
+
     private
+
+    # The local government area, which Google gives in its long form as the council's name.
+    def council
+      components["administrative_area_level_2_long"] || components["administrative_area_level_2"]
+    end
 
     def location
       @payload["location"] || {}

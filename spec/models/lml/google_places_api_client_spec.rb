@@ -104,6 +104,29 @@ RSpec.describe Lml::GooglePlacesApiClient do
     end
   end
 
+  describe "#autocomplete" do
+    it "posts what was typed with its session token" do
+      request = stub_request(:post, Lml::GooglePlacesApiClient::AUTOCOMPLETE_URL).with(
+        body: { input: "the tote", sessionToken: "session-1", regionCode: "AU" },
+        headers: { "X-Goog-Api-Key" => "test-key" },
+      ).to_return(status: 200, body: { suggestions: [] }.to_json)
+
+      expect(@client.autocomplete("the tote", session_token: "session-1", region_code: "AU"))
+        .to eq("suggestions" => [])
+      expect(request).to have_been_requested
+    end
+
+    it "restricts suggestions to the regions given" do
+      request = stub_request(:post, Lml::GooglePlacesApiClient::AUTOCOMPLETE_URL)
+        .with(body: hash_including("includedRegionCodes" => ["AU"]))
+        .to_return(status: 200, body: "{}")
+
+      @client.autocomplete("the tote", session_token: "session-1", restrict_to: ["AU"])
+
+      expect(request).to have_been_requested
+    end
+  end
+
   describe "#details" do
     it "asks for one place by id" do
       stub_request(:get, Lml::GooglePlacesApiClient::DETAILS_URL.sub("%<place_id>s", "place-espy"))
@@ -111,6 +134,17 @@ RSpec.describe Lml::GooglePlacesApiClient do
         .to_return(status: 200, body: { id: "place-espy" }.to_json)
 
       expect(@client.details("place-espy")).to eq("id" => "place-espy")
+    end
+
+    # The token that makes the autocomplete calls before it free.
+    it "closes an autocomplete session" do
+      request = stub_request(:get, Lml::GooglePlacesApiClient::DETAILS_URL.sub("%<place_id>s", "place-espy"))
+        .with(query: { sessionToken: "session-1" })
+        .to_return(status: 200, body: { id: "place-espy" }.to_json)
+
+      @client.details("place-espy", session_token: "session-1")
+
+      expect(request).to have_been_requested
     end
   end
 end

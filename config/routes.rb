@@ -78,12 +78,16 @@ Rails.application.routes.draw do
       root to: "dashboard#index"
       resources :proposals, only: [:index, :new, :create, :show]
       resources :api_tokens, only: [:index, :create, :destroy]
-      resources :venues, only: [:index, :show, :edit, :update] do
+      resources :venues, only: [:index, :show, :new, :create, :edit, :update] do
         resources :gigs, only: [:new, :create]
       end
       resources :gigs, only: [:edit, :update]
       resources :acts, only: [:index, :new, :create, :edit, :update]
+      # Place details spend money at Google, so they are fetched only for the
+      # place somebody picks - see Backstage::PlacesController.
+      resources :places, only: :show
       namespace :search do
+        resources :places, only: :index
         resources :gigs, only: :index
         resources :acts, only: :index
         resources :venues, only: :index

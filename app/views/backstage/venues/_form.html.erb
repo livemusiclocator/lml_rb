@@ -1,0 +1,103 @@
+<% field = "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+<% label = "block text-sm font-medium text-gray-700 mb-1.5" %>
+<% hint = "text-gray-400 font-normal" %>
+
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+  <% place_search = venue.new_record? %>
+  <%= form_with model: venue, scope: :venue, url: url, method: method, html: { class: "space-y-5" },
+        data: place_search ? { controller: "venue-place", venue_place_details_url_value: backstage_place_path("PLACE_ID") } : {} do |f| %>
+    <% if venue.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
+        <%= venue.errors.full_messages.to_sentence %>
+      </div>
+    <% end %>
+
+    <% if place_search %>
+      <%= render "place_search", f: f %>
+    <% end %>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="sm:col-span-2">
+        <%= f.label :name, class: label %>
+        <%= f.text_field :name, required: true, class: field %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :address, class: label %>
+        <%= f.text_field :address, class: field %>
+      </div>
+      <div>
+        <%= f.label :postcode, class: label %>
+        <%= f.text_field :postcode, class: field %>
+      </div>
+      <div>
+        <%= f.label :lga, class: label do %>
+          Council <span class="<%= hint %>">(e.g. City of Yarra)</span>
+        <% end %>
+        <%= f.text_field :lga, class: field %>
+      </div>
+      <div>
+        <%= f.label :location, class: label do %>
+          Location <span class="<%= hint %>">(e.g. melbourne)</span>
+        <% end %>
+        <%= f.text_field :location, class: field %>
+      </div>
+      <div>
+        <%= f.label :time_zone, "Time zone", class: label %>
+        <%= f.select :time_zone, Lml::Timezone::CANONICAL_TIMEZONES, {}, class: field %>
+      </div>
+      <div>
+        <%= f.label :lat_lng, class: label do %>
+          Latitude, longitude <span class="<%= hint %>">(e.g. -37.80, 144.98)</span>
+        <% end %>
+        <%= f.text_field :lat_lng, class: field %>
+      </div>
+      <div>
+        <%= f.label :location_url, "Map link", class: label %>
+        <%= f.url_field :location_url, class: field, placeholder: "https://maps.google.com/..." %>
+      </div>
+      <div>
+        <%= f.label :capacity, class: label %>
+        <%= f.number_field :capacity, min: 0, class: field %>
+      </div>
+      <div>
+        <%= f.label :tag_list, class: label do %>
+          Tags <span class="<%= hint %>">(separated by commas)</span>
+        <% end %>
+        <%= f.text_field :tag_list, class: field %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :vibe, class: label %>
+        <%= f.text_field :vibe, class: field %>
+      </div>
+      <div>
+        <%= f.label :website, class: label %>
+        <%= f.url_field :website, class: field, placeholder: "https://..." %>
+      </div>
+      <div>
+        <%= f.label :email, class: label %>
+        <%= f.email_field :email, class: field %>
+      </div>
+      <div>
+        <%= f.label :phone, class: label %>
+        <%= f.telephone_field :phone, class: field %>
+      </div>
+      <div>
+        <%= f.label :instagram_url, "Instagram", class: label %>
+        <%= f.url_field :instagram_url, class: field, placeholder: "https://instagram.com/..." %>
+      </div>
+      <div>
+        <%= f.label :facebook_url, "Facebook", class: label %>
+        <%= f.url_field :facebook_url, class: field, placeholder: "https://facebook.com/..." %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :notes, class: label %>
+        <%= f.text_area :notes, rows: 4, class: field %>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <%= f.submit submit_label, class: "bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer" %>
+      <%= link_to "Cancel", cancel_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+    </div>
+  <% end %>
+</div>

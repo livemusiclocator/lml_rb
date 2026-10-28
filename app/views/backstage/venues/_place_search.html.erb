@@ -1,0 +1,22 @@
+<%# Picking a place fills in the form below - see venue_place_controller.js -
+    and the whole Places response rides along in google_place to be kept. %>
+<div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+  <label for="venue-place-search" class="block text-sm font-medium text-indigo-900 mb-1.5">Find it on Google</label>
+  <div data-controller="autocomplete"
+       data-autocomplete-url-value="<%= backstage_search_places_path %>"
+       data-autocomplete-extras-value="#venue-place-session-token:session_token"
+       data-action="autocomplete:selected->venue-place#fill"
+       class="relative">
+    <input type="text" id="venue-place-search"
+           data-autocomplete-target="input"
+           data-action="input->autocomplete#search blur->autocomplete#close keydown.enter->venue-place#ignore"
+           placeholder="Venue name and suburb, e.g. The Tote Collingwood"
+           autocomplete="off"
+           class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+    <div data-autocomplete-target="results"
+         class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 divide-y divide-gray-100 max-h-60 overflow-y-auto"></div>
+  </div>
+  <input type="hidden" id="venue-place-session-token" data-venue-place-target="sessionToken">
+  <%= f.hidden_field :google_place, value: params.dig(:venue, :google_place), data: { venue_place_target: "payload" } %>
+  <p data-venue-place-target="status" class="text-sm text-indigo-800 mt-2" aria-live="polite"></p>
+</div>

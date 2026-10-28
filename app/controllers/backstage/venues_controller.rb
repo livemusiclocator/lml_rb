@@ -29,6 +29,8 @@ module Backstage
       notes
     ].freeze
 
+    before_action :require_admin!, only: %i[new create]
+
     def index
       @venues = current_user.managed_venues.order(:name)
       return unless current_user.admin?
@@ -45,6 +47,21 @@ module Backstage
       gigs = @venue.gigs.includes(sets: :act)
       @upcoming = gigs.where(date: today..).order(:date, :start_offset)
       @past = gigs.where(date: ...today).order(date: :desc, start_offset: :desc).limit(PAST_GIG_LIMIT)
+    end
+
+    def new
+      @venue = Lml::Venue.new(time_zone: "Australia/Melbourne")
+    end
+
+    def create
+      @venue = Lml::Venue.new(venue_params)
+      apply_google_place(@venue)
+
+      if save_new_venue(@venue)
+        redirect_to backstage_venue_path(@venue), notice: "Added #{@venue.name}."
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
 
     def edit
@@ -65,6 +82,31 @@ module Backstage
 
     def venue_params
       params.require(:venue).permit(*EDITABLE_ATTRIBUTES)
+    end
+
+    # The Place Details response the form was filled from, kept whole on the
+    # venue. It also settles what Lml::Place settles for any venue - its place
+    # id, address components and business status - and fills anything the
+    # form left blank.
+    def apply_google_place(venue)
+      payload = JSON.parse(params.dig(:venue, :google_place).presence || "null")
+      return unless payload.is_a?(Hash)
+
+      venue.google_place = payload
+      venue.assign_attributes(Lml::Place.new(payload).attributes_for(venue))
+    rescue JSON::ParserError
+      nil
+    end
+
+    # Imports create venues with next to nothing, so the model does not insist
+    # on a name. And one place should be one venue.
+    def save_new_venue(venue)
+      venue.validate
+      venue.errors.add(:name, :blank) if venue.name.blank?
+      if venue.google_place_id.present? && Lml::Venue.exists?(google_place_id: venue.google_place_id)
+        venue.errors.add(:base, "There is already a venue for that Google place")
+      end
+      venue.errors.empty? && venue.save
     end
 
     # The venue's own today, not the server's - a gig in Perth tonight is still

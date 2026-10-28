@@ -12,6 +12,7 @@ module Lml
     API_KEY_VAR = "GOOGLE_PLACES_SERVER_KEY"
 
     FIND_URL = "https://places.googleapis.com/v1/places:searchText"
+    AUTOCOMPLETE_URL = "https://places.googleapis.com/v1/places:autocomplete"
     DETAILS_URL = "https://places.googleapis.com/v1/places/%<place_id>s"
 
     # Places bills per request by the most expensive tier any requested field belongs to, and only
@@ -68,10 +69,25 @@ module Lml
       with_retries { @client.post(FIND_URL, body.to_json, headers(field_mask)) }
     end
 
-    def details(place_id, field_mask: "*")
-      url = format(DETAILS_URL, place_id: place_id)
+    # Suggestions as somebody types. Passing the same session_token here and to the details call
+    # for the place they pick bills the whole session as that one details call, so the typing is
+    # free - a token is a fresh uuid per search, and is spent once its details are fetched.
+    #
+    # Unlike region_code, which only biases, restrict_to is a hard filter: no suggestion from
+    # outside those regions comes back at all.
+    def autocomplete(input, session_token:, region_code: nil, restrict_to: [])
+      body = { input: input, sessionToken: session_token }
+      body[:regionCode] = region_code if region_code.present?
+      body[:includedRegionCodes] = restrict_to if restrict_to.present?
 
-      with_retries { @client.get(url, {}, headers(field_mask)) }
+      with_retries { @client.post(AUTOCOMPLETE_URL, body.to_json, headers("*")) }
+    end
+
+    def details(place_id, field_mask: "*", session_token: nil)
+      url = format(DETAILS_URL, place_id: place_id)
+      params = session_token.present? ? { sessionToken: session_token } : {}
+
+      with_retries { @client.get(url, params, headers(field_mask)) }
     end
 
     private

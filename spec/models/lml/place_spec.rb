@@ -179,4 +179,36 @@ RSpec.describe Lml::Place do
       expect(Lml::Place.new(payload("businessStatus" => "CLOSED_TEMPORARILY"))).not_to be_closed_permanently
     end
   end
+
+  describe "#form_attributes" do
+    it "starts a new venue from everything the place says about it" do
+      place = Lml::Place.new(
+        payload(
+          "websiteUri" => "https://espy.com.au",
+          "nationalPhoneNumber" => "(03) 9534 0211",
+          "addressComponents" => [
+            component("postal_code", "3182"),
+            component("administrative_area_level_2", "Port Phillip", "City of Port Phillip"),
+          ],
+        ),
+      )
+
+      expect(place.form_attributes).to eq(
+        name: "Hotel Esplanade",
+        address: "11 The Esplanade, St Kilda VIC 3182",
+        postcode: "3182",
+        lga: "City of Port Phillip",
+        lat_lng: "-37.8676, 144.9756",
+        time_zone: "Australia/Melbourne",
+        website: "https://espy.com.au",
+        phone: "(03) 9534 0211",
+      )
+    end
+
+    it "leaves out what the place does not say" do
+      place = Lml::Place.new(payload("location" => nil, "addressComponents" => []))
+
+      expect(place.form_attributes.keys).to contain_exactly(:name, :address, :time_zone)
+    end
+  end
 end
