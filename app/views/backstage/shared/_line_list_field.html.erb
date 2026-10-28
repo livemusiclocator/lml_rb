@@ -1,0 +1,21 @@
+<%# A "one per line" field edited a row at a time by line_list_controller.js.
+    The block is one row's inputs; each [data-field] in it is a column, in the
+    order the line lists them. Without javascript the textarea is all there is. %>
+<div data-controller="line-list">
+  <%= text_area_tag name, value, id: id, rows: 3, class: textarea_class, placeholder: placeholder,
+        data: { line_list_target: "source" } %>
+
+  <div data-line-list-target="editor" class="hidden space-y-2">
+    <div data-line-list-target="rows" class="space-y-2"></div>
+    <button type="button" data-action="line-list#add"
+            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"><%= add_label %></button>
+  </div>
+
+  <template data-line-list-target="template">
+    <div data-line-list-row class="flex items-start gap-2">
+      <%= yield %>
+      <button type="button" data-action="line-list#remove" aria-label="Remove" title="Remove"
+              class="px-2 py-2 text-gray-400 hover:text-red-600 cursor-pointer">&times;</button>
+    </div>
+  </template>
+</div>

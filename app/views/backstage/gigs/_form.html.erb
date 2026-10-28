@@ -43,21 +43,24 @@
       </div>
       <div class="sm:col-span-2">
         <%= f.label :set_list, class: label do %>
-          Set list <span class="<%= hint %>">(one act per line: act | start | finish | stage)</span>
+          Sets <span class="<%= hint %>">(times like 8pm or 20:00; leave out anything you don't know)</span>
         <% end %>
-        <%= f.text_area :set_list, rows: 4, class: "#{field} font-mono text-sm", placeholder: "Gut Health | 8:00pm | 8:45pm\nKing Stingray | 9:15pm | 10:30pm" %>
+        <%= render "backstage/shared/sets_field", name: "gig[set_list]", value: gig.set_list, id: "gig_set_list",
+              textarea_class: "#{field} font-mono text-sm" %>
       </div>
       <div class="sm:col-span-2">
         <%= f.label :price_list, class: label do %>
-          Prices <span class="<%= hint %>">(one per line: amount | description)</span>
+          Prices
         <% end %>
-        <%= f.text_area :price_list, rows: 3, class: "#{field} font-mono text-sm", placeholder: "25.00 | General admission\n20.00 | Concession" %>
+        <%= render "backstage/shared/prices_field", name: "gig[price_list]", value: gig.price_list, id: "gig_price_list",
+              textarea_class: "#{field} font-mono text-sm" %>
       </div>
       <div class="sm:col-span-2">
         <%= f.label :genre_tag_list, class: label do %>
-          Genres <span class="<%= hint %>">(one per line)</span>
+          Genres
         <% end %>
-        <%= f.text_area :genre_tag_list, rows: 3, class: "#{field} text-sm", placeholder: "indie rock\npost-punk" %>
+        <%= render "backstage/shared/genres_field", name: "gig[genre_tag_list]", value: gig.genre_tag_list, id: "gig_genre_tag_list",
+              textarea_class: "#{field} text-sm" %>
       </div>
       <div class="sm:col-span-2">
         <%= f.label :description, class: label %>

@@ -52,6 +52,7 @@ module Backstage
           :finish_time,
           :series,
           :set_list,
+          :genre_tag_list,
           genre_tags: [], proposed_genre_tags: [], information_tags: [],
         ],
       )

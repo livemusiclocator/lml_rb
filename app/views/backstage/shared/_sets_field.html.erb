@@ -1,0 +1,23 @@
+<% input = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+<%= render layout: "backstage/shared/line_list_field",
+      locals: { name: name, value: value, id: id, textarea_class: textarea_class, add_label: "+ Add a set",
+                placeholder: "Gut Health | 8:00pm | 8:45pm\nKing Stingray | 9:15pm | 10:30pm" } do %>
+  <div class="flex-1 grid grid-cols-3 sm:grid-cols-10 gap-2">
+    <%# The search fills in the act as a set line names it - see Lml::Act#set_list_name. %>
+    <div class="relative col-span-3 sm:col-span-4"
+         data-controller="autocomplete"
+         data-autocomplete-url-value="<%= backstage_search_acts_path %>"
+         data-autocomplete-text-key-value="set_list_name"
+         data-action="autocomplete:selected->line-list#sync">
+      <input type="text" data-field="act" data-autocomplete-target="input"
+             data-action="input->autocomplete#search input->line-list#sync blur->autocomplete#close keydown.enter->line-list#next paste->line-list#paste"
+             placeholder="Act - new or existing" aria-label="Act" autocomplete="off" class="<%= input %>">
+      <div data-autocomplete-target="results"
+           class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 divide-y divide-gray-100 max-h-60 overflow-y-auto"></div>
+    </div>
+    <% %w[Start Finish Stage].each do |column| %>
+      <input type="text" data-field="<%= column.downcase %>" data-action="input->line-list#sync keydown.enter->line-list#next"
+             placeholder="<%= column %>" aria-label="<%= column %>" autocomplete="off" class="<%= input %> sm:col-span-2">
+    <% end %>
+  </div>
+<% end %>

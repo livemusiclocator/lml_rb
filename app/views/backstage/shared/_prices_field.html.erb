@@ -1,0 +1,12 @@
+<% input = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+<%= render layout: "backstage/shared/line_list_field",
+      locals: { name: name, value: value, id: id, textarea_class: textarea_class, add_label: "+ Add a price",
+                placeholder: "25.00 | General admission\n20.00 | Concession" } do %>
+  <div class="flex-1 grid grid-cols-3 gap-2">
+    <input type="text" inputmode="decimal" data-field="amount"
+           data-action="input->line-list#sync keydown.enter->line-list#next paste->line-list#paste"
+           placeholder="Amount" aria-label="Amount" autocomplete="off" class="<%= input %>">
+    <input type="text" data-field="description" data-action="input->line-list#sync keydown.enter->line-list#next"
+           placeholder="Description, e.g. General admission" aria-label="Description" autocomplete="off" class="<%= input %> col-span-2">
+  </div>
+<% end %>
