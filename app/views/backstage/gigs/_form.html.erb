@@ -47,14 +47,14 @@
         <%= f.label :set_list, class: label do %>
           Sets <span class="<%= hint %>">(times like 8pm or 20:00; leave out anything you don't know)</span>
         <% end %>
-        <%= render "backstage/shared/sets_field", name: "gig[set_list]", value: gig.set_list, id: "gig_set_list",
+        <%= render "backstage/shared/sets_field", name: "gig[set_list]", value: @lists ? @lists[:set_list] : gig.set_list, id: "gig_set_list",
               textarea_class: "#{field} font-mono text-sm" %>
       </div>
       <div class="sm:col-span-2">
         <%= f.label :price_list, class: label do %>
           Prices
         <% end %>
-        <%= render "backstage/shared/prices_field", name: "gig[price_list]", value: gig.price_list, id: "gig_price_list",
+        <%= render "backstage/shared/prices_field", name: "gig[price_list]", value: @lists ? @lists[:price_list] : gig.price_list, id: "gig_price_list",
               textarea_class: "#{field} font-mono text-sm" %>
       </div>
       <div class="sm:col-span-2">

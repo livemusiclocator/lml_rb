@@ -7,7 +7,7 @@ module Backstage
   class GigsController < ApplicationController
     def new
       @venue = accessible_venue
-      @gig = @venue.gigs.build(status: :confirmed)
+      @gig = params[:repeat] ? repeat_of(@venue.gigs.find(params[:repeat])) : @venue.gigs.build(status: :confirmed)
     end
 
     def create
@@ -38,6 +38,16 @@ module Backstage
     end
 
     private
+
+    # The same gig a week later, as an unsaved form to check over - as ActiveAdmin's clone does,
+    # except nothing exists until somebody saves it. Sets and prices are rows that need a saved gig
+    # to hang off, so they travel as the text the form shows instead.
+    def repeat_of(gig)
+      @lists = { set_list: gig.set_list, price_list: gig.price_list }
+      repeat = @venue.gigs.build(gig.attributes.except("id", "created_at", "updated_at", "upload_id"))
+      repeat.date = gig.date + 7.days if gig.date
+      repeat
+    end
 
     def accessible_venue
       accessible_venues.find(params[:venue_id])

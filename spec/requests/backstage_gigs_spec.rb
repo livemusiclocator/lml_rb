@@ -117,13 +117,25 @@ describe "backstage gigs" do
     end
   end
 
+  describe "repeating a gig" do
+    it "does not repeat a gig from a venue somebody else manages" do
+      other_gig = create(:lml_gig, venue: @other_venue, name: "Not yours")
+
+      get "/backstage/venues/#{@venue.id}/gigs/new", params: { repeat: other_gig.id }
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "as an admin" do
     before do
       sign_in create(:lml_user, :admin)
     end
 
     it "adds a gig at a venue they do not manage" do
-      expect { post "/backstage/venues/#{@other_venue.id}/gigs", params: @params }.to change(@other_venue.gigs, :count).by(1)
+      expect do
+        post "/backstage/venues/#{@other_venue.id}/gigs", params: @params
+      end.to change(@other_venue.gigs, :count).by(1)
     end
 
     it "edits a gig at a venue they do not manage" do

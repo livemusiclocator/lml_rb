@@ -206,4 +206,34 @@ describe "backstage gigs", type: :system do
     expect(page).to have_content("New name")
     expect(page).to have_no_content("Old name")
   end
+
+  it "starts the same gig a week later, saved only once it is added" do
+    gig = create(
+      :lml_gig,
+      venue: @venue,
+      name: "Weekly Jam",
+      date: Date.current + 2,
+      start_time: "20:00",
+      ticketing_url: "https://tickets.example/jam",
+    )
+    gig.set_list = "House Band | 8:00pm"
+    gig.price_list = "10.00 | Entry"
+    visit "/backstage/venues/#{@venue.id}"
+
+    within("li", text: "Weekly Jam") { click_on "Repeat next week" }
+
+    expect(page).to have_field("Gig name / headliner", with: "Weekly Jam")
+    expect(page).to have_field("Date", with: (Date.current + 9).iso8601)
+    expect(page).to have_field("Ticketing URL", with: "https://tickets.example/jam")
+    expect(set_rows[0].find_field("Act").value).to eq("House Band")
+    expect(Lml::Gig.count).to eq(1)
+
+    click_button "Add gig"
+
+    expect(page).to have_content("Added Weekly Jam.")
+    repeat = Lml::Gig.find_by!(date: Date.current + 9)
+    expect(repeat.set_list).to eq("House Band | 20:00 |  | ")
+    expect(repeat.price_list).to eq("$10.00 | Entry")
+    expect(repeat.start_time).to eq("20:00")
+  end
 end
