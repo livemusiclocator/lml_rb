@@ -49,6 +49,11 @@ module Lml
     # so it takes googleMapsUri - the place's own listing - wherever nobody has chosen a link.
     FILL_INS = %i[time_zone address postcode latitude longitude location_url].freeze
 
+    # Parameters that only say how somebody arrived at a link: Google's own g_mp on its maps links,
+    # and the usual campaign and click ids. Anything else in a query string is left alone, since
+    # some sites need theirs to find the page at all.
+    TRACKING = /\A(utm_\w+|g_mp|gclid|fbclid|msclkid)\z/
+
     def initialize(payload)
       @payload = payload
     end
@@ -78,7 +83,13 @@ module Lml
     # The link to the place's own listing on Google Maps, without the g_mp parameter Google adds
     # after the cid to say which API call produced it - it means nothing to a visitor.
     def maps_url
-      @payload["googleMapsUri"]&.sub(/&g_mp=[^&]*/, "")
+      without_tracking(@payload["googleMapsUri"])
+    end
+
+    # Business listings often carry campaign tags - the Tivoli's is ?utm_source=google&... - which
+    # mean nothing on a venue page.
+    def website
+      without_tracking(@payload["websiteUri"])
     end
 
     def closed_permanently?
@@ -142,13 +153,24 @@ module Lml
         lga: council,
         lat_lng: location.values_at("latitude", "longitude").compact.join(", ").presence,
         time_zone: time_zone,
-        website: @payload["websiteUri"],
+        website: website,
         phone: @payload["nationalPhoneNumber"],
         location_url: maps_url,
       }.compact
     end
 
     private
+
+    def without_tracking(url)
+      return url if url.blank?
+
+      uri = URI.parse(url)
+      params = URI.decode_www_form(uri.query.to_s).reject { |key, _| key.match?(TRACKING) }
+      uri.query = params.empty? ? nil : URI.encode_www_form(params)
+      uri.to_s
+    rescue URI::InvalidURIError, ArgumentError
+      url
+    end
 
     # The local government area, which Google gives in its long form as the council's name.
     def council

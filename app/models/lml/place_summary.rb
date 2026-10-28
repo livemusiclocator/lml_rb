@@ -101,12 +101,13 @@ module Lml
       forms.compact.any? { |form| normalise(column, form) == normalise(column, ours) }
     end
 
-    # Google writes the same website and phone number in more than one way.
+    # Google writes the same website and phone number in more than one way - with or without www
+    # and https, or with the phone number's spaces and brackets moved.
     def normalise(column, value)
       value = value.to_s.strip
 
       case column
-      when :website then value.downcase.chomp("/")
+      when :website then value.downcase.sub(%r{\Ahttps?://(www\.)?}, "").chomp("/")
       when :phone then value.gsub(/\D/, "")
       else value
       end

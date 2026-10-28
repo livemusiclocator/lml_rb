@@ -71,6 +71,7 @@ RSpec.describe Lml::PlaceSummary do
 
   it "does not count the same website or phone number written differently" do
     differences = summary(
+      { "websiteUri" => "http://www.thetotehotel.com/?utm_source=google&utm_medium=gmb" },
       name: "The Tote",
       address: "67-71 Johnston St, Collingwood",
       website: "https://TheToteHotel.com",

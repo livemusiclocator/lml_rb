@@ -219,6 +219,19 @@ RSpec.describe Lml::Place do
     end
   end
 
+  describe "#website" do
+    it "drops the campaign tags google listings carry, and keeps the rest of the address" do
+      place = Lml::Place.new(
+        payload("websiteUri" => "http://www.thetivoli.com.au/?utm_source=google&utm_medium=gmb&utm_campaign=seo"),
+      )
+      kept = Lml::Place.new(payload("websiteUri" => "https://example.com/?page_id=12&gclid=abc"))
+
+      expect(place.website).to eq("http://www.thetivoli.com.au/")
+      expect(place.form_attributes[:website]).to eq("http://www.thetivoli.com.au/")
+      expect(kept.website).to eq("https://example.com/?page_id=12")
+    end
+  end
+
   describe "#address" do
     it "is the short form, without the state, postcode and country" do
       place = Lml::Place.new(payload("shortFormattedAddress" => "11 The Esplanade, St Kilda"))
