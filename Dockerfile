@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Keep RUBY_VERSION in step with .tool-versions and the CI images in .circleci/config.yml
-ARG RUBY_VERSION=4.0.6
+ARG RUBY_VERSION=4.0.9
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 # Rails app lives here
