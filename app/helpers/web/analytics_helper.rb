@@ -5,14 +5,14 @@ module Web
     PROD_GA_MEASUREMENT_ID = "G-8TKSCK99CN"
     DEV_GA_MEASUREMENT_ID  = "G-Y3W30VYBWV"
     GTAG_SNIPPET = <<~HTML
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=%<tag_id>s"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '%<tag_id>s'%<config>s);
-      </script>
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=%<tag_id>s"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+      %<debug_set>s        gtag('config', '%<tag_id>s'%<config>s);
+            </script>
     HTML
 
     def analytics_enabled?
@@ -40,7 +40,8 @@ module Web
 
     def gtag_script_tag(tag_id, debug_mode: false)
       config = debug_mode ? ", { debug_mode: true }" : ""
-      format(GTAG_SNIPPET, tag_id: tag_id, config: config).html_safe
+      debug_set = debug_mode ? "        gtag('set', { debug_mode: true });\n" : ""
+      format(GTAG_SNIPPET, tag_id: tag_id, config: config, debug_set: debug_set).html_safe
     end
   end
 end

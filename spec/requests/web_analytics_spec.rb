@@ -40,6 +40,7 @@ describe "web layout Google Analytics tag" do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("https://www.googletagmanager.com/gtag/js?id=G-8TKSCK99CN")
+      expect(response.body).not_to include("gtag('set', { debug_mode: true });")
       expect(response.body).to include("gtag('config', 'G-8TKSCK99CN');")
     end
 
@@ -50,6 +51,7 @@ describe "web layout Google Analytics tag" do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("https://www.googletagmanager.com/gtag/js?id=G-8TKSCK99CN")
+      expect(response.body).not_to include("gtag('set', { debug_mode: true });")
       expect(response.body).to include("gtag('config', 'G-8TKSCK99CN');")
     end
 
@@ -75,6 +77,7 @@ describe "web layout Google Analytics tag" do
       get "/about"
 
       expect(response.body).to include("https://www.googletagmanager.com/gtag/js?id=G-Y3W30VYBWV")
+      expect(response.body).to include("gtag('set', { debug_mode: true });")
       expect(response.body).to include("gtag('config', 'G-Y3W30VYBWV', { debug_mode: true });")
     end
 
@@ -84,6 +87,7 @@ describe "web layout Google Analytics tag" do
       get "/"
 
       expect(response.body).to include("https://www.googletagmanager.com/gtag/js?id=G-Y3W30VYBWV")
+      expect(response.body).to include("gtag('set', { debug_mode: true });")
       expect(response.body).to include("gtag('config', 'G-Y3W30VYBWV', { debug_mode: true });")
     end
 
@@ -93,6 +97,7 @@ describe "web layout Google Analytics tag" do
       get "/about"
 
       expect(response.body).to include("https://www.googletagmanager.com/gtag/js?id=G-CUSTOM999")
+      expect(response.body).to include("gtag('set', { debug_mode: true });")
       expect(response.body).to include("gtag('config', 'G-CUSTOM999', { debug_mode: true });")
     end
 
