@@ -1,4 +1,4 @@
-# Hightlight duplicates on schedule if on duplicates scope
+# Highlight duplicates on schedule if on duplicates scope
 # current_scope = params[:scope]
 # show_duplicates = current_scope == "duplicates"
 
