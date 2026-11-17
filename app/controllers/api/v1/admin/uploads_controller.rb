@@ -79,7 +79,11 @@ module Api
             .merge(error_description: upload.error_description.presence)
           return serialized unless with_gigs
 
-          serialized.merge(content: upload.content, gigs: gigs_for(upload))
+          # content_with_ids is what to keep and send next time: the same
+          # content, each entry carrying the id of the gig it became, so a
+          # second upload updates by id even after a gig has been renamed.
+          serialized.merge(content: upload.content, content_with_ids: upload.content_with_ids,
+                           entry_gig_ids: upload.entry_gig_ids, gigs: gigs_for(upload))
         end
 
         # The gigs this upload created or last touched. Entries it deleted are

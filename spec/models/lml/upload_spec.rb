@@ -351,4 +351,62 @@ describe Lml::Upload do
       expect(gig.sets).to be_empty
     end
   end
+
+  # Content is matched on name, date and venue, so a gig renamed in review
+  # comes back as a second copy when the same content is sent again. The
+  # content with ids is what to send instead.
+  describe "content with ids" do
+    before do
+      @venue = Lml::Venue.create!(name: "The Tote", time_zone: "Australia/Melbourne")
+    end
+
+    def upload(content)
+      Lml::Upload.create!(time_zone: "Australia/Melbourne", format: "clipper", source: "research",
+                          venue: @venue, content: content).tap(&:process!)
+    end
+
+    it "gives each entry the id of the gig it became" do
+      first = upload(<<~CONTENT)
+        # a comment before anything
+        ---
+        name: DOLE NIGHT w/ Contact Sport + Brodown
+        date: 2024-03-01
+        ---
+        name: Kickarse Karaoke
+        date: 2024-03-02
+      CONTENT
+
+      dole = Lml::Gig.find_by!(name: "DOLE NIGHT w/ Contact Sport + Brodown")
+      karaoke = Lml::Gig.find_by!(name: "Kickarse Karaoke")
+      expect(first.reload.entry_gig_ids).to eq([[dole.id], [karaoke.id]])
+      expect(first.content_with_ids).to eq(<<~CONTENT)
+        # a comment before anything
+        ---
+        id: #{dole.id}
+        name: DOLE NIGHT w/ Contact Sport + Brodown
+        date: 2024-03-01
+        ---
+        id: #{karaoke.id}
+        name: Kickarse Karaoke
+        date: 2024-03-02
+      CONTENT
+    end
+
+    it "updates a renamed gig rather than adding another when it is sent again" do
+      first = upload("name: DOLE NIGHT w/ Contact Sport + Brodown\ndate: 2024-03-01\nurl: https://example.com/a\n")
+      gig = Lml::Gig.find_by!(name: "DOLE NIGHT w/ Contact Sport + Brodown")
+      gig.update!(name: "Contact Sport")
+
+      expect { upload(first.content_with_ids.sub("https://example.com/a", "https://example.com/b")) }
+        .not_to change(Lml::Gig, :count)
+      expect(gig.reload.url).to eq("https://example.com/b")
+    end
+
+    it "leaves an entry alone when it became several gigs" do
+      first = upload("name: Trivia\ndate: 2024-03-01\nweeks: 2\n")
+
+      expect(first.reload.entry_gig_ids.first.length).to eq(2)
+      expect(first.content_with_ids).not_to include("id:")
+    end
+  end
 end

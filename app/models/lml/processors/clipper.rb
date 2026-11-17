@@ -3,8 +3,14 @@
 module Lml
   module Processors
     class Clipper
+      # The gig ids each entry ended up as, in entry order - several for an
+      # entry with `weeks`, none for one that deleted its gig. Kept for
+      # Upload#content_with_ids.
+      attr_reader :entry_gig_ids
+
       def initialize(upload)
         @upload = upload
+        @entry_gig_ids = []
       end
 
       def process!
@@ -66,6 +72,8 @@ module Lml
           id = details[:id]
           weeks = details[:weeks] || 1
 
+          ids = []
+          @entry_gig_ids << ids
           weeks.times do |week_offset|
             if id.present?
               gig = Lml::Gig.find_by(id: id)
@@ -110,6 +118,7 @@ module Lml
             gig.duration = details[:duration]
             gig.finish_time = finish_time.strftime("%H:%M") if finish_time
             gig.save!
+            ids << gig.id
             gig.suggest_tags! unless ENV["DISABLE_CLIPPER_TAG_SUGGESTION"]
             @upload.status = "Succeeded"
             @upload.error_description = ""

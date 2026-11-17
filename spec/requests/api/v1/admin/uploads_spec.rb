@@ -57,6 +57,19 @@ describe "admin api uploads" do
       expect(body["upload"]["user_id"]).to eq(@admin.id)
     end
 
+    # What to keep and send next time, so a renamed gig is updated by id.
+    it "hands back the content with each entry's gig id" do
+      post "/v1/admin/uploads",
+        headers: @headers,
+        params: {
+          upload: { content: CLIPPER, source: "cli", venue_id: @tote.id },
+        }
+
+      sniffers = Lml::Gig.find_by!(name: "Sniffers Live")
+      expect(body["upload"]["content_with_ids"]).to start_with("id: #{sniffers.id}\nname: Sniffers Live\n")
+      expect(body["upload"]["entry_gig_ids"].length).to eq(2)
+    end
+
     it "reports the gigs it touched, so a caller can see what landed" do
       post "/v1/admin/uploads",
         headers: @headers,

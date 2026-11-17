@@ -47,6 +47,15 @@ describe "backstage uploads" do
     end
   end
 
+  it "offers the content back with gig ids, to send next time" do
+    post "/backstage/uploads", params: { upload: { content: "name: Gut Health\ndate: 2026-12-04\n", source: "backstage", venue_id: @tote.id } }
+
+    gig = Lml::Gig.find_by!(name: "Gut Health")
+    follow_redirect!
+    expect(response.body).to include("To send again")
+    expect(response.body).to include("id: #{gig.id}")
+  end
+
   it "shows what an upload sent" do
     get "/backstage/uploads/#{@theirs.id}"
 

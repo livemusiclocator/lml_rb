@@ -53,9 +53,35 @@ module Lml
       # processing an upload leaves every later request served by that thread
       # rendering times in the last venue's zone. use_zone restores what was
       # there when the block ends.
+      processor = Lml::Processors::Clipper.new(self)
       Time.use_zone(Time.zone) do
-        Lml::Processors::Clipper.new(self).process!
+        processor.process!
       end
+    ensure
+      update_column(:entry_gig_ids, processor.entry_gig_ids) if processor && persisted?
+    end
+
+    # The content as it was sent, with each entry given the id of the gig it
+    # became. Send this back and every entry updates its gig by id, whatever
+    # has been renamed since - where the content as sent matches on name, date
+    # and venue, and a gig renamed in review would come back as a second copy.
+    #
+    # Left alone: an entry that already had an id, one that became several gigs
+    # (`weeks`), and one that deleted its gig or was never reached.
+    def content_with_ids
+      ids = Array(entry_gig_ids)
+      index = -1
+      Lml::Processors::ClipperParser.extract_line_groups(content.to_s.lines).map do |group|
+        details = Lml::Processors::ClipperParser.extract_entry(group)
+        next group.join if details.keys.none?
+
+        index += 1
+        made = Array(ids[index])
+        next group.join unless made.length == 1 && details[:id].blank?
+
+        line = "id: #{made.first}\n"
+        group.first.to_s.start_with?("---") ? [group.first, line, *group.drop(1)].join : [line, *group].join
+      end.join
     end
 
     scope :filter_by_source, ->(source) { where(source: source) }

@@ -41,7 +41,16 @@
   </section>
 
   <section class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-    <h2 class="font-semibold text-gray-900 mb-4">What was sent</h2>
-    <pre class="text-xs text-gray-700 whitespace-pre-wrap break-words max-h-[40rem] overflow-y-auto"><%= @upload.content %></pre>
+    <% with_ids = @upload.content_with_ids %>
+    <% if with_ids != @upload.content %>
+      <h2 class="font-semibold text-gray-900 mb-1">To send again</h2>
+      <p class="text-xs text-gray-500 mb-4">
+        What was sent, with each gig's id added. Paste this next time and every entry updates its own gig, even one renamed since.
+      </p>
+      <pre class="text-xs text-gray-700 whitespace-pre-wrap break-words max-h-[40rem] overflow-y-auto"><%= with_ids %></pre>
+    <% else %>
+      <h2 class="font-semibold text-gray-900 mb-4">What was sent</h2>
+      <pre class="text-xs text-gray-700 whitespace-pre-wrap break-words max-h-[40rem] overflow-y-auto"><%= @upload.content %></pre>
+    <% end %>
   </section>
 </div>
