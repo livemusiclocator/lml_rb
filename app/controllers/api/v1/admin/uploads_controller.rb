@@ -13,10 +13,8 @@ module Api
       class UploadsController < BaseController
         WRITABLE = %i[content source venue_id].freeze
 
-        # Entries with an internal_description trigger one OpenAI call each for
-        # genre suggestions, so a big upload can outrun the 30 second router
-        # timeout. Well under what one venue's week looks like.
-        PROCESSING_LIMIT = 100
+        # See Lml::Upload::PROCESSING_LIMIT.
+        PROCESSING_LIMIT = Lml::Upload::PROCESSING_LIMIT
 
         def index
           scope = Lml::Upload.order(created_at: :desc)
@@ -35,7 +33,7 @@ module Api
         def create
           upload = Lml::Upload.new(upload_params.merge(format: "clipper", user: current_api_token.user))
           return render_invalid(upload) unless upload.valid?
-          return too_many_entries(upload) if entry_count(upload) > PROCESSING_LIMIT
+          return too_many_entries(upload) if upload.too_big?
 
           upload.save!
           upload.process!
@@ -67,13 +65,9 @@ module Api
         def too_many_entries(upload)
           render_error(
             :unprocessable_content,
-            "That upload has #{entry_count(upload)} entries and the limit is #{PROCESSING_LIMIT}. " \
+            "That upload has #{upload.entry_count} entries and the limit is #{PROCESSING_LIMIT}. " \
             "Split it up - processing happens inside the request.",
           )
-        end
-
-        def entry_count(upload)
-          Lml::Processors::ClipperParser.extract_entries(upload.content.to_s.lines).length
         end
 
         def upload_params

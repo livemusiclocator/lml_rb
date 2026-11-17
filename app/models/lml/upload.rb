@@ -27,6 +27,20 @@ module Lml
       inverse_of: :upload,
       dependent: :nullify
 
+    # Processing happens inside the request, and entries with an
+    # internal_description each make an OpenAI call for genre suggestions, so a
+    # big upload can outrun Heroku's 30 second router timeout. Well under what
+    # one venue's week looks like.
+    PROCESSING_LIMIT = 100
+
+    def entry_count
+      Lml::Processors::ClipperParser.extract_entries(content.to_s.lines).length
+    end
+
+    def too_big?
+      entry_count > PROCESSING_LIMIT
+    end
+
     def venue_label
       venue&.label
     end

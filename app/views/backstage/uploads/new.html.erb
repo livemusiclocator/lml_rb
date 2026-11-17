@@ -1,0 +1,58 @@
+<% field = "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+<% label = "block text-sm font-medium text-gray-700 mb-1.5" %>
+<% hint = "text-gray-400 font-normal" %>
+
+<div class="mb-8">
+  <%= link_to "‹ Uploads", backstage_uploads_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  <h1 class="text-3xl font-bold tracking-tight mt-1">New upload</h1>
+  <p class="text-gray-500 mt-1">
+    Paste gigs in the clipper format. They go live straight away and land in your review queue.
+    <%= link_to "How to write it", "https://docs.google.com/document/d/1o-3VA5yghojXBiSHworXDHJfGp7NOUZgbpnGN1lhzio/edit?tab=t.0#heading=h.lqx2443ai69m",
+        target: "_blank", rel: "noopener", class: "underline hover:text-gray-700" %>
+  </p>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+  <%= form_with model: @upload, scope: :upload, url: backstage_uploads_path, method: :post, html: { class: "space-y-5" } do |f| %>
+    <% if @upload.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
+        <%= @upload.errors.full_messages.to_sentence %>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="<%= label %>" for="upload_venue_search">Venue <span class="<%= hint %>">(unless every entry names its own venue_id)</span></label>
+        <div data-controller="autocomplete" data-autocomplete-url-value="<%= backstage_search_venues_path %>" class="relative">
+          <input type="text" id="upload_venue_search"
+                 data-autocomplete-target="input"
+                 data-action="input->autocomplete#search focus->autocomplete#search blur->autocomplete#clear"
+                 placeholder="Type to search venues..." autocomplete="off"
+                 value="<%= @upload.venue&.name %>" class="<%= field %>">
+          <%= f.hidden_field :venue_id, data: { autocomplete_target: "hidden" } %>
+          <div data-autocomplete-target="results"
+               class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 divide-y divide-gray-100 max-h-60 overflow-y-auto">
+          </div>
+        </div>
+      </div>
+      <div>
+        <%= f.label :source, class: label do %>
+          Source <span class="<%= hint %>">(where these came from)</span>
+        <% end %>
+        <%= f.text_field :source, class: field %>
+      </div>
+      <div class="sm:col-span-2">
+        <%= f.label :content, class: label do %>
+          Gigs <span class="<%= hint %>">(up to <%= Lml::Upload::PROCESSING_LIMIT %> entries)</span>
+        <% end %>
+        <%= f.text_area :content, rows: 18, required: true, class: "#{field} font-mono text-sm",
+              placeholder: "name: Gut Health\ndate: 2026-12-04\ntime: 20:00\nacts: Gut Health | Support Act\n---\nname: ..." %>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <%= f.submit "Upload", class: "bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer" %>
+      <%= link_to "Cancel", backstage_uploads_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+    </div>
+  <% end %>
+</div>

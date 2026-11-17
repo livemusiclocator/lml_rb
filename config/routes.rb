@@ -86,6 +86,8 @@ Rails.application.routes.draw do
       # Working through unchecked gigs a screen at a time - see ReviewsController.
       # The id is the gig's.
       resources :reviews, only: [:index, :show, :update]
+      # Clipper uploads, for admins - see UploadsController.
+      resources :uploads, only: [:index, :show, :new, :create]
       resources :acts, only: [:index, :new, :create, :edit, :update]
       # Place details spend money at Google, so they are fetched only for the
       # place somebody picks - see Backstage::PlacesController.
