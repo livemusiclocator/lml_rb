@@ -1,7 +1,18 @@
 # frozen_string_literal: true
 
 module Lml
-  class AdminUser < ApplicationRecord
+  # The ActiveAdmin login at api.lml.live. Not the same thing as a backstage
+  # user with the `admin` flag (Lml::User#admin?), which is what an admin
+  # means everywhere else, the admin API's tokens included.
+  #
+  # It was Lml::AdminUser, which read as though it were that flag. Renamed in
+  # the code only: the table is still admin_users, along with venues.admin_user_id
+  # and the devise scope (authenticate_admin_user!, current_admin_user). Renaming
+  # those is a migration in two deploys for a table that goes away with
+  # ActiveAdmin, as admins move to backstage.
+  class SuperAdmin < ApplicationRecord
+    self.table_name = "admin_users"
+
     devise(:database_authenticatable, :recoverable, :rememberable, :validatable)
 
     def self.ransackable_attributes(_auth_object = nil)
@@ -14,7 +25,7 @@ module Lml
 
     has_many :venues, class_name: "Lml::Venue", foreign_key: :admin_user_id, dependent: :nullify
     # proposals.reviewed_by_id has a foreign key but had no association on this side, so deleting an
-    # admin user who had ever reviewed anything was a 500. Nullify rather than restrict: the review
+    # super admin who had ever reviewed anything was a 500. Nullify rather than restrict: the review
     # itself - its status, reviewed_at and reviewer_note - is the part worth keeping, and this
     # account is meant to stop existing once admins move to backstage.
     has_many :reviewed_proposals,

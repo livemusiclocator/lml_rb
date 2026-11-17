@@ -13,7 +13,7 @@ require "rails_helper"
 describe "admin autocomplete pickers", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "admin_pickers_spec@example.com",
       username: "picker",
       password: @password,

@@ -9,7 +9,7 @@ require "rails_helper"
 describe "the admin dashboard coverage panel", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "coverage_spec@example.com",
       username: "coverage",
       password: @password,

@@ -8,7 +8,7 @@ require "rails_helper"
 describe "merging a duplicate venue in admin", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "venue_merge_spec@example.com",
       username: "merger",
       password: @password,

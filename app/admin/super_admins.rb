@@ -1,4 +1,5 @@
-ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
+ActiveAdmin.register Lml::SuperAdmin, as: "SuperAdmin" do
+  menu label: "Super admins"
   permit_params do
     permitted = %i[email username time_zone password password_confirmation]
     param_key = resource_class.model_name.param_key
@@ -12,7 +13,7 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
   index do
     selectable_column
     column :email do |admin_user|
-      link_to(admin_user.email, admin_admin_user_path(admin_user))
+      link_to(admin_user.email, admin_super_admin_path(admin_user))
     end
     column :username
     column :time_zone
@@ -47,7 +48,7 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
 
     panel "Assigned Venues" do
       if resource.venues.any?
-        form action: unassign_venues_admin_admin_user_path(resource), method: :post do
+        form action: unassign_venues_admin_super_admin_path(resource), method: :post do
           input name: :authenticity_token, type: :hidden, value: form_authenticity_token
           table_for resource.venues do
             column "" do |venue|
@@ -80,7 +81,7 @@ ActiveAdmin.register Lml::AdminUser, as: "AdminUser" do
     else
       flash[:error] = "No venues selected."
     end
-    redirect_to admin_admin_user_path(resource)
+    redirect_to admin_super_admin_path(resource)
   end
 
   filter :email_cont, label: "Email"

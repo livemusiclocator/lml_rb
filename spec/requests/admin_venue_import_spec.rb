@@ -6,7 +6,7 @@ describe "admin venue import" do
   before do
     host! "api.lml.live"
 
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "venue_import_spec@example.com",
       username: "importer",
       password: "supersecret123",

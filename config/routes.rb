@@ -124,7 +124,7 @@ Rails.application.routes.draw do
 
   # api.lml.live
   constraints subdomain: /^api$/ do
-    devise_for :admin_users, ActiveAdmin::Devise.config.merge(class_name: "Lml::AdminUser")
+    devise_for :admin_users, ActiveAdmin::Devise.config.merge(class_name: "Lml::SuperAdmin")
     ActiveAdmin.routes(self)
 
     authenticate :admin_user do

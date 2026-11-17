@@ -17,7 +17,7 @@ require "rails_helper"
 describe "an act's aliases in admin", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "act_aliases_spec@example.com",
       username: "aliaser",
       password: @password,

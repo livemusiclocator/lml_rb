@@ -6,7 +6,7 @@ describe "picker search" do
   before do
     host! "api.lml.live"
 
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "picker_search_spec@example.com",
       username: "picker",
       password: "supersecret123",

@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-describe "admin users" do
+describe "super admins" do
   before { host! "api.lml.live" }
 
   before do
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "admin_users_spec@example.com",
       username: "old_username",
       password: "supersecret123",
@@ -17,9 +17,9 @@ describe "admin users" do
   end
 
   it "updates the username without requiring a password change" do
-    patch "/admin/admin_users/#{@admin_user.id}",
+    patch "/admin/super_admins/#{@admin_user.id}",
       params: {
-        lml_admin_user: {
+        lml_super_admin: {
           email: @admin_user.email,
           username: "new_username",
           time_zone: @admin_user.time_zone,
@@ -28,7 +28,7 @@ describe "admin users" do
         },
       }
 
-    expect(response).to redirect_to("/admin/admin_users/#{@admin_user.id}")
+    expect(response).to redirect_to("/admin/super_admins/#{@admin_user.id}")
     expect(@admin_user.reload.username).to eq("new_username")
   end
 

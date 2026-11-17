@@ -53,7 +53,7 @@ module Lml
     has_many :uploads, dependent: :delete_all
     has_many :venue_managers, class_name: "Lml::VenueManager", foreign_key: :venue_id, dependent: :destroy
     has_many :managers, through: :venue_managers, source: :user
-    belongs_to :admin_user, class_name: "Lml::AdminUser", optional: true
+    belongs_to :admin_user, class_name: "Lml::SuperAdmin", optional: true
     # custom join to Web::Location - if available
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first

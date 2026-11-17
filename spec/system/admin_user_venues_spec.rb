@@ -5,10 +5,10 @@ require "rails_helper"
 # The "Available Venues (Not Assigned)" panel was removed from here: it listed an arbitrary 50
 # unassigned venues with no ordering, and assigning is done from the venue itself. This covers what
 # is left, which had no system spec of its own, and would catch the show page failing to render.
-describe "an admin user's assigned venues", type: :system do
+describe "a super admin's assigned venues", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "admin_user_venues_spec@example.com",
       username: "assigner",
       password: @password,
@@ -23,7 +23,7 @@ describe "an admin user's assigned venues", type: :system do
     )
     @unassigned = Lml::Venue.create!(name: "The Corner", location: "melbourne", time_zone: "Australia/Melbourne")
 
-    visit "/admin/admin_users/#{@admin_user.id}"
+    visit "/admin/super_admins/#{@admin_user.id}"
   end
 
   def sign_in_as_admin

@@ -12,7 +12,7 @@ module Lml
 
     belongs_to :user, class_name: "Lml::User"
     belongs_to :target, polymorphic: true, optional: true
-    belongs_to :reviewed_by, class_name: "Lml::AdminUser", optional: true
+    belongs_to :reviewed_by, class_name: "Lml::SuperAdmin", optional: true
 
     enum :status, { pending: 0, approved: 1, rejected: 2 }
 

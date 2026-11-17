@@ -8,7 +8,7 @@ require "rails_helper"
 describe "the venue import page", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "venue_import_system_spec@example.com",
       username: "importer",
       password: @password,

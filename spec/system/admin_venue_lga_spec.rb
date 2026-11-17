@@ -8,7 +8,7 @@ require "rails_helper"
 describe "the venue LGA field", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "venue_lga_spec@example.com",
       username: "lga",
       password: @password,

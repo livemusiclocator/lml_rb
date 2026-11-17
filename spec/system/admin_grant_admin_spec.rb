@@ -9,7 +9,7 @@ require "rails_helper"
 describe "granting admin access", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "grant_admin_spec@example.com",
       username: "granter",
       password: @password,

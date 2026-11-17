@@ -11,7 +11,7 @@ require "rails_helper"
 describe "admin index filters", type: :system do
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "admin_filters_visible_spec@example.com",
       username: "filterer",
       password: @password,

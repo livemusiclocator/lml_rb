@@ -105,7 +105,7 @@ describe Lml::VenueMerge do
     end
 
     it "inherits a researcher only when unassigned" do
-      researcher = Lml::AdminUser.create!(
+      researcher = Lml::SuperAdmin.create!(
         email: "researcher@example.com",
         username: "res",
         password: "supersecret123",

@@ -12,7 +12,7 @@ describe "looking a venue up in google places", type: :system do
 
   before do
     @password = "supersecret123"
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "venue_place_lookup_spec@example.com",
       username: "places",
       password: @password,

@@ -6,7 +6,7 @@ describe "admin venues" do
   before do
     host! "api.lml.live"
 
-    @admin_user = Lml::AdminUser.create!(
+    @admin_user = Lml::SuperAdmin.create!(
       email: "admin_venues_spec@example.com",
       username: "researcher",
       password: "supersecret123",

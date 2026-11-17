@@ -68,13 +68,13 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   batch_action :assign_to_admin_user,
     form: -> {
       {
-        admin_user_id: Lml::AdminUser.order(:username).map { |u|
+        admin_user_id: Lml::SuperAdmin.order(:username).map { |u|
           [u.username, u.id]
         },
       }
     } do |ids, inputs|
     Lml::Venue.where(id: ids).update_all(admin_user_id: inputs[:admin_user_id])
-    redirect_to collection_path, notice: "Venues assigned to admin user."
+    redirect_to collection_path, notice: "Venues assigned to super admin."
   end
 
   batch_action :unassign_from_admin_user do |ids|
@@ -85,7 +85,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   filter :name_cont, label: "Name"
   filter :time_zone_cont, label: "Time Zone"
   filter :location_cont, label: "Location"
-  filter :with_admin_user, label: "Researcher", as: :select, collection: -> { [["Unassigned", "none"]] + Lml::AdminUser.order(:username).map { |u| [u.username, u.id] } }
+  filter :with_admin_user, label: "Researcher", as: :select, collection: -> { [["Unassigned", "none"]] + Lml::SuperAdmin.order(:username).map { |u| [u.username, u.id] } }
 
   index do
     selectable_column
@@ -353,7 +353,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       f.input(
         :admin_user,
         as: :select,
-        collection: Lml::AdminUser.order(:username).map { |u| [u.username, u.id] },
+        collection: Lml::SuperAdmin.order(:username).map { |u| [u.username, u.id] },
       )
       f.input :email, input_html: { type: "email" }
       f.input :phone
