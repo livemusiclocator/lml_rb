@@ -85,6 +85,16 @@ describe "backstage review", type: :system do
     within_window(guide) { expect(page).to have_current_path("/gigs/#{@dole.id}") }
   end
 
+  it "goes to another gig at the venue that night, to hide a copy" do
+    typed = create(:lml_gig, name: "Contact Sport + Brodown", date: @dole.date, venue: @tote)
+
+    visit "/backstage/reviews/#{@dole.id}"
+    click_link "Contact Sport + Brodown"
+
+    expect(page).to have_css("h1", text: "Contact Sport + Brodown")
+    expect(page).to have_current_path(%r{/backstage/reviews/#{typed.id}})
+  end
+
   it "hides a gig that is not one" do
     visit "/backstage/reviews/#{@karaoke.id}"
     click_button "Hide - not a gig"

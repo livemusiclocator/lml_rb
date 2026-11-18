@@ -42,6 +42,7 @@ module Backstage
     def show
       @gig = Lml::Gig.find(params[:id])
       @filters = filters
+      @same_night = same_night(@gig)
       @remaining = queue.where.not(id: @gig.id).count
       @acts = suggested_acts(@gig)
       @genres = suggested_genres(@gig)
@@ -135,7 +136,18 @@ module Backstage
       end
     end
 
+    # Everything else at the venue that night. A research upload sends a site's
+    # gig even where LML already has another on that night under a different
+    # name, because it may be a second gig - or a rename, in which case this is
+    # where the copy shows up, a click from being hidden.
+    def same_night(gig)
+      return Lml::Gig.none if gig.venue_id.nil? || gig.date.nil?
+
+      Lml::Gig.where(venue_id: gig.venue_id, date: gig.date).where.not(id: gig.id).order(:start_offset, :name)
+    end
+
     def redisplay
+      @same_night = same_night(@gig)
       @remaining = queue.where.not(id: @gig.id).count
       @acts = params.dig(:gig, :set_list).to_s
       @genres = params.dig(:gig, :genre_tag_list).to_s

@@ -64,6 +64,22 @@
   </div>
 
   <aside class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 text-sm space-y-4">
+    <% if @same_night.any? %>
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-3">
+        <h2 class="font-semibold text-amber-900 mb-1">Also at this venue that night</h2>
+        <p class="text-xs text-amber-800 mb-2">If one of these is this gig under another name, hide the copy.</p>
+        <ul class="space-y-1">
+          <% @same_night.each do |other| %>
+            <li>
+              <%= link_to other.name, backstage_review_path(other, @filters), class: "text-indigo-600 hover:text-indigo-800 underline" %>
+              <span class="text-gray-500 text-xs">
+                <%= other.start_time %><% if other.checked? %> &middot; checked<% end %><% if other.hidden? %> &middot; hidden<% end %><% if other.source.present? %> &middot; <%= other.source %><% end %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
     <div>
       <h2 class="font-semibold text-gray-900 mb-1">Links</h2>
       <%# Backstage is served on the gig guide's own host, so the path is enough. %>

@@ -85,6 +85,25 @@ describe "backstage reviews" do
       expect(response.body).to include(%(href="/gigs/#{@dole.id}"))
     end
 
+    # Research sends a site's gig even where LML has another that night under a
+    # different name - a second gig, or a rename that is now two copies.
+    it "shows what else is at the venue that night" do
+      typed = create(:lml_gig, name: "Contact Sport + Brodown", date: @dole.date, venue: @tote)
+      create(:lml_gig, name: "Next night", date: @dole.date + 1, venue: @tote)
+
+      get "/backstage/reviews/#{@dole.id}"
+
+      expect(response.body).to include("Also at this venue that night")
+      expect(response.body).to include(%(href="/backstage/reviews/#{typed.id}?who=mine"))
+      expect(response.body).not_to include("Next night")
+    end
+
+    it "says nothing about the night when the gig is alone on it" do
+      get "/backstage/reviews/#{@vine_gig.id}"
+
+      expect(response.body).not_to include("Also at this venue that night")
+    end
+
     it "offers the suggested acts and genres when nothing is confirmed yet" do
       get "/backstage/reviews/#{@dole.id}"
 
