@@ -75,6 +75,16 @@ describe "backstage review", type: :system do
     expect(page).to have_no_link("Golden Vine Hotel")
   end
 
+  it "opens the gig as the public sees it, in a tab of its own" do
+    # The gig guide's page will not render without its main edition.
+    Web::ExplorerConfig.create!(edition_id: "main", allow_all_locations: true, default_location: "anywhere",
+                                selectable_locations: [])
+    visit "/backstage/reviews/#{@dole.id}"
+
+    guide = window_opened_by { click_link "On the gig guide" }
+    within_window(guide) { expect(page).to have_current_path("/gigs/#{@dole.id}") }
+  end
+
   it "hides a gig that is not one" do
     visit "/backstage/reviews/#{@karaoke.id}"
     click_button "Hide - not a gig"

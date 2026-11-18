@@ -64,19 +64,23 @@
   </div>
 
   <aside class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 text-sm space-y-4">
-    <% if @gig.ticketing_url.present? || @gig.url.present? %>
-      <div>
-        <h2 class="font-semibold text-gray-900 mb-1">Links</h2>
+    <div>
+      <h2 class="font-semibold text-gray-900 mb-1">Links</h2>
+      <%# Backstage is served on the gig guide's own host, so the path is enough. %>
+      <p><%= link_to "On the gig guide", "/gigs/#{@gig.id}", target: "_blank", rel: "noopener", class: "text-indigo-600 hover:text-indigo-800 underline" %></p>
+      <% if @gig.ticketing_url.present? || @gig.url.present? %>
         <% if @gig.ticketing_url.present? %>
           <p><%= link_to "Tickets", @gig.ticketing_url, target: "_blank", rel: "noopener", class: "text-indigo-600 hover:text-indigo-800 underline" %></p>
         <% end %>
         <% if @gig.url.present? && @gig.url != @gig.ticketing_url %>
           <p><%= link_to "Event page", @gig.url, target: "_blank", rel: "noopener", class: "text-indigo-600 hover:text-indigo-800 underline" %></p>
         <% end %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
     <div>
-      <h2 class="font-semibold text-gray-900 mb-1">Description</h2>
+      <%# internal_description: the venue's or ticketer's own copy, kept only to suggest genres from. %>
+      <h2 class="font-semibold text-gray-900 mb-1">Internal description</h2>
+      <p class="text-xs text-gray-400 mb-1">The source's own copy, for working out acts and genres. Never shown on the gig guide.</p>
       <p class="text-gray-600 whitespace-pre-line"><%= @gig.internal_description.presence || "None." %></p>
     </div>
   </aside>

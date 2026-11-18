@@ -78,6 +78,13 @@ describe "backstage reviews" do
   end
 
   describe "one gig" do
+    # The gig as the public sees it, to check what review is about to change.
+    it "links to the gig on the gig guide" do
+      get "/backstage/reviews/#{@dole.id}"
+
+      expect(response.body).to include(%(href="/gigs/#{@dole.id}"))
+    end
+
     it "offers the suggested acts and genres when nothing is confirmed yet" do
       get "/backstage/reviews/#{@dole.id}"
 
