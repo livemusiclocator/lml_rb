@@ -31,6 +31,24 @@ if Rails.env.development?
   end
 
   [
+    ["melbourne", "Melbourne" ],
+    ["geelong_bellarine", "Geelong & the Bellarine" ],
+    ["goldfields", "Goldfields" ],
+    ["great_ocean_road", "Great Ocean Road" ],
+    ["high_country", "High Country" ],
+    ["murray", "The Murray" ],
+    ["grampians", "Grampians" ],
+    ["gippsland", "Gippsland" ],
+    ["phillip_island", "Phillip Island" ],
+    ["daylesford_macedon_ranges", "Daylesford and the Macedon Ranges" ],
+    ["mornington_peninsula", "Mornington Peninsula" ],
+    ["yarra_valley_dandenong_ranges", "Yarra Valley & Dandenong Ranges" ],
+  ].each do |internal_identifier, name|
+    tourism_region = Web::TourismRegion.find_by(internal_idendifier: internal_identifier)
+    tourism_region ||= Web::TourismRegion.create!(internal_identifier: internal_identifier, name: name)
+  end
+
+  [
     ["geelong", false, ["geelong"], "geelong"],
     ["stkilda", false, ["stkilda"], "stkilda"],
     ["main", true, ["castlemaine", "melbourne", "stkilda", "geelong", "bendigo"], "anywhere"],

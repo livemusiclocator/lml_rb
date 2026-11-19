@@ -9,11 +9,11 @@ module Lml
     scope :search, ->(query) { search_terms(query, SEARCH_COLUMNS).order(:name) }
 
     def self.ransackable_attributes(_auth_object = nil)
-      %w[name location time_zone admin_user_id]
+      %w[name location time_zone admin_user_id tourism_region_id]
     end
 
     def self.ransackable_scopes(_auth_object = nil)
-      [:with_admin_user]
+      [:with_admin_user, :with_tourism_region]
     end
 
     scope :with_admin_user,
@@ -23,8 +23,15 @@ module Lml
         where(admin_user_id: id)
       }
 
+    scope :with_tourism_region,
+      lambda { |id|
+        return where(tourism_region_id: nil) if id == "none"
+
+        where(tourism_region_id: id)
+      }
+
     def self.ransackable_associations(_auth_object = nil)
-      %w[admin_user]
+      %w[admin_user tourism_region]
     end
 
     validates(
@@ -54,6 +61,7 @@ module Lml
     has_many :venue_managers, class_name: "Lml::VenueManager", foreign_key: :venue_id, dependent: :destroy
     has_many :managers, through: :venue_managers, source: :user
     belongs_to :admin_user, class_name: "Lml::SuperAdmin", optional: true
+    belongs_to :tourism_region, class_name: "Web::TourismRegion", optional: true
     # custom join to Web::Location - if available
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first
@@ -175,6 +183,14 @@ module Lml
 
       self.latitude = lat
       self.longitude = lng
+    end
+
+    # This is the user-facing label for anything location flavoured. It is
+    # based on the Visit Victoria/Tourism Victoria regional mode. Currently
+    # it is just the tourism_region, but eventually there will be a 3-tier
+    # heirarchy.
+    def destination
+      tourism_region&.name
     end
   end
 end
