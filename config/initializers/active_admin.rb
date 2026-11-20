@@ -196,7 +196,8 @@ ActiveAdmin.setup do |config|
 
   # == Setting a Favicon
   #
-  # config.favicon = 'favicon.ico'
+  # Absolute path so it is served from public/ rather than looked up as an asset.
+  config.favicon = "/favicon.ico"
 
   # == Meta Tags
   #
