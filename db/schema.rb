@@ -277,6 +277,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
     t.index ["gig_id"], name: "index_sets_on_gig_id"
   end
 
+  create_table "tourism_regions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "internal_identifier", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
@@ -346,6 +353,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
     t.string "postcode"
     t.jsonb "tags"
     t.string "time_zone"
+    t.uuid "tourism_region_id"
     t.datetime "updated_at", null: false
     t.string "vibe"
     t.string "website"
@@ -353,6 +361,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
     t.index ["admin_user_id"], name: "index_venues_on_admin_user_id"
     t.index ["google_business_status"], name: "index_venues_on_google_business_status"
     t.index ["google_place_id"], name: "index_venues_on_google_place_id"
+    t.index ["tourism_region_id"], name: "index_venues_on_tourism_region_id"
   end
 
   add_foreign_key "act_managers", "acts"
@@ -367,4 +376,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
   add_foreign_key "uploads", "users"
   add_foreign_key "venue_managers", "users"
   add_foreign_key "venue_managers", "venues"
+  add_foreign_key "venues", "tourism_regions"
 end
