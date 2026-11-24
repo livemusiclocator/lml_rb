@@ -127,6 +127,7 @@ describe "gigs" do
               "duration" => 30,
               "finish_time" => "18:30",
               "finish_timestamp" => "2001-06-08T18:30:00.000+10:00",
+              "stage" => "main",
             },
             {
               "act" => {
@@ -139,6 +140,7 @@ describe "gigs" do
               "duration" => 30,
               "finish_time" => "19:30",
               "finish_timestamp" => "2001-06-08T19:30:00.000+10:00",
+              "stage" => "main",
             },
             {
               "act" => {
@@ -152,6 +154,7 @@ describe "gigs" do
               "duration" => 60,
               "finish_time" => "21:00",
               "finish_timestamp" => "2001-06-08T21:00:00.000+10:00",
+              "stage" => "main",
             },
           ],
           "start_time" => nil,

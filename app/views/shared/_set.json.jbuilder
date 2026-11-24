@@ -8,5 +8,6 @@ json.start_timestamp set.start_timestamp
 json.duration set.duration
 json.finish_time set.finish_time
 json.finish_timestamp set.finish_timestamp
+json.stage set.stage
 
 json.act { json.partial!("shared/act", act: set.act) }
