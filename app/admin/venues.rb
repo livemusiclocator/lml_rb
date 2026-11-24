@@ -4,6 +4,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   permit_params(
     :address,
     :capacity,
+    :tourism_region_id,
     :email,
     :facebook_url,
     :instagram_url,
@@ -86,6 +87,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
   filter :time_zone_cont, label: "Time Zone"
   filter :location_cont, label: "Location"
   filter :with_admin_user, label: "Researcher", as: :select, collection: -> { [["Unassigned", "none"]] + Lml::SuperAdmin.order(:username).map { |u| [u.username, u.id] } }
+  filter :with_tourism_region, label: "Tourism Region", as: :select, collection: -> { [["Unassigned", "none"]] + Web::TourismRegion.all.map { |tr| [tr.name, tr.id] } }
 
   index do
     selectable_column
@@ -94,6 +96,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     end
     column :time_zone
     column :location
+    column :tourism_region
     column "Validated location" do |venue|
       if venue.location_record
         link_to venue.location_record.name, admin_location_path(venue.location_record)
@@ -120,6 +123,7 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
       row :name
       row :time_zone
       row :location
+      row :tourism_region
       row :admin_user do |resource|
         resource.admin_user&.username
       end
@@ -350,6 +354,12 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
         collection: Lml::Timezone::CANONICAL_TIMEZONES,
       )
       f.input :location, hint: "Should ideally match a Location's internal_identifier (case insensitive)"
+      f.input(
+        :tourism_region,
+        as: :select,
+        collection: Web::TourismRegion.all.map { |tr| [tr.name, tr.id] },
+        hint: "The Visit Victoria/Tourism Victoria region"
+      )
       f.input(
         :admin_user,
         as: :select,

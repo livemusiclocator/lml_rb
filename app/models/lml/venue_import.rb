@@ -36,6 +36,7 @@ module Lml
       "address" => :address,
       "time_zone" => :time_zone,
       "location" => :location,
+      "tourism_region" => :tourism_region,
       "website" => :website,
       "email" => :email,
       "phone" => :phone,
