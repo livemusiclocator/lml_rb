@@ -8,5 +8,6 @@ class CreateTourismRegions < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
+    add_index :tourism_regions, :internal_identifier, unique: true
   end
 end

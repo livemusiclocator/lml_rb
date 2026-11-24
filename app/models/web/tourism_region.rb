@@ -9,6 +9,6 @@ module Web
     has_many :venues, class_name: "Lml::Venue", dependent: :nullify
 
     validates :name, presence: true
-    validates :internal_identifier, presence: true
+    validates :internal_identifier, presence: true, uniqueness: true
   end
 end

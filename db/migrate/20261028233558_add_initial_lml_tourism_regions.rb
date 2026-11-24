@@ -39,7 +39,7 @@ class AddInitialLmlTourismRegions < ActiveRecord::Migration[8.1]
       phillip_island
       daylesford_macedon_ranges
       mornington_peninsula
-      yarra_valey_dandenong_ranges
+      yarra_valley_dandenong_ranges
     ]
 
     removed_count = Web::TourismRegion.where(internal_identifier: identifiers_to_remove).delete_all

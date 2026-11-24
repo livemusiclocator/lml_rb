@@ -282,6 +282,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
     t.string "internal_identifier", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
+    t.index ["internal_identifier"], name: "index_tourism_regions_on_internal_identifier", unique: true
   end
 
   create_table "uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

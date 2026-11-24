@@ -5,6 +5,5 @@ FactoryBot.define do
     time_zone { "Australia/Melbourne" }
     name { "Wonder Palace" }
     address { "48 Fancy Street, Awesomeville" }
-    tourism_region factory: :web_tourism_region
   end
 end

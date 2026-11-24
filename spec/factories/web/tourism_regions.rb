@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :web_tourism_region, class: "Web::TourismRegion" do
-    internal_identifier { "melbourne" }
-    name { "Melbourne" }
+    sequence(:internal_identifier) { |n| "region_#{n}" }
+    sequence(:name) { |n| "Region #{n}" }
   end
 end

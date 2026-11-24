@@ -44,8 +44,7 @@ if Rails.env.development?
     ["mornington_peninsula", "Mornington Peninsula" ],
     ["yarra_valley_dandenong_ranges", "Yarra Valley & Dandenong Ranges" ],
   ].each do |internal_identifier, name|
-    tourism_region = Web::TourismRegion.find_by(internal_idendifier: internal_identifier)
-    tourism_region ||= Web::TourismRegion.create!(internal_identifier: internal_identifier, name: name)
+    Web::TourismRegion.find_or_create_by!(internal_identifier: internal_identifier) { |region| region.name = name }
   end
 
   [
