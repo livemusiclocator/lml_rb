@@ -21,6 +21,7 @@
       </div>
       <div class="flex gap-4 sm:self-center">
         <%= link_to "Edit", edit_backstage_gig_path(gig), class: "text-sm font-medium text-indigo-600 hover:text-indigo-800", aria: { label: "Edit #{gig.name}" } %>
+        <%= copy_link_button(gig, class: "text-sm font-medium text-indigo-600 hover:text-indigo-800 whitespace-nowrap cursor-pointer", aria: { label: "Copy link to #{gig.name}" }) %>
         <%= link_to "Repeat next week", new_backstage_venue_gig_path(gig.venue, repeat: gig.id), class: "text-sm font-medium text-indigo-600 hover:text-indigo-800 whitespace-nowrap", aria: { label: "Repeat #{gig.name} next week" } %>
       </div>
     </li>

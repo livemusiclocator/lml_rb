@@ -3,6 +3,7 @@
     <%= link_to current_user.admin? ? "‹ Venues" : "‹ My venues", backstage_venues_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
     <h1 class="text-3xl font-bold tracking-tight mt-1"><%= @venue.name %></h1>
     <p class="text-gray-500 mt-1"><%= [@venue.address, @venue.location, @venue.destination].compact_blank.join(" · ") %></p>
+  <p class="mt-2 flex items-center gap-3"><%= short_link_with_copy(@venue, link_class: "text-sm text-indigo-600 hover:text-indigo-800", button_class: "text-sm font-medium text-indigo-600 hover:text-indigo-800 cursor-pointer") %></p>
     <% unless current_user.manages_venue?(@venue) %>
       <p class="text-xs text-amber-700 mt-2">You don't manage this venue - you can change it because you're an admin.</p>
     <% end %>

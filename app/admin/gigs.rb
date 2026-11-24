@@ -129,6 +129,9 @@ ActiveAdmin.register Lml::Gig, as: "Gig" do
     attributes_table do
       row :id
       row :name
+      row "Short link" do |resource|
+        short_link_with_copy(resource)
+      end
       row :venue
       row :date do |resource|
         admin_date(resource.date)

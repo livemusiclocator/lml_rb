@@ -121,6 +121,9 @@ ActiveAdmin.register Lml::Venue, as: "Venue" do
     attributes_table do
       row :id
       row :name
+      row "Short link" do |resource|
+        short_link_with_copy(resource)
+      end
       row :time_zone
       row :location
       row :tourism_region
