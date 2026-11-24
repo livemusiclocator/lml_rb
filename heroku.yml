@@ -12,9 +12,11 @@ build:
 # dyno boot, which raced across dynos and applied the migration as the new code was already coming
 # up. It does not any more.
 #
+# Seeds run straight after, for the reference data every environment needs - see db/seeds.rb.
+#
 # Note this assumes the database exists. A brand new environment needs its schema loaded by hand
 # before the first deploy, which db:prepare used to paper over.
 release:
   image: web
   command:
-    - ./bin/rails db:migrate
+    - ./bin/rails db:migrate db:seed

@@ -1,5 +1,26 @@
 # frozen_string_literal: true
 
+# Reference data every environment needs. heroku.yml's release phase runs these
+# seeds after migrating on every deploy, so everything out here has to be safe
+# to run again and again.
+[
+  ["melbourne", "Melbourne"],
+  ["geelong_bellarine", "Geelong & the Bellarine"],
+  ["goldfields", "Goldfields"],
+  ["great_ocean_road", "Great Ocean Road"],
+  ["high_country", "High Country"],
+  ["murray", "The Murray"],
+  ["grampians", "Grampians"],
+  ["gippsland", "Gippsland"],
+  ["phillip_island", "Phillip Island"],
+  ["daylesford_macedon_ranges", "Daylesford and the Macedon Ranges"],
+  ["mornington_peninsula", "Mornington Peninsula"],
+  ["yarra_valley_dandenong_ranges", "Yarra Valley & Dandenong Ranges"],
+].each do |internal_identifier, name|
+  Web::TourismRegion.find_or_create_by!(internal_identifier: internal_identifier) { |region| region.name = name }
+end
+
+# Conveniences for a development machine only.
 if Rails.env.development?
   user = Lml::SuperAdmin.find_or_create_by(email: "admin@example.com")
   user.update!(
@@ -28,23 +49,6 @@ if Rails.env.development?
       longitude: longitude,
       map_zoom_level: map_zoom_level,
     )
-  end
-
-  [
-    ["melbourne", "Melbourne" ],
-    ["geelong_bellarine", "Geelong & the Bellarine" ],
-    ["goldfields", "Goldfields" ],
-    ["great_ocean_road", "Great Ocean Road" ],
-    ["high_country", "High Country" ],
-    ["murray", "The Murray" ],
-    ["grampians", "Grampians" ],
-    ["gippsland", "Gippsland" ],
-    ["phillip_island", "Phillip Island" ],
-    ["daylesford_macedon_ranges", "Daylesford and the Macedon Ranges" ],
-    ["mornington_peninsula", "Mornington Peninsula" ],
-    ["yarra_valley_dandenong_ranges", "Yarra Valley & Dandenong Ranges" ],
-  ].each do |internal_identifier, name|
-    Web::TourismRegion.find_or_create_by!(internal_identifier: internal_identifier) { |region| region.name = name }
   end
 
   [
