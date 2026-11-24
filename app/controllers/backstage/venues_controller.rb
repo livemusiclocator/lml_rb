@@ -13,6 +13,7 @@ module Backstage
       name
       time_zone
       location
+      tourism_region_id
       address
       postcode
       lga
@@ -32,13 +33,15 @@ module Backstage
     before_action :require_admin!, only: %i[new create]
 
     def index
-      @venues = current_user.managed_venues.order(:name)
+      @venues = current_user.managed_venues.includes(:tourism_region).order(:name)
       return unless current_user.admin?
 
       @query = params[:q].to_s.strip
+      @region = params[:region].presence
       others = Lml::Venue.search(@query).where.not(id: @venues.select(:id))
+      others = others.with_tourism_region(@region) if @region
       @other_venue_count = others.count
-      @other_venues = others.limit(OTHER_VENUE_LIMIT)
+      @other_venues = others.includes(:tourism_region).limit(OTHER_VENUE_LIMIT)
     end
 
     def show

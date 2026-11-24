@@ -4,7 +4,7 @@
       <%= link_to backstage_venue_path(venue), class: "flex items-center justify-between gap-4 px-5 py-4 hover:bg-gray-50" do %>
         <span>
           <span class="block font-medium text-indigo-600"><%= venue.name %></span>
-          <span class="block text-sm text-gray-500"><%= [venue.address, venue.location].compact_blank.join(" · ") %></span>
+          <span class="block text-sm text-gray-500"><%= [venue.address, venue.location, venue.destination].compact_blank.join(" · ") %></span>
         </span>
         <span class="text-gray-400" aria-hidden="true">&rsaquo;</span>
       <% end %>

@@ -45,6 +45,13 @@
         <%= f.text_field :location, class: field %>
       </div>
       <div>
+        <%= f.label :tourism_region_id, class: label do %>
+          Tourism region <span class="<%= hint %>">(Visit Victoria's)</span>
+        <% end %>
+        <%= f.collection_select :tourism_region_id, Web::TourismRegion.order(:name), :id, :name,
+              { include_blank: "None" }, class: field %>
+      </div>
+      <div>
         <%= f.label :time_zone, "Time zone", class: label %>
         <%= f.select :time_zone, Lml::Timezone::CANONICAL_TIMEZONES, {}, class: field %>
       </div>

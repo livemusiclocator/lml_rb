@@ -67,4 +67,36 @@ describe "backstage venues", type: :system do
     expect(@venue.reload.time_zone).to eq("Australia/Sydney")
     expect(@venue.capacity).to eq(250)
   end
+
+  it "sets the venue's tourism region" do
+    create(:web_tourism_region, name: "Goldfields")
+
+    visit "/backstage/venues/#{@venue.id}/edit"
+    select "Goldfields", from: "Tourism region"
+    click_button "Save venue"
+
+    expect(page).to have_content("Saved The Tote.")
+    expect(page).to have_content("Goldfields")
+    expect(@venue.reload.destination).to eq("Goldfields")
+  end
+
+  it "lets an admin narrow the other venues to a tourism region" do
+    @manager.update!(admin: true)
+    goldfields = create(:web_tourism_region, name: "Goldfields")
+    create(:lml_venue, name: "The Gasometer")
+    create(:lml_venue, name: "The Theatre Royal", tourism_region: goldfields)
+
+    click_on "Venues"
+    select "Goldfields", from: "Tourism region"
+    click_button "Search"
+
+    expect(page).to have_link("The Theatre Royal")
+    expect(page).to have_no_link("The Gasometer")
+
+    select "No region", from: "Tourism region"
+    click_button "Search"
+
+    expect(page).to have_link("The Gasometer")
+    expect(page).to have_no_link("The Theatre Royal")
+  end
 end

@@ -34,6 +34,11 @@
       <%= search_field_tag :q, @query, placeholder: "Search by name or location",
           aria: { label: "Search venues" },
           class: "flex-1 min-w-0 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      <%= select_tag :region,
+          options_for_select([["Any region", ""], ["No region", "none"]] +
+                             Web::TourismRegion.order(:name).pluck(:name, :id), @region),
+          aria: { label: "Tourism region" },
+          class: "border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
       <%= submit_tag "Search", name: nil, class: "bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg cursor-pointer" %>
     <% end %>
     <% if @other_venues.any? %>
@@ -44,7 +49,7 @@
         </p>
       <% end %>
     <% else %>
-      <p class="text-sm text-gray-400 italic">No venues match "<%= @query %>".</p>
+      <p class="text-sm text-gray-400 italic">No venues match.</p>
     <% end %>
   </section>
 <% end %>
