@@ -3,6 +3,7 @@
 gig = @gig
 
 json.id gig.id
+json.short_url gig.short_url
 json.name gig.name
 json.date gig.date
 json.ticketing_url gig.ticketing_url

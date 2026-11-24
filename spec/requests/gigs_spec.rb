@@ -106,6 +106,7 @@ describe "gigs" do
           "description" => "This is some text that is going to continue to persuade you to attend this gig but with less capital letters.",
           "duration" => nil,
           "id" => @gig.id,
+          "short_url" => @gig.short_url,
           "name" => "The One Gig You Should Not Miss Out On",
           "series" => "ohm",
           "category" => "music",

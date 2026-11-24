@@ -217,6 +217,10 @@ Rails.application.routes.draw do
     get "/",
       to: redirect(status: 301, domain: target_domain, subdomain: "www", params: { location: "melbourne" }),
       via: :all
+    # Short links to a gig, venue or act - see Lml::ShortLink - and the long
+    # form of a gig's link that the RSS feed has always used.
+    get ":kind/:code", to: "short_links#show", constraints: { kind: /[gva]/ }, defaults: { target_domain: }
+    get "gigs/:id", to: "short_links#gig", constraints: { id: uuid }, defaults: { target_domain: }
   end
   # www.lml.live => www.livemusiclocator.com.au/?location=melbourne (copy pasted from "" subdomain handling above)
   constraints domain: short_domain, subdomain: "www" do

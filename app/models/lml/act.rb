@@ -170,6 +170,10 @@ module Lml
 
       "#{name} (#{location}/#{country || "Australia"})"
     end
+
+    def short_url
+      Lml::ShortLink.url(self)
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

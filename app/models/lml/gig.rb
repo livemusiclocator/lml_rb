@@ -225,6 +225,10 @@ module Lml
       "https://lml.live/gigs/#{id}"
     end
 
+    def short_url
+      Lml::ShortLink.url(self)
+    end
+
     def display_name
       [name, venue_label, date&.to_formatted_s].compact.join(" - ")
     end

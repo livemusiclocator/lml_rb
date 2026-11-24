@@ -192,5 +192,9 @@ module Lml
     def destination
       tourism_region&.name
     end
+
+    def short_url
+      Lml::ShortLink.url(self)
+    end
   end
 end
