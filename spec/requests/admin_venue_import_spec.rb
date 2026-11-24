@@ -58,7 +58,7 @@ describe "admin venue import" do
     end
 
     it "runs the import for the url it was given" do
-      expect(Lml::VenueImport).to receive(:call).with(@url).and_return({ "created" => 2 })
+      expect(Lml::VenueImport).to receive(:call).with(@url, worksheet: "venues").and_return({ "created" => 2 })
 
       post "/admin/venue_import/run", params: { sheet_url: @url }
 
@@ -70,7 +70,7 @@ describe "admin venue import" do
 
       post "/admin/venue_import/run", params: { sheet_url: @url }
 
-      expect(flash[:notice]).to eq("Imported: 2 created, 1 ambiguous.")
+      expect(flash[:notice]).to eq("Imported venues: 2 created, 1 ambiguous.")
     end
 
     it "keeps the url in the form after a run, so a re-run is one click" do
