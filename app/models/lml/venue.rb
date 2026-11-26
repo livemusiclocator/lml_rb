@@ -196,5 +196,35 @@ module Lml
     def short_url
       Lml::ShortLink.url(self)
     end
+
+    # Suggest a tourism region based on the venue's LGA and possible location.
+    # 76 of the 79 LGA's sit wholly in one region, and so the region is
+    # determined by a straight-forward mapping. The others are handled
+    # individually - see comments below.
+    def suggest_tourism_region!
+      tourism_region_id = case lga
+      when "Mitchell", "Murrindindi"
+        # Mitchell and Murrindindi straddle regions, so their venues stay unmapped
+        # for a human to decide.
+        nil
+      when "Bass Coast Shire"
+        # Bass Coast is split the way Visit Victoria splits it.
+        case location
+        when "Phillip Island", "San Remo"
+          "phillip_island"
+        when "Wonthaggi", "Inverloch", "Kilcunda", "Cape Patterson"
+          "gippsland"
+        end
+      when nil
+        # Venues with no lga have no region.
+        nil
+      else
+        # The rest sit wholly in one region.
+        Web::TourismRegion::LGA_REGION_MAP[lga]
+      end
+
+      tourism_region = Web::TourismRegion.find_by(internal_identifier: tourism_region_id)
+      update!(tourism_region: tourism_region)
+    end
   end
 end
