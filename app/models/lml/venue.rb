@@ -62,10 +62,12 @@ module Lml
     has_many :managers, through: :venue_managers, source: :user
     belongs_to :admin_user, class_name: "Lml::SuperAdmin", optional: true
     belongs_to :tourism_region, class_name: "Web::TourismRegion", optional: true
+
     # custom join to Web::Location - if available
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first
     end
+
     scope :in_location,
       lambda { |location|
         if %w[anywhere everywhere].include?(location)
@@ -96,6 +98,16 @@ module Lml
     scope :in_locations,
       lambda { |identifiers|
         where("LOWER(venues.location) IN (?)", identifiers.map { |identifier| identifier.to_s.downcase })
+      }
+
+    # Destination will encompass tourism_region, suburb_or_town, and
+    # precinct_name. For now it is just tourism_region. Unlike locations, only
+    # lowercase identifiers are allowed.
+    scope :in_destination,
+      lambda { |destination|
+        return all if destination == "anywhere"
+
+        joins(:tourism_region).where(tourism_region: { internal_identifier: destination })
       }
 
     # Venues with a gig - not hidden, not a draft - on or after this date. No upper bound, so a

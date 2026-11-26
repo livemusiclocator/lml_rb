@@ -51,13 +51,33 @@ Params:
 ```
 date_from: Date in format `YYYY-MM-DD` (required)
 date_to: Date in format `YYYY-MM-DD` (required)
-location: String (required)
+location: String
+destination: String
 token: An API token
 ```
 
-If no `location`, `date_from`, and `date_to` are provided, returns an empty array. The `location` parameter is a string representing the gig location, for example *melbourne* or *goldfields*. Only fetches gigs for up to 7 days from `date_from` unless a valid `token` is supplied. 
+If no `destination`, `location`, `date_from`, and `date_to` are provided, returns an empty array. Either a `destination` *or* a `location` field must be provided. The `location` parameter is a string representing the gig location, for example *melbourne* or *goldfields*. The destination is a string from the following table.
 
-The special value *anywhere* returns gigs across every location the gig guide publishes, which is not necessarily every location we hold gigs for - a location can be kept out of the guide while it is being worked on. Name such a location explicitly and you will still get its gigs.
+| Destination | `destination` field |
+|---|---|
+| Melbourne | `"melbourne"` |
+| Geelong & the Bellarine | `"geelong_bellarine"` |
+| Goldfields | `"goldfields"` |
+| Great Ocean Road | `"great_ocean_road"` |
+| High Country | `"high_country"`  |
+| The Murray | `"murray"` |
+| Grampians | `"grampians"` |
+| Gippsland | `"gippsland"` |
+| Phillip Island | `"phillip_island"` |
+| Daylesford and the Macedon Ranges | `"daylesford_macedon_ranges"` |
+| Mornington Peninsula | `"mornington_peninsula"` |
+| Yarra Valley & Dandenong Ranges | `"yarra_valley_dandenong_ranges"` |
+
+Note that `location` is considered a legacy field. Whilst it will remain supported for the foreseeable future, it is recommended to use the `destination` field instead as the `destination` values are what most people think of when they think about the location of a gig.
+
+Only fetches gigs for up to 7 days from `date_from` unless a valid `token` is supplied. Without a valid token, the `date_to` field will be automatically adjusted to the earlier of the supplied `date_to` and the supplied `date_from` + 7 days.
+
+The special `location` value *anywhere* returns gigs across every location the gig guide publishes, which is not necessarily every location we hold gigs for - a location can be kept out of the guide while it is being worked on. Name such a location explicitly and you will still get its gigs.
 
 Example:
 

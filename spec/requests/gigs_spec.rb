@@ -41,6 +41,10 @@ describe "gigs" do
 
   describe "show" do
     before do
+      @tourism_region = Web::TourismRegion.create!(
+        name: "Melbourne",
+        internal_identifier: "melbourne",
+      )
       @venue = Lml::Venue.create!(
         name: "The Gig Place",
         address: "the address",
@@ -49,6 +53,7 @@ describe "gigs" do
         time_zone: "Australia/Melbourne",
         capacity: 500,
         website: "https://gigplace.com.au",
+        tourism_region: @tourism_region,
       )
       @gig = Lml::Gig.create!(
         name: "The One Gig You Should Not Miss Out On",
@@ -179,6 +184,7 @@ describe "gigs" do
             "tags" => [],
             "vibe" => nil,
             "location_url" => nil,
+            "destination" => "Melbourne",
           },
         },
       )
@@ -310,6 +316,13 @@ describe "gigs" do
         expect(response.parsed_body).to eq([])
       end
 
+      context "location is not provided" do
+        it "returns no gigs" do
+          get "/gigs/query?date_from=2001-06-08&date_to=2001-06-08"
+          expect(response.parsed_body).to eq([])
+        end
+      end
+
       it "returns no gigs when there are no gigs for the specified dates" do
         get "/gigs/query?location=melbourne&date_from=2011-06-08&date_to=2011-06-08"
         expect(response.parsed_body).to eq([])
@@ -431,6 +444,93 @@ describe "gigs" do
             "Another gig in st kilda",
             "A gig in bendigo",
           )
+        end
+      end
+
+      describe "destination" do
+        before do
+          @melbourne = Web::TourismRegion.create!(
+            name: "Melbourne",
+            internal_identifier: "melbourne",
+          )
+          @goldfields = Web::TourismRegion.create!(
+            name: "Goldfields",
+            internal_identifier: "goldfields",
+          )
+          @melbourne_venue = Lml::Venue.create!(
+            name: "The Night Cat",
+            location: "melbourne",
+            address: "the address",
+            postcode: 9999,
+            time_zone: "Australia/Melbourne",
+            capacity: 100,
+            website: "https://thenightcat.com.au",
+            tourism_region: @melbourne,
+          )
+          @goldfields_venue = Lml::Venue.create!(
+            name: "Theatre Royal",
+            location: "castlemaine",
+            address: "the address",
+            postcode: 9999,
+            time_zone: "Australia/Melbourne",
+            capacity: 100,
+            website: "https://theatreroyalcastlemaine.com.au",
+            tourism_region: @goldfields
+          )
+          @goldfields_venue_not_in_castlemaine = Lml::Venue.create!(
+            name: "A goldfields venue",
+            location: "someotherlocation",
+            address: "the address",
+            postcode: 9999,
+            time_zone: "Australia/Melbourne",
+            capacity: 100,
+            website: "https://example.com.au",
+            tourism_region: @goldfields
+          )
+          @gig_in_melbourne = Lml::Gig.create!(
+            name: "A gig in melbourne",
+            venue: @melbourne_venue,
+            date: "2001-06-08",
+          )
+          @gig_in_goldfields = Lml::Gig.create!(
+            name: "A gig in goldfields",
+            venue: @goldfields_venue,
+            date: "2001-06-08",
+          )
+          @gig_in_goldfields_not_in_castlemaine = Lml::Gig.create!(
+            name: "A gig in goldfields not in castlemaine",
+            venue: @goldfields_venue_not_in_castlemaine,
+            date: "2001-06-08",
+          )
+        end
+
+        def gig_names
+          response.parsed_body.map { |gig| gig["name"] }
+        end
+
+        context "destination is provided but not location" do
+          it "returns gigs where the venue tourism_region matches the destination" do
+            get "/gigs/query?destination=goldfields&date_from=2001-06-08&date_to=2001-06-08"
+            expect(gig_names).to contain_exactly(
+              "A gig in goldfields",
+              "A gig in goldfields not in castlemaine"
+            )
+          end
+        end
+
+        context "destination and location are provided" do
+          it "returns gigs where the venue matches the location and the destination" do
+            get "/gigs/query?destination=goldfields&location=castlemaine&date_from=2001-06-08&date_to=2001-06-08"
+            expect(gig_names).to include("A gig in goldfields")
+            expect(gig_names).not_to include("A gig in goldfields not in castlemaine")
+          end
+        end
+
+        context "an invalid destination is provided" do
+          it "returns no gigs" do
+            get "/gigs/query?destination=foo&date_from=2001-06-08&date_to=2001-06-08"
+            expect(response.parsed_body).to eq([])
+          end
         end
       end
 

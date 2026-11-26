@@ -14,3 +14,4 @@ json.tags venue.tags || []
 json.location_url venue.location_url
 json.latitude venue.latitude
 json.longitude venue.longitude
+json.destination venue.destination

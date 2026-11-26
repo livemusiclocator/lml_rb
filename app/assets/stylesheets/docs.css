@@ -2,8 +2,8 @@
 	--background-color: aliceblue;
 	--accent-color: #337ab7;
 	--accent-color-light: #337ab71e;
-	--border-color: grey;
-	--code-background-color: #e3e3e3;
+	--border-color: lightgrey;
+	--code-background-color: white;
 }
 
 body {
@@ -42,8 +42,21 @@ pre code {
 	display: block;
 	padding: 0.5rem;
 	border: 1px solid var(--border-color);
-	border-radius: 4px;
 	background-color: var(--code-background-color);
 	color: black;
 	overflow-x: scroll;
+}
+
+table {
+	margin: 1rem 0;
+}
+
+table th,
+table td,
+table tr:last-child td {
+	border: 1px solid var(--border-color);
+}
+
+table td {
+	background-color: white;
 }

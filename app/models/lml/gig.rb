@@ -81,6 +81,7 @@ module Lml
 
     scope :visible, -> { where(hidden: [nil, false]).where.not(status: "draft") }
     scope :in_location, ->(location) { joins(:venue).merge(Venue.in_location(location)) }
+    scope :in_destination, ->(destination) { joins(:venue).merge(Venue.in_destination(destination)) }
     scope :potential_duplicates,
       lambda {
         # Self-join to find gigs sharing venue_id + date with other gigs

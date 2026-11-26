@@ -49,12 +49,28 @@ module Api
       expires_in 1.minutes, public: true
 
       location = params[:location] || "nowhere"
+      destination = params[:destination] || "anywhere"
+
+      # We want users to be able to query by destination only as it supersedes
+      # location. However if the location parameter is left out, it defaults to
+      # "nowhere", which means the query will return nothing no matter the value
+      # of destination. Instead of changing the default value of location (and
+      # breaking backward compatibility), set the location to "anywhere" if a
+      # destination parameter is supplied without an explicit location.
+      if !params[:destination].nil? && params[:location].nil?
+        location = "anywhere"
+      end
+
       date_from = Date.parse(params[:date_from] || "2000-01-01")
       date_to = Date.parse(params[:date_to] || "2000-01-01")
 
       date_to = date_from + 7.days if !token_authorized? && (date_to > date_from + 7.days)
 
-      @gigs = Lml::Gig.eager.in_location(location).visible.where(date: (date_from..date_to))
+      @gigs = Lml::Gig.eager
+                .in_location(location)
+                .in_destination(destination)
+                .visible
+                .where(date: (date_from..date_to))
     end
 
     def show
