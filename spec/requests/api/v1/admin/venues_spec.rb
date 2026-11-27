@@ -67,6 +67,29 @@ describe "admin api venues" do
       expect(body["venue"]).to include("tourism_region_id" => @tote.tourism_region_id, "destination" => "Melbourne")
     end
 
+    it "returns the venue's short link" do
+      get "/v1/admin/venues/#{@tote.id}", headers: @headers
+
+      expect(body["venue"]["short_url"]).to eq(Lml::ShortLink.url(@tote))
+    end
+
+    it "returns the ids of venues merged into it" do
+      merged_id = SecureRandom.uuid
+      @tote.update!(merged_venue_ids: [merged_id])
+
+      get "/v1/admin/venues/#{@tote.id}", headers: @headers
+
+      expect(body["venue"]["merged_venue_ids"]).to eq([merged_id])
+    end
+
+    it "returns when google was last asked about it" do
+      @tote.update!(google_place_fetched_at: Time.zone.parse("2026-11-01 10:00"))
+
+      get "/v1/admin/venues/#{@tote.id}", headers: @headers
+
+      expect(Time.zone.parse(body["venue"]["google_place_fetched_at"])).to eq(Time.zone.parse("2026-11-01 10:00"))
+    end
+
     it "returns a json 404 for a venue that does not exist" do
       get "/v1/admin/venues/#{SecureRandom.uuid}", headers: @headers
 
@@ -190,6 +213,15 @@ describe "admin api venues" do
 
       expect(response).to have_http_status(:unprocessable_content)
       expect(@tote.reload.name).to eq("The Tote")
+    end
+
+    it "ignores merged venue ids, which only a merge writes" do
+      patch "/v1/admin/venues/#{@tote.id}",
+        headers: @headers,
+        params: { venue: { merged_venue_ids: [SecureRandom.uuid] } },
+        as: :json
+
+      expect(@tote.reload.merged_venue_ids).to eq([])
     end
 
     it "refuses to repoint a venue's google place" do

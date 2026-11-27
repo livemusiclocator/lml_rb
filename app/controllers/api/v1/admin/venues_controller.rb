@@ -38,6 +38,20 @@ module Api
           tourism_region_id
         ].freeze
 
+        # Returned but never written: each is resolved from Google, derived, or set by
+        # something with more context than an api caller.
+        READ_ONLY = %i[
+          google_place_id
+          google_business_status
+          google_place_fetched_at
+          google_maps_url
+          destination
+          short_url
+          merged_venue_ids
+          created_at
+          updated_at
+        ].freeze
+
         def index
           scope = params[:q].present? ? Lml::Venue.search(params[:q]) : Lml::Venue.order(:name)
 
@@ -90,22 +104,19 @@ module Api
           params.require(:venue).permit(*WRITABLE, tags: [])
         end
 
+        # google_maps_url is derived from the place id, so nil for a venue that is unresolved
+        # or carrying one of VenuePlaceLookup's markers. location_url is the link a person chose,
+        # which is a different thing and stays writable.
+        #
+        # destination is the tourism region's name, so a caller can read a venue without a
+        # second lookup. Set the region by tourism_region_id - see /v1/admin/tourism_regions.
+        #
+        # merged_venue_ids are venues merged into this one. A caller holding one of those ids is
+        # holding a venue that no longer exists, and this is where it went.
         def serialize(venue)
           venue.slice(*WRITABLE, :id)
-            .merge(
-              tags: venue.tags || [],
-              google_place_id: venue.google_place_id,
-              # Derived, so read only - and nil for a venue that is unresolved or carrying one
-              # of VenuePlaceLookup's markers. location_url beside it is the link a person
-              # chose, which is a different thing and stays writable.
-              google_maps_url: venue.google_maps_url,
-              google_business_status: venue.google_business_status,
-              # The region's name, so a caller can read a venue without a second lookup.
-              # Set the region by tourism_region_id - see /v1/admin/tourism_regions.
-              destination: venue.destination,
-              created_at: venue.created_at,
-              updated_at: venue.updated_at,
-            )
+            .merge(tags: venue.tags || [])
+            .merge(READ_ONLY.index_with { |attribute| venue.public_send(attribute) })
         end
       end
     end
