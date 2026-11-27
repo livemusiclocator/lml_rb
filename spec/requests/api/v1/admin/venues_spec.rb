@@ -59,6 +59,14 @@ describe "admin api venues" do
       expect(body["venue"]).to include("lga" => "City of Yarra")
     end
 
+    it "returns the venue's tourism region and its name" do
+      @tote.update!(tourism_region: create(:web_tourism_region, name: "Melbourne"))
+
+      get "/v1/admin/venues/#{@tote.id}", headers: @headers
+
+      expect(body["venue"]).to include("tourism_region_id" => @tote.tourism_region_id, "destination" => "Melbourne")
+    end
+
     it "returns a json 404 for a venue that does not exist" do
       get "/v1/admin/venues/#{SecureRandom.uuid}", headers: @headers
 
@@ -141,6 +149,36 @@ describe "admin api venues" do
       patch "/v1/admin/venues/#{@tote.id}", headers: @headers, params: { venue: { lga: "City of Yarra" } }
 
       expect(@tote.reload.lga).to eq("City of Yarra")
+    end
+
+    it "sets the tourism region" do
+      region = create(:web_tourism_region)
+
+      patch "/v1/admin/venues/#{@tote.id}", headers: @headers, params: { venue: { tourism_region_id: region.id } }
+
+      expect(@tote.reload.tourism_region).to eq(region)
+    end
+
+    it "clears the tourism region" do
+      @tote.update!(tourism_region: create(:web_tourism_region))
+
+      patch "/v1/admin/venues/#{@tote.id}",
+        headers: @headers,
+        params: { venue: { tourism_region_id: nil } },
+        as: :json
+
+      expect(@tote.reload.tourism_region).to be_nil
+    end
+
+    it "refuses a tourism region that does not exist" do
+      patch "/v1/admin/venues/#{@tote.id}",
+        headers: @headers,
+        params: {
+          venue: { tourism_region_id: SecureRandom.uuid },
+        }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(body["details"]).to include("tourism_region")
     end
 
     it "reports validation failures without changing the venue" do

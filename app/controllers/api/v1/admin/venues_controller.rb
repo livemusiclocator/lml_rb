@@ -35,6 +35,7 @@ module Api
           instagram_url
           latitude
           longitude
+          tourism_region_id
         ].freeze
 
         def index
@@ -99,6 +100,9 @@ module Api
               # chose, which is a different thing and stays writable.
               google_maps_url: venue.google_maps_url,
               google_business_status: venue.google_business_status,
+              # The region's name, so a caller can read a venue without a second lookup.
+              # Set the region by tourism_region_id - see /v1/admin/tourism_regions.
+              destination: venue.destination,
               created_at: venue.created_at,
               updated_at: venue.updated_at,
             )

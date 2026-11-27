@@ -62,6 +62,9 @@ module Lml
     has_many :managers, through: :venue_managers, source: :user
     belongs_to :admin_user, class_name: "Lml::SuperAdmin", optional: true
     belongs_to :tourism_region, class_name: "Web::TourismRegion", optional: true
+    # Optional, but an id that names no region is a typo rather than a blank -
+    # and without this the foreign key turns it into a 500 rather than a 422.
+    validates :tourism_region, presence: { message: "does not exist" }, if: :tourism_region_id?
     # custom join to Web::Location - if available
     def location_record
       Web::Location.where("LOWER(internal_identifier) = LOWER(?)", location).first
