@@ -189,6 +189,8 @@ Rails.application.routes.draw do
           post "place_lookup", on: :member
         end
         resources :acts, only: [:index, :show, :create, :update]
+        # Read only - the ids a venue's tourism_region_id can take.
+        resources :tourism_regions, only: :index
         # No update: an upload is a record of what was sent, and reprocessing
         # edited content is a different thing to editing the record.
         resources :uploads, only: [:index, :show, :create]
