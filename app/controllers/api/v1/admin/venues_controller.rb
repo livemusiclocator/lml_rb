@@ -38,6 +38,9 @@ module Api
           tourism_region_id
         ].freeze
 
+        # What a venue block may set: everything update takes, tags included.
+        BLOCK_FIELDS = [*WRITABLE, :tags].freeze
+
         # Returned but never written: each is resolved from Google, derived, or set by
         # something with more context than an api caller.
         READ_ONLY = %i[
@@ -92,7 +95,60 @@ module Api
           render json: { outcome: outcome, venue: serialize(venue.reload) }
         end
 
+        # Venues as `key: value` blocks - see Lml::Processors::VenueBlocks - in the
+        # shape bulk_update reads, so export, edit and send back is a round trip.
+        #
+        # Paginated like every other collection here, page and per_page as usual,
+        # so a leaked token cannot take every venue's email and phone in one go.
+        # Pages are separate files that can each be edited and sent back. The
+        # total is in the X-Total-Count header, since the body has nowhere to put
+        # it. Filters as for index, plus location and tourism_region_id -
+        # tourism_region_id=none is every venue still without a region.
+        def export
+          scope = export_scope
+          response.set_header("X-Total-Count", scope.count.to_s)
+          render plain: Lml::Processors::VenueBlocks.serialise(paginate(scope), fields: BLOCK_FIELDS)
+        end
+
+        # Many venues in one request, from the same blocks export writes. The
+        # response is those blocks back, each with a `result:` line - see
+        # Lml::VenueBulkUpdate. Send the text as `content`, or as the whole body
+        # with Content-Type text/plain.
+        #
+        # 200 even when some blocks failed: each block's result is the answer,
+        # and the ones that worked are saved either way.
+        def bulk_update
+          update = Lml::VenueBulkUpdate.new(bulk_content, fields: BLOCK_FIELDS)
+          return render_error(:unprocessable_content, "There are no venues in that.") if update.entry_count.zero?
+          return too_many_venues(update) if update.too_big?
+
+          render plain: update.call
+        end
+
         private
+
+        def export_scope
+          # id breaks ties between venues of the same name, so no venue lands on
+          # two pages or none as a caller walks through them.
+          scope = params[:q].present? ? Lml::Venue.search(params[:q]) : Lml::Venue.order(:name, :id)
+          scope = scope.where(location: params[:location]) if params[:location].present?
+          scope = scope.with_tourism_region(params[:tourism_region_id]) if params[:tourism_region_id].present?
+          scope.includes(:tourism_region)
+        end
+
+        def bulk_content
+          return request.raw_post if request.media_type == "text/plain"
+
+          params.require(:content)
+        end
+
+        def too_many_venues(update)
+          render_error(
+            :unprocessable_content,
+            "That has #{update.entry_count} venues and the limit is #{Lml::VenueBulkUpdate::LIMIT}. " \
+            "Split it up - every venue is saved inside the request.",
+          )
+        end
 
         def force?
           ActiveModel::Type::Boolean.new.cast(params[:force]).present?

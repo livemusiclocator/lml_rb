@@ -185,8 +185,12 @@ Rails.application.routes.draw do
       namespace :admin do
         # place_lookup spends money at Google, so it is a POST on the member
         # rather than something a GET could set off by accident.
+        # export and bulk_update are the two halves of a round trip in the
+        # venue block format - see Lml::Processors::VenueBlocks.
         resources :venues, only: [:index, :show, :create, :update] do
           post "place_lookup", on: :member
+          get "export", on: :collection, defaults: { format: :text }
+          post "bulk_update", on: :collection, defaults: { format: :text }
         end
         resources :acts, only: [:index, :show, :create, :update]
         # Read only - the ids a venue's tourism_region_id can take.
