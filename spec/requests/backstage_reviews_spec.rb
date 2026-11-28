@@ -16,12 +16,12 @@ describe "backstage reviews" do
     @theirs = upload_by(create(:lml_user, :admin), "lmb", @vine)
 
     @dole = create(:lml_gig, name: "DOLE NIGHT w/ Contact Sport + Brodown", date: Date.current + 1, venue: @tote,
-                             source: "research-markryall", upload: @mine, proposed_acts: ["Contact Sport", "Brodown"],
-                             proposed_genre_tags: ["punk"])
+                             source: "research-markryall", upload: @mine, uploaded_by: @admin,
+                             proposed_acts: ["Contact Sport", "Brodown"], proposed_genre_tags: ["punk"])
     @karaoke = create(:lml_gig, name: "Kickarse Karaoke", date: Date.current + 2, venue: @tote,
-                                source: "research-markryall", upload: @mine)
+                                source: "research-markryall", upload: @mine, uploaded_by: @admin)
     @vine_gig = create(:lml_gig, name: "Andrew Swift", date: Date.current + 3, venue: @vine, source: "lmb",
-                                 upload: @theirs)
+                                 upload: @theirs, uploaded_by: @theirs.user)
     @checked = create(:lml_gig, name: "Already done", date: Date.current + 1, venue: @tote, checked: true)
     @past = create(:lml_gig, name: "Last week", date: Date.current - 7, venue: @tote)
   end
@@ -51,6 +51,14 @@ describe "backstage reviews" do
       expect(response.body).to include("research-markryall")
       expect(response.body).to include(%(href="/backstage/reviews/#{@dole.id}?who=mine"))
       expect(response.body).not_to include("Golden Vine Hotel</a>")
+    end
+
+    it "counts gigs you sent through the api's bulk update, which keeps no upload" do
+      sent = create(:lml_gig, name: "Bulk sent", date: Date.current + 1, venue: @vine, uploaded_by: @admin)
+
+      get "/backstage/reviews"
+
+      expect(response.body).to include(%(href="/backstage/reviews/#{sent.id}?who=mine"))
     end
 
     it "shows everybody's when asked, a venue at a time" do

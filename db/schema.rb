@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_28_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -110,8 +110,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
     t.string "ticketing_url"
     t.datetime "updated_at", null: false
     t.uuid "upload_id"
+    t.uuid "uploaded_by_id"
     t.string "url"
     t.uuid "venue_id"
+    t.index ["uploaded_by_id"], name: "index_gigs_on_uploaded_by_id"
     t.index ["venue_id"], name: "index_gigs_on_venue_id"
   end
 
@@ -368,6 +370,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
   add_foreign_key "act_managers", "acts"
   add_foreign_key "act_managers", "users"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "gigs", "users", column: "uploaded_by_id"
   add_foreign_key "gigs", "venues"
   add_foreign_key "proposals", "admin_users", column: "reviewed_by_id"
   add_foreign_key "proposals", "users"

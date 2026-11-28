@@ -8,7 +8,7 @@ module Backstage
       @managed_venues = current_user.managed_venues
       @managed_acts = current_user.managed_acts
       @to_review = Lml::Gig.where(checked: [false, nil], hidden: [false, nil], date: Date.current..)
-                           .where(upload_id: current_user.uploads.select(:id)).count if current_user.admin?
+                           .where(uploaded_by: current_user).count if current_user.admin?
     end
   end
 end

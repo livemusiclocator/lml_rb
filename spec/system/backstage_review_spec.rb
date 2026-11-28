@@ -13,14 +13,14 @@ describe "backstage review", type: :system do
     @password = "supersecret123"
     @admin = create(:lml_user, :admin, password: @password, password_confirmation: @password)
     @tote = create(:lml_venue, name: "The Tote")
-    # The queue starts from the admin's own uploads.
+    # The queue starts from the gigs the admin sent in (gigs.uploaded_by).
     @upload = Lml::Upload.create!(user: @admin, source: "research-markryall", venue: @tote, format: "clipper",
                                   time_zone: "Australia/Melbourne", content: "")
     @dole = create(:lml_gig, name: "DOLE NIGHT w/ Contact Sport + Brodown", date: Date.current + 1, venue: @tote,
-                             source: "research-markryall", upload: @upload, proposed_acts: ["Contact Sport", "Brodown"],
-                             proposed_genre_tags: ["punk"])
+                             source: "research-markryall", upload: @upload, uploaded_by: @admin,
+                             proposed_acts: ["Contact Sport", "Brodown"], proposed_genre_tags: ["punk"])
     @karaoke = create(:lml_gig, name: "Kickarse Karaoke", date: Date.current + 2, venue: @tote,
-                                source: "research-markryall", upload: @upload)
+                                source: "research-markryall", upload: @upload, uploaded_by: @admin)
 
     sign_in_as_admin
   end

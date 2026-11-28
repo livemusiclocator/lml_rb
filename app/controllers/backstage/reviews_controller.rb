@@ -18,7 +18,8 @@ module Backstage
   # Skipped gigs are remembered in the session, so skipping does not land on the
   # same gig again. The list starts over from the index.
   #
-  # It starts from the gigs your own uploads put in - `who=mine`, the default -
+  # It starts from the gigs you sent in, by upload or the admin API's bulk update
+  # (gigs.uploaded_by) - `who=mine`, the default -
   # because every gig LML holds starts out unchecked, and the whole of that is
   # not anybody's to work through. `who=everyone` is the rest of it.
   class ReviewsController < ApplicationController
@@ -78,7 +79,7 @@ module Backstage
                      .where(checked: [false, nil], hidden: [false, nil])
                      .where(date: Date.current..)
                      .order("venues.name", "gigs.date", "gigs.start_offset", "gigs.name", "gigs.id")
-      gigs = gigs.where(upload_id: current_user.uploads.select(:id)) if filters[:who] == "mine"
+      gigs = gigs.where(uploaded_by: current_user) if filters[:who] == "mine"
       gigs = gigs.where(source: filters[:source]) if filters[:source]
       gigs = gigs.where(upload_id: filters[:upload_id]) if filters[:upload_id]
       gigs = gigs.where(venue_id: filters[:venue_id]) if filters[:venue_id]

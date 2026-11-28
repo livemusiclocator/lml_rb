@@ -20,6 +20,11 @@ module Lml
     has_many :api_tokens, class_name: "Lml::ApiToken", dependent: :destroy
     # Nullified rather than destroyed: an upload is the record of what was sent.
     has_many :uploads, class_name: "Lml::Upload", dependent: :nullify
+    has_many :uploaded_gigs,
+      class_name: "Lml::Gig",
+      foreign_key: :uploaded_by_id,
+      inverse_of: :uploaded_by,
+      dependent: :nullify
 
     scope :admins, -> { where(admin: true) }
 

@@ -3,9 +3,9 @@
 module Api
   module V1
     module Admin
-      # Read only. Gigs are written through uploads, because clipper is the
-      # format the whole toolchain already speaks and a second write path would
-      # be a second set of matching rules to keep in step.
+      # Gigs are written in clipper, the format the whole toolchain already
+      # speaks: bulk_update here, or an upload. Both apply each entry through
+      # Lml::Processors::ClipperEntry, so there is one set of matching rules.
       #
       # Deliberately NOT scoped to `visible`, unlike the public API and the
       # pickers. A caller comparing a venue's website against what we hold has
@@ -38,7 +38,44 @@ module Api
           render plain: Lml::Processors::ClipperSerialiser.for_collection(filtered_scope)
         end
 
+        # Clipper in, the same blocks back with a `result:` line each - see
+        # Lml::GigBulkUpdate. Send the text as `content`, or as the whole body
+        # with Content-Type text/plain. `venue_id` is the venue for entries that
+        # name none; `source` goes on every gig. Nothing is kept: the response is
+        # the record. 200 even when some blocks failed, as the ones that worked
+        # are saved either way.
+        def bulk_update
+          venue = Lml::Venue.find_by(id: params[:venue_id]) if params[:venue_id].present?
+          return render_error(:unprocessable_content, "There is no venue #{params[:venue_id]}.") if
+            params[:venue_id].present? && venue.nil?
+
+          update = Lml::GigBulkUpdate.new(
+            bulk_content,
+            venue: venue,
+            source: params[:source].presence || "api",
+            user: current_admin,
+          )
+          return render_error(:unprocessable_content, "There are no gigs in that.") if update.entry_count.zero?
+          return too_many_gigs(update) if update.too_big?
+
+          render plain: update.call
+        end
+
         private
+
+        def bulk_content
+          return request.raw_post if request.media_type == "text/plain"
+
+          params.require(:content)
+        end
+
+        def too_many_gigs(update)
+          render_error(
+            :unprocessable_content,
+            "That has #{update.entry_count} gigs and the limit is #{Lml::GigBulkUpdate::LIMIT}. " \
+            "Split it up - every gig is saved inside the request.",
+          )
+        end
 
         def bad_date(error)
           render_error(:bad_request, "Could not read #{error.message} as a date. Use YYYY-MM-DD.")

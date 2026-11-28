@@ -352,6 +352,31 @@ describe Lml::Upload do
     end
   end
 
+  # The review queue's "mine" starts from gigs.uploaded_by, so an upload with a
+  # sender has to leave it on every gig it touches.
+  describe "who sent it" do
+    before do
+      @venue = Lml::Venue.create!(name: "The Tote", time_zone: "Australia/Melbourne")
+      @user = create(:lml_user, :admin)
+    end
+
+    it "records the sender on the gig" do
+      Lml::Upload.create!(time_zone: "Australia/Melbourne", format: "clipper", venue: @venue, user: @user,
+                          content: "name: Sent in\ndate: 2024-03-01\n").process!
+
+      expect(Lml::Gig.find_by!(name: "Sent in").uploaded_by).to eq(@user)
+    end
+
+    it "leaves the sender alone when an upload has none, as ActiveAdmin's do not" do
+      gig = Lml::Gig.create!(name: "Sent in", venue: @venue, date: Date.new(2024, 3, 1), uploaded_by: @user)
+
+      Lml::Upload.create!(time_zone: "Australia/Melbourne", format: "clipper", venue: @venue,
+                          content: "name: Sent in\ndate: 2024-03-01\n").process!
+
+      expect(gig.reload.uploaded_by).to eq(@user)
+    end
+  end
+
   # Content is matched on name, date and venue, so a gig renamed in review
   # comes back as a second copy when the same content is sent again. The
   # content with ids is what to send instead.

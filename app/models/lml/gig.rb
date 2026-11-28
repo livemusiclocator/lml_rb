@@ -47,6 +47,9 @@ module Lml
 
     belongs_to :venue, optional: true
     belongs_to :upload, optional: true
+    # Who last sent the gig in, by upload or the admin API's bulk update - what
+    # the review queue's "mine" starts from.
+    belongs_to :uploaded_by, class_name: "Lml::User", optional: true
 
     has_many :sets, dependent: :delete_all
     has_many :prices, dependent: :delete_all

@@ -1,7 +1,11 @@
 # frozen_string_literal: true
-# rubocop:disable all
+
 module Lml
   module Processors
+    # An upload's clipper content applied entry by entry, stopping at the first
+    # entry that fails and recording why on the upload. Entries before it stay
+    # applied. Each entry is a ClipperEntry, which the admin API's bulk update
+    # shares - that one carries on past a failure instead.
     class Clipper
       # The gig ids each entry ended up as, in entry order - several for an
       # entry with `weeks`, none for one that deleted its gig. Kept for
@@ -14,120 +18,44 @@ module Lml
       end
 
       def process!
-        default_venue = @upload.venue
-
-        entries = ClipperParser.extract_entries(@upload.content.lines)
-
-        entries.each_with_index do |details, index|
-          venue = default_venue
-
-          venue = Lml::Venue.find_by(id: details[:venue_id]) if details[:venue_id]
-
-          unless venue
-            @upload.status = "Failed"
-            @upload.error_description = "#{index + 1}: A venue is required"
-            @upload.save!
-            return 1
-          end
-
-          Time.zone = venue.time_zone
-          unless details[:name].present?
-            @upload.status = "Failed"
-            @upload.error_description = "#{index + 1}: A gig name is required"
-            @upload.save!
-            return 1
-          end
-
-          begin
-            date = Date.parse(details[:date] || "")
-          rescue Date::Error
-            @upload.status = "Failed"
-            @upload.error_description = "#{index + 1}: '#{details[:date]}' is not a valid date"
-            @upload.save!
-            return 1
-          end
-
-          unless details[:start_time].blank?
-            begin
-              start_time = Time.parse(details[:start_time])
-            rescue ArgumentError
-              @upload.status = "Failed"
-              @upload.error_description = "#{index + 1}: '#{details[:start_time]}' is not a valid time"
-              @upload.save!
-              return 1
-            end
-          end
-
-          unless details[:finish_time].blank?
-            begin
-              finish_time = Time.parse(details[:finish_time])
-            rescue ArgumentError
-              @upload.status = "Failed"
-              @upload.error_description = "#{index + 1}: '#{details[:finish_time]}' is not a valid time"
-              @upload.save!
-              return 1
-            end
-          end
-
-          id = details[:id]
-          weeks = details[:weeks] || 1
-
-          ids = []
-          @entry_gig_ids << ids
-          weeks.times do |week_offset|
-            if id.present?
-              gig = Lml::Gig.find_by(id: id)
-              unless gig
-                @upload.status = "Failed"
-                @upload.error_description = "#{index + 1}: A gig with id #{id} could not be found"
-                @upload.save!
-                return 1
-              end
-            end
-
-            gig_date = date + (week_offset * 7)
-
-            gig ||= Lml::Gig.find_or_create_gig(
-              name: details[:name],
-              date: gig_date,
-              venue: venue,
-            )
-
-            if details[:status] == "delete"
-              gig.destroy
-              next
-            end
-
-            gig.name = details[:name]
-            gig.venue = venue
-            gig.upload = @upload
-            gig.status = details[:status] || "confirmed"
-            gig.internal_description = details[:internal_description]
-            gig.source = @upload.source
-            gig.url = details[:url]
-            gig.information_tags = details[:information_tags] if details[:information_tags].present?
-            gig.genre_tags = details[:genre_tags] if details[:genre_tags].present?
-            gig.proposed_acts = details[:proposed_acts] if details[:proposed_acts].present?
-            gig.series = details[:series]
-            gig.category = details[:category]
-            gig.ticketing_url = details[:ticketing_url] if details[:ticketing_url].present?
-            gig.set_list = details[:sets].join("\n") if details[:sets].present?
-            gig.price_list = details[:prices].join("\n") if details[:prices].present?
-            gig.date = gig_date
-            gig.start_time = start_time.strftime("%H:%M") if start_time
-            gig.duration = details[:duration]
-            gig.finish_time = finish_time.strftime("%H:%M") if finish_time
-            gig.save!
-            ids << gig.id
-            gig.suggest_tags! unless ENV["DISABLE_CLIPPER_TAG_SUGGESTION"]
-            @upload.status = "Succeeded"
-            @upload.error_description = ""
-          end
+        ClipperParser.extract_entries(@upload.content.lines).each_with_index do |details, index|
+          return fail! unless apply(details, index)
         end
 
         @upload.save!
       end
+
+      private
+
+      def apply(details, index)
+        outcome = entry(details).apply!
+        @entry_gig_ids << outcome.gig_ids
+        if outcome.result != ClipperEntry::DELETED
+          @upload.status = "Succeeded"
+          @upload.error_description = ""
+        end
+        true
+      rescue ClipperEntry::Failed => e
+        @failure = "#{index + 1}: #{e.message}"
+        false
+      end
+
+      def entry(details)
+        ClipperEntry.new(
+          details,
+          default_venue: @upload.venue,
+          source: @upload.source,
+          upload: @upload,
+          uploaded_by: @upload.user,
+        )
+      end
+
+      def fail!
+        @upload.status = "Failed"
+        @upload.error_description = @failure
+        @upload.save!
+        1
+      end
     end
   end
 end
-# rubocop:enable all
